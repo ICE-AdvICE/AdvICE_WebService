@@ -1,0 +1,152 @@
+.root{ /*배경*/
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgb(202, 202, 202,0.6);
+}
+.rootDisable{/*배경*/
+    display: none;
+}
+.modalContainer{/*모달 배경*/
+    width: 500px;
+    position: absolute;
+    z-index: 101;
+    left: 50%;
+    transform: translate(-50%, 0); /* Y축 이동량을 0으로 조정하여 모달이 상단에 더 가깝게 위치하도록 함 */
+    background-color: white;
+    border-radius: 5px;
+    /* top 값을 헤더 높이와 여백을 고려하여 조정 */
+    top: 60px; 
+}
+.close{ /*x버튼*/
+    position: absolute;
+    top: 3px;
+    right: 15px;
+    font-size: 26px;
+}
+.close:hover{cursor: pointer;}
+.title{ 
+    width: 95%;
+    height: 50px;
+    line-height: 50px;
+    vertical-align: middle;
+    padding: 0 10px;
+    border-bottom: 2px solid #037F8C; /*제목 밑 선*/
+    
+    margin-left: auto;
+    margin-right: auto;
+}
+.modalBody{
+    padding: 10px 20px;
+}
+/*.footer{
+    width: 100%;
+    height: 50px;
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+}
+*/
+/*
+.footer button{ 
+    width: 370px;
+    height: 45px; 
+    line-height: 30px;
+    margin-left: 10px;
+    margin-right: 10px;
+    
+    border: none; 
+    outline: 0;
+    border-radius: 10px; 
+    color: rgb(56, 56, 63);
+
+    font-weight: bold;
+    color: white;
+    font-size: 20px;
+    text-align: center;
+    font-family: "Noto Sans KR", sans-serif;
+}
+.footer button:hover{
+    background-color: #48d1cc;
+}
+*/
+.header{
+    width: 100%;
+    height: 50px;
+    padding: 10px;
+    display: flex;
+    justify-content: left;
+}
+.header button{ 
+    width: 100px; /*넓이*/
+    height: 45px; /*높이*/
+    line-height: 30px;
+    margin-left: 10px;
+    margin-right: -10px;
+    text-align: left;
+    border: none; /*테두리 인듯*/
+    outline: 0;
+    margin-top: 50px;
+    
+    
+
+    font-weight: bold;
+    color: rgb(255, 255, 255);
+    font-size: 20px;
+    text-align: center;
+    font-family: "Noto Sans KR", sans-serif;
+    position: relative; /* 가상 요소의 위치 기준점 */
+}
+
+.header p{
+    font-weight: bold;
+    font-size: 45px;
+    color: #052940;
+    text-align: center;
+    font-family: "Noto Sans KR", sans-serif;
+}
+
+.header p{
+    content: ""; /* 가상 요소에는 content 속성이 필수 */
+    display: block; /* 블록 레벨 요소로 만들어 줄 전체 너비를 차지하게 함 */
+    width: 480px; /* 버튼의 너비보다 긴 구분선을 원한다면 값을 조정 */
+    height: 2px; /* 구분선의 두께 */
+    background-color: #052940; /* 구분선의 색상 */
+    position: absolute; /* 버튼을 기준으로 위치를 조정하기 위함 */
+    
+    
+}
+.header button::after {
+    content: ""; /* 가상 요소에는 content 속성이 필수 */
+    display: block; /* 블록 레벨 요소로 만들어 줄 전체 너비를 차지하게 함 */
+    width: 350%; /* 버튼의 너비보다 긴 구분선을 원한다면 값을 조정 */
+    height: 2px; /* 구분선의 두께 */
+    background-color: #48d1cc; /* 구분선의 색상 */
+    position: absolute; /* 버튼을 기준으로 위치를 조정하기 위함 */
+    left: 0%; /* 버튼의 왼쪽 기준으로부터의 위치 조정 */
+    bottom: 0px; /* 버튼의 하단으로부터의 거리 */
+  }
+
+.header button:hover{
+    background-color: #48d1cc;
+}
+
+.button{
+    margin: 0;
+  padding: 0.5rem 1rem;
+
+  font-family: "Noto Sans KR", sans-serif;
+  font-size: 1rem;
+  font-weight: 400;
+  text-align: center;
+  text-decoration: none;
+
+  display: inline-block;
+  width: auto;
+
+  border: none;
+  border-radius: 4px;
+}
