@@ -2,7 +2,13 @@ package com.icehufs.icebreaker.entity;
 
 import java.time.LocalDateTime;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,9 +26,9 @@ public class Article {
     private Long id;
     // 외래키 User 테이블의 컬럼명: user_no, 다대일 관계 설정.
     @ManyToOne
-    @Column(name = "uesr_no")
+    @JoinColumn(name = "uesr_no")
     private User user_no;
-    @Column(name = "article_content")
+    @Column(name = "article_title")
     private String title;
     @Column(name = "article_content")
     private String content;
