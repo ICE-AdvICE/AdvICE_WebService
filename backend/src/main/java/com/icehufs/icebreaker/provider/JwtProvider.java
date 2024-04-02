@@ -21,13 +21,13 @@ public class JwtProvider {
         Date expiredDate = Date.from(Instant.now().plus(1, ChronoUnit.HOURS)); //토큰 만료시간을 1시간으로 설정
 
         String jwt = Jwts.builder() //본격적인 jwt 생성코드
-                .signWith(SignatureAlgorithm.ES256, secretKey)
+                .signWith(SignatureAlgorithm.HS256, secretKey)
                 .setSubject(email).setIssuedAt(new Date()).setExpiration(expiredDate)
                 .compact();
         return jwt;
     }
 
-    public String validate(String jwt){ //jwt를 secretKey를 통해 검증하고, JWT 내부의 클레임의 주제인 학번을 추출하는 함수
+    public String validate(String jwt){ //jwt의 secretKey, 만료시간 확인하고, JWT 내부의 클레임의 주제인 학번을 추출하는 함수
         Claims claims = null;
 
         try{

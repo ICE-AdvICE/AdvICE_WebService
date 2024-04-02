@@ -1,8 +1,12 @@
 package com.icehufs.icebreaker.entity;
 
-import java.time.LocalDateTime;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
-import jakarta.persistence.*;
+import com.icehufs.icebreaker.dto.request.auth.SignUpRequestDto;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,20 +17,31 @@ import lombok.ToString;
 @ToString
 @Entity
 @Getter
+@Table(name = "user")
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // DB가 id 자동 생성
-    @Column(name = "user_no")
-    private Long id;
-    @Column(name = "user_studentNum")
-    private String studentNum;
-    @Column(name = "user_password")
-    private String password;
-    @Column(name = "user_name")
-    private String name;
     @Column(name = "user_email")
     private String email;
-    @Column(name = "user_createDate")
-    private LocalDateTime date;
+
+    @Column(name = "user_studentNum")
+    private String studentNum;
+
+    @Column(name = "user_password")
+    private String password;
+
+    @Column(name = "user_name")
+    private String name;
+
+    //@Column(name = "user_createDate")
+    //private LocalDateTime date;
+
+    public User(SignUpRequestDto dto) {
+        this.email = dto.getEmail();
+        this.studentNum = dto.getStudentNum();
+        this.password = dto.getPassword();
+        this.name = dto.getName();
+
+    }
 
 }
+

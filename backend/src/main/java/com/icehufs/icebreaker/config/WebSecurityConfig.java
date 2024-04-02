@@ -2,6 +2,10 @@ package com.icehufs.icebreaker.config;
 
 import java.io.IOException;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -14,28 +18,25 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import com.icehufs.icebreaker.filter.JwtAuthenticationFilter;
 
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 
 @Configurable
 @EnableWebSecurity
 @RequiredArgsConstructor
-public class WebSecurityConfig {
+public class WebSecurityConfig { //filter를 사용할 . 수있도록 config
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Bean
     protected SecurityFilterChain configure(HttpSecurity httpSecurity) throws Exception{
         httpSecurity
-            .cors().and()
-            .csrf().disable()
-            .httpBasic().disable()
-            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-            .authorizeRequests()
-            //.antMatchers().permitAll() //권한이 필요없는 API 설정
-            .anyRequest().authenticated().and()
-            .exceptionHandling().authenticationEntryPoint(new FailedAuthenticationEntryPoint());
+                .cors().and()
+                .csrf().disable()
+                .httpBasic().disable()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+                .authorizeRequests()
+                .antMatchers("/", "/api/v1/auth/**").permitAll() //권한이 필요없는 API 설정
+                .anyRequest().authenticated().and()
+                .exceptionHandling().authenticationEntryPoint(new FailedAuthenticationEntryPoint());
 
         httpSecurity.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
@@ -45,14 +46,14 @@ public class WebSecurityConfig {
 
 }
 
-class FailedAuthenticationEntryPoint implements AuthenticationEntryPoint{
+class FailedAuthenticationEntryPoint implements AuthenticationEntryPoint{ //인증 실패할 경우 처리
 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response,
             AuthenticationException authException) throws IOException, ServletException {
         response.setContentType("application/json");
-        response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-        response.getWriter().write("{\"code\": \"NP\", \"message\": \"권한이 없습니다.\"}");
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        response.getWriter().write("{\"code\": \"AF\", \"message\": \"Authorization Failed.\"}");
     }
     
 }
