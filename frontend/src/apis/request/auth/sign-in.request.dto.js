@@ -1,0 +1,4 @@
+const SignInRequestDto = {
+    email: " ",
+    password: " "
+};

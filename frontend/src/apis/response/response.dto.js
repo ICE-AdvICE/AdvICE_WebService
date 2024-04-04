@@ -2,7 +2,7 @@
 const ResponseCode = require("../../types/enum");
 
 const ResponseDto = {
-    code: ResponseCode.SUCCESS, // ResponseCode 사용 예시
+    code: ResponseCode.any, // ResponseCode 사용 예시
     message: ""
 };
 

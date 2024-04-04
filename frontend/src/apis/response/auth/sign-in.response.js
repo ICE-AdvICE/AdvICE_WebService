@@ -1,6 +1,9 @@
 const ResponseCode = require("../../types/enum");
 
-const SignUpResponseDto  = {
+const SignInResponseDto  = {
     code: ResponseCode.any, // ResponseCode 사용 예시
-    message: ""
+    message: "",
+    token: "",
+    expirationTime: 0
+
 };
