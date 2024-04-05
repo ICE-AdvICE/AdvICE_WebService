@@ -16,7 +16,9 @@ import com.icehufs.icebreaker.repository.UserRepository;
 import com.icehufs.icebreaker.service.AuthService;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AuthServiceImplement implements AuthService {
@@ -60,6 +62,7 @@ public class AuthServiceImplement implements AuthService {
             String email = dto.getEmail();  //요청으로 받은 이메일 존재 확인
             User userEntity = userRepository.findByEmail(email);
             if (userEntity == null) return SignInResponseDto.signInFail();
+            
 
             String password = dto.getPassword(); //요청 받은 비번과 해당 유저(이메일)의 비번 일치하는지 확인
             String encodedPassword = userEntity.getPassword();

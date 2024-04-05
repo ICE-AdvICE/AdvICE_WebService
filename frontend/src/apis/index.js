@@ -7,10 +7,10 @@ const API_DOMAIN = `${DOMAIN}/api/v1`;
 const SIGN_IN_URL = () => `${API_DOMAIN}/auth/sign-in`;
 const SIGN_UP_URL = () => `${API_DOMAIN}/auth/sign-up`;
 
-export const SignInRequestDto = async (requestBody) => {
+export const signInRequest = async (requestBody) => {
     const result = await axios.post(SIGN_IN_URL(), requestBody)
         .then(response => {
-            const responseBody = response.data;
+            const responseBody = response.data;// responseBody의 key값들이: code, message, token, expirationTime
             return responseBody;
         })
         .catch(error => {
@@ -22,6 +22,6 @@ export const SignInRequestDto = async (requestBody) => {
 };
 
 
-export const SignUpRequestDto = async (requestBody) => {
+export const signUpRequest = async (requestBody) => {
 
 }
