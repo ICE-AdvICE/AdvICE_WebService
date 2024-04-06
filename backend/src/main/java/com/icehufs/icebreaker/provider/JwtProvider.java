@@ -27,7 +27,7 @@ public class JwtProvider {
         return jwt;
     }
 
-    public String validate(String jwt){ //jwt의 secretKey, 만료시간 확인하고, JWT 내부의 클레임의 주제인 학번을 추출하는 함수
+    public String validate(String jwt){ //jwt의 secretKey, 만료시간 확인하고, JWT 내부의 클레임의 주제인 이메일을 추출하는 함수
         Claims claims = null;
 
         try{

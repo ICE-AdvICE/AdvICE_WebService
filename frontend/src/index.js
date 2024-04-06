@@ -1,14 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter as Router } from 'react-router-dom';
-import App from './App'; // 애플리케이션의 루트 컴포넌트
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import App from './App';
+import ArticleMain from './layouts/ArticleMain';
 
 ReactDOM.render(
-  <React.StrictMode>
-    <Router>
-      <App />
-    </Router>
-  </React.StrictMode>,
+  <BrowserRouter>
+    <Routes>
+      <Route path="/" element={<App />} />
+      <Route path="/article-main" element={<ArticleMain />} />
+    </Routes>
+  </BrowserRouter>,
   document.getElementById('root')
 );
-
