@@ -34,7 +34,7 @@ public class WebSecurityConfig { //filter를 사용할 . 수있도록 config
                 .httpBasic().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests()
-                .antMatchers("/", "/api/v1/auth/**").permitAll() //권한이 필요없는 API 설정
+                .antMatchers("/", "/api/v1/**").permitAll() //권한이 필요없는 API 설정
                 .anyRequest().authenticated().and()
                 .exceptionHandling().authenticationEntryPoint(new FailedAuthenticationEntryPoint());
 

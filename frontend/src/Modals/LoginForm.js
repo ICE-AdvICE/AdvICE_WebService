@@ -1,10 +1,7 @@
 import React, { useState } from 'react';
-//import {SignInRequestDto} from '../apis/request/auth/sign-in.request.dto.js';
-import { signInRequest } from '../apis/index.js';
-//import {SignInResponseDto} from '../apis/response/auth/sign-in.response.js'
-//import {ResponseDto} from '../apis/response/response.dto.js'
 import { useCookies } from 'react-cookie'; // 수정된 임포트
 import { useNavigate } from 'react-router-dom'; // 수정된 임포트
+import { signInRequest } from '../apis/index.js';
 
 import MyModal from '../MyModal';
 
