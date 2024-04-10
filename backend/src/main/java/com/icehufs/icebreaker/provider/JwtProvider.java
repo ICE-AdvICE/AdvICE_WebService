@@ -17,11 +17,11 @@ public class JwtProvider {
     @Value("${secret-key}")
     private String secretKey;
 
-    public String create(String email){  //학번을 받고 jwt를 만들기 위한 함수
+    public String create(String email){  //메일을 받고 jwt를 만들기 위한 함수
         Date expiredDate = Date.from(Instant.now().plus(1, ChronoUnit.HOURS)); //토큰 만료시간을 1시간으로 설정
 
-        String jwt = Jwts.builder() //본격적인 jwt 생성코드
-                .signWith(SignatureAlgorithm.HS256, secretKey)
+        String jwt = Jwts.builder() //본격적인 jwt(토큰) 생성코드
+                .signWith(SignatureAlgorithm.HS256, secretKey) //HS256 알고리즘과 secretKey를 사용하여 토큰에 서명
                 .setSubject(email).setIssuedAt(new Date()).setExpiration(expiredDate)
                 .compact();
         return jwt;

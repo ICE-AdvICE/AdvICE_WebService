@@ -9,7 +9,7 @@ const SIGN_UP_URL = () => `${API_DOMAIN}/auth/sign-up`;
 
 const GET_ARTICLE_LIST_URL = () => `${API_DOMAIN}/article/list`;
 
-export const signInRequest = async (requestBody) => { //asyns를 통해 서버에 요청 보낸다.
+export const signInRequest = async (requestBody) => { //asyns를 통해 비동기 함수 정의
     const result = await axios.post(SIGN_IN_URL(), requestBody) //await은 요청의 응답이 돌아올 떄 까지 함수 실행을 멈추는 역할 한다(asyns함수 안에서만 사용가능)
         .then(response => {
             const responseBody = response.data;// responseBody의 key값들이: code, message, token, expirationTime

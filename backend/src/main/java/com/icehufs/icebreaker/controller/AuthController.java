@@ -34,8 +34,12 @@ public class AuthController {
         return response;
     }
 
-    @PostMapping("/sign-in")
+    @PostMapping("/sign-in") //메소드의 반환 타입과 값을 response로 선언
+    //ResponseEntity는 HTTP 응답의 본문(body), 상태 코드(status code), 헤더(headers) 등을 포함
+    //요청에 대한 응답을 보낼때 SignInResponseDto으로 미리정한 다양한 타입의 응답을 처리가능
     public ResponseEntity<? super SignInResponseDto> signIn(@RequestBody @Valid SignInRequestDto requestBody){
+        //@RequestBody 어노테이션은 HTTP 요청의 본문(body)을 SignInRequestDto 객체로 매핑
+        //@Valid 요청 본문이 SignInRequestDto 클래스에 정의된 제약 조건들을 만족하는지 검증
         ResponseEntity<? super SignInResponseDto> response = authService.signIn(requestBody);
         return response;
     }
