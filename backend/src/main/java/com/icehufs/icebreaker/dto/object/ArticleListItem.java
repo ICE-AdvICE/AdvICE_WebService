@@ -23,7 +23,7 @@ public class ArticleListItem {
     private int view_count;
     private String article_date;
     private int auth_check;
-    private String category;
+    private int category;
 
     public ArticleListItem(Article articleListViewEntity) {
         this.article_num = articleListViewEntity.getArticle_num();

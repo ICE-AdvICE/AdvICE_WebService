@@ -49,7 +49,7 @@ public class Article {
     private int auth_check;
 
     @Column(name = "category")
-    private String category;
+    private int category;
 
     // 게시글 수정을 위한 코드
     //public void patch(Article article) {

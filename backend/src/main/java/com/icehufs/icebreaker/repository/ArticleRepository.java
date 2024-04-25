@@ -8,7 +8,7 @@ import com.icehufs.icebreaker.entity.Article;
 
 
 
-public interface ArticleRepository extends CrudRepository<Article, Long> {
+public interface ArticleRepository extends CrudRepository<Article, Integer> {
     @Override
     ArrayList<Article> findAll(); // Iterable -> ArrayList 수정
 }

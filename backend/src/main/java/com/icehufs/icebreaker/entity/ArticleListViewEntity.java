@@ -24,5 +24,5 @@ public class ArticleListViewEntity {
     private int view_count;
     private String article_date;
     private boolean auth_check;
-    private String category;
+    private int category;
 }

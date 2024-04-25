@@ -9,7 +9,7 @@ public interface ResponseMessage {
         String DUPLICATE_EMAIL = "Duplicate email.";
         String NOT_EXISTED_USER = "This user does not exist.";
         String NOT_EXISTED_BOARD = "This board does not exist.";
-    
+
         //HTTP Status 401
         String SIGN_IN_FAIL = "Login information mismatch.";
         String AUTHORIZATION_FAIL = "Authorization Failed.";
