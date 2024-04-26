@@ -1,11 +1,18 @@
 package com.icehufs.icebreaker.controller;
 
+import javax.validation.Valid;
+
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.icehufs.icebreaker.dto.request.article.PostArticleRequestDto;
 import com.icehufs.icebreaker.dto.response.article.GetArticleListResponseDto;
+import com.icehufs.icebreaker.dto.response.article.PostArticleResponseDto;
 import com.icehufs.icebreaker.service.ArticleService;
 
 import lombok.RequiredArgsConstructor;
@@ -18,6 +25,15 @@ import lombok.RequiredArgsConstructor;
 public class ArticleController {
 
     private final ArticleService articleService;
+
+    @PostMapping("")
+    public ResponseEntity<? super PostArticleResponseDto> postArticle(
+        @RequestBody @Valid PostArticleRequestDto requestBody,
+        @AuthenticationPrincipal String email
+    ){
+        ResponseEntity<? super PostArticleResponseDto> response = articleService.postArticle(requestBody, email);
+        return response;
+    }
 
     @GetMapping("/list")
     public ResponseEntity<? super GetArticleListResponseDto> getArticleList(){
