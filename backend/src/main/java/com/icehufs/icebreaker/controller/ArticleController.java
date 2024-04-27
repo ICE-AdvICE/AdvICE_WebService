@@ -5,6 +5,7 @@ import javax.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.icehufs.icebreaker.dto.request.article.PostArticleRequestDto;
 import com.icehufs.icebreaker.dto.response.article.GetArticleListResponseDto;
+import com.icehufs.icebreaker.dto.response.article.GetArticleResponseDto;
 import com.icehufs.icebreaker.dto.response.article.PostArticleResponseDto;
 import com.icehufs.icebreaker.service.ArticleService;
 
@@ -32,6 +34,14 @@ public class ArticleController {
         @AuthenticationPrincipal String email
     ){
         ResponseEntity<? super PostArticleResponseDto> response = articleService.postArticle(requestBody, email);
+        return response;
+    }
+
+    @GetMapping("/{articleNum}")
+    public ResponseEntity<? super GetArticleResponseDto> getArticle(
+        @PathVariable("articleNum") Integer articleNum
+    ){
+        ResponseEntity<? super GetArticleResponseDto> response = articleService.getArticle(articleNum);
         return response;
     }
 

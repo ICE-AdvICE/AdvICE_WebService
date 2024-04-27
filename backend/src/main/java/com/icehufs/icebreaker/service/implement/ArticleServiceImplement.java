@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.icehufs.icebreaker.dto.request.article.PostArticleRequestDto;
 import com.icehufs.icebreaker.dto.response.ResponseDto;
 import com.icehufs.icebreaker.dto.response.article.GetArticleListResponseDto;
+import com.icehufs.icebreaker.dto.response.article.GetArticleResponseDto;
 import com.icehufs.icebreaker.dto.response.article.PostArticleResponseDto;
 import com.icehufs.icebreaker.entity.Article;
 import com.icehufs.icebreaker.repository.ArticleRepository;
@@ -45,6 +46,28 @@ public class ArticleServiceImplement implements ArticleService {
     }
     
 
+    @Override
+    public ResponseEntity<? super GetArticleResponseDto> getArticle(Integer articleNum) {
+        Article articleEntity = null;
+
+        try {
+
+            articleEntity = articleRepository.findByArticleNum(articleNum);
+            if (articleEntity == null) return GetArticleResponseDto.noExistArticle();
+
+            articleEntity.IncreaseViewCount();
+            articleRepository.save(articleEntity);
+
+
+
+        } catch (Exception exception){
+            exception.printStackTrace();
+            return ResponseDto.databaseError();
+
+        }
+
+        return GetArticleResponseDto.success(articleEntity);
+    }
 
 
 
@@ -65,5 +88,6 @@ public class ArticleServiceImplement implements ArticleService {
 
         return GetArticleListResponseDto.success(articleListViewEntities);
     }
+
     
 }

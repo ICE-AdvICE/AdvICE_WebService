@@ -15,25 +15,25 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ArticleListItem {
 
-    private int article_num;
-    private String user_email;
-    private String article_title;
-    private String article_content;
-    private int like_count;
-    private int view_count;
-    private String article_date;
-    private int auth_check;
+    private int articleNum;
+    private String userEmail;
+    private String articleTitle;
+    private String articleContent;
+    private int likeCount;
+    private int viewCount;
+    private String articleDate;
+    private int authCheck;
     private int category;
 
     public ArticleListItem(Article articleListViewEntity) {
-        this.article_num = articleListViewEntity.getArticle_num();
-        this.user_email = articleListViewEntity.getUser_email();
-        this.article_title = articleListViewEntity.getArticle_title();
-        this.article_content = articleListViewEntity.getArticle_content();
-        this.like_count = articleListViewEntity.getLike_count();
-        this.view_count = articleListViewEntity.getView_count();
-        this.article_date = articleListViewEntity.getArticle_date();
-        this.auth_check = articleListViewEntity.getAuth_check();
+        this.articleNum = articleListViewEntity.getArticleNum();
+        this.userEmail = articleListViewEntity.getUserEmail();
+        this.articleTitle = articleListViewEntity.getArticleTitle();
+        this.articleContent = articleListViewEntity.getArticleContent();
+        this.likeCount = articleListViewEntity.getLikeCount();
+        this.viewCount = articleListViewEntity.getViewCount();
+        this.articleDate = articleListViewEntity.getArticleDate();
+        this.authCheck = articleListViewEntity.getAuthCheck();
         this.category = articleListViewEntity.getCategory();
     }
 

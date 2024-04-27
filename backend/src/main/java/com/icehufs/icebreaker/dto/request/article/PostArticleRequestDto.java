@@ -13,10 +13,10 @@ import lombok.Setter;
 public class PostArticleRequestDto {
 
     @NotBlank
-    private String article_title;
+    private String articleTitle;
 
     @NotBlank
-    private String article_content;
+    private String articleContent;
 
     @NotNull
     private int category;
