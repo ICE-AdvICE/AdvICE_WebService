@@ -11,6 +11,7 @@ import com.icehufs.icebreaker.entity.Article;
 @Repository
 public interface ArticleRepository extends JpaRepository<Article, Integer> {
     
-    Article findByArticleNum(int articleNum);
+    boolean existsByArticleNum(Integer articleNum); // 정확한 필드 이름을 사용
+    Article findByArticleNum(Integer articleNum);   // 정확한 필드 이름을 사용
 
 }

@@ -76,6 +76,14 @@ public class Article {
         this.viewCount++;
     }
 
+    public void IncreaseFavoriteCount(){
+        this.likeCount++;
+    }
+
+    public void decreaseFavoriteCount(){
+        this.likeCount --;
+    }
+
     // 게시글 수정을 위한 코드
     //public void patch(Article article) {
     //    if (article.title != null)
