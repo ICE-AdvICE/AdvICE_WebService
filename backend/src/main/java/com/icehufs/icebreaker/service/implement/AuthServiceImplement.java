@@ -56,7 +56,7 @@ public class AuthServiceImplement implements AuthService {
     @Override
     public ResponseEntity<? super SignInResponseDto> signIn(SignInRequestDto dto) {
 
-        String token = null;
+        String token = null; //토큰 선업/초기화
         try{
 
             String email = dto.getEmail();  //요청으로 받은 이메일 존재 확인

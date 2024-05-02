@@ -8,7 +8,7 @@ public interface ResponseCode {
     String VALIDATION_FAILED= "VF";
     String DUPLICATE_EMAIL = "DE";
     String NOT_EXISTED_USER = "NU";
-    String NOT_EXISTED_BOARD = "NB";
+    String NOT_EXISTED_ARTICLE = "NA";
 
     //HTTP Status 401
     String SIGN_IN_FAIL = "SF";
