@@ -6,8 +6,8 @@ import { signInRequest } from '../apis/index.js';
 import MyModal from '../MyModal';
 
 const LoginForm = ({ onLogin }) => {
-  const [user_email, setUserEmail] = useState('');
-  const [user_password, setUserpassword] = useState('');
+  const [userEmail, setUserEmail] = useState('');
+  const [userPassword, setUserpassword] = useState('');
 
   const [error, setError] = useState(false); // 에러 상태 추가
   const [modalOpenfind, setModalOpenfind] = useState(false);
@@ -17,7 +17,7 @@ const LoginForm = ({ onLogin }) => {
   // 로그인 버튼 클릭 핸들러
   const onSignInButtonClickHandler = (e) => {
     e.preventDefault(); // 페이지 리로드 방지
-    const requestBody = { email: user_email, password: user_password };
+    const requestBody = { email: userEmail, password: userPassword };
     
     signInRequest(requestBody).then(signInResponse);
 
@@ -46,7 +46,7 @@ const LoginForm = ({ onLogin }) => {
   // 폼 제출 핸들러
   const handleSubmit = (e) => {
     e.preventDefault();
-    onLogin(user_email, user_password);
+    onLogin(userEmail, userPassword);
   };
 
   return (
@@ -57,7 +57,7 @@ const LoginForm = ({ onLogin }) => {
         <input
           type="text"
           error={error}
-          value={user_email}
+          value={userEmail}
           onChange={e => setUserEmail(e.target.value)}
           placeholder="이메일을 입력해주세요."
         />
@@ -67,7 +67,7 @@ const LoginForm = ({ onLogin }) => {
         <p>비밀번호</p>
         <input
           type="password"
-          value={user_password}
+          value={userPassword}
           error={error}
           onChange={e => setUserpassword(e.target.value)}
           placeholder="비밀번호를 입력하세요"
