@@ -87,12 +87,12 @@ function MainPage() {
                     <table>
                         <tbody>
                             {articleList.map((article) => (
-                                <tr key={article.article_num}>
-                                    <th>{article.article_num}</th>
-                                    <th>{article.article_title}</th>
-                                    <th>{article.view_count}</th>
-                                    <th>{article.like_count}</th>
-                                    <th>{article.article_date}</th>
+                                <tr key={article.articleNum}>
+                                    <th>{article.articleNum}</th>
+                                    <th>{article.articlTitle}</th>
+                                    <th>{article.viewCount}</th>
+                                    <th>{article.likeCount}</th>
+                                    <th>{article.articleDate}</th>
                                 </tr>
                             ))}
                         </tbody>
