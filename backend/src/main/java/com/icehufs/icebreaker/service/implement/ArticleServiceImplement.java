@@ -7,16 +7,22 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.icehufs.icebreaker.dto.request.article.PostArticleRequestDto;
+import com.icehufs.icebreaker.dto.request.article.PostCommentRequestDto;
 import com.icehufs.icebreaker.dto.response.ResponseDto;
 import com.icehufs.icebreaker.dto.response.article.GetArticleListResponseDto;
 import com.icehufs.icebreaker.dto.response.article.GetArticleResponseDto;
+import com.icehufs.icebreaker.dto.response.article.GetCommentListResponseDto;
 import com.icehufs.icebreaker.dto.response.article.PostArticleResponseDto;
+import com.icehufs.icebreaker.dto.response.article.PostCommentResponseDto;
 import com.icehufs.icebreaker.dto.response.article.PutFavoriteResponseDto;
 import com.icehufs.icebreaker.entity.Article;
+import com.icehufs.icebreaker.entity.CommentEntity;
 import com.icehufs.icebreaker.entity.FavoriteEntity;
 import com.icehufs.icebreaker.repository.ArticleRepository;
 import com.icehufs.icebreaker.repository.ArtileListViewRepository;
+import com.icehufs.icebreaker.repository.CommentRepository;
 import com.icehufs.icebreaker.repository.FavoriteRepository;
+import com.icehufs.icebreaker.repository.GetCommentListReultSet;
 import com.icehufs.icebreaker.repository.UserRepository;
 import com.icehufs.icebreaker.service.ArticleService;
 
@@ -29,6 +35,7 @@ public class ArticleServiceImplement implements ArticleService {
     private final ArtileListViewRepository artileListViewRepository;
     private final ArticleRepository articleRepository;
     private final UserRepository userRepository;
+    private final CommentRepository commentRepository;
     private final FavoriteRepository favoriteRepository;
     
     @Override
@@ -104,5 +111,40 @@ public class ArticleServiceImplement implements ArticleService {
             return ResponseDto.databaseError();
         }
         return PutFavoriteResponseDto.success();
+    }
+
+
+    @Override
+    public ResponseEntity<? super PostCommentResponseDto> postComment(PostCommentRequestDto dto, Integer articleNum,String email) {
+        
+        try{
+            boolean existedArticle = articleRepository.existsByArticleNum(articleNum);
+            if (!existedArticle) return PostCommentResponseDto.noExistArticle();
+            boolean existedUser = userRepository.existsByEmail(email);
+            if(!existedUser) return PostArticleResponseDto.notExistUser();
+            CommentEntity commentEntity = new CommentEntity(dto, articleNum, email);
+            commentRepository.save(commentEntity);
+        } catch (Exception exception){
+            exception.printStackTrace();
+            return ResponseDto.databaseError();
+        }
+        return PostCommentResponseDto.success(); }
+
+
+    @Override
+    public ResponseEntity<? super GetCommentListResponseDto> GetCommentList(Integer articleNum) {
+        List<GetCommentListReultSet> resultSets = new ArrayList<>();
+
+        try{
+            boolean existedArticle = articleRepository.existsByArticleNum(articleNum);
+            if(!existedArticle) return GetCommentListResponseDto.noExistArticle();
+
+            resultSets = commentRepository.getCommentList(articleNum);
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            return ResponseDto.databaseError();
+        }
+
+        return GetCommentListResponseDto.success(resultSets);
     }
 }
