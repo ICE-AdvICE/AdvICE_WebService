@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 import com.icehufs.icebreaker.dto.request.article.PostArticleRequestDto;
 import com.icehufs.icebreaker.dto.request.article.PostCommentRequestDto;
 import com.icehufs.icebreaker.dto.response.ResponseDto;
+import com.icehufs.icebreaker.dto.response.article.DeleteArticleResponseDto;
+import com.icehufs.icebreaker.dto.response.article.DeleteCommentResponseDto;
 import com.icehufs.icebreaker.dto.response.article.GetArticleListResponseDto;
 import com.icehufs.icebreaker.dto.response.article.GetArticleResponseDto;
 import com.icehufs.icebreaker.dto.response.article.GetCommentListResponseDto;
@@ -146,5 +148,57 @@ public class ArticleServiceImplement implements ArticleService {
         }
 
         return GetCommentListResponseDto.success(resultSets);
+    }
+
+
+    @Override
+    public ResponseEntity<? super DeleteArticleResponseDto> deleteArticle(Integer articleNum,String email) {
+        try{
+            boolean existedUser = userRepository.existsByEmail(email);
+            if (!existedUser) return DeleteArticleResponseDto.notExistUser();
+
+            Article articleEntity = articleRepository.findByArticleNum(articleNum);
+            if (articleEntity == null) return DeleteArticleResponseDto.noExistArticle();
+
+            String writerEmail = articleEntity.getUserEmail();
+            boolean isWriter = writerEmail.equals(email);
+            if (!isWriter) return DeleteArticleResponseDto.noPermission();
+
+            commentRepository.deleteByArticleNum(articleNum);
+            favoriteRepository.deleteByArticleNum(articleNum);
+
+            articleRepository.delete(articleEntity);
+
+
+        }catch(Exception exception){
+            exception.printStackTrace();
+            return ResponseDto.databaseError();
+        }
+
+        return DeleteArticleResponseDto.success();
+    }
+
+
+    @Override
+    public ResponseEntity<? super DeleteCommentResponseDto> deleteComment(Integer commentNumber, String email) {
+        try{
+            boolean existedUser = userRepository.existsByEmail(email);
+            if (!existedUser) return DeleteCommentResponseDto.notExistUser();
+
+            CommentEntity commentEntity = commentRepository.findByCommentNumber(commentNumber);
+
+            String writerEmail = commentEntity.getUserEmail();
+            boolean isWriter = writerEmail.equals(email);
+            if (!isWriter) return DeleteArticleResponseDto.noPermission();
+
+            commentRepository.delete(commentEntity);
+
+
+        }catch(Exception exception){
+            exception.printStackTrace();
+            return ResponseDto.databaseError();
+        }
+
+        return DeleteCommentResponseDto.success();
     }
 }

@@ -2,6 +2,8 @@ package com.icehufs.icebreaker.repository;
 
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -23,5 +25,9 @@ public interface CommentRepository extends JpaRepository<CommentEntity, Integer>
         nativeQuery = true
     )
     List<GetCommentListReultSet> getCommentList(Integer articleNum);
-    
+
+    @Transactional
+    void deleteByArticleNum(Integer articleNum);
+
+    CommentEntity findByCommentNumber(Integer commentNumber);
 }
