@@ -41,6 +41,8 @@ public class AuthServiceImplement implements AuthService {
             dto.setPassword(encodedPassword);
 
             User userEntity = new User(dto); //dto데이터를 entity에 삽입
+            
+
 
             userRepository.save(userEntity); //entity를 repository를 통해 db에 저장
 

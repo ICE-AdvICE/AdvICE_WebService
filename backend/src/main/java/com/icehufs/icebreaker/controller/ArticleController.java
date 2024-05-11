@@ -13,9 +13,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.icehufs.icebreaker.dto.request.article.PostArticleRequestDto;
+import com.icehufs.icebreaker.dto.request.article.PostCommentRequestDto;
 import com.icehufs.icebreaker.dto.response.article.GetArticleListResponseDto;
 import com.icehufs.icebreaker.dto.response.article.GetArticleResponseDto;
+import com.icehufs.icebreaker.dto.response.article.GetCommentListResponseDto;
 import com.icehufs.icebreaker.dto.response.article.PostArticleResponseDto;
+import com.icehufs.icebreaker.dto.response.article.PostCommentResponseDto;
 import com.icehufs.icebreaker.dto.response.article.PutFavoriteResponseDto;
 import com.icehufs.icebreaker.service.ArticleService;
 
@@ -59,4 +62,24 @@ public class ArticleController {
         ResponseEntity<? super PutFavoriteResponseDto> response = articleService.putFavorite(articleNum, email);
         return response;
     }
+
+    @PostMapping("/{articleNum}/comment")
+    public ResponseEntity<? super PostCommentResponseDto> postComment(
+        @RequestBody @Valid PostCommentRequestDto requestBody,
+        @PathVariable("articleNum") Integer articleNum,
+        @AuthenticationPrincipal String email
+    ){
+        ResponseEntity<? super PostCommentResponseDto> response = articleService.postComment(requestBody, articleNum, email);
+        return response;
+    }
+
+    @GetMapping("/{articleNum}/comment-list")
+    public ResponseEntity<? super GetCommentListResponseDto> getCommentList(
+        @PathVariable("articleNum") Integer articleNum
+    ){
+        ResponseEntity<? super GetCommentListResponseDto> response = articleService.GetCommentList(articleNum);
+        return response;
+    }
+
 }
+
