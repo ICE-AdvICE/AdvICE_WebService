@@ -4,6 +4,8 @@ import org.springframework.http.ResponseEntity;
 
 import com.icehufs.icebreaker.dto.request.article.PostArticleRequestDto;
 import com.icehufs.icebreaker.dto.request.article.PostCommentRequestDto;
+import com.icehufs.icebreaker.dto.response.article.DeleteArticleResponseDto;
+import com.icehufs.icebreaker.dto.response.article.DeleteCommentResponseDto;
 import com.icehufs.icebreaker.dto.response.article.GetArticleListResponseDto;
 import com.icehufs.icebreaker.dto.response.article.GetArticleResponseDto;
 import com.icehufs.icebreaker.dto.response.article.GetCommentListResponseDto;
@@ -18,9 +20,11 @@ public interface ArticleService {
     ResponseEntity<? super PostArticleResponseDto> postArticle(PostArticleRequestDto dto, String email);
     ResponseEntity<? super GetArticleResponseDto> getArticle(Integer articleNum);
     ResponseEntity<? super GetArticleListResponseDto> getArticleList();
+    ResponseEntity<? super DeleteArticleResponseDto> deleteArticle(Integer articleNum, String email);
 
     ResponseEntity<? super PutFavoriteResponseDto> putFavorite(Integer articleNum, String email);
 
     ResponseEntity<? super PostCommentResponseDto> postComment(PostCommentRequestDto dto, Integer articleNum, String email);
     ResponseEntity<? super GetCommentListResponseDto> GetCommentList(Integer articleNum);
+    ResponseEntity<? super DeleteCommentResponseDto> deleteComment(Integer commentNumber, String email);
 }

@@ -4,6 +4,7 @@ import javax.validation.Valid;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,6 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.icehufs.icebreaker.dto.request.article.PostArticleRequestDto;
 import com.icehufs.icebreaker.dto.request.article.PostCommentRequestDto;
+import com.icehufs.icebreaker.dto.response.article.DeleteArticleResponseDto;
+import com.icehufs.icebreaker.dto.response.article.DeleteCommentResponseDto;
 import com.icehufs.icebreaker.dto.response.article.GetArticleListResponseDto;
 import com.icehufs.icebreaker.dto.response.article.GetArticleResponseDto;
 import com.icehufs.icebreaker.dto.response.article.GetCommentListResponseDto;
@@ -78,6 +81,24 @@ public class ArticleController {
         @PathVariable("articleNum") Integer articleNum
     ){
         ResponseEntity<? super GetCommentListResponseDto> response = articleService.GetCommentList(articleNum);
+        return response;
+    }
+
+    @DeleteMapping("/{articleNum}")
+    public ResponseEntity<? super DeleteArticleResponseDto> deleteArticle(
+        @PathVariable("articleNum") Integer articleNum,
+        @AuthenticationPrincipal String email
+    ){
+        ResponseEntity<? super DeleteArticleResponseDto> response = articleService.deleteArticle(articleNum, email);
+        return response;
+    }
+
+    @DeleteMapping("/comment/{commentNumber}")
+    public ResponseEntity<? super DeleteCommentResponseDto> deleteComment(
+        @PathVariable("commentNumber") Integer commentNumber,
+        @AuthenticationPrincipal String email
+    ){
+        ResponseEntity<? super DeleteCommentResponseDto> response = articleService.deleteComment(commentNumber, email);
         return response;
     }
 
