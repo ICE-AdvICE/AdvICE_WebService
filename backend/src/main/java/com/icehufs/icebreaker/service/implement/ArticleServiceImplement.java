@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.icehufs.icebreaker.dto.request.article.PatchArticleRequestDto;
 import com.icehufs.icebreaker.dto.request.article.PostArticleRequestDto;
 import com.icehufs.icebreaker.dto.request.article.PostCommentRequestDto;
 import com.icehufs.icebreaker.dto.response.ResponseDto;
@@ -14,6 +15,7 @@ import com.icehufs.icebreaker.dto.response.article.DeleteCommentResponseDto;
 import com.icehufs.icebreaker.dto.response.article.GetArticleListResponseDto;
 import com.icehufs.icebreaker.dto.response.article.GetArticleResponseDto;
 import com.icehufs.icebreaker.dto.response.article.GetCommentListResponseDto;
+import com.icehufs.icebreaker.dto.response.article.PatchArticleResponseDto;
 import com.icehufs.icebreaker.dto.response.article.PostArticleResponseDto;
 import com.icehufs.icebreaker.dto.response.article.PostCommentResponseDto;
 import com.icehufs.icebreaker.dto.response.article.PutFavoriteResponseDto;
@@ -200,5 +202,31 @@ public class ArticleServiceImplement implements ArticleService {
         }
 
         return DeleteCommentResponseDto.success();
+    }
+
+
+    @Override
+    public ResponseEntity<? super PatchArticleResponseDto> patchArticle(PatchArticleRequestDto dto, Integer articleNum,
+            String email) {
+                try{
+                    boolean existedUser = userRepository.existsByEmail(email);
+                    if (!existedUser) return PatchArticleResponseDto.notExistUser();
+
+                    Article articleEntity = articleRepository.findByArticleNum(articleNum);
+                    if(articleEntity == null) return PatchArticleResponseDto.noExistArticle();
+
+                    String wirterEmail = articleEntity.getUserEmail();
+                    boolean isWriter = wirterEmail.equals(email);
+                    if (!isWriter) return PatchArticleResponseDto.noPermission();
+
+                    articleEntity.patchArticle(dto);
+                    articleRepository.save(articleEntity);
+        
+                }catch(Exception exception){
+                    exception.printStackTrace();
+                    return ResponseDto.databaseError();
+                }
+                
+                return PatchArticleResponseDto.success();
     }
 }
