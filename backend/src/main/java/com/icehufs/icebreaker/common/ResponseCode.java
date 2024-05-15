@@ -18,5 +18,6 @@ public interface ResponseCode {
     String NO_PERMISSION = "NP";
 
     //HTTP Status 500
+    String MAIL_FAIL = "MF";
     String DATABASE_ERROR = "DBE";
 }
