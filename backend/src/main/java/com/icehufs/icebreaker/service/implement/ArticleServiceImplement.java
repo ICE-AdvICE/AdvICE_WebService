@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.icehufs.icebreaker.dto.request.article.PatchArticleRequestDto;
+import com.icehufs.icebreaker.dto.request.article.PatchCommentRequestDto;
 import com.icehufs.icebreaker.dto.request.article.PostArticleRequestDto;
 import com.icehufs.icebreaker.dto.request.article.PostCommentRequestDto;
 import com.icehufs.icebreaker.dto.response.ResponseDto;
@@ -16,6 +17,7 @@ import com.icehufs.icebreaker.dto.response.article.GetArticleListResponseDto;
 import com.icehufs.icebreaker.dto.response.article.GetArticleResponseDto;
 import com.icehufs.icebreaker.dto.response.article.GetCommentListResponseDto;
 import com.icehufs.icebreaker.dto.response.article.PatchArticleResponseDto;
+import com.icehufs.icebreaker.dto.response.article.PatchCommentResponseDto;
 import com.icehufs.icebreaker.dto.response.article.PostArticleResponseDto;
 import com.icehufs.icebreaker.dto.response.article.PostCommentResponseDto;
 import com.icehufs.icebreaker.dto.response.article.PutFavoriteResponseDto;
@@ -229,4 +231,30 @@ public class ArticleServiceImplement implements ArticleService {
                 
                 return PatchArticleResponseDto.success();
     }
+
+
+    @Override
+    public ResponseEntity<? super PatchCommentResponseDto> patchComment(PatchCommentRequestDto dto,
+            Integer commentNumber, String email){
+                try{
+                    boolean existedUser = userRepository.existsByEmail(email);
+                    if (!existedUser) return PatchCommentResponseDto.notExistUser();
+
+                    CommentEntity commentEntity = commentRepository.findByCommentNumber(commentNumber);
+
+                    String wirterEmail = commentEntity.getUserEmail();
+                    boolean isWriter = wirterEmail.equals(email);
+                    if (!isWriter) return PatchArticleResponseDto.noPermission();
+
+                    commentEntity.patchComment(dto);
+                    commentRepository.save(commentEntity);
+        
+                }catch(Exception exception){
+                    exception.printStackTrace();
+                    return ResponseDto.databaseError();
+                }
+                
+                return PatchCommentResponseDto.success();
+            }
+
 }

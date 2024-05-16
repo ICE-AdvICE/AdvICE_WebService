@@ -10,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.icehufs.icebreaker.dto.request.article.PatchCommentRequestDto;
 import com.icehufs.icebreaker.dto.request.article.PostCommentRequestDto;
 
 import lombok.AllArgsConstructor;
@@ -29,6 +30,10 @@ public class CommentEntity {
     private String writeDatetime;
     private String userEmail;
     private int articleNum;
+
+    public void patchComment(PatchCommentRequestDto dto){
+        this.content = dto.getContent();
+    }
 
     public CommentEntity(PostCommentRequestDto dto, Integer articleNum, String email){
 

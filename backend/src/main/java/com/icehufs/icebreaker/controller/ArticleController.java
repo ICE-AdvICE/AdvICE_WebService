@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.icehufs.icebreaker.dto.request.article.PatchArticleRequestDto;
+import com.icehufs.icebreaker.dto.request.article.PatchCommentRequestDto;
 import com.icehufs.icebreaker.dto.request.article.PostArticleRequestDto;
 import com.icehufs.icebreaker.dto.request.article.PostCommentRequestDto;
 import com.icehufs.icebreaker.dto.response.article.DeleteArticleResponseDto;
@@ -23,6 +24,7 @@ import com.icehufs.icebreaker.dto.response.article.GetArticleListResponseDto;
 import com.icehufs.icebreaker.dto.response.article.GetArticleResponseDto;
 import com.icehufs.icebreaker.dto.response.article.GetCommentListResponseDto;
 import com.icehufs.icebreaker.dto.response.article.PatchArticleResponseDto;
+import com.icehufs.icebreaker.dto.response.article.PatchCommentResponseDto;
 import com.icehufs.icebreaker.dto.response.article.PostArticleResponseDto;
 import com.icehufs.icebreaker.dto.response.article.PostCommentResponseDto;
 import com.icehufs.icebreaker.dto.response.article.PutFavoriteResponseDto;
@@ -58,9 +60,19 @@ public class ArticleController {
     public ResponseEntity<? super PatchArticleResponseDto> patchArticle(
         @RequestBody @Valid PatchArticleRequestDto requestBody,
         @PathVariable("articleNum") Integer articleNum,
-        @AuthenticationPrincipal String emailString
+        @AuthenticationPrincipal String email
     ){
-        ResponseEntity<? super PatchArticleResponseDto> response = articleService.patchArticle(requestBody, articleNum, emailString);
+        ResponseEntity<? super PatchArticleResponseDto> response = articleService.patchArticle(requestBody, articleNum, email);
+        return response;
+    }
+
+    @PatchMapping("/comment/{commentNumber}")
+    public ResponseEntity<? super PatchCommentResponseDto> patchComment(
+        @RequestBody @Valid PatchCommentRequestDto requestBody,
+        @PathVariable("commentNumber") Integer commentNumber,
+        @AuthenticationPrincipal String email
+    ){
+        ResponseEntity<? super PatchCommentResponseDto> response = articleService.patchComment(requestBody, commentNumber, email);
         return response;
     }
 
