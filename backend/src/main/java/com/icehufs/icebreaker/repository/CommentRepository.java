@@ -14,6 +14,7 @@ import com.icehufs.icebreaker.entity.CommentEntity;
 @Repository
 public interface CommentRepository extends JpaRepository<CommentEntity, Integer> {
 
+    CommentEntity findByCommentNumber(Integer commentNumber);
     @Query(
         value=
         "SELECT" +
@@ -29,5 +30,5 @@ public interface CommentRepository extends JpaRepository<CommentEntity, Integer>
     @Transactional
     void deleteByArticleNum(Integer articleNum);
 
-    CommentEntity findByCommentNumber(Integer commentNumber);
+    
 }

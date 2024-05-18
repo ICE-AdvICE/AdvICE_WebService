@@ -8,10 +8,12 @@ import org.springframework.stereotype.Service;
 import com.icehufs.icebreaker.dto.request.user.PatchUserPassRequestDto;
 import com.icehufs.icebreaker.dto.request.user.PatchUserRequestDto;
 import com.icehufs.icebreaker.dto.response.ResponseDto;
+import com.icehufs.icebreaker.dto.response.user.DeleteUserResponseDto;
 import com.icehufs.icebreaker.dto.response.user.GetSignInUserResponseDto;
 import com.icehufs.icebreaker.dto.response.user.PatchUserPassResponseDto;
 import com.icehufs.icebreaker.dto.response.user.PatchUserResponseDto;
 import com.icehufs.icebreaker.entity.User;
+import com.icehufs.icebreaker.repository.ArticleRepository;
 import com.icehufs.icebreaker.repository.UserRepository;
 import com.icehufs.icebreaker.service.UserService;
 
@@ -22,6 +24,7 @@ import lombok.RequiredArgsConstructor;
 public class UserServiceImplement implements UserService {
 
     private final UserRepository userRepository;
+    private final ArticleRepository articleRepository;
 
     private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
@@ -79,6 +82,24 @@ public class UserServiceImplement implements UserService {
         }
         
         return PatchUserPassResponseDto.success();
+    }
+
+    @Override
+    public ResponseEntity<? super DeleteUserResponseDto> deleteUser(String email) {
+                try{
+
+            User userEntity = userRepository.findByEmail(email);
+            if (userEntity == null) return DeleteUserResponseDto.notExistUser();
+
+            articleRepository.deleteByUserEmail(email);
+            userRepository.delete(userEntity);
+
+        }catch(Exception exception){
+            exception.printStackTrace();
+            return ResponseDto.databaseError();
+        }
+
+        return DeleteUserResponseDto.success();
     }
     
 }
