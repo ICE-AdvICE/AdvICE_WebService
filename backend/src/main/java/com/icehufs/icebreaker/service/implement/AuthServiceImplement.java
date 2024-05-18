@@ -1,5 +1,11 @@
 package com.icehufs.icebreaker.service.implement;
 
+import com.icehufs.icebreaker.common.CertificationNumber;
+import com.icehufs.icebreaker.dto.request.auth.EmailCertificationRequestDto;
+import com.icehufs.icebreaker.dto.response.auth.EmailCertificationResponseDto;
+import com.icehufs.icebreaker.entity.CertificationEntity;
+import com.icehufs.icebreaker.provider.EmailProvider;
+import com.icehufs.icebreaker.repository.CertificationRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -25,6 +31,9 @@ public class AuthServiceImplement implements AuthService {
 
     private final UserRepository userRepository;
     private final JwtProvider jwtProvider;
+
+    private final CertificationRepository certificationRepository;
+    private final EmailProvider emailProvider;
 
     private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
@@ -83,6 +92,34 @@ public class AuthServiceImplement implements AuthService {
         
     }
 
-    
-    
+    @Override
+    public ResponseEntity<? super EmailCertificationResponseDto> emailCertification(EmailCertificationRequestDto dto) {
+        try {
+            // String userId = dto.getId();
+            String email = dto.getEmail();
+
+            // 존재하는 이메일인지 확인.
+            boolean isExistEmail = userRepository.existsByEmail(email);
+            if (isExistEmail) return EmailCertificationResponseDto.duplicateId();
+
+            // 인증번호 생성
+            String certificationNumber = CertificationNumber.getCertificationNumber();
+
+            // 이메일 전송 성공 여부 확인
+            boolean isSuccessed = emailProvider.sendCertificationMail(email, certificationNumber);
+            if (!isSuccessed) return EmailCertificationResponseDto.mailSendFail();
+
+            // 데이터베이스 저장.
+            CertificationEntity certificationEntity = new CertificationEntity(email, certificationNumber);
+            certificationRepository.save(certificationEntity);
+
+
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            return ResponseDto.databaseError();
+        }
+
+        return EmailCertificationResponseDto.success();
+    }
+
 }
