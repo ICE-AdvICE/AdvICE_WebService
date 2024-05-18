@@ -2,7 +2,9 @@ package com.icehufs.icebreaker.controller;
 
 import javax.validation.Valid;
 
+import com.icehufs.icebreaker.dto.request.auth.CheckCertificationRequestDto;
 import com.icehufs.icebreaker.dto.request.auth.EmailCertificationRequestDto;
+import com.icehufs.icebreaker.dto.response.auth.CheckCertificationResponseDto;
 import com.icehufs.icebreaker.dto.response.auth.EmailCertificationResponseDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -51,6 +53,14 @@ public class AuthController {
             @RequestBody @Valid EmailCertificationRequestDto requestBody
     ) {
         ResponseEntity<? super EmailCertificationResponseDto> response = authService.emailCertification(requestBody);
+        return response;
+    }
+
+    @PostMapping("/check-certification")
+    public ResponseEntity<? super CheckCertificationResponseDto> checkCertification (
+            @RequestBody @Valid CheckCertificationRequestDto requestBody
+    ) {
+        ResponseEntity<? super CheckCertificationResponseDto> response = authService.checkCertification(requestBody);
         return response;
     }
 }

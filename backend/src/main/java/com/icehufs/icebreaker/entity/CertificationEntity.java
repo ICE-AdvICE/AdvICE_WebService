@@ -17,7 +17,9 @@ import javax.persistence.Table;
 public class CertificationEntity {
 
     @Id
-    private String user_email;
+    @Column(name="user_email")
+    private String userEmail;
+
     private String certificationNumber;
 
 }
