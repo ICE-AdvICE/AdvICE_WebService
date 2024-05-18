@@ -12,6 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.icehufs.icebreaker.dto.request.article.PatchArticleRequestDto;
 import com.icehufs.icebreaker.dto.request.article.PostArticleRequestDto;
 
 import lombok.AllArgsConstructor;
@@ -84,11 +85,8 @@ public class Article {
         this.likeCount --;
     }
 
-    // 게시글 수정을 위한 코드
-    //public void patch(Article article) {
-    //    if (article.title != null)
-    //        this.title = article.title;
-    //    if (article.content != null)
-    //        this.content = article.content;
-    //}
+    public void patchArticle(PatchArticleRequestDto dto) {
+        this.articleTitle = dto.getArticleTitle();
+        this.articleContent = dto.getArticleContent();
+    }
 }

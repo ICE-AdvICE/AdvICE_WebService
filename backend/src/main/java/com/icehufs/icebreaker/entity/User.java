@@ -6,6 +6,8 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import com.icehufs.icebreaker.dto.request.auth.SignUpRequestDto;
+import com.icehufs.icebreaker.dto.request.user.PatchUserPassRequestDto;
+import com.icehufs.icebreaker.dto.request.user.PatchUserRequestDto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -32,8 +34,14 @@ public class User {
     @Column(name = "user_name")
     private String name;
 
-    //@Column(name = "user_createDate")
-    //private LocalDateTime date;
+    public void patchUser(PatchUserRequestDto dto){
+        this.studentNum = dto.getStudentNum();
+        this.name = dto.getName();
+    }
+
+    public void patchUserPass(PatchUserPassRequestDto dto){
+        this.password = dto.getPassword();
+    }
 
     public User(SignUpRequestDto dto) {
         this.email = dto.getEmail();
