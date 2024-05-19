@@ -16,6 +16,7 @@ import com.icehufs.icebreaker.dto.response.article.DeleteCommentResponseDto;
 import com.icehufs.icebreaker.dto.response.article.GetArticleListResponseDto;
 import com.icehufs.icebreaker.dto.response.article.GetArticleResponseDto;
 import com.icehufs.icebreaker.dto.response.article.GetCommentListResponseDto;
+import com.icehufs.icebreaker.dto.response.article.GetUserArticleListResponseDto;
 import com.icehufs.icebreaker.dto.response.article.PatchArticleResponseDto;
 import com.icehufs.icebreaker.dto.response.article.PatchCommentResponseDto;
 import com.icehufs.icebreaker.dto.response.article.PostArticleResponseDto;
@@ -256,5 +257,27 @@ public class ArticleServiceImplement implements ArticleService {
                 
                 return PatchCommentResponseDto.success();
             }
+
+
+    @Override
+    public ResponseEntity<? super GetUserArticleListResponseDto> getUserArticleList(String email) {
+
+        List<Article> articleListViewEntities = new ArrayList<>();
+
+        try{
+
+            boolean existedUser = userRepository.existsByEmail(email);
+            if (!existedUser) return GetUserArticleListResponseDto.noExistUser();
+
+            articleListViewEntities = artileListViewRepository.findByUserEmailOrderByArticleDateDesc(email);
+
+            
+
+        }catch(Exception exception) {
+            exception.printStackTrace();
+            return ResponseDto.databaseError();
+        }
+        return GetUserArticleListResponseDto.success(articleListViewEntities);
+    }
 
 }

@@ -11,5 +11,6 @@ import com.icehufs.icebreaker.entity.Article;
 public interface ArtileListViewRepository extends JpaRepository<Article, Integer>{
 
     List<Article> findAll();
+    List<Article> findByUserEmailOrderByArticleDateDesc(String userEmail);
     
 }
