@@ -1,18 +1,19 @@
 package com.icehufs.icebreaker.dto.response.auth;
 
-import com.icehufs.icebreaker.common.ResponseCode;
-import com.icehufs.icebreaker.common.ResponseMessage;
-import com.icehufs.icebreaker.dto.request.auth.EmailCertificationRequestDto;
-import com.icehufs.icebreaker.dto.response.ResponseDto;
-import lombok.Getter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+
+import com.icehufs.icebreaker.common.ResponseCode;
+import com.icehufs.icebreaker.common.ResponseMessage;
+import com.icehufs.icebreaker.dto.response.ResponseDto;
+
+import lombok.Getter;
 
 @Getter
 public class EmailCertificationResponseDto extends ResponseDto {
 
     private EmailCertificationResponseDto(){
-        super("특정_코드", "메세지_내용");
+        super(ResponseCode.SUCCESS, ResponseMessage.SUCCESS);
     }
 
     public static ResponseEntity<EmailCertificationResponseDto> success(){

@@ -1,18 +1,19 @@
     package com.icehufs.icebreaker.dto.response.auth;
 
-    import com.icehufs.icebreaker.common.ResponseCode;
-    import com.icehufs.icebreaker.common.ResponseMessage;
-    import com.icehufs.icebreaker.dto.request.auth.CheckCertificationRequestDto;
-    import com.icehufs.icebreaker.dto.response.ResponseDto;
-    import lombok.Getter;
     import org.springframework.http.HttpStatus;
-    import org.springframework.http.ResponseEntity;
+import org.springframework.http.ResponseEntity;
+
+import com.icehufs.icebreaker.common.ResponseCode;
+import com.icehufs.icebreaker.common.ResponseMessage;
+import com.icehufs.icebreaker.dto.response.ResponseDto;
+
+import lombok.Getter;
 
     @Getter
     public class CheckCertificationResponseDto extends ResponseDto {
 
         private CheckCertificationResponseDto(){
-            super();
+            super(ResponseCode.SUCCESS, ResponseMessage.SUCCESS);
         }
 
         public static ResponseEntity<CheckCertificationResponseDto> success() {

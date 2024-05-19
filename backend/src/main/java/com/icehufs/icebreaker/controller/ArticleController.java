@@ -23,6 +23,7 @@ import com.icehufs.icebreaker.dto.response.article.DeleteCommentResponseDto;
 import com.icehufs.icebreaker.dto.response.article.GetArticleListResponseDto;
 import com.icehufs.icebreaker.dto.response.article.GetArticleResponseDto;
 import com.icehufs.icebreaker.dto.response.article.GetCommentListResponseDto;
+import com.icehufs.icebreaker.dto.response.article.GetUserArticleListResponseDto;
 import com.icehufs.icebreaker.dto.response.article.PatchArticleResponseDto;
 import com.icehufs.icebreaker.dto.response.article.PatchCommentResponseDto;
 import com.icehufs.icebreaker.dto.response.article.PostArticleResponseDto;
@@ -79,6 +80,14 @@ public class ArticleController {
     @GetMapping("/list")
     public ResponseEntity<? super GetArticleListResponseDto> getArticleList(){
         ResponseEntity<? super GetArticleListResponseDto> response = articleService.getArticleList();
+        return response;
+    }
+
+    @GetMapping("/user-list")
+        public ResponseEntity<? super GetUserArticleListResponseDto> patchUserPass(
+        @AuthenticationPrincipal String email
+    ){
+        ResponseEntity<? super GetUserArticleListResponseDto> response = articleService.getUserArticleList(email);
         return response;
     }
 
