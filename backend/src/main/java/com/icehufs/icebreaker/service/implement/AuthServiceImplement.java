@@ -1,11 +1,15 @@
 package com.icehufs.icebreaker.service.implement;
 
 import com.icehufs.icebreaker.common.CertificationNumber;
+import com.icehufs.icebreaker.dto.request.auth.CheckCertificationRequestDto;
 import com.icehufs.icebreaker.dto.request.auth.EmailCertificationRequestDto;
+import com.icehufs.icebreaker.dto.response.auth.CheckCertificationResponseDto;
 import com.icehufs.icebreaker.dto.response.auth.EmailCertificationResponseDto;
 import com.icehufs.icebreaker.entity.CertificationEntity;
 import com.icehufs.icebreaker.provider.EmailProvider;
 import com.icehufs.icebreaker.repository.CertificationRepository;
+//import org.slf4j.Logger;
+//import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -120,6 +124,35 @@ public class AuthServiceImplement implements AuthService {
         }
 
         return EmailCertificationResponseDto.success();
+    }
+
+    @Override
+    public ResponseEntity<? super CheckCertificationResponseDto> checkCertification(CheckCertificationRequestDto dto) {
+        System.out.println("Starting certification check for email: " + dto.getEmail());
+        try {
+            // String userId = dto.getId();
+            String email = dto.getEmail();
+            String certificationNumber = dto.getCertificationNumber();
+
+
+            CertificationEntity certificationEntity = certificationRepository.findByUserEmail(email);
+            // 인증 메일을 보내지 않은 경우.
+            if (certificationEntity == null) {
+                return CheckCertificationResponseDto.certificationFail();
+            }
+
+            boolean isMatched = certificationEntity.getUserEmail().equals(email) && certificationEntity.getCertificationNumber().equals(certificationNumber);
+
+            if (!isMatched) {
+                return CheckCertificationResponseDto.certificationFail();
+            }
+
+
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            return ResponseDto.databaseError();
+        }
+        return CheckCertificationResponseDto.success();
     }
 
 }
