@@ -1,25 +1,22 @@
 package com.icehufs.icebreaker.service.implement;
 
 import com.icehufs.icebreaker.common.CertificationNumber;
-import com.icehufs.icebreaker.dto.request.auth.CheckCertificationRequestDto;
-import com.icehufs.icebreaker.dto.request.auth.EmailCertificationRequestDto;
-import com.icehufs.icebreaker.dto.response.auth.CheckCertificationResponseDto;
-import com.icehufs.icebreaker.dto.response.auth.EmailCertificationResponseDto;
+import com.icehufs.icebreaker.dto.request.auth.*;
+import com.icehufs.icebreaker.dto.response.auth.*;
+import com.icehufs.icebreaker.entity.BanDuration;
 import com.icehufs.icebreaker.entity.CertificationEntity;
+import com.icehufs.icebreaker.entity.UserBan;
 import com.icehufs.icebreaker.provider.EmailProvider;
 import com.icehufs.icebreaker.repository.CertificationRepository;
 //import org.slf4j.Logger;
 //import org.slf4j.LoggerFactory;
+import com.icehufs.icebreaker.repository.UserBanRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.icehufs.icebreaker.dto.request.auth.SignInRequestDto;
-import com.icehufs.icebreaker.dto.request.auth.SignUpRequestDto;
 import com.icehufs.icebreaker.dto.response.ResponseDto;
-import com.icehufs.icebreaker.dto.response.auth.SignInResponseDto;
-import com.icehufs.icebreaker.dto.response.auth.SignUpResponseDto;
 import com.icehufs.icebreaker.entity.User;
 import com.icehufs.icebreaker.provider.JwtProvider;
 import com.icehufs.icebreaker.repository.UserRepository;
@@ -27,6 +24,9 @@ import com.icehufs.icebreaker.service.AuthService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
 
 @Slf4j
 @Service
@@ -38,7 +38,7 @@ public class AuthServiceImplement implements AuthService {
 
     private final CertificationRepository certificationRepository;
     private final EmailProvider emailProvider;
-
+    private final UserBanRepository userBanRepository;
     private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     @Override
@@ -155,4 +155,28 @@ public class AuthServiceImplement implements AuthService {
         return CheckCertificationResponseDto.success();
     }
 
+    @Override
+    @Transactional
+    public ResponseEntity<? super GiveUserBanResponseDto> giveUserBan(GiveUserBanRequestDto dto) {
+        try {
+            String email = dto.getEmail();
+            User user = userRepository.findByEmail(email);
+            if (user == null) {
+                return GiveUserBanResponseDto.duplicateId();
+            }
+
+            BanDuration banDuration = BanDuration.valueOf(dto.getBanDuration().toUpperCase());
+            UserBan userBan = new UserBan();
+            userBan.setUser(user);
+            userBan.setBanDuration(banDuration);
+            userBan.setBanStartTime(LocalDateTime.now());
+
+            userBanRepository.save(userBan);
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            return ResponseDto.databaseError();
+        }
+
+        return GiveUserBanResponseDto.success();
+    }
 }

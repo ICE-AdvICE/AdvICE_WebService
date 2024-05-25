@@ -2,20 +2,11 @@ package com.icehufs.icebreaker.controller;
 
 import javax.validation.Valid;
 
-import com.icehufs.icebreaker.dto.request.auth.CheckCertificationRequestDto;
-import com.icehufs.icebreaker.dto.request.auth.EmailCertificationRequestDto;
-import com.icehufs.icebreaker.dto.response.auth.CheckCertificationResponseDto;
-import com.icehufs.icebreaker.dto.response.auth.EmailCertificationResponseDto;
+import com.icehufs.icebreaker.dto.request.auth.*;
+import com.icehufs.icebreaker.dto.response.auth.*;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import com.icehufs.icebreaker.dto.request.auth.SignInRequestDto;
-import com.icehufs.icebreaker.dto.request.auth.SignUpRequestDto;
-import com.icehufs.icebreaker.dto.response.auth.SignInResponseDto;
-import com.icehufs.icebreaker.dto.response.auth.SignUpResponseDto;
 import com.icehufs.icebreaker.service.AuthService;
 
 import lombok.RequiredArgsConstructor;
@@ -61,6 +52,14 @@ public class AuthController {
             @RequestBody @Valid CheckCertificationRequestDto requestBody
     ) {
         ResponseEntity<? super CheckCertificationResponseDto> response = authService.checkCertification(requestBody);
+        return response;
+    }
+
+    @PostMapping("/give-ban")
+    public ResponseEntity<? super GiveUserBanResponseDto> GiveUserBan (
+            @RequestBody @Valid GiveUserBanRequestDto requestBody
+    ) {
+        ResponseEntity<? super GiveUserBanResponseDto> response = authService.giveUserBan(requestBody);
         return response;
     }
 }

@@ -11,8 +11,6 @@
         <module name="icebreaker.main" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="icebreaker" target="17" />
-    </bytecodeTargetLevel>
+    <bytecodeTargetLevel target="17" />
   </component>
 </project>

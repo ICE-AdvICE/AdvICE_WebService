@@ -1,15 +1,8 @@
 package com.icehufs.icebreaker.service;
 
-import com.icehufs.icebreaker.dto.request.auth.CheckCertificationRequestDto;
-import com.icehufs.icebreaker.dto.request.auth.EmailCertificationRequestDto;
-import com.icehufs.icebreaker.dto.response.auth.CheckCertificationResponseDto;
-import com.icehufs.icebreaker.dto.response.auth.EmailCertificationResponseDto;
+import com.icehufs.icebreaker.dto.request.auth.*;
+import com.icehufs.icebreaker.dto.response.auth.*;
 import org.springframework.http.ResponseEntity;
-
-import com.icehufs.icebreaker.dto.request.auth.SignInRequestDto;
-import com.icehufs.icebreaker.dto.request.auth.SignUpRequestDto;
-import com.icehufs.icebreaker.dto.response.auth.SignInResponseDto;
-import com.icehufs.icebreaker.dto.response.auth.SignUpResponseDto;
 
 public interface AuthService {
 
@@ -17,4 +10,5 @@ public interface AuthService {
     ResponseEntity<? super SignInResponseDto> signIn(SignInRequestDto dto);
     ResponseEntity<? super EmailCertificationResponseDto> emailCertification(EmailCertificationRequestDto dto);
     ResponseEntity<? super CheckCertificationResponseDto> checkCertification(CheckCertificationRequestDto dto);
+    ResponseEntity<? super GiveUserBanResponseDto> giveUserBan(GiveUserBanRequestDto dto);
 }
