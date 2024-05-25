@@ -54,8 +54,6 @@ public class AuthServiceImplement implements AuthService {
             dto.setPassword(encodedPassword);
 
             User userEntity = new User(dto); //dto데이터를 entity에 삽입
-            
-
 
             userRepository.save(userEntity); //entity를 repository를 통해 db에 저장
 
@@ -77,12 +75,17 @@ public class AuthServiceImplement implements AuthService {
             String email = dto.getEmail();  //요청으로 받은 이메일 존재 확인
             User userEntity = userRepository.findByEmail(email);
             if (userEntity == null) return SignInResponseDto.signInFail();
-            
 
             String password = dto.getPassword(); //요청 받은 비번과 해당 유저(이메일)의 비번 일치하는지 확인
             String encodedPassword = userEntity.getPassword();
+            // System.out.println("Encoded Password from DB: " + encodedPassword);
+            // System.out.println("Input Password: " + password);
+
             boolean isMatched = passwordEncoder.matches(password, encodedPassword); //입력 받은 비번과 db에 있는 암호화된 비번 확인;
-            if(!isMatched) return SignInResponseDto.signInFail();
+            if(!isMatched) {
+                // System.out.println("비밀번호가 일치하지않습니다.");
+                return SignInResponseDto.signInFail();
+            }
 
             token = jwtProvider.create(email); //토큰 생성
 
@@ -160,14 +163,16 @@ public class AuthServiceImplement implements AuthService {
     public ResponseEntity<? super GiveUserBanResponseDto> giveUserBan(GiveUserBanRequestDto dto) {
         try {
             String email = dto.getEmail();
-            User user = userRepository.findByEmail(email);
-            if (user == null) {
+            User ban_email = userRepository.findByEmail(email);
+
+            // 이미 정지된 계정일 경우.
+            if (ban_email == null) {
                 return GiveUserBanResponseDto.duplicateId();
             }
 
             BanDuration banDuration = BanDuration.valueOf(dto.getBanDuration().toUpperCase());
             UserBan userBan = new UserBan();
-            userBan.setUser(user);
+            userBan.setEmail(email);
             userBan.setBanDuration(banDuration);
             userBan.setBanStartTime(LocalDateTime.now());
 

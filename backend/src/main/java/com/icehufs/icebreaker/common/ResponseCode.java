@@ -16,6 +16,7 @@ public interface ResponseCode {
 
     //HTTP Status 403
     String NO_PERMISSION = "NP";
+    String BANNED_USER = "BU";
 
     //HTTP Status 500
     String MAIL_FAIL = "MF";

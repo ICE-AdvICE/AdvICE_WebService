@@ -1,8 +1,12 @@
 package com.icehufs.icebreaker.service.implement;
 
+import java.time.LocalDateTime;
+import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.icehufs.icebreaker.entity.*;
+import com.icehufs.icebreaker.repository.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -22,15 +26,6 @@ import com.icehufs.icebreaker.dto.response.article.PatchCommentResponseDto;
 import com.icehufs.icebreaker.dto.response.article.PostArticleResponseDto;
 import com.icehufs.icebreaker.dto.response.article.PostCommentResponseDto;
 import com.icehufs.icebreaker.dto.response.article.PutFavoriteResponseDto;
-import com.icehufs.icebreaker.entity.Article;
-import com.icehufs.icebreaker.entity.CommentEntity;
-import com.icehufs.icebreaker.entity.FavoriteEntity;
-import com.icehufs.icebreaker.repository.ArticleRepository;
-import com.icehufs.icebreaker.repository.ArtileListViewRepository;
-import com.icehufs.icebreaker.repository.CommentRepository;
-import com.icehufs.icebreaker.repository.FavoriteRepository;
-import com.icehufs.icebreaker.repository.GetCommentListReultSet;
-import com.icehufs.icebreaker.repository.UserRepository;
 import com.icehufs.icebreaker.service.ArticleService;
 
 import lombok.RequiredArgsConstructor;
@@ -44,13 +39,28 @@ public class ArticleServiceImplement implements ArticleService {
     private final UserRepository userRepository;
     private final CommentRepository commentRepository;
     private final FavoriteRepository favoriteRepository;
+    private final UserBanRepository userBanRepository;
     
     @Override
     public ResponseEntity<? super PostArticleResponseDto> postArticle(PostArticleRequestDto dto, String email){
         try{
+            // 사용자 계정이 존재하는지 확인하는 코드
             boolean existedEmail = userRepository.existsByEmail(email);
             if (!existedEmail) return PostArticleResponseDto.notExistUser();
 
+            // 사용자 계정이 정지되어 있는지 확인하는 코드
+            UserBan userBan = userBanRepository.findByEmail(email);
+            // 만일 계정이 정지되어있다면..
+            if (userBan != null){
+                LocalDateTime banEndTime = userBan.getBanStartTime().plus(getPeriod(userBan.getBanDuration()));
+                // 활동 정지가 만료되지 않았을 경우
+                if (LocalDateTime.now().isBefore(banEndTime)) {
+                    return PostArticleResponseDto.bannedUser();
+                // 활동 정지가 만료되었을 경우
+                } else {
+                    userBanRepository.delete(userBan);
+                }
+            }
             Article articleEntity = new Article(dto, email);
             articleRepository.save(articleEntity);
         }catch (Exception exception){
@@ -280,4 +290,19 @@ public class ArticleServiceImplement implements ArticleService {
         return GetUserArticleListResponseDto.success(articleListViewEntities);
     }
 
+    // BanDuration 엔티티를 받아와 사용.
+    private Period getPeriod(BanDuration banDuration) {
+        switch (banDuration) {
+            case ONE_MONTH:
+                return Period.ofMonths(1);
+            case SIX_MONTHS:
+                return Period.ofMonths(6);
+            case ONE_YEAR:
+                return Period.ofYears(1);
+            case PERMANENT:
+                return Period.ofYears(100);  // 100년이기에 사실상 영구정지와 같다.
+            default:
+                throw new IllegalArgumentException("Unknown ban duration: " + banDuration);
+        }
+    }
 }
