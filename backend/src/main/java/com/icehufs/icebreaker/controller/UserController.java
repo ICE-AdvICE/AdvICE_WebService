@@ -4,6 +4,7 @@ import javax.validation.Valid;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.icehufs.icebreaker.dto.request.user.PatchUserPassRequestDto;
 import com.icehufs.icebreaker.dto.request.user.PatchUserRequestDto;
+import com.icehufs.icebreaker.dto.response.user.DeleteUserResponseDto;
 import com.icehufs.icebreaker.dto.response.user.GetSignInUserResponseDto;
 import com.icehufs.icebreaker.dto.response.user.PatchUserPassResponseDto;
 import com.icehufs.icebreaker.dto.response.user.PatchUserResponseDto;
@@ -50,5 +52,14 @@ public class UserController {
         ResponseEntity<? super PatchUserPassResponseDto> response = userService.patchUserPass(requestBody, email);
         return response;
     }
+
+    @DeleteMapping("")
+    public ResponseEntity<? super DeleteUserResponseDto> deleteUser(
+        @AuthenticationPrincipal String email
+    ){
+        ResponseEntity<? super DeleteUserResponseDto> response = userService.deleteUser(email);
+        return response;
+    }
+
     
 }
