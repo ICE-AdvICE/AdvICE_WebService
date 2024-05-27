@@ -18,6 +18,7 @@ import com.icehufs.icebreaker.dto.request.article.PatchArticleRequestDto;
 import com.icehufs.icebreaker.dto.request.article.PatchCommentRequestDto;
 import com.icehufs.icebreaker.dto.request.article.PostArticleRequestDto;
 import com.icehufs.icebreaker.dto.request.article.PostCommentRequestDto;
+import com.icehufs.icebreaker.dto.response.article.CheckOwnOfArticleResponseDto;
 import com.icehufs.icebreaker.dto.response.article.DeleteArticleResponseDto;
 import com.icehufs.icebreaker.dto.response.article.DeleteCommentResponseDto;
 import com.icehufs.icebreaker.dto.response.article.GetArticleListResponseDto;
@@ -64,6 +65,15 @@ public class ArticleController {
         @AuthenticationPrincipal String email
     ){
         ResponseEntity<? super PatchArticleResponseDto> response = articleService.patchArticle(requestBody, articleNum, email);
+        return response;
+    }
+
+    @GetMapping("/own/{articleNum}")
+    public ResponseEntity<? super CheckOwnOfArticleResponseDto> checkOwnArticle(
+        @PathVariable("articleNum") Integer articleNum,
+        @AuthenticationPrincipal String email
+    ){
+        ResponseEntity<? super CheckOwnOfArticleResponseDto> response = articleService.checkOwnArtcle(email, articleNum);
         return response;
     }
 

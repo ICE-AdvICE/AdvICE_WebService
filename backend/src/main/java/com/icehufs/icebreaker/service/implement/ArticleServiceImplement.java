@@ -5,8 +5,6 @@ import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.icehufs.icebreaker.entity.*;
-import com.icehufs.icebreaker.repository.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +13,7 @@ import com.icehufs.icebreaker.dto.request.article.PatchCommentRequestDto;
 import com.icehufs.icebreaker.dto.request.article.PostArticleRequestDto;
 import com.icehufs.icebreaker.dto.request.article.PostCommentRequestDto;
 import com.icehufs.icebreaker.dto.response.ResponseDto;
+import com.icehufs.icebreaker.dto.response.article.CheckOwnOfArticleResponseDto;
 import com.icehufs.icebreaker.dto.response.article.DeleteArticleResponseDto;
 import com.icehufs.icebreaker.dto.response.article.DeleteCommentResponseDto;
 import com.icehufs.icebreaker.dto.response.article.GetArticleListResponseDto;
@@ -26,6 +25,18 @@ import com.icehufs.icebreaker.dto.response.article.PatchCommentResponseDto;
 import com.icehufs.icebreaker.dto.response.article.PostArticleResponseDto;
 import com.icehufs.icebreaker.dto.response.article.PostCommentResponseDto;
 import com.icehufs.icebreaker.dto.response.article.PutFavoriteResponseDto;
+import com.icehufs.icebreaker.entity.Article;
+import com.icehufs.icebreaker.entity.BanDuration;
+import com.icehufs.icebreaker.entity.CommentEntity;
+import com.icehufs.icebreaker.entity.FavoriteEntity;
+import com.icehufs.icebreaker.entity.UserBan;
+import com.icehufs.icebreaker.repository.ArticleRepository;
+import com.icehufs.icebreaker.repository.ArtileListViewRepository;
+import com.icehufs.icebreaker.repository.CommentRepository;
+import com.icehufs.icebreaker.repository.FavoriteRepository;
+import com.icehufs.icebreaker.repository.GetCommentListReultSet;
+import com.icehufs.icebreaker.repository.UserBanRepository;
+import com.icehufs.icebreaker.repository.UserRepository;
 import com.icehufs.icebreaker.service.ArticleService;
 
 import lombok.RequiredArgsConstructor;
@@ -304,5 +315,27 @@ public class ArticleServiceImplement implements ArticleService {
             default:
                 throw new IllegalArgumentException("Unknown ban duration: " + banDuration);
         }
+    }
+
+
+    @Override
+    public ResponseEntity<? super CheckOwnOfArticleResponseDto> checkOwnArtcle(String email, Integer articleNum) {
+        try{
+            boolean existedUser = userRepository.existsByEmail(email);
+            if (!existedUser) return CheckOwnOfArticleResponseDto.notExistUser();
+
+            Article articleEntity = articleRepository.findByArticleNum(articleNum);
+            if(articleEntity == null) return CheckOwnOfArticleResponseDto.noExistArticle();
+
+            String wirterEmail = articleEntity.getUserEmail();
+            boolean isWriter = wirterEmail.equals(email);
+            if (!isWriter) return CheckOwnOfArticleResponseDto.noPermission();
+
+        }catch(Exception exception){
+            exception.printStackTrace();
+            return ResponseDto.databaseError();
+        }
+        
+        return CheckOwnOfArticleResponseDto.success();
     }
 }

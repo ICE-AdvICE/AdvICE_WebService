@@ -1,32 +1,41 @@
 package com.icehufs.icebreaker.service.implement;
 
-import com.icehufs.icebreaker.common.CertificationNumber;
-import com.icehufs.icebreaker.dto.request.auth.*;
-import com.icehufs.icebreaker.dto.response.auth.*;
-import com.icehufs.icebreaker.entity.BanDuration;
-import com.icehufs.icebreaker.entity.CertificationEntity;
-import com.icehufs.icebreaker.entity.UserBan;
-import com.icehufs.icebreaker.provider.EmailProvider;
-import com.icehufs.icebreaker.repository.CertificationRepository;
-//import org.slf4j.Logger;
-//import org.slf4j.LoggerFactory;
-import com.icehufs.icebreaker.repository.UserBanRepository;
+import java.time.LocalDateTime;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.icehufs.icebreaker.common.CertificationNumber;
+import com.icehufs.icebreaker.dto.request.auth.CheckCertificationRequestDto;
+import com.icehufs.icebreaker.dto.request.auth.EmailCertificationRequestDto;
+import com.icehufs.icebreaker.dto.request.auth.GiveUserBanRequestDto;
+import com.icehufs.icebreaker.dto.request.auth.SignInRequestDto;
+import com.icehufs.icebreaker.dto.request.auth.SignUpRequestDto;
 import com.icehufs.icebreaker.dto.response.ResponseDto;
+import com.icehufs.icebreaker.dto.response.auth.CheckCertificationResponseDto;
+import com.icehufs.icebreaker.dto.response.auth.EmailCertificationResponseDto;
+import com.icehufs.icebreaker.dto.response.auth.GiveUserBanResponseDto;
+import com.icehufs.icebreaker.dto.response.auth.PassChanEmailCertificationResponseDto;
+import com.icehufs.icebreaker.dto.response.auth.SignInResponseDto;
+import com.icehufs.icebreaker.dto.response.auth.SignUpResponseDto;
+import com.icehufs.icebreaker.entity.BanDuration;
+import com.icehufs.icebreaker.entity.CertificationEntity;
 import com.icehufs.icebreaker.entity.User;
+import com.icehufs.icebreaker.entity.UserBan;
+import com.icehufs.icebreaker.provider.EmailProvider;
 import com.icehufs.icebreaker.provider.JwtProvider;
+import com.icehufs.icebreaker.repository.CertificationRepository;
+//import org.slf4j.Logger;
+//import org.slf4j.LoggerFactory;
+import com.icehufs.icebreaker.repository.UserBanRepository;
 import com.icehufs.icebreaker.repository.UserRepository;
 import com.icehufs.icebreaker.service.AuthService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDateTime;
 
 @Slf4j
 @Service
@@ -109,6 +118,12 @@ public class AuthServiceImplement implements AuthService {
             boolean isExistEmail = userRepository.existsByEmail(email);
             if (isExistEmail) return EmailCertificationResponseDto.duplicateId();
 
+            // 전에 이 이메일로 인증번호를 받은적 있으면 그 이메일 삭제
+            CertificationEntity certificationEntity1 = certificationRepository.findByUserEmail(email);
+            if (certificationEntity1 != null){
+                certificationRepository.delete(certificationEntity1);
+            }
+
             // 인증번호 생성
             String certificationNumber = CertificationNumber.getCertificationNumber();
 
@@ -184,4 +199,40 @@ public class AuthServiceImplement implements AuthService {
 
         return GiveUserBanResponseDto.success();
     }
+
+    @Override
+    public ResponseEntity<? super PassChanEmailCertificationResponseDto> passChanEmailCertif(EmailCertificationRequestDto dto){
+        try {
+            
+            String email = dto.getEmail();
+
+            // 존재하는 이메일인지 확인.
+            boolean isExistEmail = userRepository.existsByEmail(email);
+            if (!isExistEmail) return PassChanEmailCertificationResponseDto.notExistUser();
+
+            CertificationEntity certificationEntity1 = certificationRepository.findByUserEmail(email);
+            if (certificationEntity1 != null){
+                certificationRepository.delete(certificationEntity1);
+            }
+
+            // 인증번호 생성
+            String certificationNumber = CertificationNumber.getCertificationNumber();
+
+            // 이메일 전송 성공 여부 확인
+            boolean isSuccessed = emailProvider.sendCertificationMail(email, certificationNumber);
+            if (!isSuccessed) return EmailCertificationResponseDto.mailSendFail();
+
+            // 데이터베이스 저장.
+            CertificationEntity certificationEntity = new CertificationEntity(email, certificationNumber);
+            certificationRepository.save(certificationEntity);
+
+
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            return ResponseDto.databaseError();
+        }
+
+        return PassChanEmailCertificationResponseDto.success();
+    }
+
 }

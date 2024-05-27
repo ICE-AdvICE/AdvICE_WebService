@@ -6,6 +6,7 @@ import com.icehufs.icebreaker.dto.request.article.PatchArticleRequestDto;
 import com.icehufs.icebreaker.dto.request.article.PatchCommentRequestDto;
 import com.icehufs.icebreaker.dto.request.article.PostArticleRequestDto;
 import com.icehufs.icebreaker.dto.request.article.PostCommentRequestDto;
+import com.icehufs.icebreaker.dto.response.article.CheckOwnOfArticleResponseDto;
 import com.icehufs.icebreaker.dto.response.article.DeleteArticleResponseDto;
 import com.icehufs.icebreaker.dto.response.article.DeleteCommentResponseDto;
 import com.icehufs.icebreaker.dto.response.article.GetArticleListResponseDto;
@@ -28,6 +29,7 @@ public interface ArticleService {
     ResponseEntity<? super GetArticleListResponseDto> getArticleList();
     ResponseEntity<? super GetUserArticleListResponseDto> getUserArticleList(String email);
     ResponseEntity<? super PatchArticleResponseDto> patchArticle(PatchArticleRequestDto dto, Integer articleNum, String email);
+    ResponseEntity<? super CheckOwnOfArticleResponseDto> checkOwnArtcle(String email, Integer articleNum);
     ResponseEntity<? super DeleteArticleResponseDto> deleteArticle(Integer articleNum, String email);
 
     ResponseEntity<? super PutFavoriteResponseDto> putFavorite(Integer articleNum, String email);
@@ -36,4 +38,5 @@ public interface ArticleService {
     ResponseEntity<? super GetCommentListResponseDto> GetCommentList(Integer articleNum);
     ResponseEntity<? super PatchCommentResponseDto> patchComment(PatchCommentRequestDto requestBody, Integer commentNumber, String email);
     ResponseEntity<? super DeleteCommentResponseDto> deleteComment(Integer commentNumber, String email);
+
 }
