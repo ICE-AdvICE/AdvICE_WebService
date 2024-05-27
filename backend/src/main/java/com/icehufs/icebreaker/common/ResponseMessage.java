@@ -13,14 +13,14 @@ public interface ResponseMessage {
         //HTTP Status 401
         String SIGN_IN_FAIL = "Login information mismatch.";
         String AUTHORIZATION_FAIL = "Authorization Failed.";
-    
+
         //HTTP Status 403
         String NO_PERMISSION = "Do not have permission.";
         String BANNED_USER = "User is currently banned from posting";
-    
+
         //HTTP Status 500
         String MAIL_FAIL = "Mail send Failed";
         String DATABASE_ERROR = "Database error.";
 
-    
+
 }

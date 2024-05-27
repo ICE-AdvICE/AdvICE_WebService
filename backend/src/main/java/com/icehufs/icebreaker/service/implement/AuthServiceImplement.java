@@ -210,6 +210,11 @@ public class AuthServiceImplement implements AuthService {
             boolean isExistEmail = userRepository.existsByEmail(email);
             if (!isExistEmail) return PassChanEmailCertificationResponseDto.notExistUser();
 
+            CertificationEntity certificationEntity1 = certificationRepository.findByUserEmail(email);
+            if (certificationEntity1 != null){
+                certificationRepository.delete(certificationEntity1);
+            }
+
             // 인증번호 생성
             String certificationNumber = CertificationNumber.getCertificationNumber();
 
