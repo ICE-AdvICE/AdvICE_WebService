@@ -5,6 +5,7 @@ public interface ResponseMessage {
         String SUCCESS = "Success.";
 
         //HTTP Status 400
+        String SUCCESS_BUT_NOT = "Success but not.";
         String VALIDATION_FAILED= "Validati on failed.";
         String DUPLICATE_EMAIL = "Duplicate email.";
         String NOT_EXISTED_USER = "This user does not exist.";

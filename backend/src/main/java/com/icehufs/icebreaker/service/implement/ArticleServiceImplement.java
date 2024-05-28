@@ -13,6 +13,7 @@ import com.icehufs.icebreaker.dto.request.article.PatchCommentRequestDto;
 import com.icehufs.icebreaker.dto.request.article.PostArticleRequestDto;
 import com.icehufs.icebreaker.dto.request.article.PostCommentRequestDto;
 import com.icehufs.icebreaker.dto.response.ResponseDto;
+import com.icehufs.icebreaker.dto.response.article.CheckArticleFavoriteResponseDto;
 import com.icehufs.icebreaker.dto.response.article.CheckOwnOfArticleResponseDto;
 import com.icehufs.icebreaker.dto.response.article.DeleteArticleResponseDto;
 import com.icehufs.icebreaker.dto.response.article.DeleteCommentResponseDto;
@@ -337,5 +338,18 @@ public class ArticleServiceImplement implements ArticleService {
         }
         
         return CheckOwnOfArticleResponseDto.success();
+    }
+    
+    @Override
+    public ResponseEntity<? super CheckArticleFavoriteResponseDto> checkFavorite(Integer articleNum, String email) {
+        try {
+            FavoriteEntity favoriteEntity = favoriteRepository.findByArticleNumAndUserEmail(articleNum, email);
+            if (favoriteEntity == null) return CheckArticleFavoriteResponseDto.notFavorite();
+
+        }catch (Exception exception){
+            exception.printStackTrace();
+            return ResponseDto.databaseError();
+        }
+        return CheckArticleFavoriteResponseDto.success();
     }
 }
