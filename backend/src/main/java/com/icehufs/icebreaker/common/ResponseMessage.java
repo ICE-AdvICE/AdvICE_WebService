@@ -5,7 +5,6 @@ public interface ResponseMessage {
         String SUCCESS = "Success.";
 
         //HTTP Status 400
-        String SUCCESS_BUT_NOT = "Success but not.";
         String VALIDATION_FAILED= "Validati on failed.";
         String DUPLICATE_EMAIL = "Duplicate email.";
         String NOT_EXISTED_USER = "This user does not exist.";
@@ -17,10 +16,13 @@ public interface ResponseMessage {
 
         //HTTP Status 403
         String NO_PERMISSION = "Do not have permission.";
-        String BANNED_USER = "User is currently banned from posting";
+        String BANNED_USER = "User is currently banned from posting.";
+
+        //HTTP Status 404
+        String SUCCESS_BUT_NOT = "Success but not.";
 
         //HTTP Status 500
-        String MAIL_FAIL = "Mail send Failed";
+        String MAIL_FAIL = "Mail send Failed.";
         String DATABASE_ERROR = "Database error.";
 
 
