@@ -8,7 +8,6 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
 @Getter
-@Setter
 @NoArgsConstructor
 public class EmailCertificationRequestDto {
 
@@ -16,5 +15,7 @@ public class EmailCertificationRequestDto {
     @NotBlank
     private String email;
 
-
+    public void setEmail(String email) {
+        this.email = email + "@hufs.ac.kr";
+    }
 }
