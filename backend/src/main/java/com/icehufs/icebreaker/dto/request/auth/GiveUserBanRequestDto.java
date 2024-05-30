@@ -15,4 +15,7 @@ public class GiveUserBanRequestDto {
 
     @NotBlank
     private String banDuration;
+
+    @NotBlank
+    private String banReason;
 }
