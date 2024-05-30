@@ -5,8 +5,10 @@ import Newpassword from './Modals/Newpassword';
 import SignUpForm from './Modals/SignupForm';
 import SignUpinfoForm from './Modals/Signupinfo';
 import FindpasswordForm from './Modals/findpassword';
+import MypageForm from './Modals/Mypage';
 import MyModal from './MyModal';
 import './MyModal.module.css';
+
 
 
 
@@ -16,7 +18,8 @@ function App(){
   const [modalOpenfind, setModalOpenfind] = useState(false); //비밀번호 찾기
   const [modalOpenNew, setModalOpennew] = useState(false); //비밀번호 수정
   const [modalOpeninfo, setModalOpeninfo] = useState(false); //회원가입 인증 후 정보 입력
-  const navigator = useNavigate();
+  const [modalOpenMypage, setModalOpenmypage] = useState(false); //회원가입 인증 후 정보 입력
+  const navigator = useNavigate(); //네비게이션 하기0    
 
 
   const handleLogin = (user_studentnum, user_password) => {
@@ -43,24 +46,43 @@ function App(){
     console.log("Logging in with",user_name, user_studentnum,user_password, user_password_1);
     // 비밀번호 수정.
   };
+
+  const handlemypage = (user_email, user_studentnum,user_name ) => {
+    console.log("Logging in with",user_email, user_studentnum,user_name );
+    // 비밀번호 수정.
+  };
+  const openFindPasswordModal = () => {
+    setModalOpenin(false);  // 로그인 모달 닫기
+    setModalOpenfind(true); // 비밀번호 찾기 모달 열기
+  };
+
+
+  const openSignUpModal = () => {
+    setModalOpenin(false);  // 로그인 모달 닫기
+    setModalOpen(true); // 비밀번호 찾기 모달 열기
+  };
+
   
   return(
     <>
           <button onClick={e => setModalOpen(true)}>회원가입</button>  {/*버튼*/}
           <button onClick={e => setModalOpenin(true)}>로그인</button>  {/*버튼*/}
-          <button onClick={e => setModalOpenfind(true)}>비밀번호찾기</button>  {/*버튼*/}
+          <button onClick={e => {setModalOpenfind(true)}}>비밀번호찾기</button>  {/*버튼*/}
           <button onClick={e => setModalOpennew(true)}>비밀번호 수정하기</button>  {/*버튼*/}
           <button onClick={e => setModalOpeninfo(true)}>회원가입 정보입력</button>  {/*버튼*/}
-          <button onClick={() => navigator('/article-main')}>익명 게시판</button> {/*전체 게시글 페이지*/}
+          <button onClick={e => setModalOpenmypage(true)}>Mypage</button>  {/*버튼*/}
+          <button onClick={() => navigator('/article-main')}>익명 게시판</button> {/*전체 게시글 페이지 경로 적어주는 코드  + index.js 도 작업해주기 */} 
+          
           <MyModal //회원가입 모달
             open={modalOpen}
               width={500} //모달 넓이 이게 적당 한듯
+             
               onCancel={e => setModalOpen(false)} //x 버튼
               header={[
-                <button  onClick={e => setModalOpenin(true) }>로그인</button>
-                ,
-                <button  onClick={e => setModalOpen(true) }>회원가입</button>
-                ]}
+                <div className="image-container" style={{ textAlign: 'center' }}>
+                    <img src="/img/hufslogo.gif" alt="HUFS Logo" style={{ height: '50px', marginTop: '70px', display: 'block' }} />
+                </div>
+              ]}
                 footer={[]}
           >
             <SignUpForm onSignUpForm={handleSignUp} />
@@ -68,16 +90,21 @@ function App(){
 
           <MyModal
           open={modalOpenin}
+          onCancel={() => setModalOpenin(false)}
               width={500} //모달 넓이 이게 적당 한듯
+              
               header={[
-                <button onClick={e => setModalOpenin(true) }>로그인</button>,
-                <button  onClick={e => setModalOpen(true) }>회원가입</button>
+                <div className="image-container" style={{ textAlign: 'center' }}>
+                    <img src="/img/hufslogo.gif" alt="HUFS Logo" style={{ height: '50px', marginTop: '70px', display: 'block' }} />
+                </div>
+                
                 ]}
-              onCancel={e => setModalOpenin(false)} //x 버튼
+                
+             
 
               footer={[]}
           >
-          <LoginForm onLogin={handleLogin} />
+          <LoginForm onLogin={handleLogin} openFindPasswordModal={openFindPasswordModal} openSignUpModal={openSignUpModal} closeModal={() => setModalOpenin(false)} />
 
           </MyModal>
 
@@ -113,20 +140,32 @@ function App(){
               
           </MyModal>
 
-          <MyModal //비밀번호 찾기
+          <MyModal //회원가입 정보 입력
           open={modalOpeninfo}
               width={500} //모달 넓이 이게 적당 한듯
               header={[
-                <p>회원가입</p>
+                <div className="image-container" style={{ textAlign: 'center' }}>
+                    <img src="/img/hufslogo.gif" alt="HUFS Logo" style={{ height: '50px', marginTop: '70px', display: 'block' }} />
+                </div>
                 ]}
               onCancel={e => setModalOpeninfo(false)} //x 버튼
               footer={[]}
           >
             <SignUpinfoForm onLogin={handleinfo} />
+          </MyModal>
 
-
-
-              
+          <MyModal //마이페이지
+          open={modalOpenMypage}
+              width={500} //모달 넓이 이게 적당 한듯
+              header={[
+                <div className="image-container" style={{ textAlign: 'center' }}>
+                    <img src="/img/hufslogo.gif" alt="HUFS Logo" style={{ height: '50px', marginTop: '70px', display: 'block' }} />
+                </div>
+                ]}
+              onCancel={e => setModalOpenmypage(false)} //x 버튼
+              footer={[]}
+          >
+            <MypageForm onLogin={handlemypage} />
           </MyModal>
           
       </>
