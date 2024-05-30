@@ -1,7 +1,11 @@
 package com.icehufs.icebreaker.service.implement;
 
 import java.time.LocalDateTime;
+import java.time.Period;
 
+import com.icehufs.icebreaker.dto.response.article.PostArticleResponseDto;
+import com.icehufs.icebreaker.dto.response.auth.*;
+import com.icehufs.icebreaker.entity.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -15,16 +19,6 @@ import com.icehufs.icebreaker.dto.request.auth.GiveUserBanRequestDto;
 import com.icehufs.icebreaker.dto.request.auth.SignInRequestDto;
 import com.icehufs.icebreaker.dto.request.auth.SignUpRequestDto;
 import com.icehufs.icebreaker.dto.response.ResponseDto;
-import com.icehufs.icebreaker.dto.response.auth.CheckCertificationResponseDto;
-import com.icehufs.icebreaker.dto.response.auth.EmailCertificationResponseDto;
-import com.icehufs.icebreaker.dto.response.auth.GiveUserBanResponseDto;
-import com.icehufs.icebreaker.dto.response.auth.PassChanEmailCertificationResponseDto;
-import com.icehufs.icebreaker.dto.response.auth.SignInResponseDto;
-import com.icehufs.icebreaker.dto.response.auth.SignUpResponseDto;
-import com.icehufs.icebreaker.entity.BanDuration;
-import com.icehufs.icebreaker.entity.CertificationEntity;
-import com.icehufs.icebreaker.entity.User;
-import com.icehufs.icebreaker.entity.UserBan;
 import com.icehufs.icebreaker.provider.EmailProvider;
 import com.icehufs.icebreaker.provider.JwtProvider;
 import com.icehufs.icebreaker.repository.CertificationRepository;
@@ -97,7 +91,7 @@ public class AuthServiceImplement implements AuthService {
             }
 
             token = jwtProvider.create(email); //토큰 생성
-
+            System.out.println(token);
 
         } catch(Exception exception){
             exception.printStackTrace();
@@ -146,7 +140,7 @@ public class AuthServiceImplement implements AuthService {
 
     @Override
     public ResponseEntity<? super CheckCertificationResponseDto> checkCertification(CheckCertificationRequestDto dto) {
-        System.out.println("Starting certification check for email: " + dto.getEmail());
+        // System.out.println("Starting certification check for email: " + dto.getEmail());
         try {
             // String userId = dto.getId();
             String email = dto.getEmail();
@@ -178,10 +172,10 @@ public class AuthServiceImplement implements AuthService {
     public ResponseEntity<? super GiveUserBanResponseDto> giveUserBan(GiveUserBanRequestDto dto) {
         try {
             String email = dto.getEmail();
-            User ban_email = userRepository.findByEmail(email);
+            boolean ban_email = userBanRepository.existsByEmail(email);
 
-            // 이미 정지된 계정일 경우.
-            if (ban_email == null) {
+            // 이미 정지된 계정일 경우.(운영자가 한 번에 단일 작성자의 문제가 있는 여러 게시글에 정지를 부여할 경우.)
+            if (ban_email) {
                 return GiveUserBanResponseDto.duplicateId();
             }
 
@@ -235,4 +229,46 @@ public class AuthServiceImplement implements AuthService {
         return PassChanEmailCertificationResponseDto.success();
     }
 
+    @Override
+    public ResponseEntity<? super CheckUserBanResponseDto> checkUserBanStatus(String token) {
+        try {
+            String email = jwtProvider.extractEmail(token);
+            UserBan userBan = userBanRepository.findByEmail(email);
+            System.out.println("1111111");
+            // 만일 계정이 정지되어있다면..
+            if (userBan != null){
+                LocalDateTime banEndTime = userBan.getBanStartTime().plus(getPeriod(userBan.getBanDuration()));
+                // 활동 정지가 만료되지 않았을 경우
+                if (LocalDateTime.now().isBefore(banEndTime)) {
+                    return CheckUserBanResponseDto.success(userBan.getEmail(), userBan.getBanDuration(), userBan.getBanStartTime());
+                    // 활동 정지가 만료되었을 경우
+                } else {
+                    userBanRepository.delete(userBan);
+                    System.out.println("22222");
+                    return CheckUserBanResponseDto.notBanned();
+                }
+            } else {
+                return CheckUserBanResponseDto.notBanned();
+            }
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            return ResponseDto.databaseError();
+        }
+    }
+
+    // BanDuration 엔티티를 받아와 사용.
+    private Period getPeriod(BanDuration banDuration) {
+        switch (banDuration) {
+            case ONE_MONTH:
+                return Period.ofMonths(1);
+            case SIX_MONTHS:
+                return Period.ofMonths(6);
+            case ONE_YEAR:
+                return Period.ofYears(1);
+            case PERMANENT:
+                return Period.ofYears(100);  // 100년이기에 사실상 영구정지와 같다.
+            default:
+                throw new IllegalArgumentException("Unknown ban duration: " + banDuration);
+        }
+    }
 }

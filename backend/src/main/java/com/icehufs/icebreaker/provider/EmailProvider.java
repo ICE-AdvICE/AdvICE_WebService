@@ -21,7 +21,7 @@ public class EmailProvider {
             MimeMessageHelper messageHelper = new MimeMessageHelper(message, true);
 
             String htmlContent = getCertificationMessage(certificationNumber);
-
+            // System.out.println(email);
             messageHelper.setTo(email);
             messageHelper.setSubject(SUBJECT);
             messageHelper.setText(htmlContent, true);

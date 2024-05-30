@@ -60,19 +60,6 @@ public class ArticleServiceImplement implements ArticleService {
             boolean existedEmail = userRepository.existsByEmail(email);
             if (!existedEmail) return PostArticleResponseDto.notExistUser();
 
-            // 사용자 계정이 정지되어 있는지 확인하는 코드
-            UserBan userBan = userBanRepository.findByEmail(email);
-            // 만일 계정이 정지되어있다면..
-            if (userBan != null){
-                LocalDateTime banEndTime = userBan.getBanStartTime().plus(getPeriod(userBan.getBanDuration()));
-                // 활동 정지가 만료되지 않았을 경우
-                if (LocalDateTime.now().isBefore(banEndTime)) {
-                    return PostArticleResponseDto.bannedUser();
-                // 활동 정지가 만료되었을 경우
-                } else {
-                    userBanRepository.delete(userBan);
-                }
-            }
             Article articleEntity = new Article(dto, email);
             articleRepository.save(articleEntity);
         }catch (Exception exception){
@@ -301,23 +288,6 @@ public class ArticleServiceImplement implements ArticleService {
         }
         return GetUserArticleListResponseDto.success(articleListViewEntities);
     }
-
-    // BanDuration 엔티티를 받아와 사용.
-    private Period getPeriod(BanDuration banDuration) {
-        switch (banDuration) {
-            case ONE_MONTH:
-                return Period.ofMonths(1);
-            case SIX_MONTHS:
-                return Period.ofMonths(6);
-            case ONE_YEAR:
-                return Period.ofYears(1);
-            case PERMANENT:
-                return Period.ofYears(100);  // 100년이기에 사실상 영구정지와 같다.
-            default:
-                throw new IllegalArgumentException("Unknown ban duration: " + banDuration);
-        }
-    }
-
 
     @Override
     public ResponseEntity<? super CheckOwnOfArticleResponseDto> checkOwnArtcle(String email, Integer articleNum) {
