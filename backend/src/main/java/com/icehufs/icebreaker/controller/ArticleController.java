@@ -18,6 +18,7 @@ import com.icehufs.icebreaker.dto.request.article.PatchArticleRequestDto;
 import com.icehufs.icebreaker.dto.request.article.PatchCommentRequestDto;
 import com.icehufs.icebreaker.dto.request.article.PostArticleRequestDto;
 import com.icehufs.icebreaker.dto.request.article.PostCommentRequestDto;
+import com.icehufs.icebreaker.dto.response.article.CheckArticleFavoriteResponseDto;
 import com.icehufs.icebreaker.dto.response.article.CheckOwnOfArticleResponseDto;
 import com.icehufs.icebreaker.dto.response.article.DeleteArticleResponseDto;
 import com.icehufs.icebreaker.dto.response.article.DeleteCommentResponseDto;
@@ -74,6 +75,15 @@ public class ArticleController {
         @AuthenticationPrincipal String email
     ){
         ResponseEntity<? super CheckOwnOfArticleResponseDto> response = articleService.checkOwnArtcle(email, articleNum);
+        return response;
+    }
+
+    @GetMapping("/{articleNum}/like")
+    public ResponseEntity<? super CheckArticleFavoriteResponseDto> checkFavorite(
+        @PathVariable("articleNum") Integer articleNum,
+        @AuthenticationPrincipal String email
+    ){
+        ResponseEntity<? super CheckArticleFavoriteResponseDto> response = articleService.checkFavorite(articleNum, email);
         return response;
     }
 

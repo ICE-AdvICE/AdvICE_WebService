@@ -18,6 +18,9 @@ public interface ResponseCode {
     String NO_PERMISSION = "NP";
     String BANNED_USER = "BU";
 
+    //HTTP Status 404
+    String SUCCESS_BUT_NOT = "SN";
+
     //HTTP Status 500
     String MAIL_FAIL = "MF";
     String DATABASE_ERROR = "DBE";

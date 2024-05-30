@@ -1,1 +1,10 @@
 .DS_Store
+backend/.gradle/8.6/executionHistory/executionHistory.bin
+backend/.gradle/8.6/executionHistory/executionHistory.lock
+backend/.gradle/8.6/fileHashes/fileHashes.bin
+backend/.gradle/8.6/fileHashes/fileHashes.lock
+backend/.gradle/8.6/fileHashes/resourceHashesCache.bin
+backend/.gradle/buildOutputCleanup/buildOutputCleanup.lock
+backend/.gradle/file-system.probe
+backend/build/tmp/compileJava/previous-compilation-data.bin
+backend/.gradle
