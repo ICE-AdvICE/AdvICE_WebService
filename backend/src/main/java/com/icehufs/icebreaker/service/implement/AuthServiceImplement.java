@@ -241,7 +241,7 @@ public class AuthServiceImplement implements AuthService {
                 LocalDateTime banEndTime = userBan.getBanStartTime().plus(getPeriod(userBan.getBanDuration()));
                 // 활동 정지가 만료되지 않았을 경우
                 if (LocalDateTime.now().isBefore(banEndTime)) {
-                    return CheckUserBanResponseDto.success(userBan.getEmail(), userBan.getBanDuration(), userBan.getBanStartTime());
+                    return CheckUserBanResponseDto.success(userBan.getEmail(), userBan.getBanDuration(), userBan.getBanStartTime(), userBan.getBanReason());
                     // 활동 정지가 만료되었을 경우
                 } else {
                     userBanRepository.delete(userBan);
