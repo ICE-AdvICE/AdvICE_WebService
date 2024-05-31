@@ -75,6 +75,7 @@ public class AuthController {
         return response;
     }
 
+    // 정지 여부 확인 api
     @PostMapping("/check-user-ban")
     public ResponseEntity<? super CheckUserBanResponseDto> checkUserBanStatus(@RequestHeader("Authorization") String token) {
         // Assuming the token is prefixed with "Bearer "

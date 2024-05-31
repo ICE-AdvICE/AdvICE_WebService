@@ -173,16 +173,18 @@ public class AuthServiceImplement implements AuthService {
         try {
             String email = dto.getEmail();
             boolean ban_email = userBanRepository.existsByEmail(email);
-
+            
             // 이미 정지된 계정일 경우.(운영자가 한 번에 단일 작성자의 문제가 있는 여러 게시글에 정지를 부여할 경우.)
             if (ban_email) {
                 return GiveUserBanResponseDto.duplicateId();
             }
 
             BanDuration banDuration = BanDuration.valueOf(dto.getBanDuration().toUpperCase());
+            BanReason banReason = BanReason.valueOf(dto.getBanReason().toUpperCase());
             UserBan userBan = new UserBan();
             userBan.setEmail(email);
             userBan.setBanDuration(banDuration);
+            userBan.setBanReason(banReason);
             userBan.setBanStartTime(LocalDateTime.now());
 
             userBanRepository.save(userBan);
@@ -234,7 +236,6 @@ public class AuthServiceImplement implements AuthService {
         try {
             String email = jwtProvider.extractEmail(token);
             UserBan userBan = userBanRepository.findByEmail(email);
-            System.out.println("1111111");
             // 만일 계정이 정지되어있다면..
             if (userBan != null){
                 LocalDateTime banEndTime = userBan.getBanStartTime().plus(getPeriod(userBan.getBanDuration()));
@@ -244,7 +245,6 @@ public class AuthServiceImplement implements AuthService {
                     // 활동 정지가 만료되었을 경우
                 } else {
                     userBanRepository.delete(userBan);
-                    System.out.println("22222");
                     return CheckUserBanResponseDto.notBanned();
                 }
             } else {
