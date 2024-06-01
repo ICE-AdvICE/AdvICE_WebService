@@ -118,8 +118,8 @@ const BlogForm = ({ editing }) => {
                     <input type="hidden" name="category" value={category} />
                     <ul className="dropdown-menu">
                         <li onClick={() => handleCategoryChange('카테고리 선택')}>카테고리 선택</li>
-                        <li onClick={() => handleCategoryChange('0')}>0</li>
-                        <li onClick={() => handleCategoryChange('1')}>1</li>
+                        <li onClick={() => handleCategoryChange('요청')}>요청</li>
+                        <li onClick={() => handleCategoryChange('일반')}>일반</li>
                     </ul>
                 </div>
                 <span className="msg"></span>

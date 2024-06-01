@@ -6,6 +6,7 @@ import ArticleMain from './layouts/ArticleMain';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import NavBar from './components/NavBar';
 import CreatePage from './layouts/CreatePage';
+import ShowPage from './layouts/ShowPage';
 import './layouts/css/NavBar.css';
 ReactDOM.render(
   <BrowserRouter>
@@ -14,6 +15,8 @@ ReactDOM.render(
       <Route path="/" element={<Main />} />
       <Route path="/article-main" element={<ArticleMain />} />
       <Route path="/article-main/create" element={<CreatePage />} />
+      <Route path="/article-main/:articleNum" element={<ShowPage />} />
+
     </Routes>
   </BrowserRouter>,
   document.getElementById('root')

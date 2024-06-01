@@ -27,7 +27,7 @@ const InnerSection = () => {
     fetchData();
   }, []);
   const handleNavigateToPost = (articleNum) => {
-    navigate(`/article-main/order/${articleNum}`);
+    navigate(`/article-main/${articleNum}`);
   };
   return (
     <section className="inner">
