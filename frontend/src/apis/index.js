@@ -13,7 +13,7 @@ const Email_Certification_URL = () => `${API_DOMAIN}/auth/email-certification`; 
 const Check_Certification_URL = () => `${API_DOMAIN}/auth/check-certification`; //인증번호 인증
 const GET_MYPAGE_USER_URL = () => `${API_DOMAIN}/user`; //마이페이지_개인정보 
 
-
+const GET_SIGN_IN_USER_URL =() =>`${API_DOMAIN}/user`;
 const authorization = (accessToken) => {
     return {headers: {Authorization:`Bearer ${accessToken}`}}
 };
@@ -30,6 +30,55 @@ export const signInRequest = async (requestBody) => { //asyns를 통해 비동�
             return responseBody;
         });
     return result;
+};
+
+//수정
+export const updateArticleRequest = async (articleNum, updateData, accessToken) => {
+    try {
+        const response = await axios.patch(`${API_DOMAIN}/article/${articleNum}`, updateData, {
+            headers: { Authorization: `Bearer ${accessToken}` }
+        });
+        return response.data;
+    } catch (error) {
+        if (!error.response || !error.response.data) return null;
+        return error.response.data;
+    }
+};
+
+//댓글
+export const addCommentRequest = async (articleNum, commentData, accessToken) => {
+    try {
+        const response = await axios.put(`${API_DOMAIN}/article/${articleNum}/comment`, commentData, authorization(accessToken));
+        return response.data;
+    } catch (error) {
+        if (!error.response || !error.response.data) return null;
+        return error.response.data;
+    }
+};
+
+
+
+
+
+export const getSignInUserRequest = async (accessToken) => {
+    try {
+        const response = await axios.get(GET_SIGN_IN_USER_URL(), authorization(accessToken));
+        return response.data;
+    } catch (error) {
+        if (!error.response || !error.response.data) return null;
+        return error.response.data;
+    }
+};
+
+//게시물 작성
+export const createArticleRequest = async (postData, accessToken) => {
+    try {
+        const response = await axios.post(`${API_DOMAIN}/article`, postData, authorization(accessToken));
+        return response.data;
+    } catch (error) {
+        if (!error.response || !error.response.data) return null;
+        return error.response.data;
+    }
 };
 
 

@@ -1,18 +1,56 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import './css/BlogPage.css';
+import Card from '../components/Card';
+import Pagination from '../components/Pagination';
+import axios from 'axios';
 import { getArticleListRequest } from '../apis';
-import './anony-style.css';
 
-function MainPage() {
+const ArticleMain = () => {
+    const navigate = useNavigate();
+    const [currentPage, setCurrentPage] = useState(1);
+    const [articlesState, setArticlesState] = useState([]);
+    const articlesPerPage = 6;
+    const totalPages = Math.ceil(articlesState.length / articlesPerPage);
+    const indexOfLastArticle = currentPage * articlesPerPage;
+    const indexOfFirstArticle = indexOfLastArticle - articlesPerPage;
+    const currentArticles = articlesState.slice(indexOfFirstArticle, indexOfLastArticle);
+    const paginate = pageNumber => setCurrentPage(pageNumber);
 
-    const navigateToHufs = () => {
-        window.location.href = 'https://www.hufs.ac.kr/hufs/index.do';
+    const fetchArticles = async () => {
+        try {
+            const response = await axios.get('http://localhost:4000/api/v1/article/list'); // API 엔드포인트 수정
+            if (response.data.code === "SU") {
+                setArticlesState(response.data.articleList);
+            } else {
+                console.error('Error fetching articles:', response.data.message);
+            }
+        } catch (err) {
+            console.error("API 요청 중 오류 발생:", err);
+        }
     };
 
-    const navigateToIce = () => {
-        window.location.href = 'https://ice.hufs.ac.kr/sites/ice/index.do';
+    const incrementViews = async (articleNum, currentViews) => {
+        const updatedViews = currentViews + 1;
+        try {
+            await axios.patch(`http://localhost:4000/api/v1/article/${articleNum}`, { views: updatedViews });
+            const updatedArticles = articlesState.map(article =>
+                article.articleNum === articleNum ? { ...article, viewCount: updatedViews } : article
+            );
+            setArticlesState(updatedArticles);
+        } catch (err) {
+            console.error("조회수 업데이트 중 오류 발생:", err);
+        }
     };
 
-    const [articleList, setArticleList] = useState([]);
+    const handleCardClick = async (article) => {
+        try {
+            await incrementViews(article.articleNum, article.viewCount);
+            navigate(`/article-main/${article.articleNum}`);
+        } catch (err) {
+            console.error('조회수 업데이트 중 오류 발생:', err);
+        }
+    };
 
     const getArticleListResponse = (responseBody) => {
         if (!responseBody) {
@@ -22,108 +60,63 @@ function MainPage() {
         const { code, articleList } = responseBody;
         if (code === 'DBE') {
             alert('데이터베이스 오류입니다.');
-        } else if (code === 'SU' && Array.isArray(articleList)) { // articleList가 배열인지 확인
-            setArticleList(articleList); // 배열 데이터를 상태에 설정
+        } else if (code === 'SU' && Array.isArray(articleList)) {
+            setArticlesState(articleList); // 배열 데이터를 상태에 설정
         } else {
             alert('예상치 못한 데이터 형식입니다.');
         }
     };
-    
-    
 
     useEffect(() => {
         getArticleListRequest().then(getArticleListResponse);
-    }, []); // 빈 배열을 추가하여 컴포넌트 마운트 시에만 호출되도록 함
+    }, []);
 
-        return (
-            <div>
-            <header>
-                <div className="header-background">
-                <div className="header-container">
-                    <div className="header-letter">
-                    <div className="header-img">
-                        <img src="./header-name.png" alt="메인 콘텐츠 이미지" className="header-image" />
-                    </div>
-                    <div className="head-button">
-                        <button className="mypage">My Page</button>
-                    </div>
-                    </div>
+    return (
+        <div className="blog-container">
+            <img src="/main-image.png" alt="Main Content Image" className="header2-image" />
+            <div className="posts-overlay-container">
+                <img src="/main2-image.png" alt="Additional Content Image" className="header3-image"/>
+                <div className="title">
+                    <p>순번</p>
+                    <p>제목</p>
+                    <p>작성일</p>
+                    <p>조회</p>
+                    <p>좋아요</p>
                 </div>
+                <div className='main-top'>
+                    <img src="vector2.png" className="vector2"/>
                 </div>
-            </header>
-    
-            <section className="main">
-                <div className="main-container">
-                <div className="main-img">
-                    <img src="./main-image.png" alt="메인 콘텐츠 이미지" className="top-image" />
-                </div>
-                </div>
-            </section>
-    
-            <section className="main2">
-                <div className="main2-container">
-                <div className="main2-img">
-                    <img src="./main2-image.png" className="middle-image" />
-                </div>
-                <div className="vector-container">
-                    <img src="./Vector2.png" className="vector-line" />
-                </div>
-                <div className="table-container" >
-                    <div class="box-container">
-                        <table>
-                            <tbody>
-                                <tr>
-                                    <th>순번</th>
-                                    <th>글 제목</th>
-                                    <th>조회수</th>
-                                    <th>공감</th>
-                                    <th>작성일</th>
-    
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="1box-container">
-                    <table>
-                        <tbody>
-                            {articleList.map((article) => (
-                                <tr key={article.articleNum}>
-                                    <th>{article.articleNum}</th>
-                                    <th>{article.articlTitle}</th>
-                                    <th>{article.viewCount}</th>
-                                    <th>{article.likeCount}</th>
-                                    <th>{article.articleDate}</th>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                    </div>
+                <div className="posts-content">
+                    {currentArticles.length > 0 ? (
+                        currentArticles.map((article, articleNum) => (
+                            <Card
+                                title={article.articleTitle}
+                                createdAt={article.articleDate}
+                                views={article.viewCount}
+                                likes={article.likeCount}
+                                order={articleNum + 1}
+                                onClick={() => handleCardClick(article)}
+                                />
+                        ))
+                    ) : (
+                        <div>블로그 게시물이 없습니다</div>
+                    )}
                 </div>
                 <aside>
-                    <button className="sidebar-box" onClick={navigateToHufs}>
-                    <h2>학교 홈피</h2>
+                    <button className="sidebar-box" onClick={() => window.location.href='https://www.hufs.ac.kr/hufs/index.do'}>
+                        <h2>학교 홈피</h2>
                     </button>
-                    <button className="sidebar-box" onClick={navigateToIce}>
-                    <h2>학과 홈피</h2>
+                    <button className="sidebar-box" onClick={() => window.location.href='https://ice.hufs.ac.kr/sites/ice/index.do'}>
+                        <h2>학과 홈피</h2>
                     </button>
                 </aside>
-                <div class="page-container">
-                    <nav aria-label="Page navigation example">
-                        <ul class="pagination">
-                        <li class="page-item"><a class="page-link" href="#"></a></li>
-                        <li class="page-item"><a class="page-link" href="#">1</a></li>
-                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                        <li class="page-item"><a class="page-link" href="#">4</a></li>
-                        <li class="page-item"><a class="page-link" href="#">5</a></li>
-                        <li class="page-item"><a class="page-link" href="#"></a></li>
-                        </ul>
-                    </nav>
+                <div>
+                    <Pagination paginate={paginate} currentPage={currentPage} totalPages={totalPages} />
                 </div>
-                </div>
-            </section>
+                <Link to="/article-main/create" className="btn">익명게시판작성</Link>
             </div>
-        );
-        
+        </div>
+    );
 };
-export default MainPage;
+
+export default ArticleMain;
