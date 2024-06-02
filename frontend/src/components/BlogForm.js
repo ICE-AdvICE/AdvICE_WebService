@@ -6,15 +6,18 @@ import { useCookies } from 'react-cookie';
 import { updateArticleRequest, createArticleRequest } from '../apis/index';
 import ToastEditor from './ToastEditor.js';  
 import '../layouts/css/BlogForm.css'
+import { useLocation } from 'react-router-dom';
 
 const BlogForm = ({ editing }) => {
     const navigate = useNavigate();
     const { articleNum } = useParams();
     const [articleTitle, setArticleTitle] = useState('');
+    const location = useLocation();
     const [articleContent, setArticleContent] = useState('');  
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const [category, setCategory] = useState('카테고리 선택');
+    const [categoryName, setCategoryName] = useState('카테고리 선택'); // 카테고리 이름 초기값 설정
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [cookies] = useCookies(['accessToken']);
     const token = cookies.accessToken;
@@ -61,10 +64,18 @@ const BlogForm = ({ editing }) => {
             .finally(() => setLoading(false));
         }
     }, [editing, articleNum, token]);
-    
+    useEffect(() => {
+        if (editing && location.state?.article) {
+            const { articleTitle, articleContent, category } = location.state.article;
+            setArticleTitle(articleTitle || ''); // 기본값 설정
+            setArticleContent(articleContent || '');
+            setCategory(category || '카테고리 선택');
+        }
+    }, [editing, location.state]);
 
-    const handleCategoryChange = (newCategory) => {
-        setCategory(newCategory);
+    const handleCategoryChange = (id, name) => {
+        setCategory(id);
+        setCategoryName(name); // 카테고리 이름도 업데이트
         setDropdownOpen(false);
     };
 
@@ -112,14 +123,14 @@ const BlogForm = ({ editing }) => {
             <div className="container">
                 <div className={`dropdown ${dropdownOpen ? 'active' : ''}`} onClick={() => setDropdownOpen(!dropdownOpen)}>
                     <div className="select">
-                        <span>{category}</span>
+                        <span>{categoryName}</span>
                         <i className="fa fa-chevron-left"></i>
                     </div>
                     <input type="hidden" name="category" value={category} />
                     <ul className="dropdown-menu">
-                        <li onClick={() => handleCategoryChange('카테고리 선택')}>카테고리 선택</li>
-                        <li onClick={() => handleCategoryChange('요청')}>요청</li>
-                        <li onClick={() => handleCategoryChange('일반')}>일반</li>
+                        <li onClick={() => handleCategoryChange('0', '카테고리 선택')}>카테고리 선택</li>
+                        <li onClick={() => handleCategoryChange('0', '요청')}>요청</li>
+                        <li onClick={() => handleCategoryChange('1', '일반')}>일반</li>
                     </ul>
                 </div>
                 <span className="msg"></span>

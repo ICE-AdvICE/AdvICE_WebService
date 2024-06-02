@@ -6,35 +6,38 @@ import axios from 'axios';
 import { getArticleListRequest } from '../apis';
 import './css/BlogPage.css';
 
-const ArticleMain = () => {
+const AdminPage = () => {
     const navigate = useNavigate();
     const [currentPage, setCurrentPage] = useState(1);
     const [articlesState, setArticlesState] = useState([]);
     const articlesPerPage = 8;
-    const [searchTerm, setSearchTerm] = useState('');
     const totalPages = Math.ceil(articlesState.length / articlesPerPage);
     const indexOfLastArticle = currentPage * articlesPerPage;
     const indexOfFirstArticle = indexOfLastArticle - articlesPerPage;
     const currentArticles = articlesState.slice(indexOfFirstArticle, indexOfLastArticle);
-    const [selectedCategory, setSelectedCategory] = useState('title');
     const paginate = pageNumber => setCurrentPage(pageNumber);
-    const searchArticles = () => {
-        if (!searchTerm.trim()) {
-            alert("검색어를 입력하세요.");
-            return;
+
+    const deleteArticle = async (articleNum) => {
+        try {
+            const response = await axios.delete(`http://localhost:4000/api/v1/article/${articleNum}`);
+            if (response.data.code === "SU") {
+                // 성공적으로 삭제되면, 상태를 업데이트합니다.
+                const filteredArticles = articlesState.filter(article => article.articleNum !== articleNum);
+                setArticlesState(filteredArticles);
+            } else {
+                console.error('게시글 삭제 실패:', response.data.message);
+            }
+        } catch (err) {
+            console.error("게시글 삭제 요청 중 오류 발생:", err);
+            alert('게시글 삭제 중 오류가 발생했습니다.');
         }
-        const filteredArticles = articlesState.filter(article =>
-            selectedCategory === 'title' ?
-            article.articleTitle.toLowerCase().includes(searchTerm.toLowerCase()) :
-            article.articleContent.toLowerCase().includes(searchTerm.toLowerCase())
-        );
-        setArticlesState(filteredArticles);
     };
+    
 
     
     const fetchArticles = async () => {
         try {
-            const response = await axios.get('http://localhost:4000/api/v1/article/list'); // API 엔드포인트 수정
+            const response = await axios.get('http://localhost:4000/api/v1/article/'); // API 엔드포인트 수정
             if (response.data.code === "SU") {
                 setArticlesState(response.data.articleList);
             } else {
@@ -112,23 +115,14 @@ const ArticleMain = () => {
                                 order={indexOfFirstArticle + index + 1} 
                                 category = {article.category} 
                                 onClick={() => handleCardClick(article)}
+                                onDelete={deleteArticle} // 여기에 deleteArticle 함수를 전달
+                                articleNum={article.articleNum}
+                                
                             />
                         ))
                     ) : (
                         <div>블로그 게시물이 없습니다</div>
                     )}
-                </div>
-                <div className="search-bar">
-                    <select value={selectedCategory} onChange={e => setSelectedCategory(e.target.value)}>
-                        <option value="title">제목</option>
-                        <option value="content">내용</option>
-                    </select>
-                    <input
-                        type="text"
-                        value={searchTerm}
-                        onChange={e => setSearchTerm(e.target.value)}
-                    />
-                    <button onClick={searchArticles}>검색</button>
                 </div>
                 <aside>
                     <button className="sidebar-box" onClick={() => window.location.href='https://www.hufs.ac.kr/hufs/index.do'}>
@@ -147,4 +141,4 @@ const ArticleMain = () => {
     );
 };
 
-export default ArticleMain;
+export default AdminPage;
