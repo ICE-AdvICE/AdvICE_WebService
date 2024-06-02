@@ -12,6 +12,8 @@ const ToastEditor = ({ body, setBody }) => {
 
   return (
     <Editor
+      initialEditType="wysiwyg"
+      hideModeSwitch={true}
       toolbarItems={[
         ['heading', 'bold', 'italic', 'strike'],
         ['hr', 'quote'],
@@ -19,7 +21,6 @@ const ToastEditor = ({ body, setBody }) => {
         ['table'],
       ]}
       height="500px"
-      initialEditType="markdown"
       previewStyle="vertical"
       ref={editorRef}
       onChange={onChangeGetHTML}
