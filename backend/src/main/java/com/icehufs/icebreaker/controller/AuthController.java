@@ -67,11 +67,12 @@ public class AuthController {
         return response;
     }
 
-    @PostMapping("/give-ban")
+    @PostMapping("/give-ban/{articleNum}")
     public ResponseEntity<? super GiveUserBanResponseDto> GiveUserBan (
+            @PathVariable("articleNum") Integer articleNum,
             @RequestBody @Valid GiveUserBanRequestDto requestBody
     ) {
-        ResponseEntity<? super GiveUserBanResponseDto> response = authService.giveUserBan(requestBody);
+        ResponseEntity<? super GiveUserBanResponseDto> response = authService.giveUserBan(requestBody, articleNum);
         return response;
     }
 
