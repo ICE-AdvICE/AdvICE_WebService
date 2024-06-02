@@ -8,5 +8,4 @@ import org.springframework.stereotype.Repository;
 public interface UserBanRepository extends JpaRepository<UserBan, Long> {
     UserBan findByEmail(String email);
     boolean existsByEmail(String email);
-
 }
