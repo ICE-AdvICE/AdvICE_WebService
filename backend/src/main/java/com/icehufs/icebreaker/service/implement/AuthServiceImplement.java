@@ -23,6 +23,7 @@ import com.icehufs.icebreaker.dto.response.auth.GiveUserBanResponseDto;
 import com.icehufs.icebreaker.dto.response.auth.PassChanEmailCertificationResponseDto;
 import com.icehufs.icebreaker.dto.response.auth.SignInResponseDto;
 import com.icehufs.icebreaker.dto.response.auth.SignUpResponseDto;
+import com.icehufs.icebreaker.entity.Article;
 import com.icehufs.icebreaker.entity.BanDuration;
 import com.icehufs.icebreaker.entity.BanReason;
 import com.icehufs.icebreaker.entity.CertificationEntity;
@@ -30,9 +31,12 @@ import com.icehufs.icebreaker.entity.User;
 import com.icehufs.icebreaker.entity.UserBan;
 import com.icehufs.icebreaker.provider.EmailProvider;
 import com.icehufs.icebreaker.provider.JwtProvider;
-import com.icehufs.icebreaker.repository.CertificationRepository;
 //import org.slf4j.Logger;
 //import org.slf4j.LoggerFactory;
+import com.icehufs.icebreaker.repository.ArticleRepository;
+import com.icehufs.icebreaker.repository.CertificationRepository;
+import com.icehufs.icebreaker.repository.CommentRepository;
+import com.icehufs.icebreaker.repository.FavoriteRepository;
 import com.icehufs.icebreaker.repository.UserBanRepository;
 import com.icehufs.icebreaker.repository.UserRepository;
 import com.icehufs.icebreaker.service.AuthService;
@@ -51,6 +55,11 @@ public class AuthServiceImplement implements AuthService {
     private final CertificationRepository certificationRepository;
     private final EmailProvider emailProvider;
     private final UserBanRepository userBanRepository;
+
+    private final ArticleRepository articleRepository;
+    private final CommentRepository commentRepository;
+    private final FavoriteRepository favoriteRepository;
+
     private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     @Override
@@ -178,7 +187,7 @@ public class AuthServiceImplement implements AuthService {
 
     @Override
     @Transactional
-    public ResponseEntity<? super GiveUserBanResponseDto> giveUserBan(GiveUserBanRequestDto dto) {
+    public ResponseEntity<? super GiveUserBanResponseDto> giveUserBan(GiveUserBanRequestDto dto, Integer articleNum) {
         try {
             String email = dto.getEmail();
             boolean ban_email = userBanRepository.existsByEmail(email);
@@ -188,6 +197,21 @@ public class AuthServiceImplement implements AuthService {
                 return GiveUserBanResponseDto.duplicateId();
             }
 
+            // 정지하려는 유저의 이메일이 User테이블에 등록이 안되어있을 경우.
+            boolean existedUser = userRepository.existsByEmail(email);
+            if (!existedUser) return GiveUserBanResponseDto.notExistUser();
+
+            // 게시글의 번호를 통해서 작성자의 이메일 확인
+            Article articleEntity = articleRepository.findByArticleNum(articleNum);
+            String writerEmail = articleEntity.getUserEmail();
+
+            // 게시글의 작성자의 이메일과 정지하려는 이메일이 불일치할 경우.
+            boolean isWriter = writerEmail.equals(email);
+            if (!isWriter) return GiveUserBanResponseDto.notMatchId();
+
+            // 만일 게시글이 존재하지 않을 경우.
+            if (articleEntity == null) return GiveUserBanResponseDto.noExistArticle();
+
             BanDuration banDuration = BanDuration.valueOf(dto.getBanDuration().toUpperCase());
             BanReason banReason = BanReason.valueOf(dto.getBanReason().toUpperCase());
             UserBan userBan = new UserBan();
@@ -195,6 +219,10 @@ public class AuthServiceImplement implements AuthService {
             userBan.setBanDuration(banDuration);
             userBan.setBanReason(banReason);
             userBan.setBanStartTime(LocalDateTime.now());
+
+            commentRepository.deleteByArticleNum(articleNum);
+            favoriteRepository.deleteByArticleNum(articleNum);
+            articleRepository.delete(articleEntity);
 
             userBanRepository.save(userBan);
         } catch (Exception exception) {
