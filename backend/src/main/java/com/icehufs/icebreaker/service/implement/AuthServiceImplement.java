@@ -3,9 +3,6 @@ package com.icehufs.icebreaker.service.implement;
 import java.time.LocalDateTime;
 import java.time.Period;
 
-import com.icehufs.icebreaker.dto.response.article.PostArticleResponseDto;
-import com.icehufs.icebreaker.dto.response.auth.*;
-import com.icehufs.icebreaker.entity.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,6 +16,18 @@ import com.icehufs.icebreaker.dto.request.auth.GiveUserBanRequestDto;
 import com.icehufs.icebreaker.dto.request.auth.SignInRequestDto;
 import com.icehufs.icebreaker.dto.request.auth.SignUpRequestDto;
 import com.icehufs.icebreaker.dto.response.ResponseDto;
+import com.icehufs.icebreaker.dto.response.auth.CheckCertificationResponseDto;
+import com.icehufs.icebreaker.dto.response.auth.CheckUserBanResponseDto;
+import com.icehufs.icebreaker.dto.response.auth.EmailCertificationResponseDto;
+import com.icehufs.icebreaker.dto.response.auth.GiveUserBanResponseDto;
+import com.icehufs.icebreaker.dto.response.auth.PassChanEmailCertificationResponseDto;
+import com.icehufs.icebreaker.dto.response.auth.SignInResponseDto;
+import com.icehufs.icebreaker.dto.response.auth.SignUpResponseDto;
+import com.icehufs.icebreaker.entity.BanDuration;
+import com.icehufs.icebreaker.entity.BanReason;
+import com.icehufs.icebreaker.entity.CertificationEntity;
+import com.icehufs.icebreaker.entity.User;
+import com.icehufs.icebreaker.entity.UserBan;
 import com.icehufs.icebreaker.provider.EmailProvider;
 import com.icehufs.icebreaker.provider.JwtProvider;
 import com.icehufs.icebreaker.repository.CertificationRepository;
@@ -173,7 +182,7 @@ public class AuthServiceImplement implements AuthService {
         try {
             String email = dto.getEmail();
             boolean ban_email = userBanRepository.existsByEmail(email);
-            
+
             // 이미 정지된 계정일 경우.(운영자가 한 번에 단일 작성자의 문제가 있는 여러 게시글에 정지를 부여할 경우.)
             if (ban_email) {
                 return GiveUserBanResponseDto.duplicateId();

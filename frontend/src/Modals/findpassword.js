@@ -17,7 +17,7 @@ const FindpasswordForm = ({ onFindpassForm }) => {
       <img
                     className="signinIcon"
                     src="./HufsLogo.png"
-                  />       
+                  />
       <p>이메일</p>
         <label htmlFor="user_email" ></label>
         
@@ -49,7 +49,6 @@ const FindpasswordForm = ({ onFindpassForm }) => {
 
         <button type="submit"  className="signupButton">다음단계</button>
       
-     
       
     </form>
   );
