@@ -1,7 +1,4 @@
 package com.icehufs.icebreaker.service.implement;
-import java.util.ArrayList;
-import java.util.List;
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -14,7 +11,6 @@ import com.icehufs.icebreaker.dto.response.user.DeleteUserResponseDto;
 import com.icehufs.icebreaker.dto.response.user.GetSignInUserResponseDto;
 import com.icehufs.icebreaker.dto.response.user.PatchUserPassResponseDto;
 import com.icehufs.icebreaker.dto.response.user.PatchUserResponseDto;
-import com.icehufs.icebreaker.entity.Article;
 import com.icehufs.icebreaker.entity.User;
 import com.icehufs.icebreaker.repository.ArtileListViewRepository;
 import com.icehufs.icebreaker.repository.UserRepository;
@@ -90,17 +86,11 @@ public class UserServiceImplement implements UserService {
 
     @Override
     public ResponseEntity<? super DeleteUserResponseDto> deleteUser(String email) {
-        List<Article> articleListViewEntities = new ArrayList<>();
         try{
 
             User userEntity = userRepository.findByEmail(email);
             if(userEntity == null) return DeleteUserResponseDto.notExistUser();
 
-            articleListViewEntities = artileListViewRepository.findByUserEmailOrderByArticleDateDesc(email);
-
-            for (Article article : articleListViewEntities) {
-                articleService.deleteArticle(article.getArticleNum(), email);
-            }
 
             userRepository.delete(userEntity);
 
