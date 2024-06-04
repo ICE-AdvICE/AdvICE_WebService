@@ -69,7 +69,7 @@ public class ArticleController {
         return response;
     }
 
-    @GetMapping("/own/{articleNum}")
+    @GetMapping("/own/{articleNum}") //내가 쓴 게시글인지 확인
     public ResponseEntity<? super CheckOwnOfArticleResponseDto> checkOwnArticle(
         @PathVariable("articleNum") Integer articleNum,
         @AuthenticationPrincipal String email
