@@ -13,10 +13,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CommentListItem {
+
+    private int commentNumber;
     private String writeDatetime;
     private String content;
 
     public CommentListItem(GetCommentListReultSet resultSet){
+        this.commentNumber = resultSet.getCommentNumber();
         this.writeDatetime = resultSet.getWriteDatetime();
         this.content = resultSet.getContent();
     }
