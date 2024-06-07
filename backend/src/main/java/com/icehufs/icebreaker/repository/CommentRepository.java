@@ -17,6 +17,7 @@ public interface CommentRepository extends JpaRepository<CommentEntity, Integer>
     @Query(
         value=
         "SELECT" +
+        "    C.comment_number AS commentNumber, " +
         "    C.write_datetime AS writeDatetime, " +
         "    C.content AS content " +
         "FROM comment AS C " +
