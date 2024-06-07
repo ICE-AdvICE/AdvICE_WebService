@@ -17,7 +17,7 @@ const BlogForm = ({ editing }) => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const [category, setCategory] = useState('카테고리 선택');
-    const [categoryName, setCategoryName] = useState('카테고리 선택'); // 카테고리 이름 초기값 설정
+    const [categoryName, setCategoryName] = useState('카테고리 선택');  
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [cookies] = useCookies(['accessToken']);
     const token = cookies.accessToken;
@@ -32,9 +32,11 @@ const BlogForm = ({ editing }) => {
             })
             .then(res => {
                 if (res.data.code === "SU") {
-                    const { title, content } = res.data;
-                    setArticleTitle(title);
-                    setArticleContent(content);
+                    const {articleTitle, articleContent,category } = res.data;
+                    setCategory(category);
+                    setArticleTitle(articleTitle);
+                    setArticleContent(articleContent);
+                    setCategoryName(category);
                 } else {
                     switch (res.data.code) {
                         case "NA":
@@ -64,18 +66,19 @@ const BlogForm = ({ editing }) => {
             .finally(() => setLoading(false));
         }
     }, [editing, articleNum, token]);
+
     useEffect(() => {
         if (editing && location.state?.article) {
             const { articleTitle, articleContent, category } = location.state.article;
-            setArticleTitle(articleTitle || ''); // 기본값 설정
-            setArticleContent(articleContent || '');
-            setCategory(category || '카테고리 선택');
+            setArticleTitle(articleTitle);
+            setArticleContent(articleContent);
+            setCategory(category);
         }
     }, [editing, location.state]);
 
     const handleCategoryChange = (id, name) => {
         setCategory(id);
-        setCategoryName(name); // 카테고리 이름도 업데이트
+        setCategoryName(name); 
         setDropdownOpen(false);
     };
 
@@ -95,7 +98,7 @@ const BlogForm = ({ editing }) => {
             response = await createArticleRequest(postData, token);
         }
         if (response && response.code === 'SU') {
-            navigate(editing ? `/article-main/order/${articleNum}` : '/article-main');
+            navigate(editing ? `/article-main/${articleNum}` : '/article-main');
         } else {
             if (response) {
                 switch (response.code) {
