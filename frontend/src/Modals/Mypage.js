@@ -31,6 +31,9 @@ const MypageForm = () => {
                 } catch (error) {
                     console.error('Error fetching user data:', error);
                 }
+            }else {
+                // 토큰이 없는 경우 사용자 정보를 초기화
+                setUserDetails({ email: '', studentNum: '', name: '' });
             }
         };
         fetchUserDetails();

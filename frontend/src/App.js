@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useCookies } from 'react-cookie'; //
 import LoginForm from "./Modals/LoginForm";
 import Newpassword from './Modals/Newpassword';
 import SignUpForm from './Modals/SignupForm';
@@ -21,10 +22,19 @@ function App(){
   const [modalOpenMypage, setModalOpenmypage] = useState(false); //회원가입 인증 후 정보 입력
   const navigator = useNavigate(); //네비게이션 하기0    
 
+  const [isLoggedIn, setIsLoggedIn] = useState(false);  // 로그인 상태 관리
+  const [cookies, setCookie, removeCookie] = useCookies(['accessToken']);
 
-  const handleLogin = (user_studentnum, user_password) => {
-    console.log("Logging in with", user_studentnum, user_password);
-    // 로그인
+  const handleLogin = (email, password) => {
+    console.log("Logging in with", email, password);
+    setIsLoggedIn(true);  // 로그인 상태를 true로 변경
+    setModalOpenin(false);  // 로그인 모달 닫기
+  };
+
+  const handleLogout = () => {
+    setIsLoggedIn(false); // 로그인 상태를 false로 변경
+    removeCookie('accessToken', { path: '/' }); // accessToken 쿠키 삭제
+    navigator('/'); // 홈페이지로 리디렉트 (옵션)
   };
 
   const handleSignUp = (user_email, password) => {
@@ -65,14 +75,20 @@ function App(){
   
   return(
     <>
-          <button onClick={e => setModalOpen(true)}>회원가입</button>  {/*버튼*/}
-          <button onClick={e => setModalOpenin(true)}>로그인</button>  {/*버튼*/}
-          <button onClick={e => {setModalOpenfind(true)}}>비밀번호찾기</button>  {/*버튼*/}
-          <button onClick={e => setModalOpennew(true)}>비밀번호 수정하기</button>  {/*버튼*/}
-          <button onClick={e => setModalOpeninfo(true)}>회원가입 정보입력</button>  {/*버튼*/}
-          <button onClick={e => setModalOpenmypage(true)}>Mypage</button>  {/*버튼*/}
-          <button onClick={() => navigator('/article-main')}>익명 게시판</button> {/*전체 게시글 페이지 경로 적어주는 코드  + index.js 도 작업해주기 */} 
-          
+    
+      {isLoggedIn ? (
+        <button onClick={handleLogout}>로그아웃</button>
+      ) : (
+        <>
+          <button onClick={e => setModalOpen(true)}>회원가입</button>
+          <button onClick={e => setModalOpenin(true)}>로그인</button>
+          <button onClick={e => setModalOpenfind(true)}>비밀번호찾기</button>
+          <button onClick={e => setModalOpennew(true)}>비밀번호 수정하기</button>
+          <button onClick={e => setModalOpeninfo(true)}>회원가입 정보입력</button>
+          <button onClick={e => setModalOpenmypage(true)}>Mypage</button>
+          <button onClick={() => navigator('/article-main')}>익명 게시판</button>
+        </>
+      )}
           <MyModal //회원가입 모달
             open={modalOpen}
               width={500} //모달 넓이 이게 적당 한듯
@@ -104,7 +120,8 @@ function App(){
 
               footer={[]}
           >
-          <LoginForm onLogin={handleLogin} openFindPasswordModal={openFindPasswordModal} openSignUpModal={openSignUpModal} closeModal={() => setModalOpenin(false)} />
+          <LoginForm onLogin={handleLogin} setIsLoggedIn={setIsLoggedIn} openFindPasswordModal={openFindPasswordModal} openSignUpModal={openSignUpModal} closeModal={() => setModalOpenin(false)} />
+
 
           </MyModal>
 
