@@ -2,36 +2,96 @@
   width: 1522px;
   height: 460px;
   position: relative;
- 
 }
 .header2-image{
   width:100%;
   height: 100%;
 }
-  
-.ArticleContentbox{
-  margin-top: 3%;
-  margin-left: 10%;
-  width: 80%;
-  height: auto;
-  padding: 30px 30px;
-  border-radius: 6px;
+.comment-input-area{
+  margin-top: 12px;
 }
+.header10-image{
+  width:100%;
+  height: 100%;
+  position: relative;
+  margin-top: 10px;
+}  
+.Commentbox-name{
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+.CommentBox-container{
+  z-index: 111;
+  position: absolute;
+  width: 100%;
+  height: 30%;
+  left: 13%;
+  top: 36%;
+}
+.Commentbox-name h3 {
+  height: 40px;
+  color: blue;
+  line-height: 40px; 
+  margin: 0;  
+  padding: 0 10px;  
+}
+
+.Commentbox-name button {
+  line-height: normal; /* 버튼의 기본 line-height로 재설정 */
+  padding: 0 15px; /* 버튼의 패딩 조정 */
+}
+
+.ArticleContentbox-container{
+  position: relative;
+  height: auto;
+}
+ 
+.ArticleContentbox{
+  width: 100%;
+  height: auto;
+  border-radius: 6px;
+
+}
+.ArticleTitle{
+  margin-bottom: 35px;
+  z-index:111;
+  position: absolute;
+  top:12%;
+  left: 13%;
+}
+.ArticleDate {
+  margin-bottom: 5px;
+  display: flex;   
+  width: 69%;
+  left: 13%;
+  top:17%;
+  position: absolute;      
+  justify-content: space-between;  
+  align-items: center;   
+}
+
 .ArticleCategory {
   background-color: black;  
   color: white;             
-  padding: 3px 3px;            
+  padding: 1px 1px;            
   border-radius: 5px;       
   width: 6%;
+  position: absolute;
+  top:5%;
+  left: 13%;
   height: 50px;
-  text-align: center;               
-  margin-bottom: 20px;
+  width: 70px;
+  text-align: center;    
+  z-index: 111;           
+ 
 }
 .ArticleCategory p{
-  margin-top: 5px;
+  margin-top: 6px;
   padding: 2px 2px;
   margin-bottom: 0;
 }
+
 .vector5{
  width: 100%;
  height: auto;
@@ -39,20 +99,28 @@
 
 .ArticleDate {
   margin-bottom: 5px;
-  display: flex;         
+  display: flex;   
+  left: 13%;
+  top:17%;
+  position: absolute;      
   justify-content: space-between;  
   align-items: center;   
 }
-.ArticleTitle{
+
+.Article-Main{
+  position: absolute;
+  top: 20%;
   margin-bottom: 30px;
+  left: 13%;
 }
-.ArticleMain{
-  margin-bottom: 30px;
-}
+
 .Comment-Option{
-  margin-top: 20px;
-  position: relative;
-  display: flex;          
+  margin-top: 15px;
+  position: absolute;
+  top:27%;
+  display: flex;   
+  left: 13%;
+  z-index: 111;       
   align-items: center;  
   width: 25%;
   flex-direction: row;
@@ -61,34 +129,88 @@
   margin-left: 10px;
   margin-top: 10px;
 }
-
-.CommentWriter{
-  margin: 12px 0 29px;
-  padding: 16px 10px 10px 18px;
-  border: 1px solid ;
-  border-radius: 6px;
-  box-sizing: border-box;
-
+.Edit-Delete-Options {
+  width: 6%;
+  margin-top: 15px;
+  position: absolute;
+  top:28%;
+  z-index: 111;
+  left: 16%;
+  display: flex;  
+  justify-content: space-around; 
 }
-.CommentWriter .comment_inbox_text {
-  position: relative;
-  margin-bottom: 10px;
+.Edit-Delete-Options button {
+  border: none !important;
+  background: transparent;
+  cursor: pointer;
 }
-.d-flex2{
-  margin-top: 10px;
+
+
+
+.CommentBox-bottom{
   width: 100%;
-  height: 20%;
+  height: 50px;
 }
-.edit{
+
+
+
+
+.Comment-Divider {
+  border: 0;
+  border-top: 1px solid #ccc;
+  margin: 10px 0;
+}
+
+
+
+.Comment-Author {
+  font-weight: bold;
+  margin-right: 5px;
+}
+
+.Comment-Date {
+  color: gray;
+  font-size: 0.8em;
+}
+.Comment-Header {
+  display: flex;
+  align-items: center;
+}
+
+/*하트 css 부분 */
+.heart {
+  width: 15px;  
+  height: 15px;  
+  background-color: #d5d4d4;  
+  position: relative;
+  transform: rotate(-45deg);  
+}
+
+
+.heart:before, .heart:after {
+  content: "";
   position: absolute;
-  left: 92%;
-  background-color: black;
-  color: white;
-}
-.Edit-Delete-Options{
-  position: absolute;
-  right: 10%;
+  width: 15px;  
+  height: 15px;  
+  border-radius: 50%;  
+  background-color: #d5d4d4;  
 }
 
+.heart:before {
+  top: 0;
+  left: 7.5px; 
+}
 
+.heart:after {
+  top: -7.5px;  
+  left: 0;
+}
 
+.heart.love {
+  background-color: #F80808; 
+}
+
+.heart.love:before,
+.heart.love:after {
+  background-color: #F80808;  
+}
