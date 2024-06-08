@@ -3,11 +3,6 @@ package com.icehufs.icebreaker.service.implement;
 import java.time.LocalDateTime;
 import java.time.Period;
 
-import com.icehufs.icebreaker.dto.response.article.DeleteArticleResponseDto;
-import com.icehufs.icebreaker.dto.response.article.PostArticleResponseDto;
-import com.icehufs.icebreaker.dto.response.auth.*;
-import com.icehufs.icebreaker.entity.*;
-import com.icehufs.icebreaker.repository.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -21,8 +16,27 @@ import com.icehufs.icebreaker.dto.request.auth.GiveUserBanRequestDto;
 import com.icehufs.icebreaker.dto.request.auth.SignInRequestDto;
 import com.icehufs.icebreaker.dto.request.auth.SignUpRequestDto;
 import com.icehufs.icebreaker.dto.response.ResponseDto;
+import com.icehufs.icebreaker.dto.response.auth.CheckCertificationResponseDto;
+import com.icehufs.icebreaker.dto.response.auth.CheckUserBanResponseDto;
+import com.icehufs.icebreaker.dto.response.auth.EmailCertificationResponseDto;
+import com.icehufs.icebreaker.dto.response.auth.GiveUserBanResponseDto;
+import com.icehufs.icebreaker.dto.response.auth.PassChanEmailCertificationResponseDto;
+import com.icehufs.icebreaker.dto.response.auth.SignInResponseDto;
+import com.icehufs.icebreaker.dto.response.auth.SignUpResponseDto;
+import com.icehufs.icebreaker.entity.Article;
+import com.icehufs.icebreaker.entity.BanDurationEnum;
+import com.icehufs.icebreaker.entity.BanReasonEnum;
+import com.icehufs.icebreaker.entity.CertificationEntity;
+import com.icehufs.icebreaker.entity.User;
+import com.icehufs.icebreaker.entity.UserBan;
 import com.icehufs.icebreaker.provider.EmailProvider;
 import com.icehufs.icebreaker.provider.JwtProvider;
+import com.icehufs.icebreaker.repository.ArticleRepository;
+import com.icehufs.icebreaker.repository.CertificationRepository;
+import com.icehufs.icebreaker.repository.CommentRepository;
+import com.icehufs.icebreaker.repository.FavoriteRepository;
+import com.icehufs.icebreaker.repository.UserBanRepository;
+import com.icehufs.icebreaker.repository.UserRepository;
 //import org.slf4j.Logger;
 //import org.slf4j.LoggerFactory;
 import com.icehufs.icebreaker.service.AuthService;
@@ -198,8 +212,8 @@ public class AuthServiceImplement implements AuthService {
             // 만일 게시글이 존재하지 않을 경우.
             if (articleEntity == null) return GiveUserBanResponseDto.noExistArticle();
 
-            BanDuration banDuration = BanDuration.valueOf(dto.getBanDuration().toUpperCase());
-            BanReason banReason = BanReason.valueOf(dto.getBanReason().toUpperCase());
+            BanDurationEnum banDuration = BanDurationEnum.valueOf(dto.getBanDuration().toUpperCase());
+            BanReasonEnum banReason = BanReasonEnum.valueOf(dto.getBanReason().toUpperCase());
             UserBan userBan = new UserBan();
             userBan.setEmail(email);
             userBan.setBanDuration(banDuration);
@@ -280,7 +294,7 @@ public class AuthServiceImplement implements AuthService {
     }
 
     // BanDuration 엔티티를 받아와 사용.
-    private Period getPeriod(BanDuration banDuration) {
+    private Period getPeriod(BanDurationEnum banDuration) {
         switch (banDuration) {
             case ONE_MONTH:
                 return Period.ofMonths(1);
