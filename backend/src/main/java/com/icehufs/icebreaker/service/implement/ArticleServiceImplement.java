@@ -1,7 +1,5 @@
 package com.icehufs.icebreaker.service.implement;
 
-import java.time.LocalDateTime;
-import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,10 +25,8 @@ import com.icehufs.icebreaker.dto.response.article.PostArticleResponseDto;
 import com.icehufs.icebreaker.dto.response.article.PostCommentResponseDto;
 import com.icehufs.icebreaker.dto.response.article.PutFavoriteResponseDto;
 import com.icehufs.icebreaker.entity.Article;
-import com.icehufs.icebreaker.entity.BanDuration;
 import com.icehufs.icebreaker.entity.CommentEntity;
 import com.icehufs.icebreaker.entity.FavoriteEntity;
-import com.icehufs.icebreaker.entity.UserBan;
 import com.icehufs.icebreaker.repository.ArticleRepository;
 import com.icehufs.icebreaker.repository.ArtileListViewRepository;
 import com.icehufs.icebreaker.repository.CommentRepository;

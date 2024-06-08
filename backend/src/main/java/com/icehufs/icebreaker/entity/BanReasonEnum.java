@@ -1,6 +1,6 @@
 package com.icehufs.icebreaker.entity;
 
-public enum BanReason {
+public enum BanReasonEnum {
     // 스팸성 게시물이나 댓글 작성
     SPAM,
     // 다른 사용자에 대한 괴롭힘 또는 괴롭히는 내용의 게시물 작성

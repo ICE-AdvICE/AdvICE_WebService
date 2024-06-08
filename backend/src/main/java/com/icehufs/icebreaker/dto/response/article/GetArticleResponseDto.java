@@ -7,6 +7,7 @@ import com.icehufs.icebreaker.common.ResponseCode;
 import com.icehufs.icebreaker.common.ResponseMessage;
 import com.icehufs.icebreaker.dto.response.ResponseDto;
 import com.icehufs.icebreaker.entity.Article;
+import com.icehufs.icebreaker.entity.ArticleCategoryEnum;
 
 import lombok.Getter;
 
@@ -21,7 +22,7 @@ public class GetArticleResponseDto extends ResponseDto {
     private int viewCount;
     private String articleDate;
     private int authCheck;
-    private int category;
+    private ArticleCategoryEnum category;
 
     private GetArticleResponseDto(Article articleEntity){
         super(ResponseCode.SUCCESS, ResponseMessage.SUCCESS);

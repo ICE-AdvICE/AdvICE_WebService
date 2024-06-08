@@ -7,6 +7,8 @@ import java.util.Date;
 
 import javax.persistence.Column; //최근 버전에서는 import jakarta.persistence.~
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -55,8 +57,9 @@ public class Article {
     @Column(name = "auth_check")
     private int authCheck;
 
+    @Enumerated(EnumType.ORDINAL)
     @Column(name = "category")
-    private int category;
+    private ArticleCategoryEnum category;
 
     public Article(PostArticleRequestDto dto, String email){
         Date now = Date.from(Instant.now());
