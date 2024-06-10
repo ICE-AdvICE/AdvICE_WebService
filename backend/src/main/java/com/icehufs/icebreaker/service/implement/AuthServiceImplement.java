@@ -188,8 +188,14 @@ public class AuthServiceImplement implements AuthService {
     @Override
     @Transactional
     public ResponseEntity<? super GiveUserBanResponseDto> giveUserBan(GiveUserBanRequestDto dto, Integer articleNum) {
+        Article articleEntity = null;
         try {
-            String email = dto.getEmail();
+            articleEntity = articleRepository.findByArticleNum(articleNum);
+
+            // 만일 게시글이 존재하지 않을 경우.
+            if (articleEntity == null) return GiveUserBanResponseDto.noExistArticle();
+
+            String email = articleEntity.getUserEmail();
             boolean ban_email = userBanRepository.existsByEmail(email);
 
             // 이미 정지된 계정일 경우.(운영자가 한 번에 단일 작성자의 문제가 있는 여러 게시글에 정지를 부여할 경우.)
@@ -201,16 +207,10 @@ public class AuthServiceImplement implements AuthService {
             boolean existedUser = userRepository.existsByEmail(email);
             if (!existedUser) return GiveUserBanResponseDto.notExistUser();
 
-            // 게시글의 번호를 통해서 작성자의 이메일 확인
-            Article articleEntity = articleRepository.findByArticleNum(articleNum);
-            String writerEmail = articleEntity.getUserEmail();
-
             // 게시글의 작성자의 이메일과 정지하려는 이메일이 불일치할 경우.
+            String writerEmail = email;
             boolean isWriter = writerEmail.equals(email);
             if (!isWriter) return GiveUserBanResponseDto.notMatchId();
-
-            // 만일 게시글이 존재하지 않을 경우.
-            if (articleEntity == null) return GiveUserBanResponseDto.noExistArticle();
 
             BanDurationEnum banDuration = BanDurationEnum.valueOf(dto.getBanDuration().toUpperCase());
             BanReasonEnum banReason = BanReasonEnum.valueOf(dto.getBanReason().toUpperCase());
