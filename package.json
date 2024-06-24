@@ -1,7 +1,0 @@
-{
-  "dependencies": {
-    "@toast-ui/editor": "^3.2.2",
-    "@toast-ui/react-editor": "^3.2.3",
-    "bootstrap": "^5.3.3"
-  }
-}
