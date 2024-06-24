@@ -17,7 +17,6 @@ import lombok.NoArgsConstructor;
 public class ArticleListViewEntity {
     @Id
     private int article_num;
-    private String user_email;
     private String article_title;
     private String article_content;
     private int like_count;
