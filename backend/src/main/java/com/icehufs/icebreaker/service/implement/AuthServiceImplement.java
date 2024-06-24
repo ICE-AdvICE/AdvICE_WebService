@@ -196,21 +196,18 @@ public class AuthServiceImplement implements AuthService {
             if (articleEntity == null) return GiveUserBanResponseDto.noExistArticle();
 
             String email = articleEntity.getUserEmail();
-            boolean ban_email = userBanRepository.existsByEmail(email);
-
-            // 이미 정지된 계정일 경우.(운영자가 한 번에 단일 작성자의 문제가 있는 여러 게시글에 정지를 부여할 경우.)
-            if (ban_email) {
-                return GiveUserBanResponseDto.duplicateId();
-            }
+            
 
             // 정지하려는 유저의 이메일이 User테이블에 등록이 안되어있을 경우.
             boolean existedUser = userRepository.existsByEmail(email);
             if (!existedUser) return GiveUserBanResponseDto.notExistUser();
 
-            // 게시글의 작성자의 이메일과 정지하려는 이메일이 불일치할 경우.
-            String writerEmail = email;
-            boolean isWriter = writerEmail.equals(email);
-            if (!isWriter) return GiveUserBanResponseDto.notMatchId();
+            boolean ban_email = userBanRepository.existsByEmail(email);
+            // 이미 정지된 계정일 경우.(운영자가 한 번에 단일 작성자의 문제가 있는 여러 게시글에 정지를 부여할 경우.)
+            if (ban_email) {
+                return GiveUserBanResponseDto.duplicateId();
+            }
+
 
             BanDurationEnum banDuration = BanDurationEnum.valueOf(dto.getBanDuration().toUpperCase());
             BanReasonEnum banReason = BanReasonEnum.valueOf(dto.getBanReason().toUpperCase());

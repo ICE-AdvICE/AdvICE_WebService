@@ -17,7 +17,6 @@ import lombok.NoArgsConstructor;
 public class ArticleListItem {
 
     private int articleNum;
-    private String userEmail;
     private String articleTitle;
     private String articleContent;
     private int likeCount;
@@ -28,7 +27,6 @@ public class ArticleListItem {
 
     public ArticleListItem(Article articleListViewEntity) {
         this.articleNum = articleListViewEntity.getArticleNum();
-        this.userEmail = articleListViewEntity.getUserEmail();
         this.articleTitle = articleListViewEntity.getArticleTitle();
         this.articleContent = articleListViewEntity.getArticleContent();
         this.likeCount = articleListViewEntity.getLikeCount();
