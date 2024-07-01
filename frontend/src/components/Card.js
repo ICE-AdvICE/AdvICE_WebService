@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import { useLocation } from "react-router-dom";
 
-const Card = ({ title, createdAt, views, likes, onDelete, order,onClick, children }) => {
+const Card = ({ title, createdAt, views, likes, onDelete, order,onClick, children,category }) => {
     const location = useLocation();  
     const displayDate = createdAt ? new Date(createdAt).toISOString().split('T')[0] : '0000-00-00';
     
@@ -9,6 +9,7 @@ const Card = ({ title, createdAt, views, likes, onDelete, order,onClick, childre
         <div className="card" onClick={onClick}>
             <div className="d-flex justify-content-between">
                 <p className="card-order">{order}</p>
+                <p className="card-category">{category}</p>
                 <p className='card-title'>{title}</p>
                 <p className='card-created'>{displayDate}</p>
                 <p className='card-views'>{views}</p>
@@ -19,7 +20,7 @@ const Card = ({ title, createdAt, views, likes, onDelete, order,onClick, childre
                     }}>삭제
                     </button>
                 )}
-                <p className='card-likes'>❤️ {likes}</p>
+                <p className='card-likes'>{likes}</p>
                 {children}
             </div>
         </div>

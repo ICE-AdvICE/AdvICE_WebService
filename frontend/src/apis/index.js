@@ -1,4 +1,5 @@
 import axios from 'axios';
+import moment from 'moment';
 
 const DOMAIN = 'http://localhost:4000';
 
@@ -114,6 +115,51 @@ export const getArticleListRequest = async () => {
     return result;
 };
 
+export const handleCommentSubmit = async (event, commentInput, setComments, setCommentInput, userEmail, articleNum, token) => {
+    if (event.key === 'Enter' && !event.shiftKey) {
+      event.preventDefault();
+      if (!commentInput.trim()) {
+        alert("댓글 내용을 입력해주세요.");
+        return;
+      }
+  
+      const commentData = {
+        content: commentInput,
+        user_email: userEmail
+      };
+  
+      try {
+        const response = await axios.post(`http://localhost:4000/api/v1/article/${articleNum}/comment`, commentData, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        console.log("Full Response:", response);
+        console.log("Response data:", response.data);
+        if (response.data.code === "SU") {
+         
+          fetchComments(articleNum, token, setComments);
+          setCommentInput("");
+ 
+        }
+      } catch (err) {
+        console.error("Error posting comment:", err);
+      }
+    }
+};
+export const fetchComments = (articleNum, token, setComments) => {
+    axios.get(`http://localhost:4000/api/v1/article/${articleNum}/comment-list`, {
+        headers: { Authorization: `Bearer ${token}` }
+    })
+    .then(response => {
+        setComments(response.data.commentList.map(comment => ({
+            writeDatetime: moment.utc(comment.writeDatetime).local().format('YYYY-MM-DD HH:mm:ss'), // UTC를 로컬로 변환
+            content: comment.content,
+            user_email: comment.user_email
+        })) || []);
+    })
+    .catch(err => {
+        console.error("Error fetching comments:", err);
+    });
+};
 
 export const emailCertificationRequest = async (requestBody) => {
     
@@ -162,3 +208,4 @@ export const getMypageRequest = async (accessToken)=>{
         return error.response.data;
     }
 };
+
