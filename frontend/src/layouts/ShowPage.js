@@ -7,7 +7,7 @@ import { getMypageRequest } from '../apis/index.js';
 import './css/ShowPage.css';
 import moment from 'moment';
 import { handleCommentSubmit } from '../apis/index.js';
-
+import {fetchComments } from '../apis/index.js';
 const ShowPage = () => {
     const { articleNum } = useParams();
     const [article, setArticle] = useState(null);
@@ -136,22 +136,7 @@ const ShowPage = () => {
         handleCommentSubmit(event, commentInput, setComments, setCommentInput, userEmail, articleNum, token);
     };
 
-    const fetchComments = () => {
-        axios.get(`http://localhost:4000/api/v1/article/${articleNum}/comment-list`, {
-            headers: { Authorization: `Bearer ${token}` }
-        })
-        .then(response => {
-            setComments(response.data.commentList.map(comment => ({
-                writeDatetime: moment.utc(comment.writeDatetime).local().format('YYYY-MM-DD HH:mm:ss'), // UTC를 로컬로 변환
-                content: comment.content,
-                user_email: comment.user_email
-            })) || []);  
-        })
-        .catch(err => {
-            console.error("Error fetching comments:", err);
-            
-        });
-    };
+  
     
 
    
@@ -245,8 +230,7 @@ const ShowPage = () => {
                                 )}
                             </div>
                             
-                            <div className='CommentBox-container'>
-                               
+                            <div className='CommentBox-container'>  
                                 {comments.map((comment, index) => (
                                     <div key={index}>
                                         <div className="Comment">

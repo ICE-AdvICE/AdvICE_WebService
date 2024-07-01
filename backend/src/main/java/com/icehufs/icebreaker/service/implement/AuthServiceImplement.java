@@ -3,9 +3,6 @@ package com.icehufs.icebreaker.service.implement;
 import java.time.LocalDateTime;
 import java.time.Period;
 
-import com.icehufs.icebreaker.dto.response.article.PostArticleResponseDto;
-import com.icehufs.icebreaker.dto.response.auth.*;
-import com.icehufs.icebreaker.entity.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,13 +16,29 @@ import com.icehufs.icebreaker.dto.request.auth.GiveUserBanRequestDto;
 import com.icehufs.icebreaker.dto.request.auth.SignInRequestDto;
 import com.icehufs.icebreaker.dto.request.auth.SignUpRequestDto;
 import com.icehufs.icebreaker.dto.response.ResponseDto;
+import com.icehufs.icebreaker.dto.response.auth.CheckCertificationResponseDto;
+import com.icehufs.icebreaker.dto.response.auth.CheckUserBanResponseDto;
+import com.icehufs.icebreaker.dto.response.auth.EmailCertificationResponseDto;
+import com.icehufs.icebreaker.dto.response.auth.GiveUserBanResponseDto;
+import com.icehufs.icebreaker.dto.response.auth.PassChanEmailCertificationResponseDto;
+import com.icehufs.icebreaker.dto.response.auth.SignInResponseDto;
+import com.icehufs.icebreaker.dto.response.auth.SignUpResponseDto;
+import com.icehufs.icebreaker.entity.Article;
+import com.icehufs.icebreaker.entity.BanDurationEnum;
+import com.icehufs.icebreaker.entity.BanReasonEnum;
+import com.icehufs.icebreaker.entity.CertificationEntity;
+import com.icehufs.icebreaker.entity.User;
+import com.icehufs.icebreaker.entity.UserBan;
 import com.icehufs.icebreaker.provider.EmailProvider;
 import com.icehufs.icebreaker.provider.JwtProvider;
+import com.icehufs.icebreaker.repository.ArticleRepository;
 import com.icehufs.icebreaker.repository.CertificationRepository;
-//import org.slf4j.Logger;
-//import org.slf4j.LoggerFactory;
+import com.icehufs.icebreaker.repository.CommentRepository;
+import com.icehufs.icebreaker.repository.FavoriteRepository;
 import com.icehufs.icebreaker.repository.UserBanRepository;
 import com.icehufs.icebreaker.repository.UserRepository;
+//import org.slf4j.Logger;
+//import org.slf4j.LoggerFactory;
 import com.icehufs.icebreaker.service.AuthService;
 
 import lombok.RequiredArgsConstructor;
@@ -42,6 +55,11 @@ public class AuthServiceImplement implements AuthService {
     private final CertificationRepository certificationRepository;
     private final EmailProvider emailProvider;
     private final UserBanRepository userBanRepository;
+
+    // 운영자의 게시글 삭제 관련 레포지토리
+    private final ArticleRepository articleRepository;
+    private final CommentRepository commentRepository;
+    private final FavoriteRepository favoriteRepository;
     private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     @Override
@@ -169,21 +187,39 @@ public class AuthServiceImplement implements AuthService {
 
     @Override
     @Transactional
-    public ResponseEntity<? super GiveUserBanResponseDto> giveUserBan(GiveUserBanRequestDto dto) {
+    public ResponseEntity<? super GiveUserBanResponseDto> giveUserBan(GiveUserBanRequestDto dto, Integer articleNum) {
+        Article articleEntity = null;
         try {
-            String email = dto.getEmail();
-            boolean ban_email = userBanRepository.existsByEmail(email);
+            articleEntity = articleRepository.findByArticleNum(articleNum);
 
+            // 만일 게시글이 존재하지 않을 경우.
+            if (articleEntity == null) return GiveUserBanResponseDto.noExistArticle();
+
+            String email = articleEntity.getUserEmail();
+            
+
+            // 정지하려는 유저의 이메일이 User테이블에 등록이 안되어있을 경우.
+            boolean existedUser = userRepository.existsByEmail(email);
+            if (!existedUser) return GiveUserBanResponseDto.notExistUser();
+
+            boolean ban_email = userBanRepository.existsByEmail(email);
             // 이미 정지된 계정일 경우.(운영자가 한 번에 단일 작성자의 문제가 있는 여러 게시글에 정지를 부여할 경우.)
             if (ban_email) {
                 return GiveUserBanResponseDto.duplicateId();
             }
 
-            BanDuration banDuration = BanDuration.valueOf(dto.getBanDuration().toUpperCase());
+
+            BanDurationEnum banDuration = BanDurationEnum.valueOf(dto.getBanDuration().toUpperCase());
+            BanReasonEnum banReason = BanReasonEnum.valueOf(dto.getBanReason().toUpperCase());
             UserBan userBan = new UserBan();
             userBan.setEmail(email);
             userBan.setBanDuration(banDuration);
+            userBan.setBanReason(banReason);
             userBan.setBanStartTime(LocalDateTime.now());
+
+            commentRepository.deleteByArticleNum(articleNum);
+            favoriteRepository.deleteByArticleNum(articleNum);
+            articleRepository.delete(articleEntity);
 
             userBanRepository.save(userBan);
         } catch (Exception exception) {
@@ -234,17 +270,15 @@ public class AuthServiceImplement implements AuthService {
         try {
             String email = jwtProvider.extractEmail(token);
             UserBan userBan = userBanRepository.findByEmail(email);
-            System.out.println("1111111");
             // 만일 계정이 정지되어있다면..
             if (userBan != null){
                 LocalDateTime banEndTime = userBan.getBanStartTime().plus(getPeriod(userBan.getBanDuration()));
                 // 활동 정지가 만료되지 않았을 경우
                 if (LocalDateTime.now().isBefore(banEndTime)) {
-                    return CheckUserBanResponseDto.success(userBan.getEmail(), userBan.getBanDuration(), userBan.getBanStartTime());
+                    return CheckUserBanResponseDto.success(userBan.getEmail(), userBan.getBanDuration(), userBan.getBanStartTime(), userBan.getBanReason());
                     // 활동 정지가 만료되었을 경우
                 } else {
                     userBanRepository.delete(userBan);
-                    System.out.println("22222");
                     return CheckUserBanResponseDto.notBanned();
                 }
             } else {
@@ -257,7 +291,7 @@ public class AuthServiceImplement implements AuthService {
     }
 
     // BanDuration 엔티티를 받아와 사용.
-    private Period getPeriod(BanDuration banDuration) {
+    private Period getPeriod(BanDurationEnum banDuration) {
         switch (banDuration) {
             case ONE_MONTH:
                 return Period.ofMonths(1);

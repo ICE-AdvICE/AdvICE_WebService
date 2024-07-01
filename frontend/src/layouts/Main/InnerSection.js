@@ -34,10 +34,6 @@ const InnerSection = () => {
       <div className="middle-container">
         <div className = "middle-img" >
             <img src="main2-bottom.png"  class="middle-image" />
-            
-            
-              
-             
         </div>
         <div className="middle-note" id="more">
             <div className="middle-note-top">

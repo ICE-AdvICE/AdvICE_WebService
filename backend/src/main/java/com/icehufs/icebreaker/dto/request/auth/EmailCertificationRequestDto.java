@@ -19,3 +19,4 @@ public class EmailCertificationRequestDto {
         this.email = email + "@hufs.ac.kr";
     }
 }
+    

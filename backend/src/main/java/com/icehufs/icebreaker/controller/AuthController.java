@@ -67,14 +67,16 @@ public class AuthController {
         return response;
     }
 
-    @PostMapping("/give-ban")
+    @PostMapping("/give-ban/{articleNum}")
     public ResponseEntity<? super GiveUserBanResponseDto> GiveUserBan (
+            @PathVariable("articleNum") Integer articleNum,
             @RequestBody @Valid GiveUserBanRequestDto requestBody
     ) {
-        ResponseEntity<? super GiveUserBanResponseDto> response = authService.giveUserBan(requestBody);
+        ResponseEntity<? super GiveUserBanResponseDto> response = authService.giveUserBan(requestBody, articleNum);
         return response;
     }
 
+    // 정지 여부 확인 api
     @PostMapping("/check-user-ban")
     public ResponseEntity<? super CheckUserBanResponseDto> checkUserBanStatus(@RequestHeader("Authorization") String token) {
         // Assuming the token is prefixed with "Bearer "

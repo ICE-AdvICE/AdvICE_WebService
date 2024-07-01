@@ -34,18 +34,23 @@ public class UserBan {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "ban_duration")
-    private BanDuration banDuration;
+    private BanDurationEnum banDuration;
 
     @Column(name = "ban_starttime")
     private LocalDateTime banStartTime;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "ban_reason")
+    private BanReasonEnum banReason;
 
     @ManyToOne
     @JoinColumn(name = "user_email", referencedColumnName = "user_email", insertable = false, updatable = false, foreignKey = @ForeignKey(name = "fk_user_email"))
     private User user;
 
-    public UserBan(String email, BanDuration banDuration) {
+    public UserBan(String email, BanDurationEnum banDuration, BanReasonEnum banReason) {
         this.email = email;
         this.banDuration = banDuration;
         this.banStartTime = LocalDateTime.now();
+        this.banReason = banReason;
     }
 }

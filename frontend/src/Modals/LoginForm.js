@@ -6,7 +6,7 @@ import FindpasswordForm from '../Modals/findpassword';
 import SignUpForm from '../Modals/SignupForm';
 import MyModal from '../MyModal';
 
-const LoginForm = ({ onLogin, openFindPasswordModal,openSignUpModal, closeModal }) => {
+const LoginForm = ({ onLogin, setIsLoggedIn, openFindPasswordModal, openSignUpModal, closeModal }) => {
   
   const [userEmail, setUserEmail] = useState('');
   const [userPassword, setUserpassword] = useState('');
@@ -35,11 +35,12 @@ const LoginForm = ({ onLogin, openFindPasswordModal,openSignUpModal, closeModal 
   // signInResponse 처리 함수
   const signInResponse = (responseBody) => {
     console.log(responseBody);
+    const { code, token, expirationTime } = responseBody;
     if (!responseBody) { //예상하지못한 error를 처리 함수
       alert('네트워크 이상입니다.');
       return;
     }
-    const { code } = responseBody; //정상 응답 또는 예상한 error 반환 함수
+     //정상 응답 또는 예상한 error 반환 함수
     //alert(code);
     if (code === 'DBE') alert('데이터베이스 오류입니다.');
     else if (code === 'SF' || code === 'VF') setError(true);
@@ -47,9 +48,14 @@ const LoginForm = ({ onLogin, openFindPasswordModal,openSignUpModal, closeModal 
       alert('네트워크 오류입니다.');
       return;
     }
-    else if(code ==='SU') alert("로그인 성공");
+    else if(responseBody.code === 'SU') {
+      console.log("로그인 성공, 상태 변경 중...");
+      setIsLoggedIn(true);
+      closeModal();
+      navigator('/');
+    }
       
-    const { token, expirationTime } = responseBody;
+   
     const now = new Date().getTime();                      //현재 시간
     const expires = new Date(now + expirationTime * 1000); //서버에서 설정한 시간(expirationTime)을 현재시간에 더하여 로그인만료 시각을 반환
 

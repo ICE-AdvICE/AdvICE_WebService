@@ -24,4 +24,8 @@ public class SignUpRequestDto {
 
     @NotBlank
     private String name;
+
+    public void setEmail(String email) {
+        this.email = email + "@hufs.ac.kr";
+    }
 }

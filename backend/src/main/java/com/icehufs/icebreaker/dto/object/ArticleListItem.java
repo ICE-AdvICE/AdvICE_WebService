@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.icehufs.icebreaker.entity.Article;
+import com.icehufs.icebreaker.entity.ArticleCategoryEnum;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -16,18 +17,16 @@ import lombok.NoArgsConstructor;
 public class ArticleListItem {
 
     private int articleNum;
-    private String userEmail;
     private String articleTitle;
     private String articleContent;
     private int likeCount;
     private int viewCount;
     private String articleDate;
     private int authCheck;
-    private int category;
+    private ArticleCategoryEnum category;
 
     public ArticleListItem(Article articleListViewEntity) {
         this.articleNum = articleListViewEntity.getArticleNum();
-        this.userEmail = articleListViewEntity.getUserEmail();
         this.articleTitle = articleListViewEntity.getArticleTitle();
         this.articleContent = articleListViewEntity.getArticleContent();
         this.likeCount = articleListViewEntity.getLikeCount();

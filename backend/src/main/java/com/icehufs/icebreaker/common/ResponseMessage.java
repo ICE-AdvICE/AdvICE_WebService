@@ -24,6 +24,7 @@ public interface ResponseMessage {
         //HTTP Status 500
         String MAIL_FAIL = "Mail send Failed.";
         String DATABASE_ERROR = "Database error.";
+        String DOES_NOT_MATCH_EMAIL ="Doesn't Match Email.";
 
 
 }

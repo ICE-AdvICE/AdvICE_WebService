@@ -17,12 +17,11 @@ import lombok.NoArgsConstructor;
 public class ArticleListViewEntity {
     @Id
     private int article_num;
-    private String user_email;
     private String article_title;
     private String article_content;
     private int like_count;
     private int view_count;
     private String article_date;
     private boolean auth_check;
-    private int category;
+    private ArticleCategoryEnum category;
 }

@@ -7,6 +7,7 @@ import com.icehufs.icebreaker.common.ResponseCode;
 import com.icehufs.icebreaker.common.ResponseMessage;
 import com.icehufs.icebreaker.dto.response.ResponseDto;
 import com.icehufs.icebreaker.entity.Article;
+import com.icehufs.icebreaker.entity.ArticleCategoryEnum;
 
 import lombok.Getter;
 
@@ -14,19 +15,19 @@ import lombok.Getter;
 public class GetArticleResponseDto extends ResponseDto {
 
     private int articleNum;
-    private String userEmail;
+    //private String userEmail; 익명보장을 위해 글 작성자 메일을 아예 노출 x
     private String articleTitle;
     private String articleContent;
     private int likeCount;
     private int viewCount;
     private String articleDate;
     private int authCheck;
-    private int category;
+    private ArticleCategoryEnum category;
 
     private GetArticleResponseDto(Article articleEntity){
         super(ResponseCode.SUCCESS, ResponseMessage.SUCCESS);
         this.articleNum = articleEntity.getArticleNum();
-        this.userEmail = articleEntity.getUserEmail();
+        //this.userEmail = articleEntity.getUserEmail();
         this.articleTitle = articleEntity.getArticleTitle();
         this.articleContent = articleEntity.getArticleContent();
         this.likeCount = articleEntity.getLikeCount();
