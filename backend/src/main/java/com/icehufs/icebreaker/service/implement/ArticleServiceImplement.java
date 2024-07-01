@@ -13,6 +13,7 @@ import com.icehufs.icebreaker.dto.request.article.PostCommentRequestDto;
 import com.icehufs.icebreaker.dto.response.ResponseDto;
 import com.icehufs.icebreaker.dto.response.article.CheckArticleFavoriteResponseDto;
 import com.icehufs.icebreaker.dto.response.article.CheckOwnOfArticleResponseDto;
+import com.icehufs.icebreaker.dto.response.article.DeleteArticleAdminResponseDto;
 import com.icehufs.icebreaker.dto.response.article.DeleteArticleResponseDto;
 import com.icehufs.icebreaker.dto.response.article.DeleteCommentResponseDto;
 import com.icehufs.icebreaker.dto.response.article.GetArticleListResponseDto;
@@ -162,7 +163,7 @@ public class ArticleServiceImplement implements ArticleService {
 
 
     @Override
-    public ResponseEntity<? super DeleteArticleResponseDto> deleteArticle(Integer articleNum,String email) {
+    public ResponseEntity<? super DeleteArticleResponseDto> deleteArticle(Integer articleNum, String email) {
         try{
             boolean existedUser = userRepository.existsByEmail(email);
             if (!existedUser) return DeleteArticleResponseDto.notExistUser();
@@ -317,5 +318,26 @@ public class ArticleServiceImplement implements ArticleService {
             return ResponseDto.databaseError();
         }
         return CheckArticleFavoriteResponseDto.success();
+    }
+
+
+    @Override
+    public ResponseEntity<? super DeleteArticleAdminResponseDto> deleteArticleAdmin(Integer articleNum, String email) {
+        try{
+            //운영자email 확인 로직을 추후에 추가
+
+            Article articleEntity = articleRepository.findByArticleNum(articleNum);
+            if (articleEntity == null) return DeleteArticleAdminResponseDto.noExistArticle();
+
+            commentRepository.deleteByArticleNum(articleNum);
+            favoriteRepository.deleteByArticleNum(articleNum);
+            articleRepository.delete(articleEntity);
+
+        }catch(Exception exception){
+            exception.printStackTrace();
+            return ResponseDto.databaseError();
+        }
+
+        return DeleteArticleAdminResponseDto.success();
     }
 }

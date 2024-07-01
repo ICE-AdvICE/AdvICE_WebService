@@ -21,6 +21,7 @@ import com.icehufs.icebreaker.dto.request.article.PostCommentRequestDto;
 import com.icehufs.icebreaker.dto.response.article.CheckArticleFavoriteResponseDto;
 import com.icehufs.icebreaker.dto.response.article.CheckOwnOfArticleResponseDto;
 import com.icehufs.icebreaker.dto.response.article.DeleteArticleResponseDto;
+import com.icehufs.icebreaker.dto.response.article.DeleteArticleAdminResponseDto;
 import com.icehufs.icebreaker.dto.response.article.DeleteCommentResponseDto;
 import com.icehufs.icebreaker.dto.response.article.GetArticleListResponseDto;
 import com.icehufs.icebreaker.dto.response.article.GetArticleResponseDto;
@@ -144,6 +145,15 @@ public class ArticleController {
         @AuthenticationPrincipal String email
     ){
         ResponseEntity<? super DeleteArticleResponseDto> response = articleService.deleteArticle(articleNum, email);
+        return response;
+    }
+
+    @DeleteMapping("/admin/{articleNum}")
+    public ResponseEntity<? super DeleteArticleAdminResponseDto> deleteArticleAdmin(
+        @PathVariable("articleNum") Integer articleNum,
+        @AuthenticationPrincipal String email
+    ){
+        ResponseEntity<? super DeleteArticleAdminResponseDto> response = articleService.deleteArticleAdmin(articleNum, email);
         return response;
     }
 
