@@ -1,36 +1,57 @@
-import React, { useRef,useEffect } from 'react';
-import { Editor } from '@toast-ui/react-editor';
-import '@toast-ui/editor/dist/toastui-editor.css';
+import React, { useMemo, useState } from 'react';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 
-const ToastEditor = ({ body, setBody }) => {
-  const editorRef = useRef();
+const formats = [
+  'font',
+  'header',
+  'bold',
+  'italic',
+  'underline',
+  'strike',
+  'blockquote',
+  'list',
+  'bullet',
+  'indent',
+  'link',
+  'align',
+  'color',
+  'background',
+  'size',
+  'h1',
+];
 
-  const onChangeGetHTML = () => {
-    const data = editorRef.current.getInstance().getHTML();
-    setBody(data);
-  };
+const QuillEditor = () => {
+  const [values, setValues] = useState('');
 
-  useEffect(() => {
-    const editorInstance = editorRef.current.getInstance();
-    editorInstance.setHTML(body);
-  }, [body]);
+  const modules = useMemo(() => {
+    return {
+      toolbar: {
+        container: [
+          [{ size: ['small', false, 'large', 'huge'] }],
+          [{ align: [] }],
+          ['bold', 'italic', 'underline', 'strike'],
+          [{ list: 'ordered' }, { list: 'bullet' }],
+          [
+            {
+              color: [],
+            },
+            { background: [] },
+          ],
+        ],
+      },
+    };
+  }, []);
 
   return (
-    <Editor
-      initialEditType="wysiwyg"
-      hideModeSwitch={true}
-      toolbarItems={[
-        ['heading', 'bold', 'italic', 'strike'],
-        ['hr', 'quote'],
-        ['ul', 'ol', 'task', 'indent', 'outdent'],
-        ['table'],
-      ]}
-      height="500px"
-      previewStyle="vertical"
-      ref={editorRef}
-      onChange={onChangeGetHTML}
+    <ReactQuill
+      theme="snow"
+      modules={modules}
+      formats={formats}
+      value={values}
+      onChange={setValues}
     />
   );
 };
 
-export default ToastEditor;
+export default QuillEditor;

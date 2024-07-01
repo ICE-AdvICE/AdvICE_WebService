@@ -67,6 +67,7 @@ const BlogForm = ({ editing }) => {
         }
     }, [editing, articleNum, token]);
 
+    
     useEffect(() => {
         if (editing && location.state?.article) {
             const { articleTitle, articleContent, category } = location.state.article;
@@ -121,7 +122,7 @@ const BlogForm = ({ editing }) => {
     };
     return (
         <div className='blog-container'>
-            <img src="/main-image.png" alt="Main Content Image" className="header2-image" />
+            <img src="/main-image.png"  className="header2-image" />
             {error && <div className="alert alert-danger">{error}</div>}
             <div className="container">
                 <div className={`dropdown ${dropdownOpen ? 'active' : ''}`} onClick={() => setDropdownOpen(!dropdownOpen)}>

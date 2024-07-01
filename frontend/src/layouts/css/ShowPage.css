@@ -1,6 +1,6 @@
 .blog-container{
   width: 1522px;
-  height: 460px;
+  height: 100%;
   position: relative;
 }
 .header2-image{
@@ -21,14 +21,7 @@
   align-items: center;
   gap: 15px;
 }
-.CommentBox-container{
-  z-index: 111;
-  position: absolute;
-  width: 100%;
-  height: 30%;
-  left: 13%;
-  top: 36%;
-}
+
 .Commentbox-name h3 {
   height: 40px;
   color: blue;
@@ -53,13 +46,7 @@
   border-radius: 6px;
 
 }
-.ArticleTitle{
-  margin-bottom: 35px;
-  z-index:111;
-  position: absolute;
-  top:12%;
-  left: 13%;
-}
+
 .ArticleDate {
   margin-bottom: 5px;
   display: flex;   
@@ -70,70 +57,111 @@
   justify-content: space-between;  
   align-items: center;   
 }
-
+/*카테고리 일반 or 요청*/
 .ArticleCategory {
   background-color: black;  
   color: white;             
   padding: 1px 1px;            
   border-radius: 5px;       
-  width: 6%;
   position: absolute;
   top:5%;
   left: 13%;
-  height: 50px;
-  width: 70px;
-  text-align: center;    
+  height: 39px;
+  width: 78px;
+  display: flex;           /* Flexbox를 사용 */
+  align-items: center;     /* 세로 중앙 정렬 */
+  justify-content: center; /* 가로 중앙 정렬 */
+
   z-index: 111;           
- 
 }
-.ArticleCategory p{
-  margin-top: 6px;
-  padding: 2px 2px;
-  margin-bottom: 0;
-}
+.ArticleCategory p {
+  font-family: 'Inter', sans-serif; /* 폰트 패밀리 설정 */
+  font-weight: 700; /* 글자 두께 */
+  font-size: 25px; /* 글자 크기 */
+  margin-top: 0;    
+  margin-bottom: 0;  }
 
-.vector5{
- width: 100%;
- height: auto;
-}
 
+/*제목*/
+.ArticleTitle{
+  margin-bottom: 35px;
+  z-index:11;
+  position: absolute;
+  top:10%;
+  left: 13%;
+  font-family: 'Inter', sans-serif;  
+  font-weight: 700;  
+  font-size: 40px;  
+}
+/*날짜*/
 .ArticleDate {
   margin-bottom: 5px;
   display: flex;   
   left: 13%;
-  top:17%;
+  top:14%;
   position: absolute;      
   justify-content: space-between;  
   align-items: center;   
+  font-family: 'Inter', sans-serif; 
+  font-size: 20px; 
+  color: #00000093;
 }
+/*선*/
+.vector5 {
+  width: 100%;
+  height: 1px;
+  border: 1px solid #000000; /* 테두리 두께와 색상 설정 */
+ 
+}
+
+
 
 .Article-Main{
   position: absolute;
-  top: 20%;
+  height: auto;
+  width: 70%;
+  top: 19%;
   margin-bottom: 30px;
   left: 13%;
 }
+.Article-middle{
+  display: flex;  
+  width: 87%;
+  height: auto;
+  position: relative;
+  justify-content: space-between; 
+}
 
+/*하트위치*/
 .Comment-Option{
-  margin-top: 15px;
-  position: absolute;
-  top:27%;
+  position: relative;
   display: flex;   
-  left: 13%;
-  z-index: 111;       
+  z-index: 11;       
   align-items: center;  
   width: 25%;
   flex-direction: row;
+  margin-left:10px;
 }
 .Comment-Option p{
-  margin-left: 10px;
-  margin-top: 10px;
+  margin-left: 12px;
+  margin-top: 8px;
 }
+
+
+.CommentBox-container{
+  z-index: 11;
+  position: relative;
+  width: 100%;
+  height: auto;
+ 
+}
+
+
+
+
 .Edit-Delete-Options {
-  width: 6%;
-  margin-top: 15px;
-  position: absolute;
-  top:28%;
+  width: 10%;
+  position: relative;
   z-index: 111;
   left: 16%;
   display: flex;  
@@ -150,6 +178,10 @@
 .CommentBox-bottom{
   width: 100%;
   height: 50px;
+  border: 2px solid var(--skinCommentWriterBorder);
+  box-sizing: border-box;
+  border-radius: 6px;
+  background: var(--skinCommentWriterBg);
 }
 
 
@@ -185,8 +217,6 @@
   position: relative;
   transform: rotate(-45deg);  
 }
-
-
 .heart:before, .heart:after {
   content: "";
   position: absolute;
@@ -195,21 +225,17 @@
   border-radius: 50%;  
   background-color: #d5d4d4;  
 }
-
 .heart:before {
   top: 0;
   left: 7.5px; 
 }
-
 .heart:after {
   top: -7.5px;  
   left: 0;
 }
-
 .heart.love {
   background-color: #F80808; 
 }
-
 .heart.love:before,
 .heart.love:after {
   background-color: #F80808;  

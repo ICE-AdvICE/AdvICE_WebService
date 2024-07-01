@@ -1,4 +1,7 @@
-
+.blog-container{
+    width: 100%;
+    height: 100%;
+}
 .dropdown {
   width: 20%;
   display: inline-block;
@@ -77,3 +80,5 @@
 .esbutton{
     margin-top: 1%;
 }
+
+

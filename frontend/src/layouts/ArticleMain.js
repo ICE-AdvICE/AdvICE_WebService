@@ -13,7 +13,7 @@ const ArticleMain = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [articlesState, setArticlesState] = useState([]);
     const [userId, setUserId] = useState(null);
-    const articlesPerPage = 8;
+    const articlesPerPage = 6;
     const [cookies] = useCookies(['accessToken', 'userEmail']);
     const [filteredArticles, setFilteredArticles] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
@@ -23,25 +23,36 @@ const ArticleMain = () => {
     const currentArticles = filteredArticles.slice(indexOfFirstArticle, indexOfLastArticle);
     const userEmail = cookies.userEmail;
     const [selectedCategory, setSelectedCategory] = useState('all');
+    const [searchCategory, setSearchCategory] = useState('all');
     const paginate = pageNumber => setCurrentPage(pageNumber);
     const token = cookies.accessToken;
     const [userDetails, setUserDetails] = useState({
         email: '',
     });
     
-    //검색 기능
+    
+    //검색 기능(33~52)
     const searchArticles = () => {
         if (!searchTerm.trim()) {
-            alert("검색어를 입력하세요.");
+            setFilteredArticles(articlesState);
             return;
         }
-        const filteredArticles = articlesState.filter(article =>
-            selectedCategory === 'title' ?
+        const newFilteredArticles = articlesState.filter(article =>
+            searchCategory === 'title' ?
             article.articleTitle.toLowerCase().includes(searchTerm.toLowerCase()) :
             article.articleContent.toLowerCase().includes(searchTerm.toLowerCase())
         );
-        setArticlesState(filteredArticles);
+        setFilteredArticles(newFilteredArticles);
     };
+    useEffect(() => {
+        if (searchTerm === '') {
+            setFilteredArticles(articlesState);
+        } else {
+            searchArticles(); 
+        }
+    }, [searchCategory]);
+ 
+
 
     useEffect(() => {
         const fetchUserDetails = async () => {
@@ -152,39 +163,41 @@ const ArticleMain = () => {
 
     useEffect(() => {
         filterArticles();  
+        
     }, [selectedCategory, articlesState, userId, userEmail]); 
     
     useEffect(() => {
         getArticleListRequest().then(getArticleListResponse);
     }, []);
+    
 
     return (
         <div className="blog-container">
-            <img src="/main-image.png" alt="Main Content Image" className="header2-image" />
+            <img src="/main-image.png" className="header2-image"/>
             <div className="posts-overlay-container">
-                <img src="/main2-image.png" alt="Additional Content Image" className="header3-image"/>
+                <img src="/main2-image.png"   className="header3-image"/>
                 <div className="title">
-                    <p>순번</p>
-                    <p>제목</p>
-                    <p>작성일</p>
-                    <p>조회</p>
-                    <p>좋아요</p>
+                    <p>순번</p> <p>카테고리</p> <p>제목</p><p>작성일</p> <p>조회</p><p>좋아요</p>
                 </div>
                 <div className='main-top'>
                     <img src="vector2.png" className="vector2"/>
                 </div>
+                <div className='main-top2'>
+                    <img src="vector2.png" className="vector3"/>
+                </div>
                 <div className="category-dropdown">
-                <select value={selectedCategory} onChange={handleCategoryChange}>
-                    {categories.map(category => (
-                        <option key={category.value} value={category.value}>
-                            {category.label}
-                        </option>
-                    ))}
-                </select>
-            </div>
+                    <select value={selectedCategory} onChange={handleCategoryChange}>
+                        {categories.map(category => (
+                            <option key={category.value} value={category.value}>
+                                {category.label}
+                            </option>
+                        ))}
+                    </select>
+                </div>
                 <div className="posts-content">
-                    {currentArticles.length > 0 ? (
-                    currentArticles.map((article, index) => {
+                    <div className = "Notification-container">
+                        {currentArticles.filter(article => article.category === 2).length > 0 ? (
+                        currentArticles.filter(article => article.category === 2).map((article, index) => {
                         return (
                             <Card
                                 key={article.articleNum}
@@ -192,7 +205,7 @@ const ArticleMain = () => {
                                 createdAt={article.articleDate}
                                 views={article.viewCount}
                                 likes={article.likeCount}
-                                order={indexOfFirstArticle + index + 1}
+                                order="공지"
                                 category={article.category}
                                 onClick={() => handleCardClick(article)}
                                 email={article.userEmail}
@@ -200,11 +213,36 @@ const ArticleMain = () => {
                         );
                     })
                     ):  (
-                            <div>블로그 게시물이 없습니다</div>
+                            <div>공지사항이 없습니다</div>
                         )}
-                </div>
+                    </div>
+                    <div className = "non-Notification-container">
+                        {currentArticles.length > 0 ? (
+                        currentArticles.map((article, index) => {
+                            return (
+                                <Card
+                                    key={article.articleNum}
+                                    title={article.articleTitle}
+                                    createdAt={article.articleDate}
+                                    views={article.viewCount}
+                                    likes={article.likeCount}
+                                    order={indexOfFirstArticle + index + 1}
+                                    category={article.category}
+                                    onClick={() => handleCardClick(article)}
+                                    email={article.userEmail}
+                                />
+                            );
+                        })
+                        ):  (
+                                <div>게시물이 없습니다</div>
+                            )}
+                    </div>
+
+                    </div>
+                    
                 <div className="search-bar">
-                    <select value={selectedCategory} onChange={e => setSelectedCategory(e.target.value)}>
+                    <select value={searchCategory} onChange={e => setSearchCategory(e.target.value)}>
+                        <option value="all">전체</option>
                         <option value="title">제목</option>
                         <option value="content">내용</option>
                     </select>
@@ -215,20 +253,11 @@ const ArticleMain = () => {
                     />
                     <button onClick={searchArticles}>검색</button>
                 </div>
-                <aside>
-                    <button className="sidebar-box" onClick={() => window.location.href='https://www.hufs.ac.kr/hufs/index.do'}>
-                        <h2>학교 홈피</h2>
-                    </button>
-                    <button className="sidebar-box" onClick={() => window.location.href='https://ice.hufs.ac.kr/sites/ice/index.do'}>
-                        <h2>학과 홈피</h2>
-                    </button>
-                </aside>
                 <div>
                     <Pagination paginate={paginate} currentPage={currentPage} totalPages={totalPages} />
                 </div>
                 <Link to="/article-main/create" className="btn1">
-                    <img src="/pencil.png" alt="Pencil Icon" className="pencil" />
-                    글쓰기
+                    <img src="/pencil.png" className="pencil" />
                 </Link>
 
             </div>

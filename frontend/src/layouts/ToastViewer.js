@@ -1,10 +1,16 @@
-// Toast-UI Viewer 컴포넌트
 import React from 'react';
-import '@toast-ui/editor/dist/toastui-editor-viewer.css';
-import { Viewer } from '@toast-ui/react-editor';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 
-const ToastViewer = ({ html }) => {
-  return <Viewer initialValue={html} />;
+const QuillViewer = ({ html }) => {
+  return (
+    <ReactQuill
+      value={html}
+      readOnly={true}
+      theme="bubble" 
+    />
+  );
 };
 
-export default ToastViewer;
+export default QuillViewer;
+

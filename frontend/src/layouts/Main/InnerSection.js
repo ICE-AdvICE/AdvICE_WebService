@@ -33,23 +33,7 @@ const InnerSection = () => {
     <section className="inner">
       <div className="middle-container">
         <div className = "middle-img" >
-            <img src="main2-bottom.png" alt="메인 콘텐츠 이미지" class="middle-image" />
-            <div className =" middle-box-container">
-              <div className="img-container">
-                <button className="skill">
-                  <img src= "/book.png" className="box1" />
-                  <p>스터디룸 예약</p>
-                </button>
-                <button className="skill">
-                  <img src="/coding.png" className="box2" />
-                  <p>코딩존 예약</p>
-                </button>
-                <button className="skill">
-                  <img src="/computer.png" className="box3" />
-                  <p>Advice</p>
-                </button>
-              </div>
-            </div>
+            <img src="main2-bottom.png"  class="middle-image" />
         </div>
         <div className="middle-note" id="more">
             <div className="middle-note-top">
