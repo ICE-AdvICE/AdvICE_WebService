@@ -25,6 +25,7 @@ import com.icehufs.icebreaker.dto.response.article.PatchCommentResponseDto;
 import com.icehufs.icebreaker.dto.response.article.PostArticleResponseDto;
 import com.icehufs.icebreaker.dto.response.article.PostCommentResponseDto;
 import com.icehufs.icebreaker.dto.response.article.PutFavoriteResponseDto;
+import com.icehufs.icebreaker.dto.response.article.PutResolvedArticleResponseDto;
 import com.icehufs.icebreaker.entity.Article;
 import com.icehufs.icebreaker.entity.CommentEntity;
 import com.icehufs.icebreaker.entity.FavoriteEntity;
@@ -339,5 +340,25 @@ public class ArticleServiceImplement implements ArticleService {
         }
 
         return DeleteArticleAdminResponseDto.success();
+    }
+
+
+    @Override
+    public ResponseEntity<? super PutResolvedArticleResponseDto> putResolv(Integer articleNum, String email) {
+        Article articleEntity = null;
+        try {
+            //운영자email 확인 로직을 추후에 추가
+
+            articleEntity = articleRepository.findByArticleNum(articleNum);
+            if (articleEntity == null) return PutResolvedArticleResponseDto.noExistArticle();
+
+            articleEntity.putResolv();
+            articleRepository.save(articleEntity);
+
+        }catch (Exception exception){
+            exception.printStackTrace();
+            return ResponseDto.databaseError();
+        }
+        return PutResolvedArticleResponseDto.success();
     }
 }
