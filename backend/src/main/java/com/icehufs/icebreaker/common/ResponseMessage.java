@@ -20,6 +20,7 @@ public interface ResponseMessage {
 
         //HTTP Status 404
         String SUCCESS_BUT_NOT = "Success but not.";
+        String WITHDRAWN_EMAIL = "User who has withdrawn.";
 
         //HTTP Status 500
         String MAIL_FAIL = "Mail send Failed.";

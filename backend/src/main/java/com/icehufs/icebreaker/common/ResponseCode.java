@@ -20,6 +20,7 @@ public interface ResponseCode {
 
     //HTTP Status 404
     String SUCCESS_BUT_NOT = "SN";
+    String WITHDRAWN_EMAIL = "WDE";
 
     //HTTP Status 500
     String MAIL_FAIL = "MF";

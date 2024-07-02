@@ -22,6 +22,10 @@ public class GiveUserBanResponseDto extends ResponseDto {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseBody);
     }
 
+    public static ResponseEntity<ResponseDto> withdrawnId(){
+        ResponseDto responseBody = new ResponseDto(ResponseCode.WITHDRAWN_EMAIL, ResponseMessage.WITHDRAWN_EMAIL);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseBody);
+    }
 
     public static ResponseEntity<ResponseDto> notExistUser (){
         ResponseDto result = new ResponseDto(ResponseCode.NOT_EXISTED_USER, ResponseMessage.NOT_EXISTED_USER);
@@ -30,5 +34,5 @@ public class GiveUserBanResponseDto extends ResponseDto {
 
     public static ResponseEntity<ResponseDto> noExistArticle(){
         ResponseDto result = new ResponseDto(ResponseCode.NOT_EXISTED_ARTICLE, ResponseMessage.NOT_EXISTED_ARTICLE);
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result); }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result); }
 }

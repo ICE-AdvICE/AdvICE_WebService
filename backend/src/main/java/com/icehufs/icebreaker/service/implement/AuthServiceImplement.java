@@ -33,8 +33,8 @@ import com.icehufs.icebreaker.provider.EmailProvider;
 import com.icehufs.icebreaker.provider.JwtProvider;
 import com.icehufs.icebreaker.repository.ArticleRepository;
 import com.icehufs.icebreaker.repository.CertificationRepository;
-import com.icehufs.icebreaker.repository.CommentRepository;
-import com.icehufs.icebreaker.repository.FavoriteRepository;
+// import com.icehufs.icebreaker.repository.CommentRepository;
+// import com.icehufs.icebreaker.repository.FavoriteRepository;
 import com.icehufs.icebreaker.repository.UserBanRepository;
 import com.icehufs.icebreaker.repository.UserRepository;
 //import org.slf4j.Logger;
@@ -42,9 +42,9 @@ import com.icehufs.icebreaker.repository.UserRepository;
 import com.icehufs.icebreaker.service.AuthService;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+// import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
+// @Slf4j
 @Service
 @RequiredArgsConstructor
 public class AuthServiceImplement implements AuthService {
@@ -58,8 +58,8 @@ public class AuthServiceImplement implements AuthService {
 
     // 운영자의 게시글 삭제 관련 레포지토리
     private final ArticleRepository articleRepository;
-    private final CommentRepository commentRepository;
-    private final FavoriteRepository favoriteRepository;
+    // private final CommentRepository commentRepository;
+    // private final FavoriteRepository favoriteRepository;
     private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     @Override
@@ -198,9 +198,9 @@ public class AuthServiceImplement implements AuthService {
             String email = articleEntity.getUserEmail();
             
 
-            // 정지하려는 유저의 이메일이 User테이블에 등록이 안되어있을 경우.
+            // 정지하려는 유저가 이전에 탈퇴했기에 User테이블에 엔티티가 없을 경우.
             boolean existedUser = userRepository.existsByEmail(email);
-            if (!existedUser) return GiveUserBanResponseDto.notExistUser();
+            if (!existedUser) return GiveUserBanResponseDto.withdrawnId();
 
             boolean ban_email = userBanRepository.existsByEmail(email);
             // 이미 정지된 계정일 경우.(운영자가 한 번에 단일 작성자의 문제가 있는 여러 게시글에 정지를 부여할 경우.)
@@ -208,7 +208,7 @@ public class AuthServiceImplement implements AuthService {
                 return GiveUserBanResponseDto.duplicateId();
             }
 
-
+            
             BanDurationEnum banDuration = BanDurationEnum.valueOf(dto.getBanDuration().toUpperCase());
             BanReasonEnum banReason = BanReasonEnum.valueOf(dto.getBanReason().toUpperCase());
             UserBan userBan = new UserBan();
@@ -217,9 +217,10 @@ public class AuthServiceImplement implements AuthService {
             userBan.setBanReason(banReason);
             userBan.setBanStartTime(LocalDateTime.now());
 
-            commentRepository.deleteByArticleNum(articleNum);
-            favoriteRepository.deleteByArticleNum(articleNum);
-            articleRepository.delete(articleEntity);
+            // 사용자 정지와 함께 게시물 삭제를 할 경우 코드
+            //commentRepository.deleteByArticleNum(articleNum);
+            //favoriteRepository.deleteByArticleNum(articleNum);
+            //articleRepository.delete(articleEntity);
 
             userBanRepository.save(userBan);
         } catch (Exception exception) {
