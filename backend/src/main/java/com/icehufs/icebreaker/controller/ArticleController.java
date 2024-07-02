@@ -32,6 +32,7 @@ import com.icehufs.icebreaker.dto.response.article.PatchCommentResponseDto;
 import com.icehufs.icebreaker.dto.response.article.PostArticleResponseDto;
 import com.icehufs.icebreaker.dto.response.article.PostCommentResponseDto;
 import com.icehufs.icebreaker.dto.response.article.PutFavoriteResponseDto;
+import com.icehufs.icebreaker.dto.response.article.PutResolvedArticleResponseDto;
 import com.icehufs.icebreaker.service.ArticleService;
 
 import lombok.RequiredArgsConstructor;
@@ -121,6 +122,7 @@ public class ArticleController {
         return response;
     }
 
+
     @PostMapping("/{articleNum}/comment")
     public ResponseEntity<? super PostCommentResponseDto> postComment(
         @RequestBody @Valid PostCommentRequestDto requestBody,
@@ -163,6 +165,15 @@ public class ArticleController {
         @AuthenticationPrincipal String email
     ){
         ResponseEntity<? super DeleteCommentResponseDto> response = articleService.deleteComment(commentNumber, email);
+        return response;
+    }
+
+    @PutMapping("/{articleNum}/resolv")
+    public ResponseEntity<? super PutResolvedArticleResponseDto> putresolv(
+        @PathVariable("articleNum") Integer articleNum,
+        @AuthenticationPrincipal String email
+    ){
+        ResponseEntity<? super PutResolvedArticleResponseDto> response = articleService.putResolv(articleNum, email);
         return response;
     }
 

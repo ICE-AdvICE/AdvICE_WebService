@@ -92,4 +92,8 @@ public class Article {
         this.articleTitle = dto.getArticleTitle();
         this.articleContent = dto.getArticleContent();
     }
+
+    public void putResolv() {
+        this.authCheck = 1;
+    }
 }
