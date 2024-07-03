@@ -8,7 +8,9 @@ import './css/ShowPage.css';
 import moment from 'moment';
 import { handleCommentSubmit } from '../apis/index.js';
 import {fetchComments } from '../apis/index.js';
+import {handleDelete } from '../apis/index.js';
 const ShowPage = () => {
+    const [isComposing, setIsComposing] = useState(false);
     const { articleNum } = useParams();
     const [article, setArticle] = useState(null);
     const [likes, setLikes] = useState(0);
@@ -20,19 +22,30 @@ const ShowPage = () => {
     const userEmail = cookies.userEmail;
     const [authorEmail, setAuthorEmail] = useState("");
     const navigate = useNavigate();
+    const handleComposition = (event) => {
+        if (event.type === 'compositionend') {
+            setIsComposing(false);
+        } else {
+            setIsComposing(true);
+        }
+    };
 
+    const commentData = {
+        content: commentInput,
+        user_email: userEmail
+    };
     const [userDetails, setUserDetails] = useState({
         email: '',
         studentNum: '',
         name: ''
     });
     
-    /*댓글날짜 오류해결해야댐*/
     const formatDate = (dateString) => {
         const date = moment.utc(dateString).local();  
         return date.format('YYYY년 MM월 DD일');  
         
     };
+
 
     /*수정버튼*/
     const handleEdit = () => {
@@ -40,19 +53,11 @@ const ShowPage = () => {
             state: { article } 
         });
     };
-    const handleDelete = () => { //게시글 삭제
-        if (window.confirm("정말로 게시글을 삭제하시겠습니까?")) {
-            axios.delete(`http://localhost:4000/api/v1/article/${articleNum}`, {
-                headers: { Authorization: `Bearer ${token}` }
-            }).then(() => {
-                alert("게시글이 삭제되었습니다.");
-                navigate('/');
-            }).catch(err => {
-                console.error("Error deleting post:", err);
-                alert("게시글 삭제에 실패했습니다.");
-            });
-        }
+    /*삭제버튼*/
+    const onDelete = () => {
+        handleDelete(articleNum, token, navigate);
     };
+    
 
 
 //좋아요 관련 코드
@@ -133,12 +138,11 @@ const ShowPage = () => {
         setCommentInput(event.target.value);
     };
     const handleKeyDown = (event) => {
-        handleCommentSubmit(event, commentInput, setComments, setCommentInput, userEmail, articleNum, token);
+        if (event.key === 'Enter' && !event.shiftKey && !isComposing) {
+            event.preventDefault();
+            handleCommentSubmit(event, commentInput, setComments, setCommentInput, userEmail, articleNum, token);
+        }
     };
-
-  
-    
-
    
     useEffect(() => {
         const fetchUserDetails = async () => {
@@ -164,7 +168,7 @@ const ShowPage = () => {
     
 
     
-    
+
     useEffect(() => {
         if (articleNum) {
             axios.get(`http://localhost:4000/api/v1/article/${articleNum}`)
@@ -182,22 +186,19 @@ const ShowPage = () => {
   
     useEffect(() => {
         if (articleNum && token) {
-            fetchComments();
+            fetchComments(articleNum, token, setComments);
         }
     }, [articleNum, token]);
     
     useEffect(() => {
         if (articleNum && token) {
-            fetchComments();
+            fetchComments(articleNum, token, setComments);
         }
     }, []); 
-
     if (!article) {
         return <div>Loading...</div>;
     }
-
     return (
-        
         <div className="blog-container">
             <img src="/main-image.png" className="header2-image"/>
             <div className = "ArticleContentbox-container">
@@ -207,7 +208,7 @@ const ShowPage = () => {
                             <p>{article.category === 0 ? "요청" : "일반"}</p>
                         </div>
                         <div className="ArticleTitle">
-                            <h1>{article.articleTitle}</h1>
+                            <p>{article.articleTitle}</p>
                         </div>
                         <div className="ArticleDate">
                             <p>{formatDate(article.articleDate)}</p>
@@ -225,7 +226,7 @@ const ShowPage = () => {
                                 {authorEmail === userDetails.email && (
                                 <div className="Edit-Delete-Options">
                                     <button onClick={handleEdit}>수정</button>
-                                    <button onClick={handleDelete}>삭제</button>
+                                    <button onClick={ onDelete}>삭제</button>
                                 </div>
                                 )}
                             </div>
@@ -244,27 +245,24 @@ const ShowPage = () => {
                                     </div>
                                 ))}
                             </div>
-                                {userDetails.email === 'jinwoo1234@naver.com' && (
+                            {userDetails.email === 'jinwoo1234@naver.com' && (
                                     <div className="CommentBox-bottom">
                                         <textarea
                                             className="comment-input-area"
                                             value={commentInput}
                                             onChange={handleCommentChange}
-                                            onKeyDown={(event) => {
-                                                if (event.key === 'Enter' && !event.shiftKey) {
-                                                    event.preventDefault();  
-                                                    handleCommentSubmit(event, commentInput, setComments, setCommentInput, userEmail, articleNum, token);  // 댓글 제출 로직 실행
-                                                }
-                                            }}
+                                            onCompositionStart={handleComposition}
+                                            onCompositionEnd={handleComposition}
+                                            onKeyDown={handleKeyDown}
                                             placeholder="댓글을 남겨보세요"
                                             rows="3"
                                             style={{ width: '100%' }}
                                         />
+
                                     </div>
-                                )}
-                            </div>
+                            )}
+                            </div>          
                         </div>
-                    
                 </div>
             </div>
     );
