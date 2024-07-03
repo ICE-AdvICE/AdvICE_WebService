@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import styles from './login.modules.css';
+import styles from './modules.css';
 
 
 const FindpasswordForm = ({ onFindpassForm }) => {

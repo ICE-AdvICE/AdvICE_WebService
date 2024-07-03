@@ -8,3 +8,8 @@ backend/.gradle/buildOutputCleanup/buildOutputCleanup.lock
 backend/.gradle/file-system.probe
 backend/build/tmp/compileJava/previous-compilation-data.bin
 backend/.gradle
+node_modules/
+package-lock.json
+
+backend/build/classes/java/main/com/icehufs/icebreaker/service/implement/AuthServiceImplement.class
+backend/build/tmp/compileJava/previous-compilation-data.bin

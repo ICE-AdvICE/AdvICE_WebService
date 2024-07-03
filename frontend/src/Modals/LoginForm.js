@@ -3,17 +3,20 @@ import { useCookies } from 'react-cookie'; // 수정된 임포트
 import { useNavigate } from 'react-router-dom'; // 수정된 임포트
 import { signInRequest } from '../apis/index.js';
 import FindpasswordForm from '../Modals/findpassword';
-import SignUpForm from '../Modals/SignupForm';
+import SignUpinfoForm from '../Modals/Signupinfo';
 import MyModal from '../MyModal';
+import './modules.css';
 
-const LoginForm = ({ onLogin, setIsLoggedIn, openFindPasswordModal, openSignUpModal, closeModal }) => {
+
+const LoginForm = ({ onLogin })=> {
   
   const [userEmail, setUserEmail] = useState('');
   const [userPassword, setUserpassword] = useState('');
-  const [modalOpen, setModalOpen] = useState(false);
   const [error, setError] = useState(false); // 에러 상태 추가
   const [modalOpenfind, setModalOpenfind] = useState(false);
+  const [modalOpeninfo, setModalOpeninfo] = useState(false);
   const [cookies, setCookie] = useCookies(['accessToken']); //데베에 있는 데이터 호출 시 사용 예정
+  const [modalOpenin, setModalOpenin] = useState(true); // 로그인 모달 상태
   const navigator = useNavigate();
 
   // 로그인 버튼 클릭 핸들러
@@ -23,48 +26,60 @@ const LoginForm = ({ onLogin, setIsLoggedIn, openFindPasswordModal, openSignUpMo
     signInRequest(requestBody).then(signInResponse);
 
   }
+
   const handleFindpassword = (e) => {
     e.preventDefault(); // 폼 제출 방지 // 로그인 모달 닫기
-    openFindPasswordModal();
+    setModalOpenin(false); // 로그인 모달 닫기
+    setModalOpenfind(true); // 회원가입 정보 모달 열기
   };
-  const handleSignUp = (e) => {
+  
+
+
+  const handleSignupinfo = (e) => {
     e.preventDefault(); // 폼 제출 방지 // 로그인 모달 닫기
-    openSignUpModal();
+    setModalOpenin(false); // 로그인 모달 닫기
+    setModalOpeninfo(true); // 회원가입 정보 모달 열기
+    
   };
 
-  // signInResponse 처리 함수
+
   const signInResponse = (responseBody) => {
+    // 서버로부터 응답이 없거나 예상치 못한 응답일 경우
+    if (!responseBody) {
+      console.error('서버로부터 응답을 받지 못했습니다.');
+      alert('네트워크 이상입니다.');
+      setError(false);  // 에러 상태를 false로 설정하여 메시지를 숨김
+      return;
+    }
+  
     console.log(responseBody);
     const { code, token, expirationTime } = responseBody;
-    if (!responseBody) { //예상하지못한 error를 처리 함수
-      alert('네트워크 이상입니다.');
-      return;
-    }
-     //정상 응답 또는 예상한 error 반환 함수
-    //alert(code);
-    if (code === 'DBE') alert('데이터베이스 오류입니다.');
-    else if (code === 'SF' || code === 'VF') setError(true);
-    else if (code !== 'SU') {
+  
+    // 로그인 과정 중 발생할 수 있는 다양한 경우를 처리
+    if (code === 'DBE') {
+      alert('데이터베이스 오류입니다.');
+      setError(false);  // DBE는 서버 측 에러로, 입력 에러가 아니므로 false
+    } else if (code === 'SF' || code === 'VF') {
+      setError(true);  // SF (Security Failure) 또는 VF (Validation Failure) 발생 시 true
+    } else if (code !== 'SU') {
       alert('네트워크 오류입니다.');
-      return;
-    }
-    else if(responseBody.code === 'SU') {
+      setError(false);  // 네트워크 오류도 입력 에러가 아님
+    } else if (code === 'SU') {
       console.log("로그인 성공, 상태 변경 중...");
-      setIsLoggedIn(true);
-      closeModal();
-      navigator('/');
+      setError(false);  // 성공 시 에러 상태 초기화
     }
-      
-   
-    const now = new Date().getTime();                      //현재 시간
-    const expires = new Date(now + expirationTime * 1000); //서버에서 설정한 시간(expirationTime)을 현재시간에 더하여 로그인만료 시각을 반환
-
-    setCookie('accessToken', token, { expires, path: '/' }); //path로 이 쿠키가 유효한 페이지를 설정한다(현재 "/"로 모든 페이지 접근 허영)
-    navigator('/'); //리다이렉션 역할을 하며 로그인후 노출될 페이지의 경로를 지정해야함
-
-    closeModal(); // 부모 컴포넌트에서 모달을 닫는 함수로 설정
+  
+    // 토큰과 만료 시간을 받았는지 확인
+    if (token && expirationTime) {
+      const now = new Date().getTime();
+      const expires = new Date(now + expirationTime * 1000);
+      setCookie('accessToken', token, { expires, path: '/' });
+      navigator('/');  // 로그인 후 리다이렉트
+    } else if (code === 'SU') {
+      console.error('토큰 또는 만료 시간이 제공되지 않았습니다.');
+      setError(false);  // 토큰이 없는 경우 에러 상태를 true로 설정
+    }
   }
-
   // 폼 제출 핸들러
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -74,22 +89,23 @@ const LoginForm = ({ onLogin, setIsLoggedIn, openFindPasswordModal, openSignUpMo
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+  
+    <form onSubmit={(e) => e.preventDefault()}>
+     <div className="loginHeaderContainer">
+     <img src="header-name.png" alt="로그인 로고" style={{ width: '220px', height: 'auto' }} />
+    </div>
       <div className="loginFormContainer">
-        
-       
+
         <input
           type="text"
           error={error}
           value={userEmail}
           onChange={e => setUserEmail(e.target.value)}
           placeholder="학교 이메일을 입력해주세요."
-          
         />
       </div>
 
       <div className="passwordCss" >
-        
         <input
           type="password"
           value={userPassword}
@@ -98,13 +114,6 @@ const LoginForm = ({ onLogin, setIsLoggedIn, openFindPasswordModal, openSignUpMo
           placeholder="비밀번호를 입력하세요"
         />
       </div>
-      <button className="findPasswordButton" onClick={handleFindpassword}>비밀번호찾기</button>
-      <button type="submit" className="loginButton" onClick={onSignInButtonClickHandler}>로그인</button>
-      <div className="signupPrompt">
-      <p>아직 회원이 아니신가요?</p>
-      <button className="signUpButton_Login" onClick={handleSignUp}>회원가입</button>
-    </div>
-
       {error && 
       <div className='auth-sign-in-erro-box'>
         <div className='auth-sign-in-error-message'>
@@ -112,7 +121,15 @@ const LoginForm = ({ onLogin, setIsLoggedIn, openFindPasswordModal, openSignUpMo
         </div>
       </div>
       }
-     
+      <button className="findPasswordButton" onClick={handleFindpassword}>비밀번호찾기</button>
+      <button type="submit" className="loginButton" onClick={onSignInButtonClickHandler}>로그인</button>
+      <div className="signupPrompt">
+      <p>아직 회원이 아니신가요?</p>
+      <button className="signUpButton_Login" onClick={handleSignupinfo}>회원가입</button>
+    </div>
+
+
+ 
       
      <MyModal //비밀번호 찾기
           open={modalOpenfind}
@@ -127,21 +144,17 @@ const LoginForm = ({ onLogin, setIsLoggedIn, openFindPasswordModal, openSignUpMo
         
     </MyModal>
 
-    <MyModal //회원가입 모달
-            open={modalOpen}
-              width={500} //모달 넓이 이게 적당 한듯
-             
-              onCancel={e => setModalOpen(false)} //x 버튼
-              header={[
-                <div className="image-container" style={{ textAlign: 'center' }}>
-                    <img src="/img/hufslogo.gif" alt="HUFS Logo" style={{ height: '50px', marginTop: '70px', display: 'block' }} />
-                </div>
-              ]}
-                footer={[]}
-          >
-            <SignUpForm onLogin={handleSignUp} />
-          </MyModal>
-    </form>
+    <MyModal
+      open={modalOpeninfo}
+      
+      onCancel={e => setModalOpeninfo(false)} 
+      
+      header={[]}
+      footer={[]}
+      >
+      <SignUpinfoForm onLogin={handleSignupinfo} />
+    </MyModal></form>
+    
   );
 };
 
