@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-//import styles from './login.modules.css';
+import './modules.css';
 import { useCookies } from 'react-cookie'; // 수정된 임포트
 import { useNavigate } from 'react-router-dom'; // 수정된 임포트
 import { signUpRequest, emailCertificationRequest , checkCertificationRequest } from '../apis/index.js';
@@ -120,9 +120,10 @@ const SignUpinfoForm = ({ onSignUpForm }) => {
   return (
    
     <form onSubmit={handleSubmit}>
-      <div className="loginFormContainer">
-
-      
+     <div className="signupHeaderContainer">
+     <img src="header-name.png" alt="로그인 로고" style={{ width: '220px', height: 'auto' }} />
+    </div>
+      <div className="">
       <label htmlFor="user_email" ></label>
       <p>이메일 인증</p> 
       <div className="signUpContainer">
@@ -131,9 +132,9 @@ const SignUpinfoForm = ({ onSignUpForm }) => {
           type="text"
           value={userEmail}
           onChange={e => setUserEmail(e.target.value)}
-          placeholder="학교 이메일을 입력해주세요."
-
+          placeholder="학교 이메일"
         />
+        <span className="emailDomain">@hufs.ac.kr</span>
         <button type="button"  className="SignupFormpost" onClick={onEmailCertificationHandler}>인증요청</button>
       </div>
 
@@ -149,6 +150,8 @@ const SignUpinfoForm = ({ onSignUpForm }) => {
       </div>
 
 
+      
+      <div className="signup_name" >
       <p>이름</p>
         <input
           type="text"
@@ -158,10 +161,11 @@ const SignUpinfoForm = ({ onSignUpForm }) => {
           placeholder="이름을 입력해주세요."
 
         />
+        </div>
         
       </div>
 
-      <div className="passwordCss" >
+      <div className="signup_pw" >
       <p>학번</p>
         
         <input
@@ -173,17 +177,17 @@ const SignUpinfoForm = ({ onSignUpForm }) => {
         />
       </div>
 
-      <div className="passwordCss" >
+      <div className="signup_pw" >
       <p>비밀번호</p>
         <input
           type="password"
           value={userPassword}
           onChange={e => setUserpassword(e.target.value)}
-          placeholder="비밀번호를 입력해주세요."
+          placeholder="(비밀번호는 8자 이상 20자 미만이어야합니다.)"
         />
       </div>
       
-      <div className="passwordCss" >
+      <div className="signup_pw" >
       <p>비밀번호 확인</p>
         <input
           type="password"

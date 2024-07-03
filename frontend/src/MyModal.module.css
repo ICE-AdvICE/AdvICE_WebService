@@ -1,31 +1,52 @@
-.root{ /*배경*/
+.root {
     position: fixed;
     top: 0;
     left: 0;
     z-index: 100;
     width: 100vw;
     height: 100vh;
-    background-color: rgb(202, 202, 202,0.6);
+    z-index: 1050;  /* 모달의 z-index를 높게 설정 */
+    background-color: rgba(202, 202, 202, 0.6);
+    display: flex;
+    align-items: center; /* 화면 중앙에 모달을 정렬하기 위해 추가 */
+    justify-content: center; /* 화면 중앙에 모달을 정렬하기 위해 추가 */
+    pointer-events: auto; /* 오버레이 자체에는 이벤트 활성화 */
+    overflow-y: auto; /* 내용이 넘칠 경우 스크롤바를 표시 */
 }
+
 .rootDisable{/*배경*/
     display: none;
+    pointer-events: none; /* 오버레이 비활성화 상태에서는 모든 이벤트 비활성화 */
 }
-.modalContainer{/*모달 배경*/
-    width: 500px;
+
+.root:after {
+    content: "";
     position: absolute;
-    z-index: 101;
-    left: 50%;
-    transform: translate(-50%, 0); /* Y축 이동량을 0으로 조정하여 모달이 상단에 더 가깝게 위치하도록 함 */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: auto; /* 오버레이에 대한 클릭 이벤트 활성화 */
+}
+
+.modalContainer {
     background-color: white;
     border-radius: 5px;
-    /* top 값을 헤더 높이와 여백을 고려하여 조정 */
-    top: 60px; 
+    transition: all 0.3s ease-in-out;
+    width: 80%;
+    max-width: 500px;
+    padding: 20px;
+    box-sizing: border-box; /* 패딩을 포함한 너비 계산 */
+    position: relative; /* 중앙 정렬을 위해 수정 */
+    pointer-events: auto; /* 모달 내부 이벤트 활성화 */
+    z-index: 1051;  /* 컨테이너의 z-index를 모달 배경보다 높게 설정 */
 }
 .close{ /*x버튼*/
     position: absolute;
     top: 3px;
     right: 15px;
     font-size: 26px;
+    cursor: pointer; /* 마우스 호버 시 커서 변경 */
 }
 .close:hover{cursor: pointer;}
 .title{ 
@@ -112,9 +133,9 @@
 .header p{
     content: ""; /* 가상 요소에는 content 속성이 필수 */
     display: block; /* 블록 레벨 요소로 만들어 줄 전체 너비를 차지하게 함 */
-    width: 480px; /* 버튼의 너비보다 긴 구분선을 원한다면 값을 조정 */
+    width: 400px; /* 버튼의 너비보다 긴 구분선을 원한다면 값을 조정 */
     height: 2px; /* 구분선의 두께 */
-    background-color: #052940; /* 구분선의 색상 */
+    background-color: #052424; /* 구분선의 색상 */
     position: absolute; /* 버튼을 기준으로 위치를 조정하기 위함 */
     
     
@@ -150,3 +171,4 @@
   border: none;
   border-radius: 4px;
 }
+

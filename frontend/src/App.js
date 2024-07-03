@@ -22,12 +22,10 @@ function App(){
   const [modalOpenMypage, setModalOpenmypage] = useState(false); //회원가입 인증 후 정보 입력
   const navigator = useNavigate(); //네비게이션 하기0    
 
-  const [isLoggedIn, setIsLoggedIn] = useState(false);  // 로그인 상태 관리
   const [cookies, setCookie, removeCookie] = useCookies(['accessToken']);
 
   const handleLogin = (email, password) => {
     console.log("Logging in with", email, password);
-    setIsLoggedIn(true);  // 로그인 상태를 true로 변경
     setModalOpenin(false);  // 로그인 모달 닫기
   };
 
@@ -61,16 +59,7 @@ function App(){
     console.log("Logging in with",user_email, user_studentnum,user_name );
     // 비밀번호 수정.
   };
-  const openFindPasswordModal = () => {
-    setModalOpenin(false);  // 로그인 모달 닫기
-    setModalOpenfind(true); // 비밀번호 찾기 모달 열기
-  };
-
-
-  const openSignUpModal = () => {
-    setModalOpenin(false);  // 로그인 모달 닫기
-    setModalOpen(true); // 비밀번호 찾기 모달 열기
-  };
+ 
 
   
   return(
@@ -107,20 +96,10 @@ function App(){
           <MyModal
           open={modalOpenin}
           onCancel={() => setModalOpenin(false)}
-              width={500} //모달 넓이 이게 적당 한듯
-              
-              header={[
-                <div className="image-container" style={{ textAlign: 'center' }}>
-                    <img src="/img/hufslogo.gif" alt="HUFS Logo" style={{ height: '50px', marginTop: '70px', display: 'block' }} />
-                </div>
-                
-                ]}
-                
-             
-
+              header={[]}
               footer={[]}
           >
-          <LoginForm onLogin={handleLogin} setIsLoggedIn={setIsLoggedIn} openFindPasswordModal={openFindPasswordModal} openSignUpModal={openSignUpModal} closeModal={() => setModalOpenin(false)} />
+          <LoginForm onLogin={handleLogin} />
 
 
           </MyModal>
@@ -160,11 +139,7 @@ function App(){
           <MyModal //회원가입 정보 입력
           open={modalOpeninfo}
               width={500} //모달 넓이 이게 적당 한듯
-              header={[
-                <div className="image-container" style={{ textAlign: 'center' }}>
-                    <img src="/img/hufslogo.gif" alt="HUFS Logo" style={{ height: '50px', marginTop: '70px', display: 'block' }} />
-                </div>
-                ]}
+              header={[]}
               onCancel={e => setModalOpeninfo(false)} //x 버튼
               footer={[]}
           >
