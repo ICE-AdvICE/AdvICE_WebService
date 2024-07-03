@@ -15,7 +15,9 @@
     "web-vitals": "^2.1.4",
     "@toast-ui/editor": "^3.2.2",
     "@toast-ui/react-editor": "^3.2.3",
-    "bootstrap": "^5.3.3"
+    "bootstrap": "^5.3.3",
+    "moment": "^2.30.1",
+    "react-quill": "^2.0.0"
   },
   "scripts": {
     "start": "react-scripts start",
