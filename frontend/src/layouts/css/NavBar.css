@@ -1,0 +1,22 @@
+
+.header-container {
+    align-items: center; 
+    justify-content:space-between;
+    width: 100%; 
+    height: 100%;   
+    max-width: 1522px; /* 최대 너비 설정 */
+    margin: 0 auto;
+    display: flex;
+}
+.header-container img{
+    padding: 5px;
+    margin-left: 30%;
+    margin-top: 15px;
+    width: 50%;
+    height: 50%;
+}
+.navbar-nav{
+    margin-right: 20%;
+}
+
+

@@ -1,0 +1,25 @@
+.mb-3{
+    margin-top: 1%;
+}
+
+.esbutton{
+    border-radius: 10px;
+    background-color: white;
+    margin-top: 1%;
+    margin-left: 93%;
+}
+.cancel{
+    border-radius: 10px;
+    background-color: white;
+    margin-left: 5px;
+}
+.blog-radius{
+    margin-top: 1%;
+    width: 70%;
+    height: 100%;
+    border: 1px solid;
+    box-sizing: border-box;
+    border-radius: 12px;
+    border-color: #eee;
+    margin-left: 15%;
+}
