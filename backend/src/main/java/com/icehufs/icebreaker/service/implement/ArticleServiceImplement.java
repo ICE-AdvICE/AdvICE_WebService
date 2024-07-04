@@ -134,10 +134,13 @@ public class ArticleServiceImplement implements ArticleService {
         try{
             boolean existedArticle = articleRepository.existsByArticleNum(articleNum);
             if (!existedArticle) return PostCommentResponseDto.noExistArticle();
-            boolean existedUser = userRepository.existsByEmail(email);
+
+            boolean existedUser = userRepository.existsByEmail(email); //이부분 나중에 권한 부여 된 사용자를 확인라는 로직으로 수정
             if(!existedUser) return PostArticleResponseDto.notExistUser();
+
             CommentEntity commentEntity = new CommentEntity(dto, articleNum, email);
             commentRepository.save(commentEntity);
+
         } catch (Exception exception){
             exception.printStackTrace();
             return ResponseDto.databaseError();
@@ -194,7 +197,7 @@ public class ArticleServiceImplement implements ArticleService {
     @Override
     public ResponseEntity<? super DeleteCommentResponseDto> deleteComment(Integer commentNumber, String email) {
         try{
-            boolean existedUser = userRepository.existsByEmail(email);
+            boolean existedUser = userRepository.existsByEmail(email); //이부분 나중에 권한 부여 된 사용자를 확인라는 로직으로 수정
             if (!existedUser) return DeleteCommentResponseDto.notExistUser();
 
             CommentEntity commentEntity = commentRepository.findByCommentNumber(commentNumber);
@@ -245,7 +248,7 @@ public class ArticleServiceImplement implements ArticleService {
     public ResponseEntity<? super PatchCommentResponseDto> patchComment(PatchCommentRequestDto dto,
             Integer commentNumber, String email){
                 try{
-                    boolean existedUser = userRepository.existsByEmail(email);
+                    boolean existedUser = userRepository.existsByEmail(email); //이부분 나중에 권한 부여 된 사용자를 확인라는 로직으로 수정
                     if (!existedUser) return PatchCommentResponseDto.notExistUser();
 
                     CommentEntity commentEntity = commentRepository.findByCommentNumber(commentNumber);

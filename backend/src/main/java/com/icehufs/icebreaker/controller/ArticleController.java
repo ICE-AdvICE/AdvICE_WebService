@@ -55,7 +55,7 @@ public class ArticleController {
 
     @GetMapping("/{articleNum}")
     public ResponseEntity<? super GetArticleResponseDto> getArticle(
-        @PathVariable("articleNum") Integer articleNum
+        @PathVariable Integer articleNum
     ){
         ResponseEntity<? super GetArticleResponseDto> response = articleService.getArticle(articleNum);
         return response;
@@ -64,7 +64,7 @@ public class ArticleController {
     @PatchMapping("/{articleNum}")
     public ResponseEntity<? super PatchArticleResponseDto> patchArticle(
         @RequestBody @Valid PatchArticleRequestDto requestBody,
-        @PathVariable("articleNum") Integer articleNum,
+        @PathVariable Integer articleNum,
         @AuthenticationPrincipal String email
     ){
         ResponseEntity<? super PatchArticleResponseDto> response = articleService.patchArticle(requestBody, articleNum, email);
@@ -73,7 +73,7 @@ public class ArticleController {
 
     @GetMapping("/own/{articleNum}") //내가 쓴 게시글인지 확인
     public ResponseEntity<? super CheckOwnOfArticleResponseDto> checkOwnArticle(
-        @PathVariable("articleNum") Integer articleNum,
+        @PathVariable Integer articleNum,
         @AuthenticationPrincipal String email
     ){
         ResponseEntity<? super CheckOwnOfArticleResponseDto> response = articleService.checkOwnArtcle(email, articleNum);
@@ -82,7 +82,7 @@ public class ArticleController {
 
     @GetMapping("/{articleNum}/like")
     public ResponseEntity<? super CheckArticleFavoriteResponseDto> checkFavorite(
-        @PathVariable("articleNum") Integer articleNum,
+        @PathVariable Integer articleNum,
         @AuthenticationPrincipal String email
     ){
         ResponseEntity<? super CheckArticleFavoriteResponseDto> response = articleService.checkFavorite(articleNum, email);
@@ -92,7 +92,7 @@ public class ArticleController {
     @PatchMapping("/comment/{commentNumber}")
     public ResponseEntity<? super PatchCommentResponseDto> patchComment(
         @RequestBody @Valid PatchCommentRequestDto requestBody,
-        @PathVariable("commentNumber") Integer commentNumber,
+        @PathVariable Integer commentNumber,
         @AuthenticationPrincipal String email
     ){
         ResponseEntity<? super PatchCommentResponseDto> response = articleService.patchComment(requestBody, commentNumber, email);
@@ -115,7 +115,7 @@ public class ArticleController {
 
     @PutMapping("/{articleNum}/like")
     public ResponseEntity<? super PutFavoriteResponseDto> putFavorite(
-        @PathVariable("articleNum") Integer articleNum,
+        @PathVariable Integer articleNum,
         @AuthenticationPrincipal String email
     ){
         ResponseEntity<? super PutFavoriteResponseDto> response = articleService.putFavorite(articleNum, email);
@@ -126,7 +126,7 @@ public class ArticleController {
     @PostMapping("/{articleNum}/comment")
     public ResponseEntity<? super PostCommentResponseDto> postComment(
         @RequestBody @Valid PostCommentRequestDto requestBody,
-        @PathVariable("articleNum") Integer articleNum,
+        @PathVariable Integer articleNum,
         @AuthenticationPrincipal String email
     ){
         ResponseEntity<? super PostCommentResponseDto> response = articleService.postComment(requestBody, articleNum, email);
@@ -135,7 +135,7 @@ public class ArticleController {
 
     @GetMapping("/{articleNum}/comment-list")
     public ResponseEntity<? super GetCommentListResponseDto> getCommentList(
-        @PathVariable("articleNum") Integer articleNum
+        @PathVariable Integer articleNum
     ){
         ResponseEntity<? super GetCommentListResponseDto> response = articleService.GetCommentList(articleNum);
         return response;
@@ -143,7 +143,7 @@ public class ArticleController {
 
     @DeleteMapping("/{articleNum}")
     public ResponseEntity<? super DeleteArticleResponseDto> deleteArticle(
-        @PathVariable("articleNum") Integer articleNum,
+        @PathVariable Integer articleNum,
         @AuthenticationPrincipal String email
     ){
         ResponseEntity<? super DeleteArticleResponseDto> response = articleService.deleteArticle(articleNum, email);
@@ -152,7 +152,7 @@ public class ArticleController {
 
     @DeleteMapping("/admin/{articleNum}")
     public ResponseEntity<? super DeleteArticleAdminResponseDto> deleteArticleAdmin(
-        @PathVariable("articleNum") Integer articleNum,
+        @PathVariable Integer articleNum,
         @AuthenticationPrincipal String email
     ){
         ResponseEntity<? super DeleteArticleAdminResponseDto> response = articleService.deleteArticleAdmin(articleNum, email);
@@ -161,7 +161,7 @@ public class ArticleController {
 
     @DeleteMapping("/comment/{commentNumber}")
     public ResponseEntity<? super DeleteCommentResponseDto> deleteComment(
-        @PathVariable("commentNumber") Integer commentNumber,
+        @PathVariable Integer commentNumber,
         @AuthenticationPrincipal String email
     ){
         ResponseEntity<? super DeleteCommentResponseDto> response = articleService.deleteComment(commentNumber, email);
@@ -170,7 +170,7 @@ public class ArticleController {
 
     @PutMapping("/{articleNum}/resolv")
     public ResponseEntity<? super PutResolvedArticleResponseDto> putresolv(
-        @PathVariable("articleNum") Integer articleNum,
+        @PathVariable Integer articleNum,
         @AuthenticationPrincipal String email
     ){
         ResponseEntity<? super PutResolvedArticleResponseDto> response = articleService.putResolv(articleNum, email);
