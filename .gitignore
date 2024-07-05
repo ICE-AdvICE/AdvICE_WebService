@@ -1,6 +1,9 @@
 .DS_Store
 backend/.gradle
-backend/build/
 node_modules/
 package-lock.json
 package.json
+backend/build/
+*.class
+*.bin
+
