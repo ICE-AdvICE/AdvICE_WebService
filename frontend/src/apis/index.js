@@ -13,10 +13,51 @@ const GET_ARTICLE_LIST_URL = () => `${API_DOMAIN}/article/list`;
 const Email_Certification_URL = () => `${API_DOMAIN}/auth/email-certification`; //인증번호 전송
 const Check_Certification_URL = () => `${API_DOMAIN}/auth/check-certification`; //인증번호 인증
 const GET_MYPAGE_USER_URL = () => `${API_DOMAIN}/user`; //마이페이지_개인정보 
+const PATCH_MYPAGE_USER_URL=() =>`${API_DOMAIN}/user`; //마이페이지_개인정보 수정
 
 const GET_SIGN_IN_USER_URL =() =>`${API_DOMAIN}/user`;
 const authorization = (accessToken) => {
     return {headers: {Authorization:`Bearer ${accessToken}`}}
+};
+
+const COMMENT_WRITE = (articleNum) => `${API_DOMAIN}/article/${articleNum}/comment`;
+
+//게시글 삭제 api
+export const handleDelete = async (articleNum, token, navigate) => {  
+    if (window.confirm("정말로 게시글을 삭제하시겠습니까?")) {
+        try {
+            const response = await axios.delete(`${API_DOMAIN}/article/${articleNum}`, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            if (response.data.code === "SU") {  
+                alert("게시글이 삭제되었습니다.");
+                navigate('/');
+            } 
+        } catch (error) {
+            if (error.response) {
+                switch (error.response.data.code) {
+                    case "NA":
+                        alert("This article does not exist.");
+                        break;
+                    case "NU":
+                        alert("This user does not exist.");
+                        break;
+                    case "VF":
+                        alert("Validation failed.");
+                        break;
+                    case "NP":
+                        alert("Do not have permission.");
+                        break;
+                    case "DBE":
+                        alert("Database error.");
+                        break;
+                    default:
+                        alert("An unexpected error occurred: ");
+                        break;
+                }
+            } 
+        }
+    }
 };
 
 export const signInRequest = async (requestBody) => { //asyns를 통해 비동기 함수 정의
@@ -45,20 +86,6 @@ export const updateArticleRequest = async (articleNum, updateData, accessToken) 
         return error.response.data;
     }
 };
-
-//댓글
-export const addCommentRequest = async (articleNum, commentData, accessToken) => {
-    try {
-        const response = await axios.put(`${API_DOMAIN}/article/${articleNum}/comment`, commentData, authorization(accessToken));
-        return response.data;
-    } catch (error) {
-        if (!error.response || !error.response.data) return null;
-        return error.response.data;
-    }
-};
-
-
-
 
 
 export const getSignInUserRequest = async (accessToken) => {
@@ -101,6 +128,7 @@ return result;
 
 };
 
+//모든 게시글을 리스트 형태로 불러오는 API
 export const getArticleListRequest = async () => {
     const result = await axios.get(GET_ARTICLE_LIST_URL())
         .then(response => {
@@ -108,45 +136,61 @@ export const getArticleListRequest = async () => {
             return responseBody;
         })
         .catch(error => {
-            if (!error.response || !error.response.data) return null; //예상하지못한 error를 0으로 반환
-            const responseBody = error.response.data;                 //예상했던 error를 code와message로 반환
+            const responseBody = error.response.data;    
+            if (responseBody.code === "DBE") {
+                alert("Database error.");  
+            }             
             return responseBody;
         })
     return result;
 };
-
+//(Admin)게시글 댓글 작성 API
 export const handleCommentSubmit = async (event, commentInput, setComments, setCommentInput, userEmail, articleNum, token) => {
     if (event.key === 'Enter' && !event.shiftKey) {
-      event.preventDefault();
-      if (!commentInput.trim()) {
-        alert("댓글 내용을 입력해주세요.");
-        return;
-      }
-  
-      const commentData = {
-        content: commentInput,
-        user_email: userEmail
-      };
-  
-      try {
-        const response = await axios.post(`http://localhost:4000/api/v1/article/${articleNum}/comment`, commentData, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
-        console.log("Full Response:", response);
-        console.log("Response data:", response.data);
-        if (response.data.code === "SU") {
-         
-          fetchComments(articleNum, token, setComments);
-          setCommentInput("");
- 
+        event.preventDefault();
+        if (!commentInput.trim()) {
+            alert("댓글 내용을 입력해주세요.");
+            return;
         }
-      } catch (err) {
-        console.error("Error posting comment:", err);
-      }
+        const commentData = {
+            content: commentInput,
+            user_email: userEmail
+        };
+        try {
+            const response = await axios.post(COMMENT_WRITE(articleNum), commentData, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            if (response.data.code === "SU") {
+                fetchComments(articleNum, token, setComments);
+                setCommentInput("");
+            } else {
+                switch (response.data.code) {
+                    case "NA":
+                        alert("This article does not exist.");
+                        break;
+                    case "NU":
+                        alert("This user does not exist.");
+                        break;
+                    case "VF":
+                        alert("Validation failed.");
+                        break;
+                    case "DBE":
+                        alert("Database error.");
+                        break;
+                    default:
+                        alert("An unexpected error occurred.");
+                        break;
+                }
+            }
+        } catch (err) {
+            console.error("Error posting comment:", err);
+        }
     }
 };
+
 export const fetchComments = (articleNum, token, setComments) => {
     axios.get(`http://localhost:4000/api/v1/article/${articleNum}/comment-list`, {
+        
         headers: { Authorization: `Bearer ${token}` }
     })
     .then(response => {
@@ -205,6 +249,19 @@ export const getMypageRequest = async (accessToken)=>{
         return response.data;
     } catch (error) {
         if (!error.response || !error.response.data) return null;
+        return error.response.data;
+    }
+};
+
+
+export const updateMypageUserRequest = async (userData, accessToken) => { //MyPage 정보수정
+    try {
+        const response = await axios.patch(PATCH_MYPAGE_USER_URL(), userData, {
+            headers: { Authorization: `Bearer ${accessToken}` }
+        });
+        return response.data;
+    } catch (error) {
+        if (!error.response || !error.response.data) return { code: "UN", message: "Unexpected error occurred." };
         return error.response.data;
     }
 };

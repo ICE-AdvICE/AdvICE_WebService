@@ -47,8 +47,9 @@ public class WebSecurityConfig { //filter를 사용할 . 수있도록 config
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authorizeRequests(request -> request
-                        .antMatchers("/", "/api/v1/**").permitAll() //권한이 필요없는 API 설정
-                        //.antMatchers("/api/v1/admin").hasRole("USER")
+                        .antMatchers("/api/user/**").permitAll() //권한이 필요없는 API 설정
+                        .antMatchers("/api/v1/admin").hasRole("ADMIN")
+                        .antMatchers("/api/v2/admin").hasRole("ADNUM2")
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(exceptionHandling -> exceptionHandling
@@ -72,7 +73,6 @@ public class WebSecurityConfig { //filter를 사용할 . 수있도록 config
 
         return source;
     }
-
 }
 
 class FailedAuthenticationEntryPoint implements AuthenticationEntryPoint{ //인증 실패할 경우 처리

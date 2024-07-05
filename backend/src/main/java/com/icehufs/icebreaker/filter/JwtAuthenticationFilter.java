@@ -38,20 +38,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-
         try{
             String token = parseBearerToken(request); //parseBearerToken함수로부터 인증된 토근을 받기
         if(token == null){ //parseBearerToken에서 토큰이 인증 실패되었다면 다음 필터에게 넘기기
             filterChain.doFilter(request, response);
             return;
         }
-
         String email = jwtProvider.validate(token); //validate과정에서 기간이 만료 되었거나, secretKey가 안 맞으면 null
         if (email == null){
             filterChain.doFilter(request, response);
             return;
         }
-
         User userEntity = userRepository.findByEmail(email); //토큰으로부터 추출한 사용자의 아이디로 권한 확인
         String role = userEntity.getRole(); // role의 형태 유지 필수 = ROLE_USER, ROLE_ADMIN
 
@@ -69,13 +66,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
 
         } catch (Exception exception){
             exception.printStackTrace();
-
         }
 
         filterChain.doFilter(request, response);
-
-
-
     }
 
     private String parseBearerToken(HttpServletRequest request){ //request에서 헤더 부분(beartoken)을 꺼내는 함수

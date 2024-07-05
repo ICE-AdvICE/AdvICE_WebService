@@ -107,17 +107,11 @@ function App(){
           <MyModal //비밀번호 찾기
           open={modalOpenfind}
               width={500} //모달 넓이 이게 적당 한듯
-              header={[
-                <p>비밀번호 찾기</p>
-                ]}
+              header={[]}
               onCancel={e => setModalOpenfind(false)} //x 버튼
               footer={[]}
           >
           <FindpasswordForm onLogin={handleFindpassword} />
-
-
-
-              
           </MyModal>
 
 
@@ -125,7 +119,6 @@ function App(){
           open={modalOpenNew}
               width={500} //모달 넓이 이게 적당 한듯
               header={[
-                <p>비밀번호 수정하기</p>
                 ]}
               onCancel={e => setModalOpennew(false)} //x 버튼
               footer={[]}

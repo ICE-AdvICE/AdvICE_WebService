@@ -34,7 +34,6 @@ import com.icehufs.icebreaker.repository.ArtileListViewRepository;
 import com.icehufs.icebreaker.repository.CommentRepository;
 import com.icehufs.icebreaker.repository.FavoriteRepository;
 import com.icehufs.icebreaker.repository.GetCommentListReultSet;
-import com.icehufs.icebreaker.repository.UserBanRepository;
 import com.icehufs.icebreaker.repository.UserRepository;
 import com.icehufs.icebreaker.service.ArticleService;
 
@@ -49,7 +48,6 @@ public class ArticleServiceImplement implements ArticleService {
     private final UserRepository userRepository;
     private final CommentRepository commentRepository;
     private final FavoriteRepository favoriteRepository;
-    private final UserBanRepository userBanRepository;
     
     @Override
     public ResponseEntity<? super PostArticleResponseDto> postArticle(PostArticleRequestDto dto, String email){

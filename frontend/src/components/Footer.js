@@ -26,6 +26,12 @@ const Footer = () => {
                                 ice@hufs.ac.kr
                             </span>
                         </p>
+                        <p>
+                            <span>
+                            Copyright ⓒ Hankuk University of Foreign Studies. 
+                            </span>
+
+                        </p>
                     </div>
                 </div>
                 
