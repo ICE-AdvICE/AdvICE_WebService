@@ -3,10 +3,11 @@ import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { useCookies } from 'react-cookie';
-import { updateArticleRequest, createArticleRequest } from '../apis/index';
-import ToastEditor from './ToastEditor.js';  
+import { updateArticleRequest, createArticleRequest  } from '../apis/index';
+import ReactQuill from 'react-quill';
 import '../layouts/css/BlogForm.css'
 import { useLocation } from 'react-router-dom';
+
 
 const BlogForm = ({ editing }) => {
     const navigate = useNavigate();
@@ -21,6 +22,7 @@ const BlogForm = ({ editing }) => {
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [cookies] = useCookies(['accessToken']);
     const token = cookies.accessToken;
+    const [categoryString, setCategoryString] = useState('카테고리 선택');
 
 
     //3. 게시글 수정 api
@@ -77,9 +79,10 @@ const BlogForm = ({ editing }) => {
         }
     }, [editing, location.state]);
 
+    
     const handleCategoryChange = (id, name) => {
         setCategory(id);
-        setCategoryName(name); 
+        setCategoryString(name);
         setDropdownOpen(false);
     };
 
@@ -87,11 +90,16 @@ const BlogForm = ({ editing }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
+        const categoryString = category == 0 ? 'GENERAL' : 'REQUEST';
+        console.log("Sending Category to Database:", categoryString);
         const postData = {
             articleTitle,
             articleContent,
-            category: Number(category),
+            category: categoryString,
+
         };
+        console.log("Post Data being sent:", postData);
+
         let response;
         if (editing) {
             response = await updateArticleRequest(articleNum, postData, token);
@@ -124,22 +132,23 @@ const BlogForm = ({ editing }) => {
         <div className='blog-container'>
             <img src="/main-image.png"  className="header2-image" />
             {error && <div className="alert alert-danger">{error}</div>}
-            <div className="container">
+            <div className="title-container">
                 <div className={`dropdown ${dropdownOpen ? 'active' : ''}`} onClick={() => setDropdownOpen(!dropdownOpen)}>
                     <div className="select">
-                        <span>{categoryName}</span>
+                        <span>{category}</span>
                         <i className="fa fa-chevron-left"></i>
                     </div>
-                    <input type="hidden" name="category" value={category} />
+                    <input type="hidden" name="category" value={categoryString} />
+                
                     <ul className="dropdown-menu">
-                        <li onClick={() => handleCategoryChange('0', '카테고리 선택')}>카테고리 선택</li>
-                        <li onClick={() => handleCategoryChange('0', '요청')}>요청</li>
-                        <li onClick={() => handleCategoryChange('1', '일반')}>일반</li>
+                        <li onClick={() => handleCategoryChange('', '카테고리 선택')}>카테고리 선택</li>
+                        <li onClick={() => handleCategoryChange('REQUEST', '요청')}>요청</li>
+                        <li onClick={() => handleCategoryChange('GENERAL', '일반')}>일반</li>
+                        <li onClick={() => handleCategoryChange('NOTIFICATION', '공지')}>공지</li>
                     </ul>
                 </div>
-                <span className="msg"></span>
             </div>
-            <form onSubmit={handleSubmit}>
+            <form className="form-container"  onSubmit={handleSubmit}>
                 <div className="mb-3">
                     <input
                         className="form-control"
@@ -149,16 +158,22 @@ const BlogForm = ({ editing }) => {
                         required
                     />
                 </div>
-                <ToastEditor
-                    body={articleContent}
-                    setBody={setArticleContent}
+                <ReactQuill
+                    theme="snow"
+                    value={articleContent}
+                    onChange={setArticleContent}
                 />
-                <button className="esbutton" type="submit" disabled={loading}>
-                    {editing ? '수정' : '등록'}
-                </button>
-                <button className="cancel" onClick={() => navigate(-1)} type="button">
-                    취소
-                </button>
+                <div className = "button-container">
+                    <button className="esbutton" type="submit" disabled={loading}>
+                        {editing ? '수정' : '등록'}
+                    </button>
+                    <button className="cancel" onClick={() => navigate(-1)} type="button">
+                        취소
+                    </button>
+                </div>
+
+                
+                
             </form>
         </div>
     );

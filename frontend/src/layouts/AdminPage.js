@@ -115,7 +115,7 @@ const AdminPage = () => {
                                 order={indexOfFirstArticle + index + 1} 
                                 category = {article.category} 
                                 onClick={() => handleCardClick(article)}
-                                onDelete={deleteArticle} // 여기에 deleteArticle 함수를 전달
+                                onDelete={deleteArticle}  
                                 articleNum={article.articleNum}
                                 
                             />

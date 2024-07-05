@@ -6,6 +6,7 @@
 .header2-image{
   width:100%;
   height: 100%;
+  
 }
 .comment-input-area{
   margin-top: 12px;
@@ -19,7 +20,8 @@
 .Commentbox-name{
   display: flex;
   align-items: center;
-  gap: 15px;
+  
+ 
 }
 
 .Commentbox-name h3 {
@@ -39,7 +41,16 @@
   position: relative;
   height: auto;
 }
- 
+
+.Comment-Content{
+  margin-left: 5px;
+  height: auto;
+  white-space: pre-line;
+}
+.Comment-Header{
+  margin-bottom: 0;
+}
+
 .ArticleContentbox{
   width: 100%;
   height: auto;
@@ -60,26 +71,24 @@
 /*카테고리 일반 or 요청*/
 .ArticleCategory {
   background-color: black;  
-  color: white;             
-  padding: 1px 1px;            
+  color: white;                
   border-radius: 5px;       
   position: absolute;
   top:5%;
-  left: 13%;
-  height: 39px;
+  left: 14%;
   width: 78px;
-  display: flex;           /* Flexbox를 사용 */
-  align-items: center;     /* 세로 중앙 정렬 */
-  justify-content: center; /* 가로 중앙 정렬 */
-
-  z-index: 111;           
+  display: flex;            
+  align-items: center;      
+  justify-content: center;  
+  z-index: 11;           
 }
 .ArticleCategory p {
-  font-family: 'Inter', sans-serif; /* 폰트 패밀리 설정 */
-  font-weight: 700; /* 글자 두께 */
-  font-size: 25px; /* 글자 크기 */
-  margin-top: 0;    
-  margin-bottom: 0;  }
+  font-family: 'Inter', sans-serif;  
+  font-weight: 700;  
+  font-size: 25px;  
+  margin-top: 2px;    
+  margin-bottom: 0;  
+}
 
 
 /*제목*/
@@ -88,17 +97,18 @@
   z-index:11;
   position: absolute;
   top:10%;
-  left: 13%;
+  left: 14%;
   font-family: 'Inter', sans-serif;  
-  font-weight: 700;  
   font-size: 40px;  
+  font-weight: 700;
 }
+
 /*날짜*/
 .ArticleDate {
   margin-bottom: 5px;
   display: flex;   
-  left: 13%;
-  top:14%;
+  left: 14%;
+  top:16.5%;
   position: absolute;      
   justify-content: space-between;  
   align-items: center;   
@@ -120,9 +130,9 @@
   position: absolute;
   height: auto;
   width: 70%;
-  top: 19%;
+  top: 20%;
   margin-bottom: 30px;
-  left: 13%;
+  left: 14%;
 }
 .Article-middle{
   display: flex;  
@@ -140,20 +150,22 @@
   align-items: center;  
   width: 25%;
   flex-direction: row;
-  margin-left:10px;
+  margin-left:20px;
 }
 .Comment-Option p{
   margin-left: 12px;
   margin-top: 8px;
 }
 
+/*댓글*/
 
 .CommentBox-container{
   z-index: 11;
   position: relative;
   width: 100%;
   height: auto;
- 
+  margin-top: 2.5%;
+  margin-left: 2%;
 }
 
 
@@ -188,8 +200,7 @@
 
 
 .Comment-Divider {
-  border: 0;
-  border-top: 1px solid #ccc;
+  border-top: 2px solid black;
   margin: 10px 0;
 }
 
@@ -198,15 +209,21 @@
 .Comment-Author {
   font-weight: bold;
   margin-right: 5px;
+  color: rgb(21, 21, 151);
 }
 
 .Comment-Date {
-  color: gray;
+  color: rgba(90, 89, 89, 0.884);
   font-size: 0.8em;
+  margin-top: 5px;
+  margin-left: 1%;
 }
 .Comment-Header {
   display: flex;
   align-items: center;
+  padding: 0;
+  margin-bottom: 0;
+  height: 17px;
 }
 
 /*하트 css 부분 */
@@ -240,3 +257,11 @@
 .heart.love:after {
   background-color: #F80808;  
 }
+.quill p{
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  font-size: 22px;
+  line-height: 29.05px;
+
+}
+

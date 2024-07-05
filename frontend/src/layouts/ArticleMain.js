@@ -9,6 +9,8 @@ import './css/BlogPage.css';
 import { getMypageRequest } from '../apis/index.js';
 
 const ArticleMain = () => {
+    const [notificationArticles, setNotificationArticles] = useState([]);
+    const [generalArticles, setGeneralArticles] = useState([]);
     const navigate = useNavigate();
     const [currentPage, setCurrentPage] = useState(1);
     const [articlesState, setArticlesState] = useState([]);
@@ -29,6 +31,20 @@ const ArticleMain = () => {
     const [userDetails, setUserDetails] = useState({
         email: '',
     });
+    
+    
+    //공지사항
+    const categoryLabels = {
+        NOTIFICATION: "공지",
+        GENERAL: "일반",
+        REQUEST: "요청"
+    };
+    const filterNotificationArticles = (articles) => {
+        const notifications = articles.filter(article => article.category === 'NOTIFICATION');
+        const general = articles.filter(article => article.category !== 'NOTIFICATION');
+        setNotificationArticles(notifications);
+        setGeneralArticles(general);
+    };
     
     
     //검색 기능(33~52)
@@ -79,23 +95,22 @@ const ArticleMain = () => {
     //카테고리 선택
     const categories = [
         { label: '모두 보여주기', value: 'all' },
-        { label: '카테고리 0', value: '0' },
-        { label: '카테고리 1', value: '1' },
+        { label: '카테고리 0', value: 'GENERAL' },
+        { label: '카테고리 1', value: 'REQUEST' },
         { label: '내가 쓴 글', value: 'my' }
     ];  
 
     const filterArticles = () => {
-        const categoryNum = parseInt(selectedCategory, 10);  
         const results = articlesState.filter(article => {
             if (selectedCategory === 'all') {
                 return true;
             } else if (selectedCategory === 'my') {
                 return article.userEmail === userDetails.email;
             } else {
-                return article.category === categoryNum;
+                return article.category === selectedCategory;
             }
         });
-        
+        results.sort((a, b) => new Date(b.articleDate) - new Date(a.articleDate));
         setFilteredArticles(results);
     };
     
@@ -104,6 +119,7 @@ const ArticleMain = () => {
         setSelectedCategory(categoryValue);
         setCurrentPage(1);
     };
+    
 
 
     //조회수 
@@ -148,9 +164,9 @@ const ArticleMain = () => {
             try {
                 const response = await axios.get('http://localhost:4000/api/v1/article/list');
                 if (response.data.code === "SU") {
-                    
                     setArticlesState(response.data.articleList);
-                    setFilteredArticles(response.data.articleList);   
+                    setFilteredArticles(response.data.articleList);
+                    filterNotificationArticles(response.data.articleList);
                 } else {
                     console.error('Error fetching articles:', response.data.message);
                 }
@@ -195,30 +211,32 @@ const ArticleMain = () => {
                     </select>
                 </div>
                 <div className="posts-content">
-                    <div className = "Notification-container">
-                        {currentArticles.filter(article => article.category === 2).length > 0 ? (
-                        currentArticles.filter(article => article.category === 2).map((article, index) => {
-                        return (
-                            <Card
-                                key={article.articleNum}
-                                title={article.articleTitle}
-                                createdAt={article.articleDate}
-                                views={article.viewCount}
-                                likes={article.likeCount}
-                                order="공지"
-                                category={article.category}
-                                onClick={() => handleCardClick(article)}
-                                email={article.userEmail}
-                            />
-                        );
-                    })
-                    ):  (
+                    <div className="Notification-container">
+                        {notificationArticles.length > 0 ? (
+                            notificationArticles.map((article) => {
+                                const categoryLabel = categoryLabels[article.category];
+                                return (
+                                    <Card
+                                        key={article.articleNum}
+                                        title={article.articleTitle}
+                                        createdAt={article.articleDate}
+                                        views={article.viewCount}
+                                        likes={article.likeCount}
+                                        order="공지"
+                                        category={categoryLabel}
+                                        onClick={() => handleCardClick(article)}
+                                        email={article.userEmail}
+                                    />
+                                );
+                            })
+                        ) : (
                             <div>공지사항이 없습니다</div>
                         )}
                     </div>
-                    <div className = "non-Notification-container">
-                        {currentArticles.length > 0 ? (
-                        currentArticles.map((article, index) => {
+                    <div className="non-Notification-container">
+                    {currentArticles.filter(article => article.category !== 'NOTIFICATION').length > 0 ? (
+                        currentArticles.filter(article => article.category !== 'NOTIFICATION').map((article, index) => {
+                            const categoryLabel = categoryLabels[article.category];
                             return (
                                 <Card
                                     key={article.articleNum}
@@ -227,32 +245,40 @@ const ArticleMain = () => {
                                     views={article.viewCount}
                                     likes={article.likeCount}
                                     order={indexOfFirstArticle + index + 1}
-                                    category={article.category}
+                                    category={categoryLabel}
                                     onClick={() => handleCardClick(article)}
                                     email={article.userEmail}
                                 />
                             );
                         })
-                        ):  (
-                                <div>게시물이 없습니다</div>
-                            )}
-                    </div>
+                    ) : (
+                        <div>게시물이 없습니다</div>
+                    )}
+                </div>
 
-                    </div>
-                    
+                </div>
+
                 <div className="search-bar">
                     <select value={searchCategory} onChange={e => setSearchCategory(e.target.value)}>
                         <option value="all">전체</option>
                         <option value="title">제목</option>
                         <option value="content">내용</option>
                     </select>
-                    <input
-                        type="text"
-                        value={searchTerm}
-                        onChange={e => setSearchTerm(e.target.value)}
-                    />
-                    <button onClick={searchArticles}>검색</button>
+                    <div className="input-container">
+                        <input
+                            type="text"
+                            value={searchTerm}
+                            onChange={e => setSearchTerm(e.target.value)}
+                        />
+                        <a href="#" onClick={(e) => {
+                            e.preventDefault();
+                            searchArticles();
+                        }}>
+                            <img className="search-icon" src="http://www.endlessicons.com/wp-content/uploads/2012/12/search-icon.png" alt="Search" />
+                        </a>
+                    </div>
                 </div>
+
                 <div>
                     <Pagination paginate={paginate} currentPage={currentPage} totalPages={totalPages} />
                 </div>
