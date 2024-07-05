@@ -13,27 +13,21 @@ const FindpasswordForm = ({ onFindpassForm }) => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <div className="signUpContainer">
-      <img
-                    className="signinIcon"
-                    src="./HufsLogo.png"
-                  />       
-      <p>이메일</p>
+      <div className="loginHeaderContainer">
+        <img src="header-name.png" alt="로그인 로고" style={{ width: '220px', height: 'auto' }} />
+      </div>
+      <div className="pw_emailpost">   
         <label htmlFor="user_email" ></label>
-        
         <input
           type="text"
           id="user_email"
           value={user_email}
           onChange={e => setUseremail(e.target.value)}
           placeholder="학교 이메일을 입력해주세요."
-
         />
         <button type="submit"  className="findpasswordpost">인증요청</button>
       </div>
-
-      <div className="emailpost" >
-      <p>인증번호</p>
+      <div className="pw_emailpost" >
         <label htmlFor="password"></label>
         <input
           type="password"
@@ -47,7 +41,7 @@ const FindpasswordForm = ({ onFindpassForm }) => {
     
       
 
-        <button type="submit"  className="signupButton">다음단계</button>
+        <button type="submit"  className="signupButton">완료</button>
       
      
       
