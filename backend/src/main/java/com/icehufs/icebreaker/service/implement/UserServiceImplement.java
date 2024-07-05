@@ -12,9 +12,7 @@ import com.icehufs.icebreaker.dto.response.user.GetSignInUserResponseDto;
 import com.icehufs.icebreaker.dto.response.user.PatchUserPassResponseDto;
 import com.icehufs.icebreaker.dto.response.user.PatchUserResponseDto;
 import com.icehufs.icebreaker.entity.User;
-import com.icehufs.icebreaker.repository.ArtileListViewRepository;
 import com.icehufs.icebreaker.repository.UserRepository;
-import com.icehufs.icebreaker.service.ArticleService;
 import com.icehufs.icebreaker.service.UserService;
 
 import lombok.RequiredArgsConstructor;
@@ -24,8 +22,6 @@ import lombok.RequiredArgsConstructor;
 public class UserServiceImplement implements UserService {
 
     private final UserRepository userRepository;
-    private final ArtileListViewRepository artileListViewRepository;
-    private final ArticleService articleService;
 
     private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
