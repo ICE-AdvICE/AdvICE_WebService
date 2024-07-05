@@ -1,6 +1,7 @@
 import PropTypes from "prop-types";
 import { useLocation } from "react-router-dom";
 
+
 const Card = ({ title, createdAt, views, likes, onDelete, order,onClick, children,category }) => {
     const location = useLocation();  
     const displayDate = createdAt ? new Date(createdAt).toISOString().split('T')[0] : '0000-00-00';

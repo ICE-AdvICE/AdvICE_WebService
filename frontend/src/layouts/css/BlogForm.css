@@ -2,8 +2,12 @@
     width: 100%;
     height: 100%;
 }
+.title-container{
+    width: 30%;
+    margin-top: 10px;
+}
 .dropdown {
-  width: 20%;
+  width: 100%;
   display: inline-block;
   background-color: #fff;
   border-radius: 3px;
@@ -13,9 +17,7 @@
   font-size: 14px;
   color: #474747;
   height: 100%;
-  text-align: left;
-  left: -8.5%;
-  margin-top: 10px;
+  text-align: center;
 }
 .dropdown .select {
     cursor: pointer;
@@ -77,8 +79,20 @@
 .dropdown .dropdown-menu li:active {
     background-color: #e2e2e2;
 }
-.esbutton{
-    margin-top: 1%;
+
+
+
+
+.form-container{
+    width: 100%;
+    height: 500px;
+    
 }
-
-
+.quill{
+    height: 40%;
+}
+.button-container{
+    width: 100%;
+    height: 10%;
+    margin-top: 50px;
+}

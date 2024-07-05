@@ -41,9 +41,10 @@ const ShowPage = () => {
     });
     
     const formatDate = (dateString) => {
-        const date = moment.utc(dateString).local();  
-        return date.format('YYYY년 MM월 DD일');  
-        
+        return moment(dateString).format('YYYY년 MM월 DD일');
+    };
+    const CommentDate = (dateString) => {
+        return moment(dateString).format('YYYY.MM.DD HH:mm');
     };
 
 
@@ -171,9 +172,9 @@ const ShowPage = () => {
 
     useEffect(() => {
         if (articleNum) {
-            axios.get(`http://localhost:4000/api/v1/article/${articleNum}`)
+            axios.get(`http://localhost:4000/api/v1/article/${articleNum}`)      
             .then(res => {
-                const { articleTitle, articleContent, likeCount, viewCount, category, articleDate, userEmail: authorEmail, comments: loadedComments } = res.data;
+                const {articleTitle, articleContent, likeCount, viewCount, category, articleDate, userEmail: authorEmail, comments: loadedComments } = res.data;
                 setArticle({ articleTitle, body: articleContent, views: viewCount, category, articleDate });
                 setLikes(likeCount);
                 setLiked(res.data.authCheck === 1);
@@ -185,13 +186,13 @@ const ShowPage = () => {
     }, [articleNum, token, userEmail]);
   
     useEffect(() => {
-        if (articleNum && token) {
+        if (articleNum) {
             fetchComments(articleNum, token, setComments);
         }
     }, [articleNum, token]);
     
     useEffect(() => {
-        if (articleNum && token) {
+        if (articleNum ) {
             fetchComments(articleNum, token, setComments);
         }
     }, []); 
@@ -237,7 +238,8 @@ const ShowPage = () => {
                                         <div className="Comment">
                                             <div className="Comment-Header">
                                                 <p className="Comment-Author">운영자{comment.commentNumber}</p>
-                                                <p className="Comment-Date">{new Date(comment.writeDatetime).toLocaleString()}</p>
+                                                <p className="Comment-Date">{CommentDate(comment.writeDatetime)}</p>
+                                               
                                             </div>  
                                             <p className="Comment-Content">{comment.content}</p>
                                         </div>

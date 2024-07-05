@@ -14,7 +14,9 @@ const InnerSection = () => {
       try {
         const response = await getArticleListRequest();
         const { articleList } = response;
-        const topPosts = articleList.slice(0, 3).map(article => ({
+        const sortedArticles = articleList.sort((a, b) => new Date(b.articleDate) - new Date(a.articleDate));
+
+        const topPosts = sortedArticles.slice(0, 4).map(article => ({
           articleNum: article.articleNum,
           articleTitle: article.articleTitle
         }));
@@ -54,7 +56,6 @@ const InnerSection = () => {
               <div>게시글이 없습니다</div>
             )}
           </div>
-      
         </div>
       </div>
     </section>
