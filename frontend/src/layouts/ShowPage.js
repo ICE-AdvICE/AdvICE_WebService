@@ -3,12 +3,11 @@ import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useCookies } from "react-cookie";
 import ToastViewer from './ToastViewer.js';  
-import { getMypageRequest } from '../apis/index.js';
 import './css/ShowPage.css';
 import moment from 'moment';
-import { handleCommentSubmit } from '../apis/index.js';
-import {fetchComments } from '../apis/index.js';
-import {handleDelete } from '../apis/index.js';
+import {handleEdit as handleEditArticle ,getMypageRequest,fetchComments,handleDelete,handleCommentSubmit ,checkArticleOwnership} from '../apis/index.js';
+ 
+ 
 const ShowPage = () => {
     const [isComposing, setIsComposing] = useState(false);
     const { articleNum } = useParams();
@@ -22,6 +21,7 @@ const ShowPage = () => {
     const userEmail = cookies.userEmail;
     const [authorEmail, setAuthorEmail] = useState("");
     const navigate = useNavigate();
+    const [canEdit, setCanEdit] = useState(false);
     const handleComposition = (event) => {
         if (event.type === 'compositionend') {
             setIsComposing(false);
@@ -30,10 +30,6 @@ const ShowPage = () => {
         }
     };
 
-    const commentData = {
-        content: commentInput,
-        user_email: userEmail
-    };
     const [userDetails, setUserDetails] = useState({
         email: '',
         studentNum: '',
@@ -48,12 +44,6 @@ const ShowPage = () => {
     };
 
 
-    /*수정버튼*/
-    const handleEdit = () => {
-        navigate(`/article-main/${articleNum}/edit`, {
-            state: { article } 
-        });
-    };
     /*삭제버튼*/
     const onDelete = () => {
         handleDelete(articleNum, token, navigate);
@@ -133,7 +123,7 @@ const ShowPage = () => {
         checkLikeStatus();
     }, [articleNum, token]);
     
-///////////////////////////////
+
 
     const handleCommentChange = (event) => {
         setCommentInput(event.target.value);
@@ -168,11 +158,24 @@ const ShowPage = () => {
     }, [token]);  
     
 
-    
+    useEffect(() => {
+        if (articleNum && token) {
+            checkArticleOwnership(articleNum, token).then(data => {
+                console.log(data.code);
+                if (data.code === "SU") {
+                    setCanEdit(true); // 소유 여부 확인 성공
+                } else {
+                    setCanEdit(false); // 소유하지 않음
+                }
+            }).catch(error => {
+                console.error('Failed to verify article ownership:', error);
+            });
+        }
+    }, [articleNum, token]);
 
     useEffect(() => {
         if (articleNum) {
-            axios.get(`http://localhost:4000/api/v1/article/${articleNum}`)      
+            axios.get(`http://localhost:4000/api/v1/article/${articleNum}`)  
             .then(res => {
                 const {articleTitle, articleContent, likeCount, viewCount, category, articleDate, userEmail: authorEmail, comments: loadedComments } = res.data;
                 setArticle({ articleTitle, body: articleContent, views: viewCount, category, articleDate });
@@ -181,7 +184,7 @@ const ShowPage = () => {
                 setComments(loadedComments || []);
                 setAuthorEmail(authorEmail);
             })
-            .catch(err => console.error("Error fetching post:", err));
+            .catch(err => console.error("Error", err));
         }
     }, [articleNum, token, userEmail]);
   
@@ -199,12 +202,37 @@ const ShowPage = () => {
     if (!article) {
         return <div>Loading...</div>;
     }
+    
+    const handleEdit = async () => {
+        if (!article) {
+            console.error("Article data is not loaded yet.");
+            return; // 로드되지 않았다면 함수 실행 중지
+        }
+        try {
+            await  handleEditArticle(articleNum, token, navigate, setCanEdit, article);
+        } catch (error) {
+            console.log('Error :', error.message);
+        }
+    };
+    if (!article) {
+        return <div>Loading...</div>;
+    }
+    
+
+
     return (
         <div className="blog-container">
-            <img src="/main-image.png" className="header2-image"/>
+            <div className = "img-container">
+                <img src="/main-image.png" className="header2-image"/>
+                <img src="/mainword-image.png"   className="words-image"/>
+
+            </div>
+            
             <div className = "ArticleContentbox-container">
                 <div className="ArticleContentbox">
                     <img src="/main2-image.png"  className="header10-image"/>
+                    <img src="/main2-icon.png"  className="icon-image"/>
+
                         <div className='ArticleCategory'>
                             <p>{article.category === 0 ? "요청" : "일반"}</p>
                         </div>
@@ -224,12 +252,12 @@ const ShowPage = () => {
                                     <div className={`heart ${liked ? 'love' : ''}`} onClick={handleLike}></div>
                                         <p>{likes}</p>  
                                 </div>
-                                {authorEmail === userDetails.email && (
-                                <div className="Edit-Delete-Options">
-                                    <button onClick={handleEdit}>수정</button>
-                                    <button onClick={ onDelete}>삭제</button>
-                                </div>
-                                )}
+                                {canEdit && (
+                                    <div className="Edit-Delete-Options">
+                                        <button onClick={handleEdit}>수정</button>
+                                        <button onClick={onDelete}>삭제</button>
+                                    </div>
+                                )}            
                             </div>
                             
                             <div className='CommentBox-container'>  
