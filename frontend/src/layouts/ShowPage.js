@@ -5,13 +5,12 @@ import { useCookies } from "react-cookie";
 import ToastViewer from './ToastViewer.js';  
 import './css/ShowPage.css';
 import moment from 'moment';
-import {handleEdit as handleEditArticle ,getMypageRequest,fetchComments,handleDelete,handleCommentSubmit } from '../apis/index.js';
+import {handleEdit as handleEditArticle ,getMypageRequest,fetchComments,handleDelete,handleCommentSubmit ,checkArticleOwnership} from '../apis/index.js';
  
  
 const ShowPage = () => {
     const [isComposing, setIsComposing] = useState(false);
     const { articleNum } = useParams();
-    const [canEdit, setCanEdit] = useState(false);
     const [article, setArticle] = useState(null);
     const [likes, setLikes] = useState(0);
     const [liked, setLiked] = useState(false);
@@ -20,9 +19,9 @@ const ShowPage = () => {
     const [cookies] = useCookies(['accessToken', 'userEmail']);
     const token = cookies.accessToken;
     const userEmail = cookies.userEmail;
-    const [isEditable, setIsEditable] = useState(false);
     const [authorEmail, setAuthorEmail] = useState("");
     const navigate = useNavigate();
+    const [canEdit, setCanEdit] = useState(false);
     const handleComposition = (event) => {
         if (event.type === 'compositionend') {
             setIsComposing(false);
@@ -44,8 +43,6 @@ const ShowPage = () => {
         return moment(dateString).format('YYYY.MM.DD HH:mm');
     };
 
-
-    
 
     /*삭제버튼*/
     const onDelete = () => {
@@ -161,7 +158,20 @@ const ShowPage = () => {
     }, [token]);  
     
 
-    
+    useEffect(() => {
+        if (articleNum && token) {
+            checkArticleOwnership(articleNum, token).then(data => {
+                console.log(data.code);
+                if (data.code === "SU") {
+                    setCanEdit(true); // 소유 여부 확인 성공
+                } else {
+                    setCanEdit(false); // 소유하지 않음
+                }
+            }).catch(error => {
+                console.error('Failed to verify article ownership:', error);
+            });
+        }
+    }, [articleNum, token]);
 
     useEffect(() => {
         if (articleNum) {
@@ -194,21 +204,35 @@ const ShowPage = () => {
     }
     
     const handleEdit = async () => {
+        if (!article) {
+            console.error("Article data is not loaded yet.");
+            return; // 로드되지 않았다면 함수 실행 중지
+        }
         try {
             await  handleEditArticle(articleNum, token, navigate, setCanEdit, article);
         } catch (error) {
             console.log('Error :', error.message);
         }
     };
+    if (!article) {
+        return <div>Loading...</div>;
+    }
+    
 
 
     return (
         <div className="blog-container">
-            <img src="/main-image.png" className="header2-image"/>
-            <img src="/mainword-image.png"   className="words-image"/>
+            <div className = "img-container">
+                <img src="/main-image.png" className="header2-image"/>
+                <img src="/mainword-image.png"   className="words-image"/>
+
+            </div>
+            
             <div className = "ArticleContentbox-container">
                 <div className="ArticleContentbox">
                     <img src="/main2-image.png"  className="header10-image"/>
+                    <img src="/main2-icon.png"  className="icon-image"/>
+
                         <div className='ArticleCategory'>
                             <p>{article.category === 0 ? "요청" : "일반"}</p>
                         </div>
@@ -228,14 +252,12 @@ const ShowPage = () => {
                                     <div className={`heart ${liked ? 'love' : ''}`} onClick={handleLike}></div>
                                         <p>{likes}</p>  
                                 </div>
-                                
-                                
+                                {canEdit && (
                                     <div className="Edit-Delete-Options">
                                         <button onClick={handleEdit}>수정</button>
                                         <button onClick={onDelete}>삭제</button>
                                     </div>
-                                
-                                
+                                )}            
                             </div>
                             
                             <div className='CommentBox-container'>  
