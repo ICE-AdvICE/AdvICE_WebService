@@ -3,15 +3,15 @@ import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useCookies } from "react-cookie";
 import ToastViewer from './ToastViewer.js';  
-import { getMypageRequest } from '../apis/index.js';
 import './css/ShowPage.css';
 import moment from 'moment';
-import { handleCommentSubmit } from '../apis/index.js';
-import {fetchComments } from '../apis/index.js';
-import {handleDelete } from '../apis/index.js';
+import {handleEdit as handleEditArticle ,getMypageRequest,fetchComments,handleDelete,handleCommentSubmit } from '../apis/index.js';
+ 
+ 
 const ShowPage = () => {
     const [isComposing, setIsComposing] = useState(false);
     const { articleNum } = useParams();
+    const [canEdit, setCanEdit] = useState(false);
     const [article, setArticle] = useState(null);
     const [likes, setLikes] = useState(0);
     const [liked, setLiked] = useState(false);
@@ -20,6 +20,7 @@ const ShowPage = () => {
     const [cookies] = useCookies(['accessToken', 'userEmail']);
     const token = cookies.accessToken;
     const userEmail = cookies.userEmail;
+    const [isEditable, setIsEditable] = useState(false);
     const [authorEmail, setAuthorEmail] = useState("");
     const navigate = useNavigate();
     const handleComposition = (event) => {
@@ -30,10 +31,6 @@ const ShowPage = () => {
         }
     };
 
-    const commentData = {
-        content: commentInput,
-        user_email: userEmail
-    };
     const [userDetails, setUserDetails] = useState({
         email: '',
         studentNum: '',
@@ -48,12 +45,8 @@ const ShowPage = () => {
     };
 
 
-    /*수정버튼*/
-    const handleEdit = () => {
-        navigate(`/article-main/${articleNum}/edit`, {
-            state: { article } 
-        });
-    };
+    
+
     /*삭제버튼*/
     const onDelete = () => {
         handleDelete(articleNum, token, navigate);
@@ -133,7 +126,7 @@ const ShowPage = () => {
         checkLikeStatus();
     }, [articleNum, token]);
     
-///////////////////////////////
+
 
     const handleCommentChange = (event) => {
         setCommentInput(event.target.value);
@@ -172,7 +165,7 @@ const ShowPage = () => {
 
     useEffect(() => {
         if (articleNum) {
-            axios.get(`http://localhost:4000/api/v1/article/${articleNum}`)      
+            axios.get(`http://localhost:4000/api/v1/article/${articleNum}`)  
             .then(res => {
                 const {articleTitle, articleContent, likeCount, viewCount, category, articleDate, userEmail: authorEmail, comments: loadedComments } = res.data;
                 setArticle({ articleTitle, body: articleContent, views: viewCount, category, articleDate });
@@ -181,7 +174,7 @@ const ShowPage = () => {
                 setComments(loadedComments || []);
                 setAuthorEmail(authorEmail);
             })
-            .catch(err => console.error("Error fetching post:", err));
+            .catch(err => console.error("Error", err));
         }
     }, [articleNum, token, userEmail]);
   
@@ -199,9 +192,20 @@ const ShowPage = () => {
     if (!article) {
         return <div>Loading...</div>;
     }
+    
+    const handleEdit = async () => {
+        try {
+            await  handleEditArticle(articleNum, token, navigate, setCanEdit, article);
+        } catch (error) {
+            console.log('Error :', error.message);
+        }
+    };
+
+
     return (
         <div className="blog-container">
             <img src="/main-image.png" className="header2-image"/>
+            <img src="/mainword-image.png"   className="words-image"/>
             <div className = "ArticleContentbox-container">
                 <div className="ArticleContentbox">
                     <img src="/main2-image.png"  className="header10-image"/>
@@ -224,12 +228,14 @@ const ShowPage = () => {
                                     <div className={`heart ${liked ? 'love' : ''}`} onClick={handleLike}></div>
                                         <p>{likes}</p>  
                                 </div>
-                                {authorEmail === userDetails.email && (
-                                <div className="Edit-Delete-Options">
-                                    <button onClick={handleEdit}>수정</button>
-                                    <button onClick={ onDelete}>삭제</button>
-                                </div>
-                                )}
+                                
+                                
+                                    <div className="Edit-Delete-Options">
+                                        <button onClick={handleEdit}>수정</button>
+                                        <button onClick={onDelete}>삭제</button>
+                                    </div>
+                                
+                                
                             </div>
                             
                             <div className='CommentBox-container'>  

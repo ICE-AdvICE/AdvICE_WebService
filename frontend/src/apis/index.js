@@ -143,6 +143,7 @@ export const getArticleListRequest = async () => {
         })
     return result;
 };
+
 //(Admin)게시글 댓글 작성 API
 export const handleCommentSubmit = async (event, commentInput, setComments, setCommentInput, userEmail, articleNum, token) => {
     if (event.key === 'Enter' && !event.shiftKey) {
@@ -202,6 +203,36 @@ export const fetchComments = (articleNum, token, setComments) => {
     .catch(err => {
         console.error("Error fetching comments:", err);
     });
+};
+// 3.게시글 수정 API
+export const handleEdit = async (articleNum, token, navigate, setCanEdit, article) => {
+    const updatedArticle = {
+        articleTitle: article.articleTitle,
+        articleContent: article.body
+    };
+    try {
+        const response = await axios.patch(`http://localhost:4000/api/v1/article/${articleNum}`, updatedArticle, {
+            headers: { Authorization: `Bearer ${token}` }
+        });
+        if (response.data.code === "SU") {
+            console.log('Article updated successfully');
+            setCanEdit(true);
+            navigate(`/article-main/${articleNum}/edit`);
+        } else if (response.data.code === "NA") {
+            alert("This article does not exist.");
+        } else if (response.data.code === "NU") {
+            alert("This user does not exist.");
+        } else if (response.data.code === "VF") {
+            alert("Validation failed.");
+        } else if (response.data.code === "DBE") {
+            alert("Database error.");
+        } else {
+            console.error('Failed to update article:', response.data.message);
+            throw new Error(response.data.message);
+        }
+    } catch (error) {
+        console.error('Error updating the article:', error);
+    }
 };
 
 export const emailCertificationRequest = async (requestBody) => {
