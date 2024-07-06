@@ -8,7 +8,7 @@ import MyModal from '../MyModal';
 import './modules.css';
 
 
-const LoginForm = ({ onLogin })=> {
+const LoginForm = ({ onLogin})=> {
   
   const [userEmail, setUserEmail] = useState('');
   const [userPassword, setUserpassword] = useState('');
@@ -21,11 +21,19 @@ const LoginForm = ({ onLogin })=> {
 
   // 로그인 버튼 클릭 핸들러
   const onSignInButtonClickHandler = (e) => {
-    e.preventDefault(); // 페이지 리로드 방지
+    e.preventDefault();
     const requestBody = { email: userEmail, password: userPassword };
-    signInRequest(requestBody).then(signInResponse);
-
-  }
+    signInRequest(requestBody).then(responseBody => {
+        if (responseBody && responseBody.token) {
+            setCookie('accessToken', responseBody.token, { path: '/' });
+            navigator('/');
+            onLogin(true); // Notify NavBar about login success
+        } else {
+            setError(true);
+            onLogin(false); // Notify NavBar about login failure
+        }
+    });
+};
 
   const handleFindpassword = (e) => {
     e.preventDefault(); // 폼 제출 방지 // 로그인 모달 닫기
@@ -65,9 +73,23 @@ const LoginForm = ({ onLogin })=> {
       alert('네트워크 오류입니다.');
       setError(false);  // 네트워크 오류도 입력 에러가 아님
     } else if (code === 'SU') {
-      console.log("로그인 성공, 상태 변경 중...");
-      setError(false);  // 성공 시 에러 상태 초기화
-    }
+      if (token && expirationTime) {
+        const now = new Date().getTime();
+        const expires = new Date(now + expirationTime * 1000);
+        setCookie('accessToken', token, { expires, path: '/' });
+        navigator('/');  // 로그인 후 리다이렉트
+        onLogin(true);  // 로그인 성공 상태를 NavBar로 전달하여 모달 닫기
+      } else {
+          console.error('토큰 또는 만료 시간이 제공되지 않았습니다.');
+          setError(false);
+      }
+    } else {
+        // 에러 핸들링
+        alert('로그인 오류입니다. 다시 시도해 주세요.');
+        setError(true);
+        onLogin(false);  // 로그인 실패 상태를 전달
+    } // 성공 시 에러 상태 초기화
+   
   
     // 토큰과 만료 시간을 받았는지 확인
     if (token && expirationTime) {
@@ -91,11 +113,10 @@ const LoginForm = ({ onLogin })=> {
   return (
   
     <form onSubmit={(e) => e.preventDefault()}>
-     <div className="loginHeaderContainer">
-     <img src="header-name.png" alt="로그인 로고" style={{ width: '220px', height: 'auto' }} />
-    </div>
+      <div className="loginHeaderContainer">
+        <img src="header-name.png" alt="로그인 로고" style={{ width: '220px', height: 'auto' }} />
+      </div>
       <div className="loginFormContainer">
-
         <input
           type="text"
           error={error}
@@ -111,7 +132,7 @@ const LoginForm = ({ onLogin })=> {
           value={userPassword}
           error={error}
           onChange={e => setUserpassword(e.target.value)}
-          placeholder="비밀번호를 입력하세요"
+          placeholder="비밀번호를 입력해주세요."
         />
       </div>
       {error && 
@@ -134,9 +155,7 @@ const LoginForm = ({ onLogin })=> {
      <MyModal //비밀번호 찾기
           open={modalOpenfind}
               width={500} //모달 넓이 이게 적당 한듯
-              header={[
-                <p>비밀번호 찾기</p>
-                ]}
+              header={[]}
               onCancel={e => setModalOpenfind(false)} //x 버튼
               footer={[]}
           >

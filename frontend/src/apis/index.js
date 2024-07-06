@@ -11,6 +11,7 @@ const GET_ARTICLE_LIST_URL = () => `${API_DOMAIN}/article/list`;
 const Email_Certification_URL = () => `${API_DOMAIN}/auth/email-certification`; //인증번호 전송
 const Check_Certification_URL = () => `${API_DOMAIN}/auth/check-certification`; //인증번호 인증
 const GET_MYPAGE_USER_URL = () => `${API_DOMAIN}/user`; //마이페이지_개인정보 
+const PATCH_MYPAGE_USER_URL=() =>`${API_DOMAIN}/user`; //마이페이지_개인정보 수정
 
 const GET_SIGN_IN_USER_URL =() =>`${API_DOMAIN}/user`;
 const authorization = (accessToken) => {
