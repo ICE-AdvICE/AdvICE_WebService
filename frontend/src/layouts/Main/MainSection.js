@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import '../css/MainSection.css'
 
 const options = [
@@ -9,10 +9,21 @@ const options = [
 
 const MainSection = () => {
   const [activeOption, setActiveOption] = useState(options[0].id); 
+  const [isLoading, setIsLoading] = useState(true); 
 
+  useEffect(() => {
+    const images = options.map(option => new Image().src = option.backgroundImage);
+    Promise.all(images).then(() => setIsLoading(false));
+  }, []);
+  
   const handleOptionClick = (id) => {
     setActiveOption(id);  
   };
+  
+  if (isLoading) {
+    return <div>Loading...</div>; // 로딩 중일 때 보여줄 화면
+  }
+
   return (
     <section className="main">
       <div className="main-container">

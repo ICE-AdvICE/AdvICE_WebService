@@ -130,7 +130,11 @@ const BlogForm = ({ editing }) => {
     };
     return (
         <div className='blog-container'>
-            <img src="/main-image.png"  className="header2-image" />
+            <div className = "img-container">
+                <img src="/main-image.png" className="header2-image"/>
+                <img src="/mainword-image.png"   className="words-image"/>
+
+            </div>
             {error && <div className="alert alert-danger">{error}</div>}
             <div className="title-container">
                 <div className={`dropdown ${dropdownOpen ? 'active' : ''}`} onClick={() => setDropdownOpen(!dropdownOpen)}>
