@@ -54,5 +54,9 @@ public class User {
 
     }
 
+    public void getRole(String role) {
+        this.role = role;
+    }
+
 }
 

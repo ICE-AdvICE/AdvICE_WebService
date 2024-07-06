@@ -27,6 +27,7 @@ import com.icehufs.icebreaker.dto.response.article.PostCommentResponseDto;
 import com.icehufs.icebreaker.dto.response.article.PutFavoriteResponseDto;
 import com.icehufs.icebreaker.dto.response.article.PutResolvedArticleResponseDto;
 import com.icehufs.icebreaker.entity.Article;
+import com.icehufs.icebreaker.entity.ArticleCategoryEnum;
 import com.icehufs.icebreaker.entity.CommentEntity;
 import com.icehufs.icebreaker.entity.FavoriteEntity;
 import com.icehufs.icebreaker.repository.ArticleRepository;
@@ -56,8 +57,12 @@ public class ArticleServiceImplement implements ArticleService {
             boolean existedEmail = userRepository.existsByEmail(email);
             if (!existedEmail) return PostArticleResponseDto.notExistUser();
 
-            Article articleEntity = new Article(dto, email);
+            Article articleEntity = new Article(dto, email); 
+            //공지 게시글일때
+            if (articleEntity.getCategory() == ArticleCategoryEnum.NOTIFICATION) return PostArticleResponseDto.validationFailed();
+
             articleRepository.save(articleEntity);
+
         }catch (Exception exception){
             exception.printStackTrace();
             return ResponseDto.databaseError();
@@ -361,5 +366,28 @@ public class ArticleServiceImplement implements ArticleService {
             return ResponseDto.databaseError();
         }
         return PutResolvedArticleResponseDto.success();
+    }
+
+
+    @Override
+    public ResponseEntity<? super PostArticleResponseDto> postArticleNotif(PostArticleRequestDto dto, String email) {
+        try{
+            // 사용자 계정이 존재하는지 확인하는 코드
+            boolean existedEmail = userRepository.existsByEmail(email);
+            if (!existedEmail) return PostArticleResponseDto.notExistUser();
+
+            Article articleEntity = new Article(dto, email); 
+            //공지 게시글 아닐때
+            if (articleEntity.getCategory() == ArticleCategoryEnum.GENERAL || articleEntity.getCategory() == ArticleCategoryEnum.REQUEST) {
+                return PostArticleResponseDto.validationFailed();
+            }
+
+            articleRepository.save(articleEntity);
+
+        }catch (Exception exception){
+            exception.printStackTrace();
+            return ResponseDto.databaseError();
+        }
+        return PostArticleResponseDto.success();
     }
 }

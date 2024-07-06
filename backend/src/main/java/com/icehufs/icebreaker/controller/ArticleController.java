@@ -89,16 +89,6 @@ public class ArticleController {
         return response;
     }
 
-    @PatchMapping("/comment/{commentNumber}")
-    public ResponseEntity<? super PatchCommentResponseDto> patchComment(
-        @RequestBody @Valid PatchCommentRequestDto requestBody,
-        @PathVariable Integer commentNumber,
-        @AuthenticationPrincipal String email
-    ){
-        ResponseEntity<? super PatchCommentResponseDto> response = articleService.patchComment(requestBody, commentNumber, email);
-        return response;
-    }
-
     @GetMapping("/list")
     public ResponseEntity<? super GetArticleListResponseDto> getArticleList(){
         ResponseEntity<? super GetArticleListResponseDto> response = articleService.getArticleList();
@@ -122,17 +112,6 @@ public class ArticleController {
         return response;
     }
 
-
-    @PostMapping("/{articleNum}/comment")
-    public ResponseEntity<? super PostCommentResponseDto> postComment(
-        @RequestBody @Valid PostCommentRequestDto requestBody,
-        @PathVariable Integer articleNum,
-        @AuthenticationPrincipal String email
-    ){
-        ResponseEntity<? super PostCommentResponseDto> response = articleService.postComment(requestBody, articleNum, email);
-        return response;
-    }
-
     @GetMapping("/{articleNum}/comment-list")
     public ResponseEntity<? super GetCommentListResponseDto> getCommentList(
         @PathVariable Integer articleNum
@@ -147,33 +126,6 @@ public class ArticleController {
         @AuthenticationPrincipal String email
     ){
         ResponseEntity<? super DeleteArticleResponseDto> response = articleService.deleteArticle(articleNum, email);
-        return response;
-    }
-
-    @DeleteMapping("/admin/{articleNum}")
-    public ResponseEntity<? super DeleteArticleAdminResponseDto> deleteArticleAdmin(
-        @PathVariable Integer articleNum,
-        @AuthenticationPrincipal String email
-    ){
-        ResponseEntity<? super DeleteArticleAdminResponseDto> response = articleService.deleteArticleAdmin(articleNum, email);
-        return response;
-    }
-
-    @DeleteMapping("/comment/{commentNumber}")
-    public ResponseEntity<? super DeleteCommentResponseDto> deleteComment(
-        @PathVariable Integer commentNumber,
-        @AuthenticationPrincipal String email
-    ){
-        ResponseEntity<? super DeleteCommentResponseDto> response = articleService.deleteComment(commentNumber, email);
-        return response;
-    }
-
-    @PutMapping("/{articleNum}/resolv")
-    public ResponseEntity<? super PutResolvedArticleResponseDto> putresolv(
-        @PathVariable Integer articleNum,
-        @AuthenticationPrincipal String email
-    ){
-        ResponseEntity<? super PutResolvedArticleResponseDto> response = articleService.putResolv(articleNum, email);
         return response;
     }
 
