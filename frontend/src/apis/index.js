@@ -278,7 +278,17 @@ return result;
 
 };
 
-
+export const updateMypageUserRequest = async (userData, accessToken) => { //MyPage 정보수정
+    try {
+        const response = await axios.patch(PATCH_MYPAGE_USER_URL(), userData, {
+            headers: { Authorization: `Bearer ${accessToken}` }
+        });
+        return response.data;
+    } catch (error) {
+        if (!error.response || !error.response.data) return { code: "UN", message: "Unexpected error occurred." };
+        return error.response.data;
+    }
+};
 
 export const getMypageRequest = async (accessToken)=>{
     try {
