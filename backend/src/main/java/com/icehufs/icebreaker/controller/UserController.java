@@ -46,10 +46,8 @@ public class UserController {
 
     @PatchMapping("/password")
     public ResponseEntity<? super PatchUserPassResponseDto> patchUserPass(
-        @RequestBody @Valid PatchUserPassRequestDto requestBody,
-        @AuthenticationPrincipal String email
-    ){
-        ResponseEntity<? super PatchUserPassResponseDto> response = userService.patchUserPass(requestBody, email);
+        @RequestBody @Valid PatchUserPassRequestDto requestBody){
+        ResponseEntity<? super PatchUserPassResponseDto> response = userService.patchUserPass(requestBody);
         return response;
     }
 

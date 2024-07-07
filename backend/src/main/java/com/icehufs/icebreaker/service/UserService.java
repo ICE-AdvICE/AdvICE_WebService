@@ -14,6 +14,6 @@ public interface UserService {
 
     ResponseEntity<? super GetSignInUserResponseDto> getSignInUser(String email);
     ResponseEntity<? super PatchUserResponseDto> patchUser(PatchUserRequestDto dto, String email);
-    ResponseEntity<? super PatchUserPassResponseDto> patchUserPass(PatchUserPassRequestDto dto, String email);
+    ResponseEntity<? super PatchUserPassResponseDto> patchUserPass(PatchUserPassRequestDto dto);
     ResponseEntity<? super DeleteUserResponseDto> deleteUser(String email);
 }

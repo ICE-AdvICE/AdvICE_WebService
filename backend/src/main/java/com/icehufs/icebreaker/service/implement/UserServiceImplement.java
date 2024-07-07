@@ -59,10 +59,10 @@ public class UserServiceImplement implements UserService {
             }
 
     @Override
-    public ResponseEntity<? super PatchUserPassResponseDto> patchUserPass(PatchUserPassRequestDto dto, String email) {
+    public ResponseEntity<? super PatchUserPassResponseDto> patchUserPass(PatchUserPassRequestDto dto) {
         try{
 
-            User userEntity = userRepository.findByEmail(email);
+            User userEntity = userRepository.findByEmail(dto.getEmail());
             if(userEntity == null) return PatchUserResponseDto.notExistUser();
 
             String password = dto.getPassword();
