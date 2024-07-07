@@ -40,10 +40,15 @@ const FindpasswordForm = ({ onFindpassForm }) => {
             alert('비밀번호가 일치하지 않습니다.');
             return;
         }
+
+        if (newPassword.length < 8 || newPassword.length > 20) { // 예를 들어 최소 길이를 8로 설정
+            alert('비밀번호 길이를 8자 이상 20자 이하로 해주세요.');
+            return;
+        }
         const requestBody = {
-            email: userEmail,
-            newPassword: newPassword
+            password: newPassword
         };
+
         const response = await pwUpdateRequest(requestBody);
         if (response.code === 'SU') {
             alert('비밀번호 변경이 성공적으로 완료되었습니다.');
@@ -67,7 +72,7 @@ const FindpasswordForm = ({ onFindpassForm }) => {
                     onChange={e => setUserEmail(e.target.value)}
                     placeholder="학교 이메일을 입력해주세요."
                 />
-                <button type="button" className="findpasswordpost" onClick={handleSendCertification}>인증번호 전송</button>
+                <button type="button" className="findpasswordpost" onClick={handleSendCertification}>인증요청</button>
             </div>
             <div className="pw_emailpost">
                 <label htmlFor="certificationNumber"></label>
@@ -78,7 +83,7 @@ const FindpasswordForm = ({ onFindpassForm }) => {
                     onChange={e => setCertificationNumber(e.target.value)}
                     placeholder="인증번호를 입력해주세요."
                 />
-                <button type="button" className="findpasswordpost" onClick={handleCertification}>인증번호 확인</button>
+                <button type="button" className="findpasswordpost" onClick={handleCertification}>인증확인</button>
             </div>
             {isCertified && (
                 <>
