@@ -19,4 +19,8 @@ public class CheckCertificationRequestDto {
     @NotBlank
     private String certificationNumber;
 
+    public void setEmail(String email) {
+        this.email = email + "@hufs.ac.kr";
+    }
+
 }

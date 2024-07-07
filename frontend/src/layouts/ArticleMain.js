@@ -189,9 +189,15 @@ const ArticleMain = () => {
 
     return (
         <div className="blog-container">
-            <img src="/main-image.png" className="header2-image"/>
+            <div className = "img-container">
+                <img src="/main-image.png" className="header2-image"/>
+                <img src="/mainword-image.png"   className="words-image"/>
+
+            </div>
+            
             <div className="posts-overlay-container">
                 <img src="/main2-image.png"   className="header3-image"/>
+                
                 <div className="title">
                     <p>순번</p> <p>카테고리</p> <p>제목</p><p>작성일</p> <p>조회</p><p>좋아요</p>
                 </div>

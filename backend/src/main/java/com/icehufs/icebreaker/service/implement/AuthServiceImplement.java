@@ -131,8 +131,10 @@ public class AuthServiceImplement implements AuthService {
             boolean isExistEmail = userRepository.existsByEmail(email);
             if (isExistEmail) return EmailCertificationResponseDto.duplicateId();
 
-            // 전에 이 이메일로 인증번호를 받은적 있으면 그 이메일 삭제
+            
             CertificationEntity certificationEntity1 = certificationRepository.findByUserEmail(email);
+
+            // 전에 이 이메일로 인증번호를 받은적 있으면 그 이메일 삭제
             if (certificationEntity1 != null){
                 certificationRepository.delete(certificationEntity1);
             }
@@ -164,6 +166,7 @@ public class AuthServiceImplement implements AuthService {
             // String userId = dto.getId();
             String email = dto.getEmail();
             String certificationNumber = dto.getCertificationNumber();
+            //System.out.println("Starting certification check for email: " + email);
 
 
             CertificationEntity certificationEntity = certificationRepository.findByUserEmail(email);
