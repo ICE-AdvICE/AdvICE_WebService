@@ -58,6 +58,10 @@ const MypageForm = ({ handleLogout }) => {
         setModalOpenfind(true); // 회원가입 정보 모달 열기
       };
       
+    const handleNumberInput = (e) => {
+        const value = e.target.value;
+        setUserDetails({...userDetails, studentNum: value.replace(/[^0-9]/g, '')});
+    };
 
     return (
         <form onSubmit={(e) => e.preventDefault()}>
@@ -83,8 +87,8 @@ const MypageForm = ({ handleLogout }) => {
                         <label>이름:</label>
                         <input type="text" value={userDetails.name} onChange={(e) => setUserDetails({...userDetails, name: e.target.value})} />
                         <label>학번:</label>
-                        <input type="text" value={userDetails.studentNum} onChange={(e) => setUserDetails({...userDetails, studentNum: e.target.value})} />
-                        <button type="button" className="mypage_update-button" onClick={handleUpdateUserDetails}>수정 완료</button>
+                        <input type="text" value={userDetails.studentNum} onChange={handleNumberInput} />
+                        <button type="button" className="mypage_update-button" onClick={handleUpdateUserDetails}>수정 완료</button> 
                     </div>
                 </MyModal>
                 

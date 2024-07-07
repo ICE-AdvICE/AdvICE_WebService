@@ -23,17 +23,19 @@ const LoginForm = ({ onLogin})=> {
   const onSignInButtonClickHandler = (e) => {
     e.preventDefault();
     const requestBody = { email: userEmail, password: userPassword };
-    signInRequest(requestBody).then(responseBody => {
-        if (responseBody && responseBody.token) {
-            setCookie('accessToken', responseBody.token, { path: '/' });
-            navigator('/');
-            onLogin(true); // Notify NavBar about login success
-        } else {
-            setError(true);
-            onLogin(false); // Notify NavBar about login failure
-        }
+    signInRequest(requestBody).then(signInResponse).catch(error => {
+      console.error('Request failed', error);
+      alert('로그인 요청 중 오류가 발생했습니다.');
+      setError(true);
+      onLogin(false);
     });
-};
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter' && e.target.type !== 'button') {
+      onSignInButtonClickHandler(e);
+    }
+  };
 
   const handleFindpassword = (e) => {
     e.preventDefault(); // 폼 제출 방지 // 로그인 모달 닫기
@@ -122,6 +124,7 @@ const LoginForm = ({ onLogin})=> {
           error={error}
           value={userEmail}
           onChange={e => setUserEmail(e.target.value)}
+          onKeyPress={handleKeyPress}
           placeholder="학교 이메일을 입력해주세요."
         />
       </div>
@@ -132,6 +135,7 @@ const LoginForm = ({ onLogin})=> {
           value={userPassword}
           error={error}
           onChange={e => setUserpassword(e.target.value)}
+          onKeyPress={handleKeyPress}
           placeholder="비밀번호를 입력해주세요."
         />
       </div>
