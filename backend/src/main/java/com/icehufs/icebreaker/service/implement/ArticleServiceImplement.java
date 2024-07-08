@@ -27,6 +27,7 @@ import com.icehufs.icebreaker.dto.response.article.PostCommentResponseDto;
 import com.icehufs.icebreaker.dto.response.article.PutFavoriteResponseDto;
 import com.icehufs.icebreaker.dto.response.article.PutResolvedArticleResponseDto;
 import com.icehufs.icebreaker.entity.Article;
+import com.icehufs.icebreaker.entity.ArticleCategoryEnum;
 import com.icehufs.icebreaker.entity.CommentEntity;
 import com.icehufs.icebreaker.entity.FavoriteEntity;
 import com.icehufs.icebreaker.repository.ArticleRepository;
@@ -56,8 +57,12 @@ public class ArticleServiceImplement implements ArticleService {
             boolean existedEmail = userRepository.existsByEmail(email);
             if (!existedEmail) return PostArticleResponseDto.notExistUser();
 
-            Article articleEntity = new Article(dto, email);
+            Article articleEntity = new Article(dto, email); 
+            //공지 게시글일때
+            if (articleEntity.getCategory() == ArticleCategoryEnum.NOTIFICATION) return PostArticleResponseDto.validationFailed();
+
             articleRepository.save(articleEntity);
+
         }catch (Exception exception){
             exception.printStackTrace();
             return ResponseDto.databaseError();
@@ -132,10 +137,13 @@ public class ArticleServiceImplement implements ArticleService {
         try{
             boolean existedArticle = articleRepository.existsByArticleNum(articleNum);
             if (!existedArticle) return PostCommentResponseDto.noExistArticle();
-            boolean existedUser = userRepository.existsByEmail(email);
+
+            boolean existedUser = userRepository.existsByEmail(email); //이부분 나중에 권한 부여 된 사용자를 확인라는 로직으로 수정
             if(!existedUser) return PostArticleResponseDto.notExistUser();
+
             CommentEntity commentEntity = new CommentEntity(dto, articleNum, email);
             commentRepository.save(commentEntity);
+
         } catch (Exception exception){
             exception.printStackTrace();
             return ResponseDto.databaseError();
@@ -192,7 +200,7 @@ public class ArticleServiceImplement implements ArticleService {
     @Override
     public ResponseEntity<? super DeleteCommentResponseDto> deleteComment(Integer commentNumber, String email) {
         try{
-            boolean existedUser = userRepository.existsByEmail(email);
+            boolean existedUser = userRepository.existsByEmail(email); //이부분 나중에 권한 부여 된 사용자를 확인라는 로직으로 수정
             if (!existedUser) return DeleteCommentResponseDto.notExistUser();
 
             CommentEntity commentEntity = commentRepository.findByCommentNumber(commentNumber);
@@ -243,7 +251,7 @@ public class ArticleServiceImplement implements ArticleService {
     public ResponseEntity<? super PatchCommentResponseDto> patchComment(PatchCommentRequestDto dto,
             Integer commentNumber, String email){
                 try{
-                    boolean existedUser = userRepository.existsByEmail(email);
+                    boolean existedUser = userRepository.existsByEmail(email); //이부분 나중에 권한 부여 된 사용자를 확인라는 로직으로 수정
                     if (!existedUser) return PatchCommentResponseDto.notExistUser();
 
                     CommentEntity commentEntity = commentRepository.findByCommentNumber(commentNumber);
@@ -358,5 +366,28 @@ public class ArticleServiceImplement implements ArticleService {
             return ResponseDto.databaseError();
         }
         return PutResolvedArticleResponseDto.success();
+    }
+
+
+    @Override
+    public ResponseEntity<? super PostArticleResponseDto> postArticleNotif(PostArticleRequestDto dto, String email) {
+        try{
+            // 사용자 계정이 존재하는지 확인하는 코드
+            boolean existedEmail = userRepository.existsByEmail(email);
+            if (!existedEmail) return PostArticleResponseDto.notExistUser();
+
+            Article articleEntity = new Article(dto, email); 
+            //공지 게시글 아닐때
+            if (articleEntity.getCategory() == ArticleCategoryEnum.GENERAL || articleEntity.getCategory() == ArticleCategoryEnum.REQUEST) {
+                return PostArticleResponseDto.validationFailed();
+            }
+
+            articleRepository.save(articleEntity);
+
+        }catch (Exception exception){
+            exception.printStackTrace();
+            return ResponseDto.databaseError();
+        }
+        return PostArticleResponseDto.success();
     }
 }

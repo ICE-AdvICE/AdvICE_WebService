@@ -1,5 +1,7 @@
 package com.icehufs.icebreaker.provider;
 
+import java.nio.charset.StandardCharsets;
+import java.security.Key;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
@@ -10,7 +12,6 @@ import org.springframework.stereotype.Component;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-
 @Component
 public class JwtProvider {
 
@@ -27,12 +28,12 @@ public class JwtProvider {
         return jwt;
     }
 
-    public String validate(String jwt){ //jwt의 secretKey, 만료시간 확인하고, JWT 내부의 클레임의 주제인 이메일을 추출하는 함수
+    public String validate(String jwt){ //secretKey를 확인을 통한 JWT 검증
         Claims claims = null;
 
         try{
-            claims = Jwts.parser().setSigningKey(secretKey)
-                    .parseClaimsJws(jwt).getBody();
+            claims = Jwts.parser().setSigningKey(secretKey) //secretKey를 사용하여 JWT를 파싱하고, 서명 검증을 수행
+                    .parseClaimsJws(jwt).getBody(); //검증이 성공하면 JWT의 본문(body)을 claims 객체에 저장
         } catch (Exception exception){
             exception.printStackTrace();
             return null;

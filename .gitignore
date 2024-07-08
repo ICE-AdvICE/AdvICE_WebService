@@ -1,3 +1,14 @@
+<<<<<<< HEAD
+.DS_Store
+backend/.gradle
+node_modules/
+package-lock.json
+package.json
+backend/build/
+*.class
+*.bin
+.vscode
+=======
 .DS_Store
 backend/.gradle/8.6/executionHistory/executionHistory.bin
 backend/.gradle/8.6/executionHistory/executionHistory.lock
@@ -15,3 +26,4 @@ package-lock.json
 *.class
 # Build directories
 backend/build/
+>>>>>>> 20b9bcd8a95f868aef65ee46d9760671dfcc99fc

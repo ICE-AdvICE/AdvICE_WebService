@@ -29,6 +29,7 @@ import com.icehufs.icebreaker.dto.response.article.DeleteArticleAdminResponseDto
 public interface ArticleService {
 
     ResponseEntity<? super PostArticleResponseDto> postArticle(PostArticleRequestDto dto, String email);
+    ResponseEntity<? super PostArticleResponseDto> postArticleNotif(PostArticleRequestDto dto, String email);
     ResponseEntity<? super GetArticleResponseDto> getArticle(Integer articleNum);
     ResponseEntity<? super GetArticleListResponseDto> getArticleList();
     ResponseEntity<? super GetUserArticleListResponseDto> getUserArticleList(String email);

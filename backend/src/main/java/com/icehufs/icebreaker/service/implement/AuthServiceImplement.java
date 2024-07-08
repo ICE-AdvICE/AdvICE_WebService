@@ -24,6 +24,7 @@ import com.icehufs.icebreaker.dto.response.auth.PassChanEmailCertificationRespon
 import com.icehufs.icebreaker.dto.response.auth.SignInResponseDto;
 import com.icehufs.icebreaker.dto.response.auth.SignUpResponseDto;
 import com.icehufs.icebreaker.entity.Article;
+import com.icehufs.icebreaker.entity.AuthorityEntity;
 import com.icehufs.icebreaker.entity.BanDurationEnum;
 import com.icehufs.icebreaker.entity.BanReasonEnum;
 import com.icehufs.icebreaker.entity.CertificationEntity;
@@ -32,6 +33,7 @@ import com.icehufs.icebreaker.entity.UserBan;
 import com.icehufs.icebreaker.provider.EmailProvider;
 import com.icehufs.icebreaker.provider.JwtProvider;
 import com.icehufs.icebreaker.repository.ArticleRepository;
+import com.icehufs.icebreaker.repository.AuthorityRepository;
 import com.icehufs.icebreaker.repository.CertificationRepository;
 // import com.icehufs.icebreaker.repository.CommentRepository;
 // import com.icehufs.icebreaker.repository.FavoriteRepository;
@@ -55,6 +57,7 @@ public class AuthServiceImplement implements AuthService {
     private final CertificationRepository certificationRepository;
     private final EmailProvider emailProvider;
     private final UserBanRepository userBanRepository;
+    private final AuthorityRepository authorityRepository;
 
     // 운영자의 게시글 삭제 관련 레포지토리
     private final ArticleRepository articleRepository;
@@ -75,8 +78,10 @@ public class AuthServiceImplement implements AuthService {
             dto.setPassword(encodedPassword);
 
             User userEntity = new User(dto); //dto데이터를 entity에 삽입
+            AuthorityEntity authorityEntity = new AuthorityEntity(dto.getEmail());//새 사용자한테 USER 기본 권한 부여
 
             userRepository.save(userEntity); //entity를 repository를 통해 db에 저장
+            authorityRepository.save(authorityEntity);
 
         } catch (Exception exception){
             exception.printStackTrace();
