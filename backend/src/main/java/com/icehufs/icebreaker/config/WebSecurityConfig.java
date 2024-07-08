@@ -48,7 +48,7 @@ public class WebSecurityConfig {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             )
             .authorizeRequests(request -> request
-                .antMatchers("/api/v1/**").permitAll()
+                .antMatchers("/api/v1/**").permitAll() //USER
                 .mvcMatchers("/api/admin1/**").hasRole("ADMIN1")
                 .mvcMatchers("/api/admin2/**").hasRole("ADMIN2")
                 .anyRequest().authenticated()

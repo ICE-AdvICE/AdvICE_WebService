@@ -21,8 +21,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import com.icehufs.icebreaker.entity.AuthorityEntity;
 import com.icehufs.icebreaker.entity.User;
 import com.icehufs.icebreaker.provider.JwtProvider;
+import com.icehufs.icebreaker.repository.AuthorityRepository;
 import com.icehufs.icebreaker.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -34,6 +36,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
 
     private final JwtProvider jwtProvider;
     private final UserRepository userRepository;
+    private final AuthorityRepository authorityRepository;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -49,11 +52,21 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
             filterChain.doFilter(request, response);
             return;
         }
-        User userEntity = userRepository.findByEmail(email); //토큰으로부터 추출한 사용자의 아이디로 권한 확인
-        String role = userEntity.getRole(); // role의 형태 유지 필수 = ROLE_USER, ROLE_ADMIN
 
-        List<GrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority(role));
+
+        List<GrantedAuthority> authorities = new ArrayList<>(); //권한을 저장할 리스트 선언
+
+        AuthorityEntity authorityEntity = authorityRepository.findByEmail(email);
+
+        authorities.add(new SimpleGrantedAuthority("ROLE_USER")); //기본 사용자 권한 부여
+
+        if(!"NULL".equals(authorityEntity.getRoleAdmin1())){
+            authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN1")); //익명게시판 운영자 권한 부여
+        }
+        if(!"NULL".equals(authorityEntity.getRoleAdmin2())){
+            authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN2"));//코딩존 운영자 권한 부여
+        }
+
 
         AbstractAuthenticationToken authenticationToken =
             new UsernamePasswordAuthenticationToken(email, null, authorities); //Context를 생성하기 위해 authenticationToken에 아이디,비번,권한을 매개변수로 받음

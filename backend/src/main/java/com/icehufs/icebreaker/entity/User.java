@@ -34,9 +34,6 @@ public class User {
     @Column(name = "user_name")
     private String name;
 
-    @Column(name="role")
-    private String role;
-
     public void patchUser(PatchUserRequestDto dto){
         this.studentNum = dto.getStudentNum();
         this.name = dto.getName();
@@ -54,9 +51,6 @@ public class User {
 
     }
 
-    public void getRole(String role) {
-        this.role = role;
-    }
 
 }
 

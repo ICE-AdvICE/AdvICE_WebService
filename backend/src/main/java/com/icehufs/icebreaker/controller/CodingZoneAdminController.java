@@ -22,7 +22,7 @@ public class CodingZoneAdminController {
 
     private final CodingZoneService codingzoneService;
 
-    @PostMapping("")
+    @PostMapping("/upload-codingzone")
     public ResponseEntity<? super CodingZoneClassAssignResponseDto> CodingZoneClassAssignResponse(
         @RequestBody @Valid CodingZoneClassAssignRequestDto requestBody,
         @AuthenticationPrincipal String email
