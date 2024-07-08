@@ -114,7 +114,7 @@ public class AuthServiceImplement implements AuthService {
             }
 
             token = jwtProvider.create(email); //토큰 생성
-            System.out.println(token);
+            // System.out.println(token);
 
         } catch(Exception exception){
             exception.printStackTrace();
@@ -183,6 +183,8 @@ public class AuthServiceImplement implements AuthService {
 
             if (!isMatched) {
                 return CheckCertificationResponseDto.certificationFail();
+            } else { // 인증 완료 시에 인증 테이블에서 해당 인증번호 삭제
+                certificationRepository.delete(certificationEntity);
             }
 
 
