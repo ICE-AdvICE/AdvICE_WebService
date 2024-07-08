@@ -1,22 +1,21 @@
-.middle-container {
-  position: absolute;
-  display:flex;
-  width: 100%;
-  height: 100%;
-}
 .inner{
-  width: 1515px;
-  height: 720px;
+  width: 100%;
+  height: auto;
   position: relative;
   display:flex;   
-  margin-top: 20px;
-  max-width: 1515px; 
-  margin: 0 auto;
+ 
 }
+.middle-container {
+  position: relative;
+  display:flex;
+  width: 100%;
+  height: auto;
+}
+
 .middle-img{
   width: 100%;
-  height: 100%;
-  object-fit: contain;
+  height: auto;
+  object-fit: cover;
   display:flex;
 }
 .middle-img img {
@@ -25,47 +24,88 @@
   object-fit: contain;
   display:flex;   
 }
-.middle-box-container{
-  width: 100%;
+.middle-note{
+  width:60%;
+  height: 70%;
+  position: absolute;
+  z-index: 111;
+  margin-left: 5%;
+  top: 7%;
+}
+.middle-note-top{
+  width: 62%;
+  height: 50%;
+  z-index: 111;
+  font-size: 2rem;
+  display: flex;
+  justify-content:space-between;
+}
+.middle-note-top button.note {
+  color: black;  
+  background: transparent; 
+  border: none;  
+  font-size: inherit;  
+  cursor: pointer; 
+  z-index: 11;
   height: 20%;
-  position: absolute;
-  top:3%;
 }
-.img-container{
+.ice{
+  font-family: "Gmarket Sans";
+  font-size: 55px;
+  font-style: normal;
+  font-weight: bold;
+}
+.note{
+  margin-top: 3%;
+}
+.middle-note-middle{
   position: absolute;
   width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content:space-around;
-  z-index: 1;
+  height: 10%;
+  top: 12%;
 }
-.skill{
-  margin-top: 30px;
-  width: 18%;
+.vector{  
+  width:63%;
+}
+.middle-note-bottom{
+  position: absolute;
+  width: 100%;
   height: 80%;
+  top: 20%;
+}
+.Text{
+  width: 63%;
+  height: 30%;
   background-color: white;
-  display: flex;
-  align-items: center;
-  border-radius: 10px;
-  padding: 4px;
-  background-position: center; 
+  border-radius: 20px;
+  margin-bottom: 5px;
 }
-.skill img{
-  margin-top: 8px;
-  width: 50%;
-} 
-.skill:first-child {
-  margin-left: 250px; 
+
+.inner{
+  width: 100%;
+  height: auto;
+  position: relative;
+  display:flex;   
+ 
 }
-.skill:last-child {
-  margin-right: 250px;  
+.middle-container {
+  position: relative;
+  display:flex;
+  width: 100%;
+  height: auto;
 }
-.skill p{
-  font-weight: bold;
-  font-size: 17px;
-  margin-top: 10px;
-  font-style: normal;
-  color: #000;
+
+.middle-img{
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  display:flex;
+}
+.middle-img img {
+  width: 100%; 
+  height: 100%;
+  object-fit: contain;
+  display:flex;   
 }
 .middle-note{
   width:60%;

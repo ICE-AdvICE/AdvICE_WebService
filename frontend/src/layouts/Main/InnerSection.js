@@ -15,7 +15,6 @@ const InnerSection = () => {
         const response = await getArticleListRequest();
         const { articleList } = response;
         const sortedArticles = articleList.sort((a, b) => new Date(b.articleDate) - new Date(a.articleDate));
-
         const topPosts = sortedArticles.slice(0, 4).map(article => ({
           articleNum: article.articleNum,
           articleTitle: article.articleTitle
@@ -59,7 +58,6 @@ const InnerSection = () => {
         </div>
       </div>
     </section>
-
   );
 }
 

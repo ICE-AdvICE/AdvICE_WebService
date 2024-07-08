@@ -383,4 +383,56 @@ export const deleteUserRequest = async (accessToken) => {
         if (!error.response || !error.response.data) return { code: "UN", message: "예상치 못한 오류가 발생했습니다." };
         return error.response.data;
     }
+}
+
+//9.(Admin)댓글 수정 API
+export const handleCommentEdit = async (commentNumber, newContent, token) => {
+    const commentData = {
+        content: newContent
+    };
+    try {
+        const response = await axios.patch(`http://localhost:4000/api/v1/article/comment/${commentNumber}`, commentData, {
+            headers: { Authorization: `Bearer ${token}` }
+        });
+        return response.data;
+    } catch (err) {
+        console.error("Error editing comment:", err);
+        throw err;
+    }
+};
+//10.(Admin)댓글 삭제 API
+export const handleCommentDelete = async (articleNum, commentNumber, token) => {
+    if (window.confirm("정말로 게시글을 삭제하시겠습니까?")) {
+        try {
+            const response = await axios.delete(`http://localhost:4000/api/v1/article/comment/${commentNumber}`, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            if (response.data.code === "SU") {
+                alert("게시글이 삭제되었습니다.");
+                return true;  
+            }
+        } catch (error) {
+            if (error.response) {
+                switch (error.response.data.code) {
+                    case "NU":
+                        alert("This user does not exist.");
+                        break;
+                    case "VF":
+                        alert("Validation failed.");
+                        break;
+                    case "NP":
+                        alert("Do not have permission.");
+                        break;
+                    case "DBE":
+                        alert("Database error.");
+                        break;
+                    default:
+                        alert("An unexpected error occurred.");
+                        break;
+                }
+            }
+            return false;  
+        }
+    }
+    return false;  
 };

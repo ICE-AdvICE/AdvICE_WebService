@@ -1,22 +1,29 @@
+.button-container{
+    width: 10%;
+    height: 10%;
+    position: absolute;
+    top:82%;
+    left:90%;
+}
 .mb-3{
     margin-top: 1%;
 }
 
 .esbutton{
-    border-radius: 10px;
-    background-color: white;
-    margin-top: 1%;
-    
-     
-     
+    border:1px,solid;
+    color: white;
+    background-color: #002D56;
+    left:90%;
+    padding: 10px 20px;
+    margin-right: 5px
+
     
 }
 .cancel{
-    border-radius: 10px;
-    background-color: white;
-    margin-left: 5px;
-   
- 
+    border:1px,solid;
+    color:white;
+    background-color: #002D56;
+    padding: 10px 20px;
 }
 .blog-radius{
     margin-top: 1%;
@@ -27,9 +34,4 @@
     border-radius: 12px;
     border-color: #eee;
     margin-left: 15%;
-}
-.button-container{
-    width: 100%;
-    height: 10%;
-    right: 10%;
 }

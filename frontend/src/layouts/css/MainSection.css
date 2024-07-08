@@ -1,22 +1,25 @@
 .main{
-  width: 1515px;
-  height: 460px;
+  width: 100%;
+  height: auto;
   position: relative;
   display:flex;
-  max-width: 1515px;
   margin: 0 auto;  
 }
 .main-container {
   width: 100%;
-  height: 460px;
-  position: absolute;
+  height: auto;
+  position: relative;
   display:flex;
+}
+.main-img{
+  width: 100%;
+  height: auto;
 }
 .top-image {
   width: 100%; 
-  object-fit: contain;  
+  object-fit: cover;  
   height: auto;  
-  max-height: 600px;  
+   
 }
 .box-container {
   position: absolute;
@@ -25,8 +28,8 @@
   justify-content: center;
   align-items: center;
   overflow: hidden;
-  height: 100%;
-  width: 50%;
+  height: 30vw;
+  width: 50vw;
   font-family: "Roboto", sans-serif;
   transition: 0.25s;
   z-index: 10;
@@ -44,8 +47,8 @@
   flex-direction: row;
   align-items: stretch;
   overflow: hidden;
-  min-width: 400px;
-  max-width: 550px;
+  max-height: 26vw;
+  max-width: 38vw;
   width: calc(100% - 100px);
   height: 400px;
 }
@@ -117,9 +120,10 @@
   flex-grow: 10000;
   transform: scale(1);
   max-width: 600px;
+  max-width: 400px;
   margin: 0px;
   border-radius: 40px;
-  background-size: auto 100%;
+  background-size: auto auto;
 }
 .box-container .option.active .shadow {
   box-shadow: inset 0 -120px 120px -120px black, inset 0 -120px 120px -100px black;

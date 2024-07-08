@@ -90,9 +90,11 @@
 }
 .quill{
     height: 40%;
+    
+    
 }
-.button-container{
-    width: 100%;
-    height: 10%;
-    margin-top: 50px;
+
+.ql-container {
+    font-family: 'Noto Sans', sans-serif;
 }
+  

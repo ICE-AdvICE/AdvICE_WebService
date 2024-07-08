@@ -21,14 +21,14 @@ const MainSection = () => {
   };
   
   if (isLoading) {
-    return <div>Loading...</div>; // 로딩 중일 때 보여줄 화면
+    return <div>Loading...</div>; 
   }
 
   return (
     <section className="main">
       <div className="main-container">
         <div className="main-img" justify-content-center>
-          <img src="header-img.PNG" alt="메인 콘텐츠 이미지" className="top-image" /> 
+          <img src="header-img.PNG"  className="top-image" /> 
           <div className="box-container">
             <div className="options">
               {options.map((option) => (
@@ -49,7 +49,7 @@ const MainSection = () => {
                           </div>
                         </div>
                       </div>
-                    ))}
+              ))}
             </div>   
           </div>
         </div>
