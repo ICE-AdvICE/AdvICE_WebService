@@ -1,6 +1,6 @@
 import React, { useState,useEffect } from 'react';
 import { useCookies } from 'react-cookie';
-import { getMypageRequest,updateMypageUserRequest } from '../apis/index.js';
+import { getMypageRequest,updateMypageUserRequest,deleteUserRequest } from '../apis/index.js';
 import MyModal from '../MyModal'; // 모달 컴포넌트 추가
 import FindpasswordForm from '../Modals/findpassword';
 import './modules.css';
@@ -43,6 +43,30 @@ const MypageForm = ({ handleLogout }) => {
         fetchUserDetails();
     }, [token]); // token이 변경될 때마다 실행
 
+    const handleDeleteAccount = async () => {
+        if (window.confirm("정말로 계정을 삭제하시겠습니까?")) {
+            const result = await deleteUserRequest(token);
+            switch (result.code) {
+                case "SU":
+                    alert("계정이 성공적으로 삭제되었습니다.");
+                    handleLogout(); // 로그아웃 처리 후 로그인 페이지로 리다이렉트한다고 가정
+                    break;
+                case "NU":
+                    alert("해당 사용자가 존재하지 않습니다.");
+                    break;
+                case "VF":
+                    alert("유효성 검증에 실패했습니다.");
+                    break;
+                case "DBE":
+                    alert("데이터베이스 오류가 발생했습니다.");
+                    break;
+                default:
+                    alert("알 수 없는 오류가 발생했습니다.");
+                    break;
+            }
+        }
+    };
+
     const handleUpdateUserDetails = async () => {
         const result = await updateMypageUserRequest(userDetails, token);
         if (result.code === "SU") {
@@ -58,6 +82,10 @@ const MypageForm = ({ handleLogout }) => {
         setModalOpenfind(true); // 회원가입 정보 모달 열기
       };
       
+    const handleNumberInput = (e) => {
+        const value = e.target.value;
+        setUserDetails({...userDetails, studentNum: value.replace(/[^0-9]/g, '')});
+    };
 
     return (
         <form onSubmit={(e) => e.preventDefault()}>
@@ -77,14 +105,15 @@ const MypageForm = ({ handleLogout }) => {
             <button type="button" onClick={() => setEditMode(true)}>정보 수정</button>
                 <button type="button" onClick={handleLogout}>로그아웃</button>
             </div>
+            <button className="delete_user" onClick={handleDeleteAccount}>회원탈퇴</button>
             {editMode && (
                 <MyModal open={editMode} onCancel={() => setEditMode(false)} footer={[]}>
                     <div>
                         <label>이름:</label>
                         <input type="text" value={userDetails.name} onChange={(e) => setUserDetails({...userDetails, name: e.target.value})} />
                         <label>학번:</label>
-                        <input type="text" value={userDetails.studentNum} onChange={(e) => setUserDetails({...userDetails, studentNum: e.target.value})} />
-                        <button type="button" className="mypage_update-button" onClick={handleUpdateUserDetails}>수정 완료</button>
+                        <input type="text" value={userDetails.studentNum} onChange={handleNumberInput} />
+                        <button type="button" className="mypage_update-button" onClick={handleUpdateUserDetails}>수정 완료</button> 
                     </div>
                 </MyModal>
                 

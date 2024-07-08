@@ -15,9 +15,16 @@ const SignUpinfoForm = ({ onSignUpForm }) => {
   const [userEmail, setUserEmail] = useState('');
   const [userReenteredPassword, setUserReenteredPassword] = useState(''); // 비밀번호 재입력을 위한 새로운 상태
   const [isCertified, setIsCertified] = useState(false); // 이메일 인증 여부를 확인하는 상태 추가
+  const [isModalOpen, setIsModalOpen] = useState(true);
   const [error, setError] = useState(false); // 에러 상태 추가
   const navigator = useNavigate();
   const [cookies, setCookie] = useCookies(['accessToken']); //데베에 있는 데이터 호출 시 사용 예정
+
+
+  const onCloseModal = () => {
+    setIsModalOpen(false);  // 모달 창 닫기
+  };
+
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -34,54 +41,63 @@ const SignUpinfoForm = ({ onSignUpForm }) => {
       return;
     }
     const requestBody = { email: userEmail, name: userName, studentNum: userStudentnum, password: userPassword };
-    signUpRequest(requestBody).then(response => {
-      if (response.code === 'SU') {
-        navigator('/'); // 성공적인 가입 후 홈페이지나 대시보드로 이동
-      } else {
-        console.error('회원가입 실패:', response);
-      }
-    });
+    signUpRequest(requestBody)
+      .then(response => signUpResponse(response))
+      .catch(error => {
+        console.error('회원가입 요청 중 오류 발생:', error);
+        alert('네트워크 이상입니다.');
+      });
   };
 
   const onCheckCertificationHandler = (e) => {
     e.preventDefault();
     const requestBody = { email: userEmail, certificationNumber: userCertificationNumber };
-    checkCertificationRequest(requestBody).then(response => {
-      if (response.code === 'SU') {
-        setIsCertified(true);
-        alert('인증이 완료되었습니다.');
-      } else {
-        alert('인증번호가 잘못되었습니다.');
-      }
-    });
+    checkCertificationRequest(requestBody)
+      .then(response => checkCertificationResponse(response))
+      .catch(error => {
+        console.error('인증 확인 요청 중 오류 발생:', error);
+        alert('네트워크 이상입니다.');
+      });
   };
 
   const onEmailCertificationHandler = (e) => {
     e.preventDefault();
     const requestBody = { email: userEmail };
-    emailCertificationRequest(requestBody).then(response => {
-      if (response.code === 'SU') {
-        alert('인증번호가 전송되었습니다.');
-      } else {
-        alert('이메일 전송 실패');
-      }
-    });
+    emailCertificationRequest(requestBody)
+      .then(response => emailCertificationResponse(response))
+      .catch(error => {
+        console.error('이메일 인증 요청 중 오류 발생:', error);
+        alert('네트워크 이상입니다.');
+      });
   };
 
-  const signUpResponse = (responseBody) => {
-    if (!responseBody) { //예상하지못한 error를 처리 함수
-      alert('네트워크 이상입니다.');
-      return;
-    }
-    const { code } = responseBody; //정상 응답 또는 예상한 error 반환 함수
-    //alert(code);
-    if (code === 'DBE') alert('데이터베이스 오류입니다.');
-    else if (code === 'SF' || code === 'VF') setError(true);
-    else if (code !== 'SU') 
-      return;
-    navigator('/'); //리다이렉션 역할을 하며 로그인후 노출될 페이지의 경로를 지정해야함
+const signUpResponse = (responseBody) => {
+  if (!responseBody) {
+    alert('네트워크 이상입니다.');
+    return;
   }
-  // 폼 제출 핸들러
+  const { code } = responseBody;
+
+  switch (code) {
+    case 'SU':
+      alert('회원가입이 성공적으로 완료되었습니다.');
+      onCloseModal();  // 모달 창 닫기
+      navigator('/');  // 사용자를 홈페이지로 리다이렉션
+      return; // 함수 종료를 확실하게 함
+    case 'DBE':
+      alert('데이터베이스 오류입니다.');
+      break;
+    case 'SF':
+    case 'VF':
+      setError(true);
+      alert('서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
+      break;
+    default:
+      alert('회원가입에 실패했습니다. 다시 시도해주세요.');
+      break;
+  }
+};
+    
 
   const emailCertificationResponse= (responseBody) => { //이메일 인증
     if (!responseBody) { //예상하지못한 error를 처리 함수
@@ -92,7 +108,7 @@ const SignUpinfoForm = ({ onSignUpForm }) => {
     //alert(code);
     if (code === 'DE') alert('이미 회원가입된 이메일 입니다');
     else if (code === 'MF') alert('이메일 전송 실패');
-    else if (code === 'DBE') alert('데이터베이스 오류');
+    else if (code === 'DBE') alert('데이터베이스 오류임');
     else if (code === 'SF' || code === 'VF') setError(true);
     else if (code !== 'SU');
     else if(code === 'SU') alert('인증번호가 전송이 되었습니다.');
@@ -111,11 +127,14 @@ const SignUpinfoForm = ({ onSignUpForm }) => {
     if (code === 'DBE');
     else if (code === 'VF') alert('인증번호가 잘못되었음요.');
     else if (code !== 'SU');
-    else if(code === 'SU') alert('인증이 완료 되었습니다.');
+    else if(code === 'SU') {
+      setIsCertified(true); 
+      alert('인증이 완료 되었습니다.');
+    }
       return;
     navigator('/'); //리다이렉션 역할을 하며 로그인후 노출될 페이지의 경로를 지정해야함
   }
- 
+
   
   return (
    

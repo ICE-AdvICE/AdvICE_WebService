@@ -12,6 +12,10 @@ const Email_Certification_URL = () => `${API_DOMAIN}/auth/email-certification`; 
 const Check_Certification_URL = () => `${API_DOMAIN}/auth/check-certification`; //인증번호 인증
 const GET_MYPAGE_USER_URL = () => `${API_DOMAIN}/user`; //마이페이지_개인정보 
 const PATCH_MYPAGE_USER_URL=() =>`${API_DOMAIN}/user`; //마이페이지_개인정보 수정
+const POST_PW_CHANGE_URL =() => `${API_DOMAIN}/auth/password-change/email-certification`;
+const PATCH_PW_URL=() =>`${API_DOMAIN}/user/password`;
+
+const DELETE_USER =()=> `${API_DOMAIN}/user`; //회원탈퇴 
 
 const GET_SIGN_IN_USER_URL =() =>`${API_DOMAIN}/user`;
 const authorization = (accessToken) => {
@@ -20,8 +24,6 @@ const authorization = (accessToken) => {
 
 const COMMENT_WRITE = (articleNum) => `${API_DOMAIN}/article/${articleNum}/comment`;
 const EDIT_ARTICLE = (articleNum) => `${API_DOMAIN}/article/${articleNum}`;
- 
- 
 //1. 게시물 작성 API
 export const createArticleRequest = async (postData, accessToken) => {
     try {
@@ -328,3 +330,57 @@ export const checkArticleOwnership = async (articleNum, token) => {
     }
 };
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+export const pwRequest = async (requestBody) => {
+    
+    const result = await axios.post(POST_PW_CHANGE_URL(), requestBody) //await은 요청의 응답이 돌아올 떄 까지 함수 실행을 멈추는 역할 한다(asyns함수 안에서만 사용가능)
+    .then(response => {
+
+        const responseBody = response.data;// responseBody의 key값들이: code, message, token, expirationTime
+        
+        return responseBody;
+    })
+    .catch(error => {
+        if (!error.response || !error.response.data) return null; //예상하지못한 error를 0으로 반환
+        const responseBody = error.response.data;                 //예상했던 error를 code와message로 반환
+        return responseBody;
+    });
+return result;
+
+};
+
+export const pwUpdateRequest = async (userData, accessToken) => { //MyPage 정보수정
+    try {
+        const response = await axios.patch(PATCH_PW_URL(), userData, {
+            headers: { Authorization: `Bearer ${accessToken}` }
+        });
+        return response.data;
+    } catch (error) {
+        if (!error.response || !error.response.data) return { code: "UN", message: "Unexpected error occurred." };
+        return error.response.data;
+    }
+};
+
+export const deleteUserRequest = async (accessToken) => {
+    try {
+        const response = await axios.delete(DELETE_USER(), {
+            headers: { Authorization: `Bearer ${accessToken}` }
+        });
+        return response.data;
+    } catch (error) {
+        if (!error.response || !error.response.data) return { code: "UN", message: "예상치 못한 오류가 발생했습니다." };
+        return error.response.data;
+    }
+};

@@ -10,6 +10,14 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class PatchUserPassRequestDto {
+
     @NotBlank
     private String password;
+
+    @NotBlank
+    private String email;
+
+    public void setEmail(String email) {
+        this.email = email + "@hufs.ac.kr";
+    }
 }
