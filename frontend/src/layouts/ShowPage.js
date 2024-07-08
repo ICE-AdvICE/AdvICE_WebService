@@ -5,11 +5,14 @@ import { useCookies } from "react-cookie";
 import ToastViewer from './ToastViewer.js';  
 import './css/ShowPage.css';
 import moment from 'moment';
-import {handleEdit as handleEditArticle ,getMypageRequest,fetchComments,handleDelete,handleCommentSubmit ,checkArticleOwnership} from '../apis/index.js';
+import {handleCommentEdit,handleCommentDelete,handleEdit as handleEditArticle ,getMypageRequest,fetchComments,handleDelete,handleCommentSubmit ,checkArticleOwnership} from '../apis/index.js';
  
  
 const ShowPage = () => {
     const [isComposing, setIsComposing] = useState(false);
+    const [editingCommentId, setEditingCommentId] = useState(null);
+    const [editCommentInput, setEditCommentInput] = useState("");
+
     const { articleNum } = useParams();
     const [article, setArticle] = useState(null);
     const [likes, setLikes] = useState(0);
@@ -30,6 +33,18 @@ const ShowPage = () => {
         }
     };
 
+    const handleDeleteComment = async (commentNumber) => {
+        try {
+            const success = await handleCommentDelete(articleNum,commentNumber, token);
+            if (success) {
+                fetchComments(articleNum,token, setComments);  
+            }
+        } catch (err) {
+            console.error("Error during comment deletion:", err);
+        }
+    };
+    
+    
     const [userDetails, setUserDetails] = useState({
         email: '',
         studentNum: '',
@@ -50,6 +65,7 @@ const ShowPage = () => {
     };
     
 
+    
 
 //좋아요 관련 코드
     const getlikestatus = () => {
@@ -128,12 +144,7 @@ const ShowPage = () => {
     const handleCommentChange = (event) => {
         setCommentInput(event.target.value);
     };
-    const handleKeyDown = (event) => {
-        if (event.key === 'Enter' && !event.shiftKey && !isComposing) {
-            event.preventDefault();
-            handleCommentSubmit(event, commentInput, setComments, setCommentInput, userEmail, articleNum, token);
-        }
-    };
+   
    
     useEffect(() => {
         const fetchUserDetails = async () => {
@@ -163,9 +174,9 @@ const ShowPage = () => {
             checkArticleOwnership(articleNum, token).then(data => {
                 console.log(data.code);
                 if (data.code === "SU") {
-                    setCanEdit(true); // 소유 여부 확인 성공
+                    setCanEdit(true);  
                 } else {
-                    setCanEdit(false); // 소유하지 않음
+                    setCanEdit(false);  
                 }
             }).catch(error => {
                 console.error('Failed to verify article ownership:', error);
@@ -173,6 +184,27 @@ const ShowPage = () => {
         }
     }, [articleNum, token]);
 
+    const handleSubmit = async () => {
+        try {
+            await handleCommentSubmit(commentInput, setComments, setCommentInput, userEmail, articleNum, token);
+        } catch (error) {
+            console.error('Error submitting comment:', error);
+        }
+    };
+    
+    const handleKeyDown = async (event) => {
+        if (event.key === 'Enter' && !event.shiftKey && !isComposing) {
+            event.preventDefault();
+            try {
+                await handleCommentSubmit(commentInput, setComments, setCommentInput, userEmail, articleNum, token);
+            } catch (error) {
+                console.error('Error submitting comment:', error);
+            }
+        }
+    };
+    
+    
+    
     useEffect(() => {
         if (articleNum) {
             axios.get(`http://localhost:4000/api/v1/article/${articleNum}`)  
@@ -206,7 +238,7 @@ const ShowPage = () => {
     const handleEdit = async () => {
         if (!article) {
             console.error("Article data is not loaded yet.");
-            return; // 로드되지 않았다면 함수 실행 중지
+            return;  
         }
         try {
             await  handleEditArticle(articleNum, token, navigate, setCanEdit, article);
@@ -225,9 +257,7 @@ const ShowPage = () => {
             <div className = "img-container">
                 <img src="/main-image.png" className="header2-image"/>
                 <img src="/mainword-image.png"   className="words-image"/>
-
             </div>
-            
             <div className = "ArticleContentbox-container">
                 <div className="ArticleContentbox">
                     <img src="/main2-image.png"  className="header10-image"/>
@@ -241,7 +271,7 @@ const ShowPage = () => {
                         </div>
                         <div className="ArticleDate">
                             <p>{formatDate(article.articleDate)}</p>
-                            <p>조회수: {article.views}</p>
+                            <p>조회수 {article.views}</p>
                         </div>
                         <div className="Article-Main">
                             <img src="/vector2.png" className="vector5"/>
@@ -265,11 +295,20 @@ const ShowPage = () => {
                                     <div key={index}>
                                         <div className="Comment">
                                             <div className="Comment-Header">
-                                                <p className="Comment-Author">운영자{comment.commentNumber}</p>
+                                                <p className="Comment-Author">운영자</p>
                                                 <p className="Comment-Date">{CommentDate(comment.writeDatetime)}</p>
+                                                {userDetails.email === 'jinwoo1234@naver.com' && (
+                                                <div className = "Admin-de_Ca-bottom">
+                                                    <button onClick={() => handleDeleteComment(comment.commentNumber)}>삭제</button>
+                                                    <button onClick={() => { setEditingCommentId(comment.commentNumber); setEditCommentInput(comment.content); }}>수정</button>
+                                                </div>
+
+                                                )}
                                                
                                             </div>  
                                             <p className="Comment-Content">{comment.content}</p>
+                                            
+                                            
                                         </div>
                                     {index < comments.length - 1 && <hr className="Comment-Divider" />}
                                     </div>
@@ -288,7 +327,9 @@ const ShowPage = () => {
                                             rows="3"
                                             style={{ width: '100%' }}
                                         />
-
+                                          <button className="submit-button" onClick={handleSubmit}>등록</button>
+                                          
+                            
                                     </div>
                             )}
                             </div>          

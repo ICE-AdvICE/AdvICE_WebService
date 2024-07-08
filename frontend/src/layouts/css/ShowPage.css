@@ -1,11 +1,15 @@
 .blog-container{
   width: 100%;
-  height: 100%;
+  height: auto;
   position: relative;
 }
-
-.comment-input-area{
-  margin-top: 12px;
+.ArticleContentbox-container{
+  position: relative;
+  height: auto;
+}
+.ArticleContentbox{
+  width: 100%;
+  height: auto;
 }
 .header10-image{
   width:100%;
@@ -13,11 +17,130 @@
   position: relative;
   margin-top: 10px;
 }  
+.icon-image{
+  position: absolute;
+  width: 50%;
+  height: 50%;
+  left: 27%;
+  top:11%;
+  z-index: 11;
+}
+.Admin-de_Ca-bottom{
+  width: 12%;
+  align-items: center;
+  text-align: center;
+  display: flex;
+
+}
+.Admin-de_Ca-bottom button{
+  margin-left: 10%;
+  width: 30%;
+  height: 30%;
+  border: none !important;
+  font-size: 13px;
+  background: transparent;
+  cursor: pointer;
+  margin-bottom: 8%;
+   
+}
+/*카테고리 일반 or 요청*/
+.ArticleCategory {
+  background-color: black;  
+  color: white;                
+  border-radius: 5px;       
+  position: absolute;
+  top:6%;
+  left: 14%;
+  width: 6.7vw;
+  display: flex;            
+  align-items: center;      
+  justify-content: center;  
+  z-index: 11;           
+}
+.ArticleCategory p {
+  font-family: 'Inter', sans-serif;  
+  font-weight: 700;  
+  font-size: 2vw;  
+  margin-top: 2px;    
+  margin-bottom: 0;  
+}
+
+/*제목*/
+.ArticleTitle{
+  margin-bottom: 35px;
+  z-index:11;
+  position: absolute;
+  top:10%;
+  left: 14%;
+  font-family: 'Inter', sans-serif;  
+  font-size: 3vw;  
+  font-weight: 700;
+}
+
+/*날짜*/
+.ArticleDate {
+  margin-bottom: 5px;
+  font-weight: 900;
+  display: flex;   
+  left: 14%;
+  top:15%;
+  width: 70%;
+  position: absolute;      
+  justify-content: space-between;  
+  align-items: center;   
+  font-family: 'Inter', sans-serif; 
+  font-size: 20px; 
+  color: #00000093;
+}
+
+.Article-Main{
+  position: absolute;
+  height: auto;
+  width: 70%;
+  top: 18.5%;
+  margin-bottom: 30px;
+  left: 14%;
+}
+
+/*선*/
+.vector5 {
+  width: 100%;
+  height: 1px;
+  border: 1px solid #000000;  
+}
+
+.Article-middle{
+  display: flex;  
+  width: 12%;
+  height: auto;
+  position: relative;
+  justify-content: space-between; 
+}
+/*수정,삭제 버튼 */
+
+.Edit-Delete-Options {
+  width: 90%;
+  position: relative;
+  z-index: 111;
+  left: 2%;
+  display: flex;  
+  margin-bottom: 4%;
+  justify-content: space-around; 
+}
+.Edit-Delete-Options button {
+  border: none !important;
+  background: transparent;
+  cursor: pointer;
+}
+.comment-input-area{
+  margin-top: 12px;
+  padding-left: 2%;
+  padding-top: 4%;
+}
+
 .Commentbox-name{
   display: flex;
   align-items: center;
-  
- 
 }
 
 .Commentbox-name h3 {
@@ -29,122 +152,24 @@
 }
 
 .Commentbox-name button {
-  line-height: normal; /* 버튼의 기본 line-height로 재설정 */
-  padding: 0 15px; /* 버튼의 패딩 조정 */
+  line-height: normal;  
+  padding: 0 15px;  
 }
 
-.ArticleContentbox-container{
-  position: relative;
-  height: auto;
-}
 
 .Comment-Content{
-  margin-left: 5px;
+  margin-left: 2%;
   height: auto;
   white-space: pre-line;
 }
 .Comment-Header{
   margin-bottom: 0;
   margin-top: 2%;
-}
-
-.ArticleContentbox{
-  width: 100%;
-  height: auto;
-  border-radius: 6px;
-
-}
-
-.ArticleDate {
-  margin-bottom: 5px;
-  display: flex;   
-  width: 69%;
-  left: 13%;
-  top:17%;
-  position: absolute;      
-  justify-content: space-between;  
-  align-items: center;   
-}
-/*카테고리 일반 or 요청*/
-.ArticleCategory {
-  background-color: black;  
-  color: white;                
-  border-radius: 5px;       
-  position: absolute;
-  top:5%;
-  left: 14%;
-  width: 78px;
-  display: flex;            
-  align-items: center;      
-  justify-content: center;  
-  z-index: 11;           
-}
-.ArticleCategory p {
-  font-family: 'Inter', sans-serif;  
-  font-weight: 700;  
-  font-size: 25px;  
-  margin-top: 2px;    
-  margin-bottom: 0;  
+  margin-left: 5px;
 }
 
 
-/*제목*/
-.ArticleTitle{
-  margin-bottom: 35px;
-  z-index:11;
-  position: absolute;
-  top:10%;
-  left: 14%;
-  font-family: 'Inter', sans-serif;  
-  font-size: 40px;  
-  font-weight: 700;
-}
 
-/*날짜*/
-.ArticleDate {
-  margin-bottom: 5px;
-  display: flex;   
-  left: 14%;
-  top:16.5%;
-  position: absolute;      
-  justify-content: space-between;  
-  align-items: center;   
-  font-family: 'Inter', sans-serif; 
-  font-size: 20px; 
-  color: #00000093;
-}
-/*선*/
-.vector5 {
-  width: 100%;
-  height: 1px;
-  border: 1px solid #000000; /* 테두리 두께와 색상 설정 */
- 
-}
-.icon-image{
-  position: absolute;
-  width: 50%;
-  height: 50%;
-  left: 27%;
-  top:10%;
-  z-index: 11;
-}
-
-
-.Article-Main{
-  position: absolute;
-  height: auto;
-  width: 70%;
-  top: 20%;
-  margin-bottom: 30px;
-  left: 14%;
-}
-.Article-middle{
-  display: flex;  
-  width: 87%;
-  height: auto;
-  position: relative;
-  justify-content: space-between; 
-}
 
 /*하트위치*/
 .Comment-Option{
@@ -154,7 +179,7 @@
   align-items: center;  
   width: 25%;
   flex-direction: row;
-  margin-left:20px;
+  margin-left:5px;
 }
 .Comment-Option p{
   margin-left: 12px;
@@ -162,41 +187,22 @@
 }
 
 /*댓글*/
-
 .CommentBox-container{
   z-index: 11;
   position: relative;
   width: 100%;
   height: auto;
-  margin-top: 2.5%;
-  margin-left: 2%;
-}
-
-
-
-
-.Edit-Delete-Options {
-  width: 10%;
-  position: relative;
-  z-index: 111;
-  left: 16%;
-  display: flex;  
-  justify-content: space-around; 
-}
-.Edit-Delete-Options button {
-  border: none !important;
-  background: transparent;
-  cursor: pointer;
+ 
 }
 
 
 
 .CommentBox-bottom{
+  position: relative;
   width: 100%;
-  height: 50px;
+  height: 10%;
   border: 2px solid var(--skinCommentWriterBorder);
   box-sizing: border-box;
-  border-radius: 6px;
   background: var(--skinCommentWriterBg);
 }
 
@@ -206,6 +212,7 @@
 .Comment-Divider {
   border-top: 2px solid black;
   margin: 10px 0;
+  width: 100%;
 }
 
 
@@ -268,4 +275,21 @@
   line-height: 29.05px;
 
 }
+.submit-button {
+  position: absolute;
+  bottom: 11px;  
+  right: 10px;  
+  padding: 5px 10px;
+  background-color:transparent;
+  color: rgba(0, 0, 0, 0.559);
+  border: none;
+}
 
+@media (max-width: 1200px) {
+  .ArticleContentbox-container{
+    width: 100%;
+  }
+  
+ 
+ 
+}

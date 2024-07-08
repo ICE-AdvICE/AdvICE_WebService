@@ -181,48 +181,46 @@ export const getArticleListRequest = async () => {
 };
 
 //(Admin)게시글 댓글 작성 API
-export const handleCommentSubmit = async (event, commentInput, setComments, setCommentInput, userEmail, articleNum, token) => {
-    if (event.key === 'Enter' && !event.shiftKey) {
-        event.preventDefault();
-        if (!commentInput.trim()) {
-            alert("댓글 내용을 입력해주세요.");
-            return;
-        }
-        const commentData = {
-            content: commentInput,
-            user_email: userEmail
-        };
-        try {
-            const response = await axios.post(COMMENT_WRITE(articleNum), commentData, {
-                headers: { Authorization: `Bearer ${token}` }
-            });
-            if (response.data.code === "SU") {
-                fetchComments(articleNum, token, setComments);
-                setCommentInput("");
-            } else {
-                switch (response.data.code) {
-                    case "NA":
-                        alert("This article does not exist.");
-                        break;
-                    case "NU":
-                        alert("This user does not exist.");
-                        break;
-                    case "VF":
-                        alert("Validation failed.");
-                        break;
-                    case "DBE":
-                        alert("Database error.");
-                        break;
-                    default:
-                        alert("An unexpected error occurred.");
-                        break;
-                }
+export const handleCommentSubmit = async (commentInput, setComments, setCommentInput, userEmail, articleNum, token) => {
+    if (!commentInput.trim()) {
+        alert("댓글 내용을 입력해주세요.");
+        return;
+    }
+    const commentData = {
+        content: commentInput,
+        user_email: userEmail
+    };
+    try {
+        const response = await axios.post(COMMENT_WRITE(articleNum), commentData, {
+            headers: { Authorization: `Bearer ${token}` }
+        });
+        if (response.data.code === "SU") {
+            fetchComments(articleNum, token, setComments);
+            setCommentInput("");
+        } else {
+            switch (response.data.code) {
+                case "NA":
+                    alert("This article does not exist.");
+                    break;
+                case "NU":
+                    alert("This user does not exist.");
+                    break;
+                case "VF":
+                    alert("Validation failed.");
+                    break;
+                case "DBE":
+                    alert("Database error.");
+                    break;
+                default:
+                    alert("An unexpected error occurred.");
+                    break;
             }
-        } catch (err) {
-            console.error("Error posting comment:", err);
         }
+    } catch (err) {
+        console.error("Error posting comment:", err);
     }
 };
+
 
 export const fetchComments = (articleNum, token, setComments) => {
     axios.get(`http://localhost:4000/api/v1/article/${articleNum}/comment-list`, {
@@ -231,6 +229,7 @@ export const fetchComments = (articleNum, token, setComments) => {
     })
     .then(response => {
         setComments(response.data.commentList.map(comment => ({
+            commentNumber: comment.commentNumber,
             writeDatetime: moment.utc(comment.writeDatetime).local().format('YYYY-MM-DD HH:mm:ss'), // UTC를 로컬로 변환
             content: comment.content,
             user_email: comment.user_email
@@ -328,3 +327,52 @@ export const checkArticleOwnership = async (articleNum, token) => {
     }
 };
 
+export const handleCommentEdit = async (commentNumber, newContent, token) => {
+    const commentData = {
+        content: newContent
+    };
+    try {
+        const response = await axios.patch(`http://localhost:4000/api/v1/article/comment/${commentNumber}`, commentData, {
+            headers: { Authorization: `Bearer ${token}` }
+        });
+        return response.data;
+    } catch (err) {
+        console.error("Error editing comment:", err);
+        throw err;
+    }
+};
+export const handleCommentDelete = async (articleNum, commentNumber, token) => {
+    if (window.confirm("정말로 게시글을 삭제하시겠습니까?")) {
+        try {
+            const response = await axios.delete(`http://localhost:4000/api/v1/article/comment/${commentNumber}`, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            if (response.data.code === "SU") {
+                alert("게시글이 삭제되었습니다.");
+                return true;  
+            }
+        } catch (error) {
+            if (error.response) {
+                switch (error.response.data.code) {
+                    case "NU":
+                        alert("This user does not exist.");
+                        break;
+                    case "VF":
+                        alert("Validation failed.");
+                        break;
+                    case "NP":
+                        alert("Do not have permission.");
+                        break;
+                    case "DBE":
+                        alert("Database error.");
+                        break;
+                    default:
+                        alert("An unexpected error occurred.");
+                        break;
+                }
+            }
+            return false;  
+        }
+    }
+    return false;  
+};

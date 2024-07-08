@@ -32,7 +32,6 @@ const ArticleMain = () => {
         email: '',
     });
     
-    
     //공지사항
     const categoryLabels = {
         NOTIFICATION: "공지",
@@ -44,8 +43,7 @@ const ArticleMain = () => {
         const general = articles.filter(article => article.category !== 'NOTIFICATION');
         setNotificationArticles(notifications);
         setGeneralArticles(general);
-    };
-    
+    }; 
     
     //검색 기능(33~52)
     const searchArticles = () => {
@@ -67,8 +65,6 @@ const ArticleMain = () => {
             searchArticles(); 
         }
     }, [searchCategory]);
- 
-
 
     useEffect(() => {
         const fetchUserDetails = async () => {
@@ -120,9 +116,6 @@ const ArticleMain = () => {
         setCurrentPage(1);
     };
     
-
-
-    //조회수 
     const incrementViews = async (articleNum, currentViews) => {
         const updatedViews = currentViews + 1;
         try {
@@ -135,7 +128,6 @@ const ArticleMain = () => {
             console.error("조회수 업데이트 중 오류 발생:", err);
         }
     };
-
     const handleCardClick = async (article) => {
         try {
             await incrementViews(article.articleNum, article.viewCount);
@@ -144,7 +136,6 @@ const ArticleMain = () => {
             console.error('조회수 업데이트 중 오류 발생:', err);
         }
     };
-
     const getArticleListResponse = (responseBody) => {
         if (!responseBody) {
             alert('네트워크 이상입니다.');
@@ -176,12 +167,10 @@ const ArticleMain = () => {
         };
         fetchArticles();
     }, []);
-
     useEffect(() => {
         filterArticles();  
         
     }, [selectedCategory, articlesState, userId, userEmail]); 
-    
     useEffect(() => {
         getArticleListRequest().then(getArticleListResponse);
     }, []);
@@ -192,29 +181,53 @@ const ArticleMain = () => {
             <div className = "img-container">
                 <img src="/main-image.png" className="header2-image"/>
                 <img src="/mainword-image.png"   className="words-image"/>
-
             </div>
             
             <div className="posts-overlay-container">
                 <img src="/main2-image.png"   className="header3-image"/>
-                
-                <div className="title">
-                    <p>순번</p> <p>카테고리</p> <p>제목</p><p>작성일</p> <p>조회</p><p>좋아요</p>
-                </div>
-                <div className='main-top'>
-                    <img src="vector2.png" className="vector2"/>
-                </div>
-                <div className='main-top2'>
-                    <img src="vector2.png" className="vector3"/>
-                </div>
-                <div className="category-dropdown">
-                    <select value={selectedCategory} onChange={handleCategoryChange}>
-                        {categories.map(category => (
-                            <option key={category.value} value={category.value}>
-                                {category.label}
-                            </option>
-                        ))}
+            
+                <div className = "bar-container">
+                    <div className="category-dropdown">
+                        <select value={selectedCategory} onChange={handleCategoryChange}>
+                            {categories.map(category => (
+                                <option key={category.value} value={category.value}>
+                                    {category.label}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                    <div className="search-bar">
+                    <select value={searchCategory} onChange={e => setSearchCategory(e.target.value)}>
+                        <option value="all">전체</option>
+                        <option value="title">제목</option>
+                        <option value="content">내용</option>
                     </select>
+                    <div className="input-container">
+                        <input
+                            type="text"
+                            value={searchTerm}
+                            onChange={e => setSearchTerm(e.target.value)}
+                        />
+                        <a href="#" onClick={(e) => {
+                            e.preventDefault();
+                            searchArticles();
+                        }}>
+                            <img className="search-icon" src="http://www.endlessicons.com/wp-content/uploads/2012/12/search-icon.png" alt="Search" />
+                        </a>
+                    </div>
+                </div>
+                </div>
+                
+                <div className = "title_vector-container">
+                    <div className="title">
+                        <p>순번</p> <p>카테고리</p> <p>제목</p><p>작성일</p> <p>조회</p><p>좋아요</p>
+                    </div>
+                    <div className='main-top'>
+                        <img src="vector2.png" className="vector2"/>
+                    </div>
+                    <div className='main-top2'>
+                        <img src="vector2.png" className="vector2"/>
+                    </div>
                 </div>
                 <div className="posts-content">
                     <div className="Notification-container">
@@ -263,29 +276,7 @@ const ArticleMain = () => {
                 </div>
 
                 </div>
-
-                <div className="search-bar">
-                    <select value={searchCategory} onChange={e => setSearchCategory(e.target.value)}>
-                        <option value="all">전체</option>
-                        <option value="title">제목</option>
-                        <option value="content">내용</option>
-                    </select>
-                    <div className="input-container">
-                        <input
-                            type="text"
-                            value={searchTerm}
-                            onChange={e => setSearchTerm(e.target.value)}
-                        />
-                        <a href="#" onClick={(e) => {
-                            e.preventDefault();
-                            searchArticles();
-                        }}>
-                            <img className="search-icon" src="http://www.endlessicons.com/wp-content/uploads/2012/12/search-icon.png" alt="Search" />
-                        </a>
-                    </div>
-                </div>
-
-                <div>
+                <div className= "pagination-container">
                     <Pagination paginate={paginate} currentPage={currentPage} totalPages={totalPages} />
                 </div>
                 <Link to="/article-main/create" className="btn1">
