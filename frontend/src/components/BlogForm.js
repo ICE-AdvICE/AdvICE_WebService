@@ -148,7 +148,7 @@ const BlogForm = ({ editing }) => {
                         <li onClick={() => handleCategoryChange('', '카테고리 선택')}>카테고리 선택</li>
                         <li onClick={() => handleCategoryChange('REQUEST', '요청')}>요청</li>
                         <li onClick={() => handleCategoryChange('GENERAL', '일반')}>일반</li>
-                        <li onClick={() => handleCategoryChange('NOTIFICATION', '공지')}>공지</li>
+                        
                     </ul>
                 </div>
             </div>
