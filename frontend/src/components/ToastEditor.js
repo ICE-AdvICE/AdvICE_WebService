@@ -28,6 +28,7 @@ const QuillEditor = () => {
     return {
       toolbar: {
         container: [
+          
           [{ size: ['small', false, 'large', 'huge'] }],
           [{ align: [] }],
           ['bold', 'italic', 'underline', 'strike'],
