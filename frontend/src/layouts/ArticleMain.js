@@ -185,7 +185,7 @@ const ArticleMain = () => {
             
             <div className="posts-overlay-container">
                 <img src="/main2-image.png"   className="header3-image"/>
-            
+                <img src="/main2-icon.png"  className="article-icon-image"/>
                 <div className = "bar-container">
                     <div className="category-dropdown">
                         <select value={selectedCategory} onChange={handleCategoryChange}>
@@ -207,6 +207,7 @@ const ArticleMain = () => {
                             type="text"
                             value={searchTerm}
                             onChange={e => setSearchTerm(e.target.value)}
+                            placeholder='search'
                         />
                         <a href="#" onClick={(e) => {
                             e.preventDefault();
@@ -220,7 +221,7 @@ const ArticleMain = () => {
                 
                 <div className = "title_vector-container">
                     <div className="title">
-                        <p>순번</p> <p>카테고리</p> <p>제목</p><p>작성일</p> <p>조회</p><p>좋아요</p>
+                        <p>카테고리</p> <p>제목</p><p>작성일</p> <p>조회</p><p>좋아요</p>
                     </div>
                     <div className='main-top'>
                         <img src="vector2.png" className="vector2"/>

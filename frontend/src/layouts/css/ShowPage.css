@@ -15,7 +15,7 @@
   width:100%;
   height: 100%;
   position: relative;
-  margin-top: 10px;
+ 
 }  
 .icon-image{
   position: absolute;
@@ -111,7 +111,7 @@
 
 .Article-middle{
   display: flex;  
-  width: 12%;
+  width: 100%;
   height: auto;
   position: relative;
   justify-content: space-between; 
@@ -119,10 +119,9 @@
 /*수정,삭제 버튼 */
 
 .Edit-Delete-Options {
-  width: 90%;
+  width: 8%;
   position: relative;
   z-index: 111;
-  left: 2%;
   display: flex;  
   margin-bottom: 4%;
   justify-content: space-around; 
@@ -244,6 +243,7 @@
   background-color: #d5d4d4;  
   position: relative;
   transform: rotate(-45deg);  
+  cursor: pointer;
 }
 .heart:before, .heart:after {
   content: "";

@@ -88,24 +88,32 @@
 .vector2{
   position: absolute;
   width:98%;
+  height: 2%;
+
 }
 .main-top2{
   width: 65%;
-  height: 20%;
+  height: 100%;
   position: absolute;
   left: 18%;
   z-index: 111;
   top:65%;
 }
 
+.article-icon-image{
+  position: absolute;
+  width: 57%;
+  height: 57%;
+  left: 22%;
+  top:11%;
+  z-index: 2;
+}
 
-
-.title p:nth-child(1) { margin-left: 2.1%; } 
-.title p:nth-child(1) { margin-right: 1%; } 
-.title p:nth-child(2) { margin-right: 17%; }  
-.title p:nth-child(3) { margin-right: 22.3%; }  
-.title p:nth-child(4) { margin-right: 5%; } 
-.title p:nth-child(5) { margin-right: 1%; } 
+.title p:nth-child(1) { margin-left: 11.5%; } 
+.title p:nth-child(1) { margin-right: 17%; }  
+.title p:nth-child(2) { margin-right: 22.3%; }  
+.title p:nth-child(3) { margin-right: 5%; } 
+.title p:nth-child(4) { margin-right: 1%; } 
  
 
 .category-dropdown{
@@ -115,13 +123,16 @@
   width: 20%;
   border-radius: 0;
   height: 100%;
+  z-index: 11;
   
 }
+
 .category-dropdown select{
   width: 80%;
   text-align: center;
   height: 30%;
   border-radius: 0;
+  border-color: #D0D5DD;
 }
  /* search-bar */ 
  .search-bar{
@@ -136,11 +147,12 @@
 .search-bar select,
 .search-bar input
 {
+  
   height: 2.6vw;    
-  text-align-last: center; /* IE와 Firefox에서 작동 */
-  text-align: center; /* 다른 브라우저를 위한 설정 */
+  text-align: center; 
   width: 75px;
   border-radius: 0;
+  border-color: #D0D5DD;
 }
 .input-container {
   position: relative;
@@ -149,9 +161,16 @@
 
 input[type="text"] {
   width: 100%;
-  flex-grow: 1;  
+  background-color: white;   
+  box-shadow: none;          
+  border: 1px solid #D0D5DD;    
+  padding: 8%;
+  
 }
-
+input[type="text"]::placeholder {
+  color: rgba(128, 128, 128, 0.467);
+  text-align: left;  
+}
 .search-icon {
   position: absolute;
   right: 0%;
@@ -200,13 +219,15 @@ select {
 .card {
   display: flex;
   position: relative;
+  cursor: pointer;
   align-items: center;
   width: 100%;
   height: 55px;
   flex-direction: column;
   justify-content: center;  
-  border-radius: px;
+  background-color: rgba(255, 255, 255, 0.5);
   margin-bottom: 20px;
+  
 }
 .card-order { flex: 1; }  
 .card-category {flex: 1;}
