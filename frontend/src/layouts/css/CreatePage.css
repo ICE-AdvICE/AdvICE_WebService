@@ -1,9 +1,12 @@
 .button-container{
-    width: 10%;
+    width: 20%;
     height: 10%;
     position: absolute;
     top:82%;
-    left:90%;
+    right: 0;
+    margin-top: 1%;
+    
+    
 }
 .mb-3{
     margin-top: 1%;
@@ -11,19 +14,27 @@
 
 .esbutton{
     border:1px,solid;
-    color: white;
-    background-color: #002D56;
-    left:90%;
-    padding: 10px 20px;
-    margin-right: 5px
+    color: black;
+    background-color: white;
+    right: 0;
+    padding: 5px 20px;
+    margin-left: 40%;
+    margin-right: 1%;
 
-    
 }
 .cancel{
     border:1px,solid;
-    color:white;
+    color:black;
+    background-color: white;
+    padding: 5px 20px;
+}
+.esbutton:hover{
+    color: white;
     background-color: #002D56;
-    padding: 10px 20px;
+}
+.cancel:hover{
+    color: white;
+    background-color: #002D56;
 }
 .blog-radius{
     margin-top: 1%;
