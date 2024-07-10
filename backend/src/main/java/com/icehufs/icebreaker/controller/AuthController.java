@@ -1,6 +1,6 @@
 package com.icehufs.icebreaker.controller;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 
 import com.icehufs.icebreaker.dto.response.auth.*;
 import org.springframework.http.ResponseEntity;

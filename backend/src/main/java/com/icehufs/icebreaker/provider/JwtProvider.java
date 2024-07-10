@@ -1,6 +1,5 @@
 package com.icehufs.icebreaker.provider;
 
-import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -12,29 +11,39 @@ import org.springframework.stereotype.Component;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
+
 @Component
 public class JwtProvider {
 
-    @Value("${secret-key}")
-    private String secretKey;
+    private Key key; // 클래스 변수로 안전한 Key 저장
 
-    public String create(String email){  //메일을 받고 jwt를 만들기 위한 함수
-        Date expiredDate = Date.from(Instant.now().plus(1, ChronoUnit.HOURS)); //토큰 만료시간을 1시간으로 설정
+    public JwtProvider() {
+        // 생성자에서 안전한 키를 생성
+        this.key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+    }
 
-        String jwt = Jwts.builder() //본격적인 jwt(토큰) 생성코드
-                .signWith(SignatureAlgorithm.HS256, secretKey) //HS256 알고리즘과 secretKey를 사용하여 토큰에 서명
-                .setSubject(email).setIssuedAt(new Date()).setExpiration(expiredDate)
+    public String create(String email) {  
+        Date expiredDate = Date.from(Instant.now().plus(1, ChronoUnit.HOURS));
+
+        String jwt = Jwts.builder()
+                .signWith(key, SignatureAlgorithm.HS256)
+                .setSubject(email)
+                .setIssuedAt(new Date())
+                .setExpiration(expiredDate)
                 .compact();
         return jwt;
     }
 
-    public String validate(String jwt){ //secretKey를 확인을 통한 JWT 검증
+    public String validate(String jwt) { 
         Claims claims = null;
 
-        try{
-            claims = Jwts.parser().setSigningKey(secretKey) //secretKey를 사용하여 JWT를 파싱하고, 서명 검증을 수행
-                    .parseClaimsJws(jwt).getBody(); //검증이 성공하면 JWT의 본문(body)을 claims 객체에 저장
-        } catch (Exception exception){
+        try {
+            claims = Jwts.parserBuilder()
+                    .setSigningKey(key)
+                    .build()
+                    .parseClaimsJws(jwt).getBody();
+        } catch (Exception exception) {
             exception.printStackTrace();
             return null;
         }
@@ -43,8 +52,9 @@ public class JwtProvider {
     }
 
     public String extractEmail(String token) {
-        Claims claims = Jwts.parser()
-                .setSigningKey(secretKey)
+        Claims claims = Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
                 .parseClaimsJws(token)
                 .getBody();
         return claims.getSubject();

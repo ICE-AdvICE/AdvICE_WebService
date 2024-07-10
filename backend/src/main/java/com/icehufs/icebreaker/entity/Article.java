@@ -5,14 +5,14 @@ import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.Date;
 
-import javax.persistence.Column; //최근 버전에서는 import jakarta.persistence.~
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import jakarta.persistence.Column; //최근 버전에서는 import jakarta.persistence.~
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 import com.icehufs.icebreaker.dto.request.article.PatchArticleRequestDto;
 import com.icehufs.icebreaker.dto.request.article.PostArticleRequestDto;
