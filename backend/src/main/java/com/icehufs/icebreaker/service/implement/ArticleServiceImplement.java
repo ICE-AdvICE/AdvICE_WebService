@@ -138,7 +138,8 @@ public class ArticleServiceImplement implements ArticleService {
             boolean existedArticle = articleRepository.existsByArticleNum(articleNum);
             if (!existedArticle) return PostCommentResponseDto.noExistArticle();
 
-            boolean existedUser = userRepository.existsByEmail(email); //이부분 나중에 권한 부여 된 사용자를 확인라는 로직으로 수정
+            // 사용자 계정이 존재하는지(로그인시간이 초과 됐는지) 확인하는 코드
+            boolean existedUser = userRepository.existsByEmail(email);
             if(!existedUser) return PostArticleResponseDto.notExistUser();
 
             CommentEntity commentEntity = new CommentEntity(dto, articleNum, email);
@@ -200,7 +201,9 @@ public class ArticleServiceImplement implements ArticleService {
     @Override
     public ResponseEntity<? super DeleteCommentResponseDto> deleteComment(Integer commentNumber, String email) {
         try{
-            boolean existedUser = userRepository.existsByEmail(email); //이부분 나중에 권한 부여 된 사용자를 확인라는 로직으로 수정
+
+            // 사용자 계정이 존재하는지(로그인시간이 초과 됐는지) 확인하는 코드
+            boolean existedUser = userRepository.existsByEmail(email); 
             if (!existedUser) return DeleteCommentResponseDto.notExistUser();
 
             CommentEntity commentEntity = commentRepository.findByCommentNumber(commentNumber);
@@ -251,7 +254,8 @@ public class ArticleServiceImplement implements ArticleService {
     public ResponseEntity<? super PatchCommentResponseDto> patchComment(PatchCommentRequestDto dto,
             Integer commentNumber, String email){
                 try{
-                    boolean existedUser = userRepository.existsByEmail(email); //이부분 나중에 권한 부여 된 사용자를 확인라는 로직으로 수정
+                    // 사용자 계정이 존재하는지(로그인시간이 초과 됐는지) 확인하는 코드
+                    boolean existedUser = userRepository.existsByEmail(email);
                     if (!existedUser) return PatchCommentResponseDto.notExistUser();
 
                     CommentEntity commentEntity = commentRepository.findByCommentNumber(commentNumber);
@@ -331,7 +335,9 @@ public class ArticleServiceImplement implements ArticleService {
     @Override
     public ResponseEntity<? super DeleteArticleAdminResponseDto> deleteArticleAdmin(Integer articleNum, String email) {
         try{
-            //운영자email 확인 로직을 추후에 추가
+            // 사용자 계정이 존재하는지(로그인시간이 초과 됐는지) 확인하는 코드
+            boolean existedUser = userRepository.existsByEmail(email);
+            if (!existedUser) return CheckOwnOfArticleResponseDto.notExistUser();
 
             Article articleEntity = articleRepository.findByArticleNum(articleNum);
             if (articleEntity == null) return DeleteArticleAdminResponseDto.noExistArticle();
@@ -353,7 +359,9 @@ public class ArticleServiceImplement implements ArticleService {
     public ResponseEntity<? super PutResolvedArticleResponseDto> putResolv(Integer articleNum, String email) {
         Article articleEntity = null;
         try {
-            //운영자email 확인 로직을 추후에 추가
+            // 사용자 계정이 존재하는지(로그인시간이 초과 됐는지) 확인하는 코드
+            boolean existedUser = userRepository.existsByEmail(email);
+            if (!existedUser) return CheckOwnOfArticleResponseDto.notExistUser();
 
             articleEntity = articleRepository.findByArticleNum(articleNum);
             if (articleEntity == null) return PutResolvedArticleResponseDto.noExistArticle();
@@ -372,7 +380,7 @@ public class ArticleServiceImplement implements ArticleService {
     @Override
     public ResponseEntity<? super PostArticleResponseDto> postArticleNotif(PostArticleRequestDto dto, String email) {
         try{
-            // 사용자 계정이 존재하는지 확인하는 코드
+            // 사용자 계정이 존재하는지(로그인시간이 초과 됐는지) 확인하는 코드
             boolean existedEmail = userRepository.existsByEmail(email);
             if (!existedEmail) return PostArticleResponseDto.notExistUser();
 

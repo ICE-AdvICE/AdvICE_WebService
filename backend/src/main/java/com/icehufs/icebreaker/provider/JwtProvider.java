@@ -1,5 +1,6 @@
 package com.icehufs.icebreaker.provider;
 
+import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -15,19 +16,20 @@ import io.jsonwebtoken.security.Keys;
 
 @Component
 public class JwtProvider {
-
-    private Key key; // 클래스 변수로 안전한 Key 저장
+    
+    private Key key;
 
     public JwtProvider() {
-        // 생성자에서 안전한 키를 생성
+        // 256비트 이상의 강력한 키를 생성
         this.key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
     }
 
     public String create(String email) {  
+
         Date expiredDate = Date.from(Instant.now().plus(1, ChronoUnit.HOURS));
 
         String jwt = Jwts.builder()
-                .signWith(key, SignatureAlgorithm.HS256)
+                .signWith(key)
                 .setSubject(email)
                 .setIssuedAt(new Date())
                 .setExpiration(expiredDate)
@@ -36,22 +38,26 @@ public class JwtProvider {
     }
 
     public String validate(String jwt) { 
-        Claims claims = null;
+
+        String claims = null;
 
         try {
             claims = Jwts.parserBuilder()
                     .setSigningKey(key)
                     .build()
-                    .parseClaimsJws(jwt).getBody();
+                    .parseClaimsJws(jwt)
+                    .getBody()
+                    .getSubject();
         } catch (Exception exception) {
             exception.printStackTrace();
             return null;
         }
 
-        return claims.getSubject();
+        return claims;
     }
 
     public String extractEmail(String token) {
+
         Claims claims = Jwts.parserBuilder()
                 .setSigningKey(key)
                 .build()

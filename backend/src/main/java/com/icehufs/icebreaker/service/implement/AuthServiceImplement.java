@@ -197,22 +197,26 @@ public class AuthServiceImplement implements AuthService {
 
     @Override
     @Transactional
-    public ResponseEntity<? super GiveUserBanResponseDto> giveUserBan(GiveUserBanRequestDto dto, Integer articleNum) {
+    public ResponseEntity<? super GiveUserBanResponseDto> giveUserBan(GiveUserBanRequestDto dto, Integer articleNum, String email) {
         Article articleEntity = null;
         try {
+
+            //정지하려는 운영자 로그인 시간 초과
+            boolean existedUser1 = userRepository.existsByEmail(email);
+            if (!existedUser1) return GiveUserBanResponseDto.notExistUser();
+
             articleEntity = articleRepository.findByArticleNum(articleNum);
 
             // 만일 게시글이 존재하지 않을 경우.
             if (articleEntity == null) return GiveUserBanResponseDto.noExistArticle();
 
-            String email = articleEntity.getUserEmail();
-            
+            String writen_email = articleEntity.getUserEmail();
 
             // 정지하려는 유저가 이전에 탈퇴했기에 User테이블에 엔티티가 없을 경우.
-            boolean existedUser = userRepository.existsByEmail(email);
+            boolean existedUser = userRepository.existsByEmail(writen_email);
             if (!existedUser) return GiveUserBanResponseDto.withdrawnId();
 
-            boolean ban_email = userBanRepository.existsByEmail(email);
+            boolean ban_email = userBanRepository.existsByEmail(writen_email);
             // 이미 정지된 계정일 경우.(운영자가 한 번에 단일 작성자의 문제가 있는 여러 게시글에 정지를 부여할 경우.)
             if (ban_email) {
                 return GiveUserBanResponseDto.duplicateId();
@@ -222,7 +226,7 @@ public class AuthServiceImplement implements AuthService {
             BanDurationEnum banDuration = BanDurationEnum.valueOf(dto.getBanDuration().toUpperCase());
             BanReasonEnum banReason = BanReasonEnum.valueOf(dto.getBanReason().toUpperCase());
             UserBan userBan = new UserBan();
-            userBan.setEmail(email);
+            userBan.setEmail(writen_email);
             userBan.setBanDuration(banDuration);
             userBan.setBanReason(banReason);
             userBan.setBanStartTime(LocalDateTime.now());
