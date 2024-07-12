@@ -44,7 +44,7 @@
     display: block; /* 블록 레벨 요소로 설정 */
     border: none; 
     outline: none;
-    background-color:#ccc; /* 기본 배경 색상 설정 */
+    background-color:rgb(56, 56, 63); /* 기본 배경 색상 설정 */
     color: white;
     font-weight: bold;
     font-size: 20px;
@@ -175,14 +175,27 @@
   height: 40px;
   border: none; 
   outline: 0;
-  color: rgb(56, 56, 63);
+  background-color: rgb(56, 56, 63);
 
   font-weight: bold;
   color: white;
-  font-size: 20px;
+  font-size: 18px;
   text-align: center;
   font-family: "Noto Sans KR", sans-serif;
   
+}
+
+.activeButton {
+  background-color: green; /* 버튼 색상 변경 */
+  color: white;
+  cursor: pointer;
+}
+
+/* 비활성화 상태일 때의 버튼 스타일 */
+.inactiveButton {
+  background-color: grey;
+  color: darkgray;
+  cursor: not-allowed;
 }
 
 .SignupFormpost:hover{
@@ -194,7 +207,7 @@
   height: 50px;
   border: none; 
   outline: 0;
-  color: rgb(56, 56, 63);
+  background-color: rgb(56, 56, 63);
 
   font-weight: bold;
   color: white;
@@ -278,7 +291,7 @@
 
 .mypage_buttons button {
   padding: 8px 16px; /* 버튼 패딩 */
-  background-color: #ccc; /* 버튼 배경색 */
+  background-color: rgb(56, 56, 63); /* 버튼 배경색 */
   color: white; /* 텍스트 색상 */
   border: none; /* 테두리 제거 */
   border-radius: 2px; /* 테두리 둥글게 */
@@ -295,7 +308,7 @@
   display: flex;
   justify-content: center; /* 가로 중앙 정렬 */
   margin-top:20px;
-  background-color: #ccc;
+  background-color:rgb(56, 56, 63);
   color: white;
   border: none;
   border-radius: 2px;
@@ -311,15 +324,25 @@
 .pw_emailpost{
   
   display: flex; /* Flexbox 레이아웃 사용 */
+  align-items: center; /* Align items vertically in the center */
+  margin-bottom: 30px; /* Adjust according to your spacing needs */
 
 }
 .pw_emailpost input {
-  margin-bottom: 30px; /* 입력 필드 간의 간격 */
-  width: 80%; /* 입력 필드 너비 조정 */
+  /* 입력 필드 간의 간격 */
+  width: auto;  /* 입력 필드 너비 조정 */
   height: 40px;
   padding: 8px; /* 입력 필드 내부 패딩 */
 
 }
+
+.pw_emailDomain {
+  margin-left: 5px;
+  margin-right: 5px; /* Add some space between the input and the domain text */
+  font-size: 16px; /* Adjust font size to match your design */
+  align-self: center; /* This ensures vertical alignment if needed */
+}
+
 
 .pw_emailpost button {
   margin-left: 7px;
@@ -336,19 +359,87 @@
   font-family: "Noto Sans KR", sans-serif;
 }
 
+.pw_emailcer{
+  
+  display: flex; /* Flexbox 레이아웃 사용 */
+
+}
+.pw_emailcer input {
+  margin-bottom: 30px; /* 입력 필드 간의 간격 */
+  width: 70%; /* 입력 필드 너비 조정 */
+  height: 40px;
+  padding: 8px; /* 입력 필드 내부 패딩 */
+
+}
+
+.pw_emailcer button {
+  margin-left: 7px;
+  width: 100px;
+  height: 40px;
+  border: none; 
+  outline: 0;
+  color: rgb(56, 56, 63);
+
+  font-weight: bold;
+  color: white;
+  font-size: 20px;
+  text-align: center;
+  font-family: "Noto Sans KR", sans-serif;
+}
+.pw_new input {
+  margin-bottom: 30px; /* 입력 필드 간의 간격 */
+  width: 100%; /* 입력 필드 너비 조정 */
+  height: 40px;
+  padding: 8px; /* 입력 필드 내부 패딩 */
+
+}
+
+.pw_new_cer input{
+  margin-bottom: 10px; /* 입력 필드 간의 간격 */
+  width: 100%; /* 입력 필드 너비 조정 */
+  height: 40px;
+  padding: 8px; /* 입력 필드 내부 패딩 */
+}
+
+.pw-mismatch-error {
+  text-align: center; /* 텍스트 중앙 정렬 */
+  width: 100%; /* 부모 컨테이너의 전체 너비 사용 */
+}
+
 .delete_user{
   
   font-size: 15px;
-  margin-top: 10px;
+  margin-top: 30px;
   margin-bottom: 10px;
   background: none; /* 배경 제거 */
   border: none; /* 테두리 제거 */
   color: black; /* 글자 색상 설정, 예시로 파란색 사용 */
   cursor: pointer; /* 마우스 오버 시 커서 변경 */
-  transform: translateY(-50%);
+  transform: translateX(245%);
 }
 
 
 .delete_user:hover {
   text-decoration: underline; /* 호버 시 밑줄 표시 */
 }
+
+
+
+.countdown-timer {
+  display: block;
+  text-align: right;
+  color: #0e5a8a;
+  font-size: 14px; /* 글씨 크기를 줄입니다 */
+  margin-top: 5px; /* 위쪽 여백을 추가하여 시각적으로 구분을 줍니다 */
+}
+
+.pw_countdown-timer{
+  display: block;
+  text-align: right;
+  color: #0e5a8a;
+  font-size: 14px; /* 글씨 크기를 줄입니다 */
+  margin-top: -30px; /* 위쪽 여백을 추가하여 시각적으로 구분을 줍니다 */
+  margin-bottom:10px;
+
+}
+

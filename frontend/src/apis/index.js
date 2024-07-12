@@ -17,6 +17,8 @@ const PATCH_PW_URL=() =>`${API_DOMAIN}/user/password`;
 
 const DELETE_USER =()=> `${API_DOMAIN}/user`; //회원탈퇴 
 
+const PUSH_BAN_USER_CERTIFICATION = () => `${API_DOMAIN}/auth/check-user-ban`;
+
 const GET_SIGN_IN_USER_URL =() =>`${API_DOMAIN}/user`;
 const authorization = (accessToken) => {
     return {headers: {Authorization:`Bearer ${accessToken}`}}
@@ -330,19 +332,6 @@ export const checkArticleOwnership = async (articleNum, token) => {
     }
 };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 export const pwRequest = async (requestBody) => {
     
     const result = await axios.post(POST_PW_CHANGE_URL(), requestBody) //await은 요청의 응답이 돌아올 떄 까지 함수 실행을 멈추는 역할 한다(asyns함수 안에서만 사용가능)
@@ -361,10 +350,10 @@ return result;
 
 };
 
-export const pwUpdateRequest = async (userData, accessToken) => { //MyPage 정보수정
+export const pwUpdateRequest = async (userData) => { //MyPage 정보수정
     try {
         const response = await axios.patch(PATCH_PW_URL(), userData, {
-            headers: { Authorization: `Bearer ${accessToken}` }
+            
         });
         return response.data;
     } catch (error) {

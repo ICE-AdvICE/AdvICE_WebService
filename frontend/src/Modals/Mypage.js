@@ -100,7 +100,7 @@ const MypageForm = ({ handleLogout }) => {
                 <p>학번: {userDetails.studentNum}</p>
                 <p>이름: {userDetails.name}</p>
             </div>
-            <button className="findPasswordButton" onClick={handleFindpassword}>비밀번호찾기</button>
+            <button className="findPasswordButton" onClick={handleFindpassword}>비밀번호 재설정</button>
             <div className="mypage_buttons">
             <button type="button" onClick={() => setEditMode(true)}>정보 수정</button>
                 <button type="button" onClick={handleLogout}>로그아웃</button>
@@ -123,10 +123,10 @@ const MypageForm = ({ handleLogout }) => {
                     open={modalOpenfind}
                         width={500} //모달 넓이 이게 적당 한듯
                         header={[]}
-                        onCancel={e => setModalOpenfind(false)} //x 버튼
+                        onCancel={e => setModalOpenfind(false) } //x 버튼
                         footer={[]}
                     >
-                    <FindpasswordForm onLogin={handleFindpassword} />
+                    <FindpasswordForm onLogin={handleFindpassword} onClose={() => setModalOpenfind(false)} />
                     
                 </MyModal>
         </form>

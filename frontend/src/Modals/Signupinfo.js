@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import './modules.css';
 import { useCookies } from 'react-cookie'; // 수정된 임포트
 import { useNavigate } from 'react-router-dom'; // 수정된 임포트
@@ -21,6 +21,31 @@ const SignUpinfoForm = ({ onSignUpForm }) => {
   const [cookies, setCookie] = useCookies(['accessToken']); //데베에 있는 데이터 호출 시 사용 예정
 
 
+
+  const [buttonDisabled, setButtonDisabled] = useState(false);
+  const [countdown, setCountdown] = useState(60);
+
+  useEffect(() => {
+    let timer;
+    if (buttonDisabled) {
+      timer = setInterval(() => {
+        setCountdown((prevCountdown) => {
+          if (prevCountdown > 0) {
+            return prevCountdown - 1;
+          } else {
+            clearInterval(timer);
+            setButtonDisabled(false);
+            return 60;
+          }
+        });
+      }, 1000);
+    }
+
+    return () => clearInterval(timer);
+  }, [buttonDisabled]);
+
+
+  
   const onCloseModal = () => {
     setIsModalOpen(false);  // 모달 창 닫기
   };
@@ -28,11 +53,6 @@ const SignUpinfoForm = ({ onSignUpForm }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!isCertified) {
-      alert('이메일 인증을 먼저 완료해주세요.');
-      return;
-    }
-    onSignUpButtonClickHandler();
   };
 
   const onSignUpButtonClickHandler = () => {
@@ -40,6 +60,18 @@ const SignUpinfoForm = ({ onSignUpForm }) => {
       alert('비밀번호가 일치하지 않습니다.');
       return;
     }
+
+    if (!isCertified) {
+      alert('이메일 인증을 먼저 완료해주세요.');
+      return;
+    }
+
+    if (userStudentnum.length < 5) {
+      alert('학번을 다시 입력해주세요.');
+      return;
+    }
+
+
     const requestBody = { email: userEmail, name: userName, studentNum: userStudentnum, password: userPassword };
     signUpRequest(requestBody)
       .then(response => signUpResponse(response))
@@ -62,13 +94,18 @@ const SignUpinfoForm = ({ onSignUpForm }) => {
 
   const onEmailCertificationHandler = (e) => {
     e.preventDefault();
-    const requestBody = { email: userEmail };
-    emailCertificationRequest(requestBody)
-      .then(response => emailCertificationResponse(response))
-      .catch(error => {
-        console.error('이메일 인증 요청 중 오류 발생:', error);
-        alert('네트워크 이상입니다.');
-      });
+    if (!buttonDisabled) {
+      setButtonDisabled(true);
+      const requestBody = { email: userEmail };
+      emailCertificationRequest(requestBody)
+        .then(response => emailCertificationResponse(response))
+        .catch(error => {
+          console.error('이메일 인증 요청 중 오류 발생:', error);
+          alert('네트워크 이상입니다.');
+          setButtonDisabled(false);
+          setCountdown(60);
+        });
+    }
   };
 
 const signUpResponse = (responseBody) => {
@@ -82,6 +119,7 @@ const signUpResponse = (responseBody) => {
     case 'SU':
       alert('회원가입이 성공적으로 완료되었습니다.');
       onCloseModal();  // 모달 창 닫기
+      onSignUpForm(true);  // 성공적으로 회원가입을 완료했다는 상태 업데이트를 부모에 전달
       navigator('/');  // 사용자를 홈페이지로 리다이렉션
       return; // 함수 종료를 확실하게 함
     case 'DBE':
@@ -156,6 +194,7 @@ const signUpResponse = (responseBody) => {
         <span className="emailDomain">@hufs.ac.kr</span>
         <button type="button"  className="SignupFormpost" onClick={onEmailCertificationHandler}>인증요청</button>
       </div>
+      {buttonDisabled && <span className="countdown-timer">{countdown}초 후에 다시 시도 가능합니다.</span>}
 
       <div className="emailpost" >  
         <label htmlFor="password"></label>
@@ -177,7 +216,7 @@ const signUpResponse = (responseBody) => {
           
           value={userName}
           onChange={e => setUsername(e.target.value)}
-          placeholder="이름을 입력해주세요."
+          placeholder=" 이름을 입력해주세요."
 
         />
         </div>
@@ -192,7 +231,8 @@ const signUpResponse = (responseBody) => {
           
           value={userStudentnum}
           onChange={e => setUserstudentnum(e.target.value)}
-          placeholder="학번을 입력해주세요."
+          placeholder=" 학번을 입력해주세요. (ex.2020XXXXX)"
+          minLength={6} 
         />
       </div>
 
@@ -202,7 +242,7 @@ const signUpResponse = (responseBody) => {
           type="password"
           value={userPassword}
           onChange={e => setUserpassword(e.target.value)}
-          placeholder="(비밀번호는 8자 이상 20자 미만이어야합니다.)"
+          placeholder=" (비밀번호는 8자 이상 20자 미만이어야합니다.)"
         />
       </div>
       
@@ -212,10 +252,10 @@ const signUpResponse = (responseBody) => {
           type="password"
           value={userReenteredPassword}
           onChange={e => setUserReenteredPassword(e.target.value)}
-          placeholder="비밀번호 재입력"
+          placeholder=" 비밀번호 재입력"
         />
         {userPassword && userReenteredPassword && userPassword !== userReenteredPassword && (
-          <div style={{ color: 'red' }}>비밀번호가 일치하지 않습니다.</div>
+          <div className="pw-mismatch-error" style={{ color: 'red' }}>비밀번호가 일치하지 않습니다.</div>
         )}
       </div>
 

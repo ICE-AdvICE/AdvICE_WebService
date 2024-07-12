@@ -112,6 +112,12 @@ const LoginForm = ({ onLogin})=> {
     
   };
 
+  const onSignUpSuccess = (success) => {
+    if (success) {
+      setModalOpeninfo(false); // 회원가입 성공 시 모달 닫기
+    }
+  };
+
   return (
   
     <form onSubmit={(e) => e.preventDefault()}>
@@ -146,7 +152,7 @@ const LoginForm = ({ onLogin})=> {
         </div>
       </div>
       }
-      <button className="findPasswordButton" onClick={handleFindpassword}>비밀번호찾기</button>
+      <button className="findPasswordButton" onClick={handleFindpassword}>비밀번호 재설정</button>
       <button type="submit" className="loginButton" onClick={onSignInButtonClickHandler}>로그인</button>
       <div className="signupPrompt">
       <p>아직 회원이 아니신가요?</p>
@@ -163,7 +169,7 @@ const LoginForm = ({ onLogin})=> {
               onCancel={e => setModalOpenfind(false)} //x 버튼
               footer={[]}
           >
-          <FindpasswordForm onLogin={handleFindpassword} />
+          <FindpasswordForm onLogin={handleFindpassword} onClose={() => setModalOpenfind(false)}/>
         
     </MyModal>
 
@@ -175,7 +181,7 @@ const LoginForm = ({ onLogin})=> {
       header={[]}
       footer={[]}
       >
-      <SignUpinfoForm onLogin={handleSignupinfo} />
+      <SignUpinfoForm onSignUpForm={onSignUpSuccess} />
     </MyModal></form>
     
   );
