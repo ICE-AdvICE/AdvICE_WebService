@@ -135,7 +135,7 @@ const LoginForm = ({ onLogin})=> {
         />
       </div>
 
-      <div className="passwordCss" >
+      <div className="login_passwordCss" >
         <input
           type="password"
           value={userPassword}

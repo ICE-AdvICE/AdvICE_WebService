@@ -1,3 +1,11 @@
+
+.loginHeaderContainer {
+  text-align: center; /* 이미지 중앙 정렬 */
+  padding: 20px;
+  border-bottom: 2.5px solid #052940; /* 상단에 실선 추가 */
+  margin-bottom: 50px;
+}
+
 .loginFormContainer {
   display: flex;  /* Flexbox 사용 */
   justify-content: center;  /* 가로축 중앙 정렬 */
@@ -8,32 +16,32 @@
   width: 100%; /* 컨테이너 너비를 명시적으로 정의 */
 }
 
-.loginHeaderContainer {
-  text-align: center; /* 이미지 중앙 정렬 */
-  padding: 20px;
-  border-bottom: 2.5px solid #052940; /* 상단에 실선 추가 */
-  margin-bottom: 50px;
-}
-
   .loginFormContainer input {
-    
+    border: 1px solid #ccc; /* 경계선 추가 */
     margin-bottom: 30px; /* 입력 필드 간의 간격 */
     width: 95%; /* 입력 필드 너비 조정 */
     height: 40px;
     padding: 8px; /* 입력 필드 내부 패딩 */
   }
-  .signin_emain
-  .passwordCss{
+  
+  .login_passwordCss{
     display: flex;  /* Flexbox 사용 */
     justify-content: center;  /* 가로축 중앙 정렬 */
-    margin-top: 20px;
+    max-height: 80vh;
+    overflow-y: auto; /* 스크롤바 활성화 */
+     width: 100%; 
   }
  
-  .passwordCss input {
+  .login_passwordCss input {
+    border: 1px solid #ccc; /* 경계선 추가 */
     margin-bottom: 10px; /* 입력 필드 간의 간격 */
-    width:100%; /* 입력 필드 너비 조정 */
+    width:95%; /* 입력 필드 너비 조정 */
     height: 40px;
     padding: 8px; /* 입력 필드 내부 패딩 */
+  }
+
+  .loginFormContainer input::placeholder, .login_passwordCss input::placeholder {
+    color: #ccc;  /* 플레이스홀더 텍스트 색상을 빨간색으로 변경 */
   }
   
   .loginButton {
@@ -56,6 +64,7 @@
     background-color: #052940; /* 호버 시 배경 색상 변경 */
   }
 
+
   .auth-sign-in-error-message {
     text-align: center;
     color: red; /* 텍스트 색상을 빨간색으로 설정 */
@@ -67,8 +76,7 @@
 .signUpContainer{
   display: flex; /* Flexbox 사용하여 요소들을 한 줄에 배치 */
   align-items: center; /* 세로 중앙 정렬 */
-  
-    
+
 }
 
 .signupHeaderContainer{
@@ -99,6 +107,7 @@
 
 .signup_pw{
   margin-top: 10px;
+  
 }
 
 .signup_pw input{
@@ -106,14 +115,6 @@
   margin-bottom: 5px; /* 입력 필드 간의 간격 */
   width: 95%; /* 입력 필드 너비 조정 */
   height: 40px;
-}
-
-.inputField {
-  margin-bottom: 5px; /* 입력 필드 간의 간격 */
-  width: 70%; /* 입력 필드 너비 조정 */
-  height: 32px;
-  padding: 8px; /* 입력 필드 내부 패딩 */
-  
 }
 
 
@@ -338,7 +339,7 @@
 
 .pw_emailDomain {
   margin-left: 5px;
-  margin-right: 5px; /* Add some space between the input and the domain text */
+  margin-right: 12px; /* Add some space between the input and the domain text */
   font-size: 16px; /* Adjust font size to match your design */
   align-self: center; /* This ensures vertical alignment if needed */
 }

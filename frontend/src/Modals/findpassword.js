@@ -99,7 +99,7 @@ const FindpasswordForm = ({ onFindm, onClose  }) => {
                     id="user_email"
                     value={userEmail}
                     onChange={e => setUserEmail(e.target.value)}
-                    placeholder="학교 이메일을 입력해주세요."
+                    placeholder="학교 이메일"
                 />
                 <span className="pw_emailDomain">@hufs.ac.kr</span>
                 <button type="button" className="findpasswordpost" onClick={handleSendCertification} disabled={buttonDisabled}>

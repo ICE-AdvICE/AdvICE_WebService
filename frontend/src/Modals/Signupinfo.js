@@ -180,9 +180,11 @@ const signUpResponse = (responseBody) => {
      <div className="signupHeaderContainer">
      <img src="header-name.png" alt="로그인 로고" style={{ width: '220px', height: 'auto' }} />
     </div>
-      <div className="">
+
+     
       <label htmlFor="user_email" ></label>
       <p>이메일 인증</p> 
+
       <div className="signUpContainer">
         <label htmlFor="user_email" ></label>
         <input
@@ -212,22 +214,16 @@ const signUpResponse = (responseBody) => {
       <div className="signup_name" >
       <p>이름</p>
         <input
-          type="text"
           
           value={userName}
           onChange={e => setUsername(e.target.value)}
           placeholder=" 이름을 입력해주세요."
-
         />
         </div>
         
-      </div>
-
       <div className="signup_pw" >
       <p>학번</p>
-        
         <input
-          type="text"
           
           value={userStudentnum}
           onChange={e => setUserstudentnum(e.target.value)}
@@ -242,7 +238,7 @@ const signUpResponse = (responseBody) => {
           type="password"
           value={userPassword}
           onChange={e => setUserpassword(e.target.value)}
-          placeholder=" (비밀번호는 8자 이상 20자 미만이어야합니다.)"
+          placeholder=" 비밀번호는 8자 이상 20자 미만이어야합니다."
         />
       </div>
       
@@ -258,11 +254,7 @@ const signUpResponse = (responseBody) => {
           <div className="pw-mismatch-error" style={{ color: 'red' }}>비밀번호가 일치하지 않습니다.</div>
         )}
       </div>
-
-       
       <button type="submit"  className="signupButton" onClick={onSignUpButtonClickHandler}>회원가입 완료</button>
-     
-      
     </form>
   
   );
