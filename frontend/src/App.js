@@ -47,6 +47,7 @@ function App(){
 
   const handleNewpassword = (Newpassword, Newpassword_1) => {
     console.log("Logging in with", Newpassword, Newpassword_1);
+    setModalOpennew(false);
     // 비밀번호 수정.
   };
 
@@ -60,7 +61,9 @@ function App(){
     // 비밀번호 수정.
   };
  
-
+  const handlepwModalClose = () => {
+    setModalOpenfind(false);  // 모달 상태를 false로 설정하여 닫습니다.
+};
   
   return(
     <>
@@ -111,7 +114,7 @@ function App(){
               onCancel={e => setModalOpenfind(false)} //x 버튼
               footer={[]}
           >
-          <FindpasswordForm onLogin={handleFindpassword} />
+          <FindpasswordForm onFind={handleFindpassword} onClose={handlepwModalClose} />
           </MyModal>
 
 
@@ -123,7 +126,7 @@ function App(){
               onCancel={e => setModalOpennew(false)} //x 버튼
               footer={[]}
           >
-            <Newpassword onLogin={handleNewpassword} />
+            <Newpassword onLogin={handleNewpassword} onClose={handlepwModalClose} />
 
 
               
