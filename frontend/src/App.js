@@ -53,7 +53,8 @@ function App(){
 
   const handleinfo = (user_name, user_studentnum,user_password, user_password_1) => {
     console.log("Logging in with",user_name, user_studentnum,user_password, user_password_1);
-    // 비밀번호 수정.
+    setModalOpeninfo(false);
+    
   };
 
   const handlemypage = (user_email, user_studentnum,user_name ) => {
@@ -64,6 +65,8 @@ function App(){
   const handlepwModalClose = () => {
     setModalOpenfind(false);  // 모달 상태를 false로 설정하여 닫습니다.
 };
+
+
   
   return(
     <>
@@ -93,7 +96,7 @@ function App(){
               ]}
                 footer={[]}
           >
-            <SignUpForm onSignUpForm={handleSignUp} />
+            <SignUpForm onSignUpForm={handleinfo} />
           </MyModal>
 
           <MyModal
