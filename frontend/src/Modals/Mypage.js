@@ -1,6 +1,7 @@
 import React, { useState,useEffect } from 'react';
 import { useCookies } from 'react-cookie';
-import { getMypageRequest,updateMypageUserRequest,deleteUserRequest } from '../apis/index.js';
+import { getMypageRequest,updateMypageUserRequest,deleteUserRequest} from '../apis/index.js';
+import { checkuserbanRequest} from '../apis/index2.js';
 import MyModal from '../MyModal'; // 모달 컴포넌트 추가
 import FindpasswordForm from '../Modals/findpassword';
 import './modules.css';
@@ -45,24 +46,31 @@ const MypageForm = ({ handleLogout }) => {
 
     const handleDeleteAccount = async () => {
         if (window.confirm("정말로 계정을 삭제하시겠습니까?")) {
-            const result = await deleteUserRequest(token);
-            switch (result.code) {
-                case "SU":
-                    alert("계정이 성공적으로 삭제되었습니다.");
-                    handleLogout(); // 로그아웃 처리 후 로그인 페이지로 리다이렉트한다고 가정
-                    break;
-                case "NU":
-                    alert("해당 사용자가 존재하지 않습니다.");
-                    break;
-                case "VF":
-                    alert("유효성 검증에 실패했습니다.");
-                    break;
-                case "DBE":
-                    alert("데이터베이스 오류가 발생했습니다.");
-                    break;
-                default:
-                    alert("알 수 없는 오류가 발생했습니다.");
-                    break;
+            // Check if the user is banned before allowing them to delete the account
+            const banCheck = await checkuserbanRequest({ email: userDetails.email });
+            if (banCheck && banCheck.email !== null) { // If the email is not null, the user is banned
+                alert(`계정 삭제가 불가능합니다. 정지 사유: ${banCheck.banReason}`);
+            } else {
+                // Proceed with account deletion if the user is not banned
+                const result = await deleteUserRequest(token);
+                switch (result.code) {
+                    case "SU":
+                        alert("계정이 성공적으로 삭제되었습니다.");
+                        handleLogout(); // 로그아웃 처리 후 로그인 페이지로 리다이렉트한다고 가정
+                        break;
+                    case "NU":
+                        alert("해당 사용자가 존재하지 않습니다.");
+                        break;
+                    case "VF":
+                        alert("유효성 검증에 실패했습니다.");
+                        break;
+                    case "DBE":
+                        alert("데이터베이스 오류가 발생했습니다.");
+                        break;
+                    default:
+                        alert("알 수 없는 오류가 발생했습니다.");
+                        break;
+                }
             }
         }
     };

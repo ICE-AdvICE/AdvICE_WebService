@@ -7,7 +7,7 @@ import { signUpRequest, emailCertificationRequest , checkCertificationRequest } 
 
 
 
-const SignUpinfoForm = ({ onSignUpForm }) => {
+const SignUpinfoForm = ({closeModal}) => {
   const [userCertificationNumber, setUsercertificationNumber] = useState('');
   const [userName, setUsername] = useState('');
   const [userStudentnum, setUserstudentnum] = useState('');
@@ -19,7 +19,7 @@ const SignUpinfoForm = ({ onSignUpForm }) => {
   const [error, setError] = useState(false); // 에러 상태 추가
   const navigator = useNavigate();
   const [cookies, setCookie] = useCookies(['accessToken']); //데베에 있는 데이터 호출 시 사용 예정
-
+  const [emailRegistered, setEmailRegistered] = useState(false);
 
 
   const [buttonDisabled, setButtonDisabled] = useState(false);
@@ -46,10 +46,7 @@ const SignUpinfoForm = ({ onSignUpForm }) => {
 
 
   
-  const onCloseModal = () => {
-    setIsModalOpen(false);  // 모달 창 닫기
-  };
-
+ 
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -75,10 +72,6 @@ const SignUpinfoForm = ({ onSignUpForm }) => {
     const requestBody = { email: userEmail, name: userName, studentNum: userStudentnum, password: userPassword };
     signUpRequest(requestBody)
       .then(response => signUpResponse(response))
-      .catch(error => {
-        console.error('회원가입 요청 중 오류 발생:', error);
-        alert('네트워크 이상입니다.');
-      });
   };
 
   const onCheckCertificationHandler = (e) => {
@@ -118,10 +111,11 @@ const signUpResponse = (responseBody) => {
   switch (code) {
     case 'SU':
       alert('회원가입이 성공적으로 완료되었습니다.');
-      onCloseModal();  // 모달 창 닫기
-      onSignUpForm(true);  // 성공적으로 회원가입을 완료했다는 상태 업데이트를 부모에 전달
-      navigator('/');  // 사용자를 홈페이지로 리다이렉션
-      return; // 함수 종료를 확실하게 함
+      navigator('/');  // 로그인 후 리다이렉트
+      closeModal();
+       // 모달 창 닫기
+       // 성공적으로 회원가입을 완료했다는 상태 업데이트를 부모에 전달
+      break; // 함수 종료를 확실하게 함
     case 'DBE':
       alert('데이터베이스 오류입니다.');
       break;
