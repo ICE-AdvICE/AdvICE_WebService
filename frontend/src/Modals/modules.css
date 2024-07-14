@@ -444,3 +444,39 @@
 
 }
 
+
+.signup_termsContainer h3 {
+  font-size: 16px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+
+.signup_checkboxLabel {
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+  cursor: pointer;
+  justify-content: flex-end; /* 체크박스와 라벨을 오른쪽으로 정렬 */
+  width: 100%; /* 라벨의 폭을 컨테이너의 전체 폭으로 설정 */
+}
+
+.signup_styledCheckbox {
+  display: none;
+}
+
+.signup_checkboxCustom {
+  width: 20px;
+  height: 20px;
+  background-color: #fff;
+  border-radius: 50%;
+  border: 1px solid #000;
+  margin-right: 10px; /* 오른쪽 정렬을 고려하여 마진 방향 조정 */
+  display: inline-block;
+}
+
+.signup_styledCheckbox:checked + .signup_checkboxCustom {
+  background-color: #052940;
+  border-color: #052940;
+}
+
