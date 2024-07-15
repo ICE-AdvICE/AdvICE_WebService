@@ -3,10 +3,11 @@ import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { useCookies } from 'react-cookie';
-import { updateArticleRequest, createArticleRequest  } from '../apis/index';
+import { updateArticleRequest, createArticleRequest, createNotificationArticleRequest  } from '../apis/index';
 import ReactQuill from 'react-quill';
 import '../layouts/css/BlogForm.css'
 import { useLocation } from 'react-router-dom';
+
 
 
 const BlogForm = ({ editing }) => {
@@ -22,9 +23,11 @@ const BlogForm = ({ editing }) => {
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [cookies] = useCookies(['accessToken']);
     const token = cookies.accessToken;
-    const [categoryString, setCategoryString] = useState('카테고리 선택');
+    const [categoryString, setCategoryString] = useState('카테고리 선택');  
+    const [isAdmin, setIsAdmin] = useState(false); // 운영자 권한 여부
 
 
+    
     //3. 게시글 수정 api
     useEffect(() => {
         if (editing && articleNum) {
@@ -90,44 +93,59 @@ const BlogForm = ({ editing }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
-        const categoryString = category == 0 ? 'GENERAL' : 'REQUEST';
-        console.log("Sending Category to Database:", categoryString);
+    
         const postData = {
             articleTitle,
             articleContent,
-            category: categoryString,
-
+            category: category,  
         };
+    
+        console.log("Sending Category to Database:", category);
         console.log("Post Data being sent:", postData);
-
+    
         let response;
         if (editing) {
+            // 게시물 수정
             response = await updateArticleRequest(articleNum, postData, token);
+            if (response && response.code === 'SU') {
+                navigate(`/article-main/${articleNum}`);
+            }
+        }  if (category === 'NOTIFICATION') {
+            // 공지 게시물 등록
+            response = await createNotificationArticleRequest(postData, token);
+            if (response === true) {
+                navigate('/article-main');  // 성공적으로 처리되면 메인 페이지로 이동
+            } else {
+                setError('Failed to create notification article.');
+            }
         } else {
             response = await createArticleRequest(postData, token);
-        }
-        if (response && response.code === 'SU') {
-            navigate(editing ? `/article-main/${articleNum}` : '/article-main');
-        } else {
-            if (response) {
-                switch (response.code) {
-                    case 'NU':
-                        setError('This user does not exist.');
-                        break;
-                    case 'VF':
-                        setError('Validation failed.');
-                        break;
-                    case 'DBE':
-                        setError('Database error.');
-                        break;
-                    default:
-                        setError("An unknown error occurred.");
+            if (response && response.code === 'SU') {
+                navigate('/article-main');
+            } else {
+
+                if (response) {
+                    switch (response.code) {
+                        case 'NU':
+                            setError('This user does not exist.');
                             break;
+                        case 'VF':
+                            setError('Validation failed.');
+                            break;
+                        case 'DBE':
+                            setError('Database error.');
+                            break;
+                        default:
+                            setError("An unknown error occurred.");
+                            break;
+                    }
                 }
             }
         }
-        setLoading(false);
+    
+
     };
+    
     return (
         <div className='blog-container'>
             <div className = "img-container">
@@ -148,7 +166,8 @@ const BlogForm = ({ editing }) => {
                         <li onClick={() => handleCategoryChange('', '카테고리 선택')}>카테고리 선택</li>
                         <li onClick={() => handleCategoryChange('REQUEST', '요청')}>요청</li>
                         <li onClick={() => handleCategoryChange('GENERAL', '일반')}>일반</li>
-                        
+                        <li onClick={() => handleCategoryChange('NOTIFICATION', '공지')}>공지</li>
+                      
                     </ul>
                 </div>
             </div>

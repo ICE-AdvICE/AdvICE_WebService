@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useMemo,useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useCookies } from "react-cookie";
 import Card from '../components/Card';
@@ -6,7 +6,7 @@ import Pagination from '../components/Pagination';
 import axios from 'axios';
 import { getArticleListRequest } from '../apis';
 import './css/BlogPage.css';
-import { getMypageRequest } from '../apis/index.js';
+import { checkUserBanStatus,getMypageRequest } from '../apis/index.js';
 
 const ArticleMain = () => {
     const [notificationArticles, setNotificationArticles] = useState([]);
@@ -22,7 +22,7 @@ const ArticleMain = () => {
     const totalPages = Math.ceil(filteredArticles.length / articlesPerPage);
     const indexOfLastArticle = currentPage * articlesPerPage;
     const indexOfFirstArticle = indexOfLastArticle - articlesPerPage;
-    const currentArticles = filteredArticles.slice(indexOfFirstArticle, indexOfLastArticle);
+     
     const userEmail = cookies.userEmail;
     const [selectedCategory, setSelectedCategory] = useState('all');
     const [searchCategory, setSearchCategory] = useState('all');
@@ -31,7 +31,27 @@ const ArticleMain = () => {
     const [userDetails, setUserDetails] = useState({
         email: '',
     });
+    const currentArticles = useMemo(() => {
+        const indexOfLastArticle = currentPage * articlesPerPage;
+        const indexOfFirstArticle = indexOfLastArticle - articlesPerPage;
+        return filteredArticles.slice(indexOfFirstArticle, indexOfLastArticle);
+    }, [currentPage, filteredArticles, articlesPerPage]);
+    const handleCreateArticleClick = async () => {
+        const token = cookies.accessToken; // 쿠키에서 액세스 토큰을 가져옵니다.
     
+        if (!token) {
+            alert("로그인이 필요합니다.");
+            return;
+        }
+    
+        // 사용자 정지 상태 확인
+        const banStatus = await checkUserBanStatus(token);
+        if (banStatus.banned) {
+            alert("계정이 정지된 상태입니다. 글 작성이 불가능합니다.");
+        } else {
+            navigate("/article-main/create"); // 정지 상태가 아니면 글 작성 페이지로 이동
+        }
+    };
     //공지사항
     const categoryLabels = {
         NOTIFICATION: "공지",
@@ -91,14 +111,15 @@ const ArticleMain = () => {
     //카테고리 선택
     const categories = [
         { label: '모두 보여주기', value: 'all' },
-        { label: '카테고리 0', value: 'GENERAL' },
-        { label: '카테고리 1', value: 'REQUEST' },
+        { label: '일반', value: 'GENERAL' },
+        { label: '요청', value: 'REQUEST' },
         { label: '내가 쓴 글', value: 'my' }
     ];  
-
     const filterArticles = () => {
         const results = articlesState.filter(article => {
-            if (selectedCategory === 'all') {
+            if (article.category === 'NOTIFICATION') {
+                return false;  // 공지사항 카테고리 제외
+            } else if (selectedCategory === 'all') {
                 return true;
             } else if (selectedCategory === 'my') {
                 return article.userEmail === userDetails.email;
@@ -233,22 +254,25 @@ const ArticleMain = () => {
                 <div className="posts-content">
                     <div className="Notification-container">
                         {notificationArticles.length > 0 ? (
-                            notificationArticles.map((article) => {
-                                const categoryLabel = categoryLabels[article.category];
-                                return (
-                                    <Card
-                                        key={article.articleNum}
-                                        title={article.articleTitle}
-                                        createdAt={article.articleDate}
-                                        views={article.viewCount}
-                                        likes={article.likeCount}
-                                        order="공지"
-                                        category={categoryLabel}
-                                        onClick={() => handleCardClick(article)}
-                                        email={article.userEmail}
-                                    />
-                                );
-                            })
+                            notificationArticles
+                                .sort((a, b) => new Date(b.articleDate) - new Date(a.articleDate)) // 최신 날짜 순으로 정렬
+                                .slice(0, 3) // 상위 3개만 선택
+                                .map((article) => {
+                                    const categoryLabel = categoryLabels[article.category];
+                                    return (
+                                        <Card
+                                            key={article.articleNum}
+                                            title={article.articleTitle}
+                                            createdAt={article.articleDate}
+                                            views={article.viewCount}
+                                            likes={article.likeCount}
+                                            order="공지"
+                                            category={categoryLabel}
+                                            onClick={() => handleCardClick(article)}
+                                            email={article.userEmail}
+                                        />
+                                    );
+                                })
                         ) : (
                             <div>공지사항이 없습니다</div>
                         )}
@@ -274,15 +298,16 @@ const ArticleMain = () => {
                     ) : (
                         <div>게시물이 없습니다</div>
                     )}
-                </div>
+                    </div>
+                    <div className= "pagination-container">
+                        <Pagination paginate={paginate} currentPage={currentPage} totalPages={totalPages} />
+                    </div>
 
                 </div>
-                <div className= "pagination-container">
-                    <Pagination paginate={paginate} currentPage={currentPage} totalPages={totalPages} />
+               
+                <div className="btn1" onClick={handleCreateArticleClick} style={{ cursor: 'pointer' }}>
+                    <img src="/pencil.png" className="pencil" alt="글 작성"/>
                 </div>
-                <Link to="/article-main/create" className="btn1">
-                    <img src="/pencil.png" className="pencil" />
-                </Link>
 
             </div>
         </div>

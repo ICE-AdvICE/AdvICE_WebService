@@ -5,13 +5,14 @@ import { useCookies } from "react-cookie";
 import ToastViewer from './ToastViewer.js';  
 import './css/ShowPage.css';
 import moment from 'moment';
-import {handleCommentEdit,handleCommentDelete,handleEdit as handleEditArticle ,getMypageRequest,fetchComments,handleDelete,handleCommentSubmit ,checkArticleOwnership} from '../apis/index.js';
+import {giveBanToUser,adminhandleDelete,checkAnonymousBoardAdmin,fetchArticle,handleCommentEdit,handleCommentDelete,handleEdit as handleEditArticle ,getMypageRequest,fetchComments,handleDelete,handleCommentSubmit ,checkArticleOwnership} from '../apis/index.js';
  
  
 const ShowPage = () => {
     const [isComposing, setIsComposing] = useState(false);
     const [editingCommentId, setEditingCommentId] = useState(null);
     const [editCommentInput, setEditCommentInput] = useState("");
+    const [isAdmin, setIsAdmin] = useState(false);
 
     const { articleNum } = useParams();
     const [article, setArticle] = useState(null);
@@ -25,6 +26,57 @@ const ShowPage = () => {
     const [authorEmail, setAuthorEmail] = useState("");
     const navigate = useNavigate();
     const [canEdit, setCanEdit] = useState(false);
+    const handleBanUser = async () => {
+        const banDuration = prompt(
+            "정지 기간을 선택하세요:\n1) ONE_MONTH\n2) SIX_MONTHS\n3) ONE_YEAR\n4) PERMANENT",
+            ""
+        );
+        const banDurationMap = {
+            "1": "ONE_MONTH",
+            "2": "SIX_MONTHS",
+            "3": "ONE_YEAR",
+            "4": "PERMANENT"
+        };
+        const selectedBanDuration = banDurationMap[banDuration];
+
+        if (!selectedBanDuration) {
+            alert("유효한 정지 기간을 선택하세요.");
+            return;
+        }
+
+        // 정지 사유 선택
+        const banReason = prompt(
+            "정지 사유를 선택하세요:\n1) SPAM\n2) HARASSMENT\n3) INAPPROPRIATE_CONTENT\n4) HATE_SPEECH\n5) VIOLENCE\n6) FALSE_INFORMATION\n7) IMPERSONATION\n8) SCAM\n9) VIOLATION_OF_RULES\n10) OTHER",
+            "1"
+        );
+        const banReasonMap = {
+            "1": "SPAM",
+            "2": "HARASSMENT",
+            "3": "INAPPROPRIATE_CONTENT",
+            "4": "HATE_SPEECH",
+            "5": "VIOLENCE",
+            "6": "FALSE_INFORMATION",
+            "7": "IMPERSONATION",
+            "8": "SCAM",
+            "9": "VIOLATION_OF_RULES",
+            "10": "OTHER"
+        };
+        const selectedBanReason = banReasonMap[banReason];
+
+        if (!selectedBanReason) {
+            alert("유효한 정지 사유를 선택하세요.");
+            return;
+        }
+
+        // API 호출
+        const result = await giveBanToUser(articleNum, token, selectedBanDuration, selectedBanReason);
+        if (result.code === 'SU') {
+            alert('사용자가 성공적으로 정지되었습니다.');
+        } else {
+            alert(`사용자 정지 실패: ${result.message}`);
+        }
+    };
+
     const handleComposition = (event) => {
         if (event.type === 'compositionend') {
             setIsComposing(false);
@@ -33,9 +85,10 @@ const ShowPage = () => {
         }
     };
 
-    const handleDeleteComment = async (commentNumber) => {
+    const handleDeleteComment = async (articleNum, commentNumber, token) => {
         try {
             const success = await handleCommentDelete(articleNum,commentNumber, token);
+            console.log("Deleting comment number:", commentNumber)
             if (success) {
                 fetchComments(articleNum,token, setComments);  
             }
@@ -63,7 +116,9 @@ const ShowPage = () => {
     const onDelete = () => {
         handleDelete(articleNum, token, navigate);
     };
-    
+    const adonDelete = () => {
+        adminhandleDelete(articleNum, token, navigate);
+    };
 
     
 
@@ -118,6 +173,22 @@ const ShowPage = () => {
     };
 
     useEffect(() => {
+        const checkAdmin = async () => {
+            try {
+                const response = await checkAnonymousBoardAdmin(token);
+                console.log('Admin Check Response:', response);
+                if (response ) {
+                    setIsAdmin(true);
+                }
+            } catch (error) {
+                console.error('Error checking admin status:', error);
+            }
+        };
+
+        checkAdmin();
+    }, [token]);
+
+    useEffect(() => {
         if (articleNum && token) {
             axios.get(`http://localhost:4000/api/v1/article/${articleNum}/like`, {
                 headers: { Authorization: `Bearer ${token}` }
@@ -168,7 +239,23 @@ const ShowPage = () => {
         fetchUserDetails();
     }, [token]);  
     
-
+    const handleSaveEdit = async (commentNumber) => {
+        try {
+            const response = await handleCommentEdit(commentNumber, editCommentInput, token);
+            if (response) {
+                // 댓글 목록을 업데이트
+                const updatedComments = comments.map(comment =>
+                    comment.commentNumber === commentNumber ? { ...comment, content: editCommentInput } : comment
+                );
+                setComments(updatedComments);
+                setEditingCommentId(null); // 수정 모드 종료
+            }
+        } catch (error) {
+            console.error('Error saving edited comment:', error);
+            alert('댓글 수정에 실패했습니다.');
+        }
+    };
+    
     useEffect(() => {
         if (articleNum && token) {
             checkArticleOwnership(articleNum, token).then(data => {
@@ -196,7 +283,7 @@ const ShowPage = () => {
         if (event.key === 'Enter' && !event.shiftKey && !isComposing) {
             event.preventDefault();
             try {
-                await handleCommentSubmit(commentInput, setComments, setCommentInput, userEmail, articleNum, token);
+                await handleCommentSubmit(event,commentInput, setComments, setCommentInput, userEmail, articleNum, token);
             } catch (error) {
                 console.error('Error submitting comment:', error);
             }
@@ -223,6 +310,7 @@ const ShowPage = () => {
     useEffect(() => {
         if (articleNum) {
             fetchComments(articleNum, token, setComments);
+            console.log(comments)
         }
     }, [articleNum, token]);
     
@@ -289,49 +377,76 @@ const ShowPage = () => {
                                     </div>
                                 )}            
                             </div>
-                            
+                            {isAdmin && (
+                                 <div className='stop'>
+                                    <button onClick={adonDelete}>삭제</button>
+                                    <button onClick={handleBanUser}>정지</button>
+                                </div>
+
+                            )}
+                           
                             <div className='CommentBox-container'>  
-                                {comments.map((comment, index) => (
-                                    <div key={index}>
-                                        <div className="Comment">
+                            {comments.map((comment, index) => (
+                                <div key={index} className="Comment">
+                                    {editingCommentId === comment.commentNumber ? (
+                                        // 수정 모드
+                                        <div className="Comment-Edit">
+                                             <p>운영자</p>
+                                            <textarea
+                                                value={editCommentInput}
+                                                onChange={(e) => setEditCommentInput(e.target.value)}
+                                                className="comment-edit-input"
+                                                rows="3"
+                                                style={{ width: '100%' }}
+                                            />
+                                            <div className='ed-comment'>
+
+
+                                                <div className='ed-bt' onClick={() => handleSaveEdit(comment.commentNumber)}>저장</div>
+                                                <div className='ed-can' onClick={() => setEditingCommentId(null)}>취소</div>
+                                            </div>
+
+                                        </div>
+                                    ) : (
+                                        // 일반 모드
+                                        <div>
                                             <div className="Comment-Header">
                                                 <p className="Comment-Author">운영자</p>
                                                 <p className="Comment-Date">{CommentDate(comment.writeDatetime)}</p>
-                                                {userDetails.email === 'jinwoo1234@naver.com' && (
-                                                <div className = "Admin-de_Ca-bottom">
-                                                    <button onClick={() => handleDeleteComment(comment.commentNumber)}>삭제</button>
-                                                    <button onClick={() => { setEditingCommentId(comment.commentNumber); setEditCommentInput(comment.content); }}>수정</button>
-                                                </div>
-
+                                                {isAdmin && (
+                                                    <div className="Admin-de_Ca-bottom">
+                                                        <button onClick={() => handleDeleteComment(articleNum, comment.commentNumber, token)}>삭제</button>
+                                                        <button onClick={() => { setEditingCommentId(comment.commentNumber); setEditCommentInput(comment.content); }}>수정</button>
+                                                    </div>
                                                 )}
-                                               
-                                            </div>  
+                                            </div>
                                             <p className="Comment-Content">{comment.content}</p>
-                                            
-                                            
                                         </div>
+                                    )}
                                     {index < comments.length - 1 && <hr className="Comment-Divider" />}
-                                    </div>
-                                ))}
-                            </div>
-                            {userDetails.email === 'jinwoo1234@naver.com' && (
-                                    <div className="CommentBox-bottom">
-                                        <textarea
-                                            className="comment-input-area"
-                                            value={commentInput}
-                                            onChange={handleCommentChange}
-                                            onCompositionStart={handleComposition}
-                                            onCompositionEnd={handleComposition}
-                                            onKeyDown={handleKeyDown}
-                                            placeholder="댓글을 남겨보세요"
-                                            rows="3"
-                                            style={{ width: '100%' }}
-                                        />
-                                          <button className="submit-button" onClick={handleSubmit}>등록</button>
-                                          
-                            
-                                    </div>
+                                </div>
+                            ))}
+                        </div>
+
+                            {isAdmin && (   
+                                <div className="CommentBox-bottom">
+                                    <p>운영자</p>
+                                    <textarea
+                                        className="comment-input-area"
+                                        value={commentInput}
+                                        onChange={handleCommentChange}
+                                        onCompositionStart={handleComposition}
+                                        onCompositionEnd={handleComposition}
+                                        onKeyDown={handleKeyDown}
+                                        
+                                        placeholder="댓글을 남겨보세요"
+                                        rows="3"
+                                        style={{ width: '100%' }}
+                                    />
+                                    <button className="submit-button" onClick={handleSubmit}>등록</button>
+                                </div>
                             )}
+                            
                             </div>          
                         </div>
                 </div>

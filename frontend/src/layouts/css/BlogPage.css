@@ -212,7 +212,8 @@ select {
 }
 .non-Notification-container{
   position: relative;
-  height: 80%;
+  height: auto;
+  
 }
 
 /* card */ 
@@ -259,17 +260,19 @@ select {
 
 /*pagination*/
 .pagination-container{
-  position: absolute;
-  top:75%;
-  left: 44%;
+  position: relative;
+  margin-top: 5%;
+  width: 100%;
+  left: 35%;
   z-index: 11;
+
  
 }
 
 
 .btn1 {
   position: absolute;
-  top: 63%;
+  top: 75%;
   right: 18%;
   width: 60px;  
   height: 60px;  
@@ -282,6 +285,7 @@ select {
   justify-content: center;  
   align-items: center;  
   text-decoration: none;  
+  z-index: 15;
 }
 .pencil{
   width: 25%;

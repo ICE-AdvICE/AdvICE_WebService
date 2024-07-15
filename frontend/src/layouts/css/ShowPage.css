@@ -132,8 +132,8 @@
   cursor: pointer;
 }
 .comment-input-area{
-  margin-top: 12px;
-  padding-left: 2%;
+  margin-top: 16px;
+  padding-left: 3%;
   padding-top: 4%;
 }
 
@@ -284,7 +284,23 @@
   color: rgba(0, 0, 0, 0.559);
   border: none;
 }
-
+.CommentBox-bottom p{
+  margin-top: 2.5%;
+  margin-left: 1%;
+  font-size: 17px;
+  font-weight: bold;
+  position: absolute;
+  
+}
+.Comment-Edit p{
+  font-size: 17px;
+  font-weight: bold;
+}
+.comment-edit-input{
+  height: 100%;
+  padding-left: 3%;
+  padding-top: 4%;
+}
 @media (max-width: 1200px) {
   .ArticleContentbox-container{
     width: 100%;
@@ -292,4 +308,9 @@
   
  
  
+}
+.ed-comment{
+  display: flex;
+  text-align: center;
+  width: 100%;
 }
