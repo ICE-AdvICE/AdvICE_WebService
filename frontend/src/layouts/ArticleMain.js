@@ -91,8 +91,8 @@ const ArticleMain = () => {
     //카테고리 선택
     const categories = [
         { label: '모두 보여주기', value: 'all' },
-        { label: '카테고리 0', value: 'GENERAL' },
-        { label: '카테고리 1', value: 'REQUEST' },
+        { label: '일반', value: 'GENERAL' },
+        { label: '요청', value: 'REQUEST' },
         { label: '내가 쓴 글', value: 'my' }
     ];  
 
@@ -233,22 +233,25 @@ const ArticleMain = () => {
                 <div className="posts-content">
                     <div className="Notification-container">
                         {notificationArticles.length > 0 ? (
-                            notificationArticles.map((article) => {
-                                const categoryLabel = categoryLabels[article.category];
-                                return (
-                                    <Card
-                                        key={article.articleNum}
-                                        title={article.articleTitle}
-                                        createdAt={article.articleDate}
-                                        views={article.viewCount}
-                                        likes={article.likeCount}
-                                        order="공지"
-                                        category={categoryLabel}
-                                        onClick={() => handleCardClick(article)}
-                                        email={article.userEmail}
-                                    />
-                                );
-                            })
+                            notificationArticles
+                                .sort((a, b) => new Date(b.articleDate) - new Date(a.articleDate)) // 최신 날짜 순으로 정렬
+                                .slice(0, 3) // 상위 3개만 선택
+                                .map((article) => {
+                                    const categoryLabel = categoryLabels[article.category];
+                                    return (
+                                        <Card
+                                            key={article.articleNum}
+                                            title={article.articleTitle}
+                                            createdAt={article.articleDate}
+                                            views={article.viewCount}
+                                            likes={article.likeCount}
+                                            order="공지"
+                                            category={categoryLabel}
+                                            onClick={() => handleCardClick(article)}
+                                            email={article.userEmail}
+                                        />
+                                    );
+                                })
                         ) : (
                             <div>공지사항이 없습니다</div>
                         )}
@@ -274,12 +277,13 @@ const ArticleMain = () => {
                     ) : (
                         <div>게시물이 없습니다</div>
                     )}
-                </div>
+                    </div>
+                    <div className= "pagination-container">
+                        <Pagination paginate={paginate} currentPage={currentPage} totalPages={totalPages} />
+                    </div>
 
                 </div>
-                <div className= "pagination-container">
-                    <Pagination paginate={paginate} currentPage={currentPage} totalPages={totalPages} />
-                </div>
+               
                 <Link to="/article-main/create" className="btn1">
                     <img src="/pencil.png" className="pencil" />
                 </Link>
