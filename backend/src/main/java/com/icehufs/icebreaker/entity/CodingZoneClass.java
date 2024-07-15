@@ -36,6 +36,9 @@ public class CodingZoneClass {
     @Column(name = "class_date")
     private String classDate;
 
+    @Column(name = "current_number")
+    private int currentNumber;
+
     @Column(name = "maximum_number")
     private int maximumNumber;
 
@@ -46,6 +49,7 @@ public class CodingZoneClass {
         this.assistantName = dto.getAssistantName();
         this.classTime = dto.getClassTime();
         this.classDate = dto.getClassDate();
+        this.currentNumber = 0;
         this.maximumNumber = dto.getMaximumNumber();
         this.category = dto.getCategory();
     }
