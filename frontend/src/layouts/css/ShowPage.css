@@ -292,7 +292,15 @@
   position: absolute;
   
 }
-
+.Comment-Edit p{
+  font-size: 17px;
+  font-weight: bold;
+}
+.comment-edit-input{
+  height: 100%;
+  padding-left: 3%;
+  padding-top: 4%;
+}
 @media (max-width: 1200px) {
   .ArticleContentbox-container{
     width: 100%;
@@ -300,4 +308,9 @@
   
  
  
+}
+.ed-comment{
+  display: flex;
+  text-align: center;
+  width: 100%;
 }

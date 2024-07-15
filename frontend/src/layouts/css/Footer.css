@@ -5,7 +5,7 @@
 
      
     margin: 0 auto;
-    position: relative;
+    position: fixed;
 }
 .footer-logo{
     padding-top: 4%;

@@ -88,6 +88,7 @@ const ShowPage = () => {
     const handleDeleteComment = async (articleNum, commentNumber, token) => {
         try {
             const success = await handleCommentDelete(articleNum,commentNumber, token);
+            console.log("Deleting comment number:", commentNumber)
             if (success) {
                 fetchComments(articleNum,token, setComments);  
             }
@@ -238,7 +239,23 @@ const ShowPage = () => {
         fetchUserDetails();
     }, [token]);  
     
-
+    const handleSaveEdit = async (commentNumber) => {
+        try {
+            const response = await handleCommentEdit(commentNumber, editCommentInput, token);
+            if (response) {
+                // 댓글 목록을 업데이트
+                const updatedComments = comments.map(comment =>
+                    comment.commentNumber === commentNumber ? { ...comment, content: editCommentInput } : comment
+                );
+                setComments(updatedComments);
+                setEditingCommentId(null); // 수정 모드 종료
+            }
+        } catch (error) {
+            console.error('Error saving edited comment:', error);
+            alert('댓글 수정에 실패했습니다.');
+        }
+    };
+    
     useEffect(() => {
         if (articleNum && token) {
             checkArticleOwnership(articleNum, token).then(data => {
@@ -293,6 +310,7 @@ const ShowPage = () => {
     useEffect(() => {
         if (articleNum) {
             fetchComments(articleNum, token, setComments);
+            console.log(comments)
         }
     }, [articleNum, token]);
     
@@ -368,28 +386,49 @@ const ShowPage = () => {
                             )}
                            
                             <div className='CommentBox-container'>  
-                                {comments.map((comment, index) => (
-                                    <div key={index}>
-                                        <div className="Comment">
+                            {comments.map((comment, index) => (
+                                <div key={index} className="Comment">
+                                    {editingCommentId === comment.commentNumber ? (
+                                        // 수정 모드
+                                        <div className="Comment-Edit">
+                                             <p>운영자</p>
+                                            <textarea
+                                                value={editCommentInput}
+                                                onChange={(e) => setEditCommentInput(e.target.value)}
+                                                className="comment-edit-input"
+                                                rows="3"
+                                                style={{ width: '100%' }}
+                                            />
+                                            <div className='ed-comment'>
+
+
+                                                <div className='ed-bt' onClick={() => handleSaveEdit(comment.commentNumber)}>저장</div>
+                                                <div className='ed-can' onClick={() => setEditingCommentId(null)}>취소</div>
+                                            </div>
+
+                                        </div>
+                                    ) : (
+                                        // 일반 모드
+                                        <div>
                                             <div className="Comment-Header">
                                                 <p className="Comment-Author">운영자</p>
-                                                <p className="Comment-Date">{CommentDate(comment.writeDatetime)}</p>  
-                                                {isAdmin && (  
+                                                <p className="Comment-Date">{CommentDate(comment.writeDatetime)}</p>
+                                                {isAdmin && (
                                                     <div className="Admin-de_Ca-bottom">
-                                                        <button onClick={() => handleDeleteComment(comment.commentNumber)}>삭제</button>
+                                                        <button onClick={() => handleDeleteComment(articleNum, comment.commentNumber, token)}>삭제</button>
                                                         <button onClick={() => { setEditingCommentId(comment.commentNumber); setEditCommentInput(comment.content); }}>수정</button>
                                                     </div>
                                                 )}
-                                            </div>  
+                                            </div>
                                             <p className="Comment-Content">{comment.content}</p>
-                                            
-                                            
                                         </div>
+                                    )}
                                     {index < comments.length - 1 && <hr className="Comment-Divider" />}
-                                    </div>
-                                ))}
-                            </div>
-                            {isAdmin && (  // 관리자일 경우에만 댓글 입력 박스 표시
+                                </div>
+                            ))}
+                        </div>
+
+                            {isAdmin && (   
                                 <div className="CommentBox-bottom">
                                     <p>운영자</p>
                                     <textarea
