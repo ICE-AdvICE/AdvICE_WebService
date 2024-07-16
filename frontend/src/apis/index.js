@@ -4,6 +4,7 @@ import moment from 'moment';
 const DOMAIN = 'http://localhost:4000';
 
 const API_DOMAIN = `${DOMAIN}/api/v1`;
+const API_ADMIN_DOMAIN = `${DOMAIN}/api/admin`;
 
 const SIGN_IN_URL = () => `${API_DOMAIN}/auth/sign-in`; //로그인
 const SIGN_UP_URL = () => `${API_DOMAIN}/auth/sign-up`; // 회원가입 
@@ -16,7 +17,6 @@ const POST_PW_CHANGE_URL =() => `${API_DOMAIN}/auth/password-change/email-certif
 const PATCH_PW_URL=() =>`${API_DOMAIN}/user/password`;
 
 const DELETE_USER =()=> `${API_DOMAIN}/user`; //회원탈퇴 
-
 
 
 const GET_SIGN_IN_USER_URL =() =>`${API_DOMAIN}/user`;
@@ -41,7 +41,7 @@ export const giveBanToUser = async (articleNum, token, banDuration, banReason) =
             headers: { Authorization: `Bearer ${token}` }
         });
 
-        console.log(response.data.code); // 응답 코드 로깅
+        console.log(response.data.code);  
         if (response.data.code === "SU") {
             alert("정지가 성공적으로 부여되었습니다.");
             return { code: 'SU' };
@@ -51,7 +51,6 @@ export const giveBanToUser = async (articleNum, token, banDuration, banReason) =
         }
     } catch (error) {
         console.error('사용자 정지 부여 중 오류 발생:', error);
-
         if (error.response) {
             const errorCode = error.response.data.code;
             switch (errorCode) {
@@ -82,16 +81,13 @@ export const giveBanToUser = async (articleNum, token, banDuration, banReason) =
     }
 };
 
+//1-11사용자 정지확인 api
 export const checkUserBanStatus = async (token) => {
     try {
         const response = await axios.post(`http://localhost:4000/api/v1/auth/check-user-ban`, {}, {
             headers: { Authorization: `Bearer ${token}` }
         });
-        console.log(response); 
-        const { data } = response;
-        console.log(data);  // 응답 로그 출력
-
-        // 정지된 계정의 경우 email이 null이 아니면 정지 상태로 간주
+        const { data } = response; 
         if (data.email !== null) {
             return {
                 banned: true,
@@ -146,17 +142,16 @@ export const createNotificationArticleRequest = async (postData, token) => {
         if (error.response) {
             switch (error.response.data.code) {
                 case "NU":
-                    alert("This user does not exist.");
+                    alert("로그인을 다시 해주세요");
                     break;
                 case "AF":
-                    alert("No Permission");
+                    alert("공지글 올릴 수 있는 권한이 없습니다.");
                     break;
                 case "VF":
                     alert("Validation failed.");
                     break;
-                    
                 case "DBE":
-                    alert("Database error.");
+                    alert("데이터베이스에 문제가 발생했습니다");
                     break;
                 default:
                     alert("An unexpected error occurred.");
@@ -193,7 +188,7 @@ export const handleEdit = async (articleNum, token, navigate, setCanEdit, articl
             headers: { Authorization: `Bearer ${token}` }
         });
         if (response.data.code === "SU") {
-            console.log('Article updated successfully');
+            console.log('게시글이 정상적으로 작성되었습니다.');
             setCanEdit(true);
             navigate(`/article-main/${articleNum}/edit`);
         } else if (response.data.code === "NA") {
@@ -203,7 +198,7 @@ export const handleEdit = async (articleNum, token, navigate, setCanEdit, articl
         } else if (response.data.code === "VF") {
             alert("Validation failed.");
         } else if (response.data.code === "DBE") {
-            alert("Database error.");
+            alert("데이터베이스에 문제가 발생했습니다");
         } else {
             console.error('Failed to update article:', response.data.message);
             throw new Error(response.data.message);
@@ -231,7 +226,7 @@ export const handleDelete = async (articleNum, token, navigate) => {
                         alert("This article does not exist.");
                         break;
                     case "NU":
-                        alert("This user does not exist.");
+                        alert("로그인을 다시해주세요.");
                         break;
                     case "VF":
                         alert("Validation failed.");
@@ -240,10 +235,10 @@ export const handleDelete = async (articleNum, token, navigate) => {
                         alert("Do not have permission.");
                         break;
                     case "DBE":
-                        alert("Database error.");
+                        alert("데이터베이스에 문제가 발생했습니다");
                         break;
                     default:
-                        alert("An unexpected error occurred: ");
+                        alert("예상치 못한 문제가 발생하였습니다.");
                         break;
                 }
             } 
@@ -281,10 +276,10 @@ export const handleCommentSubmit = async (event, commentInput, setComments, setC
                         alert("Validation failed.");
                         break;
                     case "DBE":
-                        alert("Database error.");
+                        alert("데이터베이스에 문제가 발생했습니다");
                         break;
                     default:
-                        alert("An unexpected error occurred.");
+                        alert("예상치 못한 문제가 발생하였습니다.");
                         break;
                 }
             }
@@ -320,10 +315,10 @@ export const adminhandleDelete = async (articleNum, token, navigate) => {
                         alert("Do not have permission.");
                         break;
                     case "DBE":
-                        alert("Database error.");
+                        alert("데이터베이스에 문제가 발생했습니다");
                         break;
                     default:
-                        alert("An unexpected error occurred: ");
+                        alert("예상치 못한 문제가 발생하였습니다.");
                         break;
                 }
             } 
@@ -598,7 +593,7 @@ export const handleCommentDelete = async (articleNum, commentNumber, token) => {
                         alert("Database error.");
                         break;
                     default:
-                        alert("An unexpected error occurred.");
+                        alert("예상치 못한 문제가 발생하였습니다.");
                         break;
                 }
             }
@@ -627,10 +622,10 @@ export const checkAnonymousBoardAdmin = async (token) => {
                     alert("No Permission");
                     break;
                 case "DBE":
-                    alert("Database error.");
+                    alert("데이터베이스에 문제가 발생했습니다");
                     break;
                 default:
-                    alert("An unexpected error occurred.");
+                    alert("예상치 못한 문제가 발생하였습니다.");
                     break;
             }
         }

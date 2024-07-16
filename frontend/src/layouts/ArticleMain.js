@@ -36,20 +36,19 @@ const ArticleMain = () => {
         const indexOfFirstArticle = indexOfLastArticle - articlesPerPage;
         return filteredArticles.slice(indexOfFirstArticle, indexOfLastArticle);
     }, [currentPage, filteredArticles, articlesPerPage]);
+    
     const handleCreateArticleClick = async () => {
-        const token = cookies.accessToken; // 쿠키에서 액세스 토큰을 가져옵니다.
+        const token = cookies.accessToken;  
     
         if (!token) {
             alert("로그인이 필요합니다.");
             return;
         }
-    
-        // 사용자 정지 상태 확인
         const banStatus = await checkUserBanStatus(token);
         if (banStatus.banned) {
             alert("계정이 정지된 상태입니다. 글 작성이 불가능합니다.");
         } else {
-            navigate("/article-main/create"); // 정지 상태가 아니면 글 작성 페이지로 이동
+            navigate("/article-main/create");  
         }
     };
     //공지사항
