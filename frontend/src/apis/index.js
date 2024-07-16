@@ -17,7 +17,7 @@ const PATCH_PW_URL=() =>`${API_DOMAIN}/user/password`;
 
 const DELETE_USER =()=> `${API_DOMAIN}/user`; //회원탈퇴 
 
-const PUSH_BAN_USER_CERTIFICATION = () => `${API_DOMAIN}/auth/check-user-ban`;
+
 
 const GET_SIGN_IN_USER_URL =() =>`${API_DOMAIN}/user`;
 const authorization = (accessToken) => {

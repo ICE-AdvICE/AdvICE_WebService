@@ -301,13 +301,15 @@ const ArticleMain = () => {
                     </div>
                     <div className= "pagination-container">
                         <Pagination paginate={paginate} currentPage={currentPage} totalPages={totalPages} />
+                        <div className="btn1" onClick={handleCreateArticleClick} style={{ cursor: 'pointer' }}>
+                            <img src="/pencil.png" className="pencil" />
+                            <p>글쓰기</p>
+                        </div>
                     </div>
 
                 </div>
                
-                <div className="btn1" onClick={handleCreateArticleClick} style={{ cursor: 'pointer' }}>
-                    <img src="/pencil.png" className="pencil" alt="글 작성"/>
-                </div>
+              
 
             </div>
         </div>

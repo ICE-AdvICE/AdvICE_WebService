@@ -21,7 +21,7 @@
   position: absolute;
   width: 50%;
   height: 50%;
-  left: 27%;
+  left: 25%;
   top:11%;
   z-index: 11;
 }
@@ -299,7 +299,40 @@
 .comment-edit-input{
   height: 100%;
   padding-left: 3%;
-  padding-top: 4%;
+  padding-top: 2%;
+}
+.ed-comment{
+  display: flex;       
+  align-items: center; 
+  margin-left: 90%;
+  width: 15%;
+}
+.ed-bt{
+  margin-right: 2%;
+  padding: 5px 20px;
+}
+
+
+.stop button{
+  border:1px,solid;
+  color:black;
+  background: white;
+  cursor: pointer;
+  margin-right: 2%;
+  padding: 5px 20px;
+
+}
+.stop {
+  display: flex;        
+  align-items: center;  
+  margin-left: 86%;
+  width: 15%;
+  
+}
+
+.stop button:hover{
+  color: white;
+  background-color: #002D56;
 }
 @media (max-width: 1200px) {
   .ArticleContentbox-container{
@@ -308,9 +341,4 @@
   
  
  
-}
-.ed-comment{
-  display: flex;
-  text-align: center;
-  width: 100%;
 }

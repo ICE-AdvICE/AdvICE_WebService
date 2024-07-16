@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, NavLink,useNavigate } from 'react-router-dom';
 import '../layouts/css/NavBar.css';
 import LoginForm from '../Modals/LoginForm';
@@ -15,6 +15,16 @@ const NavBar = () => {
     const [cookies, setCookie, removeCookie] = useCookies(['accessToken']); // 쿠키 관리
     const navigate = useNavigate();
 
+    useEffect(() => { //로그인 상태를 확인해주는 코드임. 
+        const token = cookies.accessToken;
+        if (token) {
+            setIsLoggedIn(true);
+        } else {
+            setIsLoggedIn(false);
+        }
+    }, [cookies.accessToken]);  
+
+
     const openLoginModal = () => setIsLoginModalOpen(true);
 
     const closeLoginModal = (loginSuccess) => {
@@ -24,10 +34,7 @@ const NavBar = () => {
         }
     };
 
-    const justCloseModal = () => {
-        setIsLoginModalOpen(false);
-    };
-
+    const justCloseModal = () => setIsLoginModalOpen(false);
     const openSignUpModal = () => setIsSignUpModalOpen(true);
     const closeSignUpModal = () => setIsSignUpModalOpen(false);
     const closeMyPageModal = () => setModalOpenmypage(false);

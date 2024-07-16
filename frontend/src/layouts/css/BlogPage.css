@@ -261,24 +261,20 @@ select {
 /*pagination*/
 .pagination-container{
   position: relative;
-  margin-top: 5%;
+  margin-top: 3%;
   width: 100%;
-  left: 35%;
+  left: 37%;
   z-index: 11;
-
+  display: flex;
  
 }
 
-
+.pagination{
+  margin-top: 6%;
+}
 .btn1 {
-  position: absolute;
-  top: 75%;
-  right: 18%;
-  width: 60px;  
-  height: 60px;  
-  padding: 0;  
-  border-radius: 50%;  
-  border: none;  
+  position: relative;
+  width: 14%;  
   background-color: white;  
   color: black; 
   display: flex;  
@@ -286,10 +282,17 @@ select {
   align-items: center;  
   text-decoration: none;  
   z-index: 15;
-}
+  margin-left: 26%;
+  border: 1px solid #ACACAC;
+  height: 80%;
+  }
 .pencil{
-  width: 25%;
-  height: 25%;
+  width: 18%;
+  height: 35%;
+}
+.btn1 p{
+  margin-left: 8%;
+  margin-top: 14%;
 }
 @media (max-width: 1500px) {
   .blog-container{
