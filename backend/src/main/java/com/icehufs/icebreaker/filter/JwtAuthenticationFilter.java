@@ -63,8 +63,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
         if(!"NULL".equals(authorityEntity.getRoleAdmin1())){
             authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN1")); //익명게시판 운영자 권한 부여
         }
-        if(!"NULL".equals(authorityEntity.getRoleAdmin2())){
-            authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN2"));//코딩존 운영자 권한 부여
+
+        if(!"NULL".equals(authorityEntity.getRoleAdminC1())){
+            authorities.add(new SimpleGrantedAuthority("ROLE_ADMINC1"));//코딩존 과목1 조교 권한 부여
+        }
+
+        if(!"NULL".equals(authorityEntity.getRoleAdminC2())){
+            authorities.add(new SimpleGrantedAuthority("ROLE_ADMINC2"));//코딩존 과목2 조교 권한 부여
+        }
+
+        if(!"NULL".equals(authorityEntity.getRoleAdmin())){
+            authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));//'ICEbreaker' 코딩존 수업 등록 및 권한 부여 가능한 권한(과사조교) 부여
         }
 
 

@@ -31,7 +31,7 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/admin1")
+@RequestMapping("/api/admin1") // 익명게시판 운영자 권한 
 public class ArticleAdminController {
 
     private final ArticleService articleService;
