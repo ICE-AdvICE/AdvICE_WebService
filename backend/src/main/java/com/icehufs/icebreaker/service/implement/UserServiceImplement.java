@@ -1,4 +1,6 @@
 package com.icehufs.icebreaker.service.implement;
+
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -114,14 +116,21 @@ public class UserServiceImplement implements UserService {
             AuthorityEntity authorityEntity = authorityRepository.findByEmail(email);
             if(authorityEntity == null) return AuthorityResponseDto.notExistUser();
  
-            int admin1 = dto.getRoleAdmin1();
-            int admin2 = dto.getRoleAdmin2();
             //System.out.println(admin1);
-            if(admin1 == 1){ //익명게시판 운영자 권한 부여
+            if(dto.getRoleAdmin1() == 1){ //익명게시판 운영자 권한 부여
                 authorityEntity.giveAdmin1Auth();
             }
-            if(admin2 == 1){ //코딩존 운영자 권한 부여
-                authorityEntity.giveAdmin2Auth();
+
+            if(dto.getRoleAdminC1() == 1){ //코딩존 운영자 권한 부여
+                authorityEntity.giveAdminC1Auth();
+            }
+
+            if(dto.getRoleAdminC2() == 1){ //코딩존 운영자 권한 부여
+                authorityEntity.giveAdminC2Auth();
+            }
+
+            if(dto.getRoleAdmin() == 1){ //코딩존 운영자 권한 부여
+                authorityEntity.giveAdminAuth();
             }
             authorityRepository.save(authorityEntity);
 
@@ -131,6 +140,7 @@ public class UserServiceImplement implements UserService {
     }
     return AuthorityResponseDto.success();
     }
+    
 
     @Override
     public ResponseEntity<? super Authority1ExistResponseDto> auth1Exist(String email) {

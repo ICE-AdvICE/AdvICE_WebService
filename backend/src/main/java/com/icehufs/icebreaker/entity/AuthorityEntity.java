@@ -66,33 +66,41 @@ public class AuthorityEntity {
     }
 
     public void giveAdminC1Auth() {
-        this.roleAdmin2 = "ROLE_ADMIN2";
-        this.givenDateAdmin2 = LocalDateTime.now();
+        this.roleAdminC1 = "ROLE_ADMINC1";
+        this.givenDateAdminC = LocalDateTime.now();
     }
 
     public void giveAdminC2Auth() {
-        this.roleAdmin2 = "ROLE_ADMIN2";
-        this.givenDateAdmin2 = LocalDateTime.now();
+        this.roleAdminC2 = "ROLE_ADMINC2";
+        this.givenDateAdminC = LocalDateTime.now();
     }
 
-    public void giveAdmin2Auth() {
-        this.roleAdmin2 = "ROLE_ADMIN2";
-        this.givenDateAdmin2 = LocalDateTime.now();
+    public void giveAdminAuth() {
+        this.roleAdmin = "ROLE_ADMIN";
     }
 
     public void setRoleAdmin1(String roleAdmin1) {
         this.roleAdmin1 = roleAdmin1;
     }
 
-    public void setRoleAdmin2(String roleAdmin2) {
-        this.roleAdmin2 = roleAdmin2;
+    public void setRoleAdminC1(String roleAdminC1) {
+        this.roleAdminC1 = roleAdminC1;
     }
+
+    public void setRoleAdminC2(String roleAdminC2) {
+        this.roleAdminC2 = roleAdminC2;
+    }
+
+    public void setRoleAdmin(String roleAdmin) {
+        this.roleAdmin = roleAdmin;
+    }
+
 
     public void setGivenDateAdmin1(LocalDateTime givenDateAdmin1) {
         this.givenDateAdmin1 = givenDateAdmin1;
     }
 
-    public void setGivenDateAdmin2(LocalDateTime givenDateAdmin2) {
-        this.givenDateAdmin2 = givenDateAdmin2;
+    public void setGivenDateAdminC(LocalDateTime givenDateAdminC) {
+        this.givenDateAdminC = givenDateAdminC;
     }
 }

@@ -18,6 +18,12 @@ public class AuthorityRequestDto {
     private int roleAdmin1;
 
     @NotNull
-    private int roleAdmin2;
-   
+    private int roleAdmin;
+
+    @NotNull
+    private int roleAdminC1;
+
+    @NotNull
+    private int roleAdminC2;
+
 }

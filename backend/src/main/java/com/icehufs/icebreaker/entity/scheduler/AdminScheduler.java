@@ -34,10 +34,18 @@ public class AdminScheduler {
                 }
             }
             
-            if (!"NULL".equals(authorityEntity.getRoleAdmin2())) { // 코딩존 운영자 권한을 가진 사용자를 검사
-                if (authorityEntity.getGivenDateAdmin2() != null && ChronoUnit.MONTHS.between(authorityEntity.getGivenDateAdmin2(), now) >= 4) {
-                    authorityEntity.setRoleAdmin2("NULL");
-                    authorityEntity.setGivenDateAdmin2(null);
+            if (!"NULL".equals(authorityEntity.getRoleAdminC1())) { //코딩존 과목1 조교 권한을 가진 사용자를 검사
+                if (authorityEntity.getGivenDateAdminC() != null && ChronoUnit.MONTHS.between(authorityEntity.getGivenDateAdminC(), now) >= 4) {
+                    authorityEntity.setRoleAdminC1("NULL");
+                    authorityEntity.setGivenDateAdminC(null);
+                    authorityRepository.save(authorityEntity);
+                }
+            }
+
+            if (!"NULL".equals(authorityEntity.getRoleAdminC2())) { //코딩존 과목2 조교 권한을 가진 사용자를 검사
+                if (authorityEntity.getGivenDateAdminC() != null && ChronoUnit.MONTHS.between(authorityEntity.getGivenDateAdminC(), now) >= 4) {
+                    authorityEntity.setRoleAdminC2("NULL");
+                    authorityEntity.setGivenDateAdminC(null);
                     authorityRepository.save(authorityEntity);
                 }
             }
