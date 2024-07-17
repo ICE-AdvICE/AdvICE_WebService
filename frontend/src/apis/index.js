@@ -444,14 +444,16 @@ export const updateMypageUserRequest = async (userData, accessToken) => { //MyPa
     }
 };
 
-export const getMypageRequest = async (accessToken)=>{
-    try {
-        const response = await axios.get(GET_MYPAGE_USER_URL (), authorization(accessToken));
-        return response.data;
-    } catch (error) {
-        if (!error.response || !error.response.data) return null;
-        return error.response.data;
+export const getMypageRequest = async (accessToken) => {
+    if (!accessToken) {
+        console.error("잘못된 접근입니다.");
+        return null; 
     }
+        const response = await axios.get(GET_MYPAGE_USER_URL(), {
+            headers: { Authorization: `Bearer ${accessToken}` }
+        });
+        return response.data;
+    
 };
 
 export const checkArticleOwnership = async (articleNum, token) => {
