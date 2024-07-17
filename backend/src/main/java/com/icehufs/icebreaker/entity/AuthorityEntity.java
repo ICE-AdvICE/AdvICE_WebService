@@ -23,33 +23,56 @@ public class AuthorityEntity {
     @Column(name = "email")
     private String email;
 
+    //일반 사용자
     @Column(name = "role_user")
     private String roleUser;
 
+    //익명게시판 운영자 권한
     @Column(name = "role_admin1")
     private String roleAdmin1;
 
-    @Column(name = "role_admin2")
-    private String roleAdmin2;
+    // 'ICEbreaker' 코딩존 수업 등록 및 권한 부여 가능한 권한 (과사조교)
+    @Column(name = "role_admin")
+    private String roleAdmin;
+
+    //코딩존 과목1 조교 권한
+    @Column(name = "role_admin_c1")
+    private String roleAdminC1;
+
+    //코딩존 과목2 조교 권한
+    @Column(name = "role_admin_c2")
+    private String roleAdminC2;
 
     @Column(name = "given_date_admin1")
     private LocalDateTime givenDateAdmin1;
 
-    @Column(name = "given_date_admin2")
-    private LocalDateTime givenDateAdmin2;
+    @Column(name = "given_date_admin_c")
+    private LocalDateTime givenDateAdminC;
 
     public AuthorityEntity(String email){
         this.email = email;
         this.roleUser = "ROLE_USER";
         this.roleAdmin1 = "NULL";
-        this.roleAdmin2 = "NULL";
+        this.roleAdminC1 = "NULL";
+        this.roleAdminC2 = "NULL";
+        this.roleAdmin = "NULL";
         this.givenDateAdmin1 = null;
-        this.givenDateAdmin2 = null;
+        this.givenDateAdminC = null;
     }
 
     public void giveAdmin1Auth() {
         this.roleAdmin1 = "ROLE_ADMIN1";
         this.givenDateAdmin1 = LocalDateTime.now();
+    }
+
+    public void giveAdminC1Auth() {
+        this.roleAdmin2 = "ROLE_ADMIN2";
+        this.givenDateAdmin2 = LocalDateTime.now();
+    }
+
+    public void giveAdminC2Auth() {
+        this.roleAdmin2 = "ROLE_ADMIN2";
+        this.givenDateAdmin2 = LocalDateTime.now();
     }
 
     public void giveAdmin2Auth() {

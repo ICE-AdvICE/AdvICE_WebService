@@ -16,9 +16,9 @@ import com.icehufs.icebreaker.service.CodingZoneService;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/api/admin2")
+@RequestMapping("/api/admin") // 'ICEbreaker' 코딩존 수업 등록 및 권한 부여 가능한 권한 (과사조교)
 @RequiredArgsConstructor
-public class CodingZoneAdminController {
+public class EntireAdminController {
 
     private final CodingZoneService codingzoneService;
 
