@@ -18,37 +18,40 @@ const MypageForm = ({ handleLogout }) => {
     const [cookies, setCookie] = useCookies(['accessToken']); // 쿠키에서 accessToken 읽기
     const token = cookies.accessToken; // 토큰을 변수에 저장
     const [modalOpenfind, setModalOpenfind] = useState(false);
+    
 
     useEffect(() => {
         const fetchUserDetails = async () => {
-            if (token) { // 토큰이 존재할 때만 API 호출
-                try {
-                    const response = await getMypageRequest(token);
-                    if (response) { // 응답이 정상적으로 있는 경우
-                        setUserDetails({ // 상태 업데이트
-                            email: response.email,
-                            studentNum: response.studentNum,
-                            name: response.name
-                        });
-                    } else {
-                        console.error('No data returned from getMypageRequest');
-                    }
-                } catch (error) {
-                    console.error('Error fetching user data:', error);
+            if (!token) {
+                console.log("로그인이 필요합니다.");
+                return;
+            }
+            try {
+                const response = await getMypageRequest(token);
+                if (response) {
+                    setUserDetails({
+                        email: response.email,
+                        studentNum: response.studentNum,
+                        name: response.name
+                    });
+                } else {
+                    console.error('No data returned from getMypageRequest');
                 }
-            }else {
-                // 토큰이 없는 경우 사용자 정보를 초기화
-                setUserDetails({ email: '', studentNum: '', name: '' });
+            } catch (error) {
+                console.error('Error fetching user data:', error);
+                alert("사용자 정보를 불러오는데 실패했습니다. 다시 시도해주세요.");
             }
         };
-        fetchUserDetails();
-    }, [token]); // token이 변경될 때마다 실행
+        if (token) {
+            fetchUserDetails();
+        }
+    }, [token]); 
 
     const handleDeleteAccount = async () => {
         if (window.confirm("정말로 계정을 삭제하시겠습니까?")) {
-            // Check if the user is banned before allowing them to delete the account
-            const banCheck = await checkuserbanRequest({ email: userDetails.email });
-            if (banCheck && banCheck.email !== null) { // If the email is not null, the user is banned
+            // 이메일과 토큰을 사용하여 사용자의 정지 유무 확인
+            const banCheck = await checkuserbanRequest(userDetails.email, token);
+            if (banCheck.banReason) {
                 alert(`계정 삭제가 불가능합니다. 정지 사유: ${banCheck.banReason}`);
             } else {
                 // Proceed with account deletion if the user is not banned
@@ -65,7 +68,7 @@ const MypageForm = ({ handleLogout }) => {
                         alert("유효성 검증에 실패했습니다.");
                         break;
                     case "DBE":
-                        alert("데이터베이스 오류가 발생했습니다.");
+                        alert("데이터베이스 오류가 발생했습니당.");
                         break;
                     default:
                         alert("알 수 없는 오류가 발생했습니다.");
@@ -118,14 +121,21 @@ const MypageForm = ({ handleLogout }) => {
                 <MyModal open={editMode} onCancel={() => setEditMode(false)} footer={[]}>
                     <div>
                         <label>이름:</label>
-                        <input type="text" value={userDetails.name} onChange={(e) => setUserDetails({...userDetails, name: e.target.value})} />
+                        <input 
+                            value={userDetails.name} 
+                            onChange={(e) => setUserDetails({...userDetails, name: e.target.value})} 
+                            className="mypage_update_name"
+                        />
                         <label>학번:</label>
-                        <input type="text" value={userDetails.studentNum} onChange={handleNumberInput} />
-                        <button type="button" className="mypage_update-button" onClick={handleUpdateUserDetails}>수정 완료</button> 
+                        <input 
+                            value={userDetails.studentNum} 
+                            onChange={handleNumberInput} 
+                            className="mypage_update_studentNum"
+                        />
+                        <button type="button" className="mypage_update-button" onClick={handleUpdateUserDetails}>수정 완료</button>
                     </div>
                 </MyModal>
-                
-                 )}
+            )}
 
             <MyModal //비밀번호 찾기
                     open={modalOpenfind}
