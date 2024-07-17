@@ -1,12 +1,12 @@
 import React, { useMemo,useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import {useNavigate } from 'react-router-dom';
 import { useCookies } from "react-cookie";
 import Card from '../components/Card';
 import Pagination from '../components/Pagination';
 import axios from 'axios';
 import { getArticleListRequest } from '../apis';
 import './css/BlogPage.css';
-import { checkUserBanStatus,getMypageRequest } from '../apis/index.js';
+import { fetchUserArticles,checkUserBanStatus,getMypageRequest } from '../apis/index.js';
 
 const ArticleMain = () => {
     const [notificationArticles, setNotificationArticles] = useState([]);
@@ -36,20 +36,19 @@ const ArticleMain = () => {
         const indexOfFirstArticle = indexOfLastArticle - articlesPerPage;
         return filteredArticles.slice(indexOfFirstArticle, indexOfLastArticle);
     }, [currentPage, filteredArticles, articlesPerPage]);
+    
     const handleCreateArticleClick = async () => {
-        const token = cookies.accessToken; // 쿠키에서 액세스 토큰을 가져옵니다.
+        const token = cookies.accessToken;  
     
         if (!token) {
             alert("로그인이 필요합니다.");
             return;
         }
-    
-        // 사용자 정지 상태 확인
         const banStatus = await checkUserBanStatus(token);
         if (banStatus.banned) {
             alert("계정이 정지된 상태입니다. 글 작성이 불가능합니다.");
         } else {
-            navigate("/article-main/create"); // 정지 상태가 아니면 글 작성 페이지로 이동
+            navigate("/article-main/create");  
         }
     };
     //공지사항
@@ -64,7 +63,6 @@ const ArticleMain = () => {
         setNotificationArticles(notifications);
         setGeneralArticles(general);
     }; 
-    
     //검색 기능(33~52)
     const searchArticles = () => {
         if (!searchTerm.trim()) {
@@ -107,8 +105,6 @@ const ArticleMain = () => {
         };
         fetchUserDetails();
     }, [token]);  
-  
-    //카테고리 선택
     const categories = [
         { label: '모두 보여주기', value: 'all' },
         { label: '일반', value: 'GENERAL' },
@@ -118,13 +114,15 @@ const ArticleMain = () => {
     const filterArticles = () => {
         const results = articlesState.filter(article => {
             if (article.category === 'NOTIFICATION') {
-                return false;  // 공지사항 카테고리 제외
+                return false;  
             } else if (selectedCategory === 'all') {
                 return true;
             } else if (selectedCategory === 'my') {
                 return article.userEmail === userDetails.email;
+            } else if (article.category === 'REQUEST' && article.authCheck === 1) {
+                return false;   
             } else {
-                return article.category === selectedCategory;
+                return article.category === selectedCategory;  // 선택된 카테고리에 맞는 게시글만 표시
             }
         });
         results.sort((a, b) => new Date(b.articleDate) - new Date(a.articleDate));
@@ -203,7 +201,6 @@ const ArticleMain = () => {
                 <img src="/main-image.png" className="header2-image"/>
                 <img src="/mainword-image.png"   className="words-image"/>
             </div>
-            
             <div className="posts-overlay-container">
                 <img src="/main2-image.png"   className="header3-image"/>
                 <img src="/main2-icon.png"  className="article-icon-image"/>
@@ -255,8 +252,8 @@ const ArticleMain = () => {
                     <div className="Notification-container">
                         {notificationArticles.length > 0 ? (
                             notificationArticles
-                                .sort((a, b) => new Date(b.articleDate) - new Date(a.articleDate)) // 최신 날짜 순으로 정렬
-                                .slice(0, 3) // 상위 3개만 선택
+                                .sort((a, b) => new Date(b.articleDate) - new Date(a.articleDate)) 
+                                .slice(0, 3) 
                                 .map((article) => {
                                     const categoryLabel = categoryLabels[article.category];
                                     return (
@@ -267,7 +264,7 @@ const ArticleMain = () => {
                                             views={article.viewCount}
                                             likes={article.likeCount}
                                             order="공지"
-                                            category={categoryLabel}
+                                            category={`[${categoryLabel}]`}
                                             onClick={() => handleCardClick(article)}
                                             email={article.userEmail}
                                         />
@@ -278,36 +275,44 @@ const ArticleMain = () => {
                         )}
                     </div>
                     <div className="non-Notification-container">
-                    {currentArticles.filter(article => article.category !== 'NOTIFICATION').length > 0 ? (
-                        currentArticles.filter(article => article.category !== 'NOTIFICATION').map((article, index) => {
-                            const categoryLabel = categoryLabels[article.category];
-                            return (
-                                <Card
-                                    key={article.articleNum}
-                                    title={article.articleTitle}
-                                    createdAt={article.articleDate}
-                                    views={article.viewCount}
-                                    likes={article.likeCount}
-                                    order={indexOfFirstArticle + index + 1}
-                                    category={categoryLabel}
-                                    onClick={() => handleCardClick(article)}
-                                    email={article.userEmail}
-                                />
-                            );
-                        })
-                    ) : (
-                        <div>게시물이 없습니다</div>
-                    )}
+                        {currentArticles.filter(article => article.category !== 'NOTIFICATION').length > 0 ? (
+                            currentArticles.filter(article => article.category !== 'NOTIFICATION').map((article, index) => {
+                                let categoryLabel = categoryLabels[article.category];
+                                if (article.category === "REQUEST" && article.authCheck === 1) {
+                                    categoryLabel = "해결";
+                                }
+                                return (
+                                    <Card
+                                        key={article.articleNum}
+                                        title={article.articleTitle}
+                                        createdAt={article.articleDate}
+                                        views={article.viewCount}
+                                        likes={article.likeCount}
+                                        order={article.articleNum}
+                                        category={`[${categoryLabel}]`}
+                                        onClick={() => handleCardClick(article)}
+                                        email={article.userEmail}
+                                    />
+                                );
+                            })
+                        ) : (
+                            <div>게시물이 없습니다</div>
+                        )}
+                    </div>
+                    <div classsName = 'writing-button'>
+                        <div className="btn1" onClick={handleCreateArticleClick} style={{ cursor: 'pointer' }}>
+                                <img src="/pencil.png" className="pencil" />
+                                <p>글쓰기</p>
+                        </div>
                     </div>
                     <div className= "pagination-container">
-                        <Pagination paginate={paginate} currentPage={currentPage} totalPages={totalPages} />
+                        <Pagination paginate={paginate} currentPage={currentPage} totalPages={totalPages} className="pagination-bar"  />
+                        
                     </div>
 
                 </div>
                
-                <div className="btn1" onClick={handleCreateArticleClick} style={{ cursor: 'pointer' }}>
-                    <img src="/pencil.png" className="pencil" alt="글 작성"/>
-                </div>
+              
 
             </div>
         </div>

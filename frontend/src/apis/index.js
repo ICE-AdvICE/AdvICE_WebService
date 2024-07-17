@@ -4,6 +4,7 @@ import moment from 'moment';
 const DOMAIN = 'http://localhost:4000';
 
 const API_DOMAIN = `${DOMAIN}/api/v1`;
+const API_ADMIN_DOMAIN = `${DOMAIN}/api/admin`;
 
 const SIGN_IN_URL = () => `${API_DOMAIN}/auth/sign-in`; //로그인
 const SIGN_UP_URL = () => `${API_DOMAIN}/auth/sign-up`; // 회원가입 
@@ -14,11 +15,7 @@ const GET_MYPAGE_USER_URL = () => `${API_DOMAIN}/user`; //마이페이지_개인
 const PATCH_MYPAGE_USER_URL=() =>`${API_DOMAIN}/user`; //마이페이지_개인정보 수정
 const POST_PW_CHANGE_URL =() => `${API_DOMAIN}/auth/password-change/email-certification`;
 const PATCH_PW_URL=() =>`${API_DOMAIN}/user/password`;
-
 const DELETE_USER =()=> `${API_DOMAIN}/user`; //회원탈퇴 
-
-
-
 const GET_SIGN_IN_USER_URL =() =>`${API_DOMAIN}/user`;
 const authorization = (accessToken) => {
     return {headers: {Authorization:`Bearer ${accessToken}`}}
@@ -28,7 +25,6 @@ const COMMENT_WRITE = (articleNum) => `${API_DOMAIN}/article/${articleNum}/comme
 const EDIT_ARTICLE = (articleNum) => `${API_DOMAIN}/article/${articleNum}`;
 
 
-
 // 1-10사용자 정지 부여 API
 export const giveBanToUser = async (articleNum, token, banDuration, banReason) => {
     try {
@@ -36,12 +32,9 @@ export const giveBanToUser = async (articleNum, token, banDuration, banReason) =
             banDuration: banDuration,
             banReason: banReason
         };
-
-        const response = await axios.post(`http://localhost:4000/api/admin1/give-ban/${articleNum}`, banDetails, {
+        const response = await axios.post(`${API_ADMIN_DOMAIN}/give-ban/${articleNum}`, banDetails, {
             headers: { Authorization: `Bearer ${token}` }
         });
-
-        console.log(response.data.code); // 응답 코드 로깅
         if (response.data.code === "SU") {
             alert("정지가 성공적으로 부여되었습니다.");
             return { code: 'SU' };
@@ -50,8 +43,6 @@ export const giveBanToUser = async (articleNum, token, banDuration, banReason) =
             return { code: response.data.code, message: response.data.message };
         }
     } catch (error) {
-        console.error('사용자 정지 부여 중 오류 발생:', error);
-
         if (error.response) {
             const errorCode = error.response.data.code;
             switch (errorCode) {
@@ -82,16 +73,13 @@ export const giveBanToUser = async (articleNum, token, banDuration, banReason) =
     }
 };
 
+//1-11사용자 정지확인 api
 export const checkUserBanStatus = async (token) => {
     try {
-        const response = await axios.post(`http://localhost:4000/api/v1/auth/check-user-ban`, {}, {
+        const response = await axios.post(`${API_DOMAIN}/auth/check-user-ban`, {}, {
             headers: { Authorization: `Bearer ${token}` }
         });
-        console.log(response); 
-        const { data } = response;
-        console.log(data);  // 응답 로그 출력
-
-        // 정지된 계정의 경우 email이 null이 아니면 정지 상태로 간주
+        const { data } = response; 
         if (data.email !== null) {
             return {
                 banned: true,
@@ -128,16 +116,12 @@ export const createArticleRequest = async (postData, accessToken) => {
         return error.response.data;
     }
 };
-
 //2.(Admin) 공지글을 등록하는 API
 export const createNotificationArticleRequest = async (postData, token) => {
     try {
-        const response = await axios.post(`${DOMAIN}/api/admin1/article`, postData, {
+        const response = await axios.post(`${API_ADMIN_DOMAIN}/article`, postData, {
             headers: { Authorization: `Bearer ${token}` }
         });
-        console.log("Authorization Token: ", `Bearer ${token}`);
-
-        console.log(response.data.code)
         if (response.data.code == "SU"){
             return true;
         }
@@ -146,20 +130,19 @@ export const createNotificationArticleRequest = async (postData, token) => {
         if (error.response) {
             switch (error.response.data.code) {
                 case "NU":
-                    alert("This user does not exist.");
+                    alert("로그인을 다시 해주세요");
                     break;
                 case "AF":
-                    alert("No Permission");
+                    alert("공지글 올릴 수 있는 권한이 없습니다.");
                     break;
                 case "VF":
                     alert("Validation failed.");
                     break;
-                    
                 case "DBE":
-                    alert("Database error.");
+                    alert("데이터베이스에 문제가 발생했습니다");
                     break;
                 default:
-                    alert("An unexpected error occurred.");
+                    alert("예상치 못한 오류가 발생했습니다.");
                     break;
             }
         }
@@ -182,7 +165,7 @@ export const fetchArticle = async (articleNum) => {
 // 4.게시글 수정 API
 export const handleEdit = async (articleNum, token, navigate, setCanEdit, article) => {
     if (!article) {
-        console.error("Article is undefined.");
+        console.error("게시글을 다시 확인해주세요.");
     }
     const updatedArticle = {
         articleTitle: article.articleTitle,
@@ -193,7 +176,7 @@ export const handleEdit = async (articleNum, token, navigate, setCanEdit, articl
             headers: { Authorization: `Bearer ${token}` }
         });
         if (response.data.code === "SU") {
-            console.log('Article updated successfully');
+            console.log('게시글이 정상적으로 작성되었습니다.');
             setCanEdit(true);
             navigate(`/article-main/${articleNum}/edit`);
         } else if (response.data.code === "NA") {
@@ -203,7 +186,7 @@ export const handleEdit = async (articleNum, token, navigate, setCanEdit, articl
         } else if (response.data.code === "VF") {
             alert("Validation failed.");
         } else if (response.data.code === "DBE") {
-            alert("Database error.");
+            alert("데이터베이스에 문제가 발생했습니다");
         } else {
             console.error('Failed to update article:', response.data.message);
             throw new Error(response.data.message);
@@ -222,28 +205,28 @@ export const handleDelete = async (articleNum, token, navigate) => {
             });
             if (response.data.code === "SU") {  
                 alert("게시글이 삭제되었습니다.");
-                navigate('/');
+                navigate('/article-main');
             } 
         } catch (error) {
             if (error.response) {
                 switch (error.response.data.code) {
                     case "NA":
-                        alert("This article does not exist.");
+                        alert("존재하지 않는 게시글입니다.");
                         break;
                     case "NU":
-                        alert("This user does not exist.");
+                        alert("로그인을 다시해주세요.");
                         break;
                     case "VF":
                         alert("Validation failed.");
                         break;
                     case "NP":
-                        alert("Do not have permission.");
+                        alert("삭제할 수 있는 권한이 없습니다.");
                         break;
                     case "DBE":
-                        alert("Database error.");
+                        alert("데이터베이스에 문제가 발생했습니다");
                         break;
                     default:
-                        alert("An unexpected error occurred: ");
+                        alert("예상치 못한 문제가 발생하였습니다.");
                         break;
                 }
             } 
@@ -263,7 +246,7 @@ export const handleCommentSubmit = async (event, commentInput, setComments, setC
             user_email: userEmail
         };
         try {
-            const response = await axios.post(`http://localhost:4000/api/admin1/${articleNum}/comment`, commentData, {
+            const response = await axios.post(`${API_ADMIN_DOMAIN}/${articleNum}/comment`, commentData, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             if (response.data.code === "SU") {
@@ -281,10 +264,10 @@ export const handleCommentSubmit = async (event, commentInput, setComments, setC
                         alert("Validation failed.");
                         break;
                     case "DBE":
-                        alert("Database error.");
+                        alert("데이터베이스에 문제가 발생했습니다");
                         break;
                     default:
-                        alert("An unexpected error occurred.");
+                        alert("예상치 못한 문제가 발생하였습니다.");
                         break;
                 }
             }
@@ -302,7 +285,7 @@ export const adminhandleDelete = async (articleNum, token, navigate) => {
             });
             if (response.data.code === "SU") {  
                 alert("게시글이 삭제되었습니다.");
-                navigate('/');
+                navigate('/article-main');
             } 
         } catch (error) {
             if (error.response) {
@@ -320,10 +303,10 @@ export const adminhandleDelete = async (articleNum, token, navigate) => {
                         alert("Do not have permission.");
                         break;
                     case "DBE":
-                        alert("Database error.");
+                        alert("데이터베이스에 문제가 발생했습니다");
                         break;
                     default:
-                        alert("An unexpected error occurred: ");
+                        alert("예상치 못한 문제가 발생하였습니다.");
                         break;
                 }
             } 
@@ -390,29 +373,17 @@ export const signUpRequest = async (requestBody) => {
         return responseBody;
     });
 return result;
-
 };
-
-
-
-
-
 export const fetchComments = (articleNum, token, setComments) => {
     axios.get(`http://localhost:4000/api/v1/article/${articleNum}/comment-list`, {
         headers: { Authorization: `Bearer ${token}` }
     })
     .then(response => {
-
-        // commentList가 제대로 받아와지는지 확인
         const comments = response.data.commentList;
-        console.log("Comment list:", comments);
-
-        // 각 댓글 객체에서 commentNumber를 출력
         const formattedComments = comments.map(comment => {
-
             return {
                 commentNumber: comment.commentNumber,
-                writeDatetime: moment.utc(comment.writeDatetime).local().format('YYYY-MM-DD HH:mm:ss'), // UTC를 로컬로 변환
+                writeDatetime: moment.utc(comment.writeDatetime).local().format('YYYY-MM-DD HH:mm:ss'),  
                 content: comment.content,
                 user_email: comment.user_email,
             };
@@ -424,8 +395,6 @@ export const fetchComments = (articleNum, token, setComments) => {
         console.error("Error fetching comments:", err);
     });
 };
-
-
 
 export const emailCertificationRequest = async (requestBody) => {
     
@@ -598,7 +567,7 @@ export const handleCommentDelete = async (articleNum, commentNumber, token) => {
                         alert("Database error.");
                         break;
                     default:
-                        alert("An unexpected error occurred.");
+                        alert("예상치 못한 문제가 발생하였습니다.");
                         break;
                 }
             }
@@ -627,10 +596,10 @@ export const checkAnonymousBoardAdmin = async (token) => {
                     alert("No Permission");
                     break;
                 case "DBE":
-                    alert("Database error.");
+                    alert("데이터베이스에 문제가 발생했습니다");
                     break;
                 default:
-                    alert("An unexpected error occurred.");
+                    
                     break;
             }
         }
@@ -654,4 +623,69 @@ export const signInRequest = async (requestBody) => { //asyns를 통해 비동�
             return responseBody;
         });
     return result;
+};
+
+//16.(Admin) 해결이 필요한 게시글을 해결된 게시글로 변경을 위한 API
+export const handleResolveArticle = async (articleNum, token, navigate, setResolved) => {
+    try {
+        const response = await axios.put(`${API_ADMIN_DOMAIN}/${articleNum}/resolv`, {}, {
+            headers: { Authorization: `Bearer ${token}` }
+        });
+        const { code } = response.data;
+        
+        if (code === "SU") {
+            console.log('게시글이 정상적으로 해결되었습니다.');
+            setResolved(true);
+            navigate(`/article-main`);
+        } else if (code === "AF") {
+            alert("No Permission.");
+        } else if (code === "NA") {
+            alert("This article does not exist.");
+        } else if (code === "NU") {
+            alert("This user does not exist.");
+        } else if (code === "VF") {
+            alert("Validation failed.");
+        } else if (code === "DBE") {
+            alert("데이터베이스에 문제가 발생했습니다.");
+        } 
+    } catch (error) {
+        console.error('Error resolving the article:', error);
+    }
+};
+export const fetchUserArticles = async (token) => {
+    try {
+        const response = await axios.get('http://localhost:4000/api/v1/article/user-list', {
+            headers: { Authorization: `Bearer ${token}` }
+        });
+        if (response.data.code === "SU") {
+            console.log("게시글 목록을 성공적으로 불러왔습니다.");
+            return response.data.articleList;  
+        } else {
+            // 다른 응답 코드에 대한 처리
+            console.error("응답 코드: ", response.data.code);
+            alert(`Error: ${response.data.message}`);
+            return null;  // 오류 발생 시 null 반환
+        }
+    } catch (error) {
+        if (error.response) {
+            switch (error.response.data.code) {
+                case "NU":
+                    alert("This user does not exist.");
+                    break;
+                case "VF":
+                    alert("Validation failed.");
+                    break;
+                case "DBE":
+                    alert("Database error.");
+                    break;
+                default:
+                    alert("Unexpected error occurred.");
+                    break;
+            }
+        } else {
+            console.error("An error occurred: ", error);
+            alert("An error occurred while fetching articles.");
+        }
+        return null;  
+    }
 };
