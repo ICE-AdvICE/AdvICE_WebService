@@ -5,7 +5,7 @@ import { useCookies } from "react-cookie";
 import ToastViewer from './ToastViewer.js';  
 import './css/ShowPage.css';
 import moment from 'moment';
-import {giveBanToUser,adminhandleDelete,checkAnonymousBoardAdmin,fetchArticle,handleCommentEdit,handleCommentDelete,handleEdit as handleEditArticle ,getMypageRequest,fetchComments,handleDelete,handleCommentSubmit ,checkArticleOwnership} from '../apis/index.js';
+import {handleResolveArticle,giveBanToUser,adminhandleDelete,checkAnonymousBoardAdmin,handleCommentEdit,handleCommentDelete,handleEdit as handleEditArticle ,getMypageRequest,fetchComments,handleDelete,handleCommentSubmit ,checkArticleOwnership} from '../apis/index.js';
  
  
 const ShowPage = () => {
@@ -13,7 +13,6 @@ const ShowPage = () => {
     const [editingCommentId, setEditingCommentId] = useState(null);
     const [editCommentInput, setEditCommentInput] = useState("");
     const [isAdmin, setIsAdmin] = useState(false);
-
     const { articleNum } = useParams();
     const [article, setArticle] = useState(null);
     const [likes, setLikes] = useState(0);
@@ -27,24 +26,7 @@ const ShowPage = () => {
     const navigate = useNavigate();
     const [canEdit, setCanEdit] = useState(false);
     const handleBanUser = async () => {
-        const banDuration = prompt(
-            "정지 기간을 선택하세요:\n1) ONE_MONTH\n2) SIX_MONTHS\n3) ONE_YEAR\n4) PERMANENT",
-            ""
-        );
-        const banDurationMap = {
-            "1": "ONE_MONTH",
-            "2": "SIX_MONTHS",
-            "3": "ONE_YEAR",
-            "4": "PERMANENT"
-        };
-        const selectedBanDuration = banDurationMap[banDuration];
-
-        if (!selectedBanDuration) {
-            alert("유효한 정지 기간을 선택하세요.");
-            return;
-        }
-
-        // 정지 사유 선택
+       
         const banReason = prompt(
             "정지 사유를 선택하세요:\n1) SPAM\n2) HARASSMENT\n3) INAPPROPRIATE_CONTENT\n4) HATE_SPEECH\n5) VIOLENCE\n6) FALSE_INFORMATION\n7) IMPERSONATION\n8) SCAM\n9) VIOLATION_OF_RULES\n10) OTHER",
             "1"
@@ -64,16 +46,37 @@ const ShowPage = () => {
         const selectedBanReason = banReasonMap[banReason];
 
         if (!selectedBanReason) {
-            alert("유효한 정지 사유를 선택하세요.");
+            alert("정지 사유를 선택하세요.");
             return;
         }
-
-        // API 호출
+        const banDuration = prompt(
+            "정지 기간을 선택하세요:\n1) ONE_MONTH\n2) SIX_MONTHS\n3) ONE_YEAR\n4) PERMANENT",
+            ""
+        );
+        const banDurationMap = {
+            "1": "ONE_MONTH",
+            "2": "SIX_MONTHS",
+            "3": "ONE_YEAR",
+            "4": "PERMANENT"
+        };
+        const selectedBanDuration = banDurationMap[banDuration];
+        if (!selectedBanDuration) {
+            alert("정지 기간을 선택하세요.");
+            return;
+        }
         const result = await giveBanToUser(articleNum, token, selectedBanDuration, selectedBanReason);
         if (result.code === 'SU') {
             alert('사용자가 성공적으로 정지되었습니다.');
         } else {
             alert(`사용자 정지 실패: ${result.message}`);
+        }
+    };
+
+    const handleResolve = async () => {
+        try {
+            await handleResolveArticle(articleNum, token, navigate, setCanEdit);
+        } catch (error) {
+            console.error('Error resolving the article:', error);
         }
     };
 
@@ -96,7 +99,6 @@ const ShowPage = () => {
             console.error("Error during comment deletion:", err);
         }
     };
-    
     
     const [userDetails, setUserDetails] = useState({
         email: '',
@@ -243,19 +245,17 @@ const ShowPage = () => {
         try {
             const response = await handleCommentEdit(commentNumber, editCommentInput, token);
             if (response) {
-                // 댓글 목록을 업데이트
                 const updatedComments = comments.map(comment =>
                     comment.commentNumber === commentNumber ? { ...comment, content: editCommentInput } : comment
                 );
                 setComments(updatedComments);
-                setEditingCommentId(null); // 수정 모드 종료
+                setEditingCommentId(null);  
             }
         } catch (error) {
             console.error('Error saving edited comment:', error);
             alert('댓글 수정에 실패했습니다.');
         }
     };
-    
     useEffect(() => {
         if (articleNum && token) {
             checkArticleOwnership(articleNum, token).then(data => {
@@ -310,7 +310,6 @@ const ShowPage = () => {
     useEffect(() => {
         if (articleNum) {
             fetchComments(articleNum, token, setComments);
-            console.log(comments)
         }
     }, [articleNum, token]);
     
@@ -351,9 +350,18 @@ const ShowPage = () => {
                     <img src="/main2-image.png"  className="header10-image"/>
                     <img src="/main2-icon.png"  className="icon-image"/>
 
-                        <div className='ArticleCategory'>
-                            <p>{article.category === 0 ? "요청" : "일반"}</p>
-                        </div>
+                    <div className='ArticleCategory'>
+                        <p>
+                            {article.category === "GENERAL" 
+                                ? "일반" 
+                                : article.category === "REQUEST"
+                                ? "요청"
+                                : article.category === "NOTIFICATION"
+                                ? "공지"
+                                : "알 수 없는 카테고리"}
+                        </p>
+                    </div>
+
                         <div className="ArticleTitle">
                             <p>{article.articleTitle}</p>
                         </div>
@@ -381,17 +389,22 @@ const ShowPage = () => {
                                  <div className='stop'>
                                     <button onClick={adonDelete}>삭제</button>
                                     <button onClick={handleBanUser}>정지</button>
+                                    {article.category === "REQUEST" && (
+                                    <button onClick={handleResolve}>해결완료</button>
+                                )}
+                                
+
                                 </div>
 
+
                             )}
+                           
                            
                             <div className='CommentBox-container'>  
                             {comments.map((comment, index) => (
                                 <div key={index} className="Comment">
                                     {editingCommentId === comment.commentNumber ? (
-                                        // 수정 모드
-                                        <div className="Comment-Edit">
-                                             <p>운영자</p>
+                                        <div className="Comment-Edit">  
                                             <textarea
                                                 value={editCommentInput}
                                                 onChange={(e) => setEditCommentInput(e.target.value)}
@@ -400,15 +413,11 @@ const ShowPage = () => {
                                                 style={{ width: '100%' }}
                                             />
                                             <div className='ed-comment'>
-
-
                                                 <div className='ed-bt' onClick={() => handleSaveEdit(comment.commentNumber)}>저장</div>
                                                 <div className='ed-can' onClick={() => setEditingCommentId(null)}>취소</div>
                                             </div>
-
                                         </div>
                                     ) : (
-                                        // 일반 모드
                                         <div>
                                             <div className="Comment-Header">
                                                 <p className="Comment-Author">운영자</p>

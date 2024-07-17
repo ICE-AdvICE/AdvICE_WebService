@@ -1,11 +1,11 @@
 .footer-container{
     width: 100%;
-    height: 100%;
+    height: 250px;
     background: #333;
 
      
     margin: 0 auto;
-    position: fixed;
+    position: relative;
 }
 .footer-logo{
     padding-top: 4%;

@@ -21,7 +21,7 @@
   position: absolute;
   width: 50%;
   height: 50%;
-  left: 27%;
+  left: 25%;
   top:11%;
   z-index: 11;
 }
@@ -133,8 +133,8 @@
 }
 .comment-input-area{
   margin-top: 16px;
-  padding-left: 3%;
-  padding-top: 4%;
+  padding-left: 2%;
+  padding-top: 5%;
 }
 
 .Commentbox-name{
@@ -285,9 +285,9 @@
   border: none;
 }
 .CommentBox-bottom p{
-  margin-top: 2.5%;
-  margin-left: 1%;
-  font-size: 17px;
+  margin-top: 3%;
+  margin-left: 2%;
+  font-size: 14px;
   font-weight: bold;
   position: absolute;
   
@@ -299,7 +299,41 @@
 .comment-edit-input{
   height: 100%;
   padding-left: 3%;
-  padding-top: 4%;
+  padding-top: 2%;
+}
+.ed-comment{
+  display: flex;       
+  align-items: center; 
+  margin-left: 90%;
+  width: 15%;
+}
+.ed-bt{
+  margin-right: 2%;
+  padding: 5px 20px;
+}
+
+
+.stop button{
+  border:1px,solid;
+  color:black;
+  background: white;
+  cursor: pointer;
+  margin-right: 2%;
+  padding: 5px 20px;
+  z-index: 100;
+}
+.stop {
+  display: flex;        
+  align-items: center;  
+  margin-left: 78%;
+  width: 25%;
+  z-index: 100;
+  
+}
+
+.stop button:hover{
+  color: white;
+  background-color: #002D56;
 }
 @media (max-width: 1200px) {
   .ArticleContentbox-container{
@@ -308,9 +342,4 @@
   
  
  
-}
-.ed-comment{
-  display: flex;
-  text-align: center;
-  width: 100%;
 }
