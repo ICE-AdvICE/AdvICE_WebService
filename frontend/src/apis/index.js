@@ -444,16 +444,22 @@ export const updateMypageUserRequest = async (userData, accessToken) => { //MyPa
     }
 };
 
+//USER API_(3)현재 로그인 된 사용자의 정보를 받아오는 API 
 export const getMypageRequest = async (accessToken) => {
     if (!accessToken) {
         console.error("잘못된 접근입니다.");
         return null; 
     }
+    try {
         const response = await axios.get(GET_MYPAGE_USER_URL(), {
             headers: { Authorization: `Bearer ${accessToken}` }
         });
+        console.log("Response:", response.data);  // 응답 로깅
         return response.data;
-    
+    } catch (error) {
+        console.error('사용자 데이터를 가져오는 중 오류 발생:', error);
+        return null;
+    }
 };
 
 export const checkArticleOwnership = async (articleNum, token) => {

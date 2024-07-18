@@ -19,34 +19,33 @@ const MypageForm = ({ handleLogout }) => {
     const token = cookies.accessToken; // 토큰을 변수에 저장
     const [modalOpenfind, setModalOpenfind] = useState(false);
     
-
+    //사용자 정보 가져오는 함수
     useEffect(() => {
         const fetchUserDetails = async () => {
-            if (!token) {
-                console.log("로그인이 필요합니다.");
-                return;
-            }
-            try {
-                const response = await getMypageRequest(token);
-                if (response) {
-                    setUserDetails({
-                        email: response.email,
-                        studentNum: response.studentNum,
-                        name: response.name
-                    });
-                } else {
-                    console.error('No data returned from getMypageRequest');
-                }
-            } catch (error) {
-                console.error('Error fetching user data:', error);
-                alert("사용자 정보를 불러오는데 실패했습니다. 다시 시도해주세요.");
+            console.log("Trying to fetch data with token:", token);
+            const data = await getMypageRequest(token);
+            console.log("Received data:", data);
+            if (data && data.code === "SU") {
+                setUserDetails({
+                    email: data.email,
+                    studentNum: data.studentNum,
+                    name: data.name
+                });
+            } else if (data && data.code === "NU") {
+                alert("해당 사용자가 존재하지 않습니다.");
+            } else if (data && data.code === "DBE") {
+                alert("데이터베이스 오류가 발생했습니다.");
             }
         };
+    
         if (token) {
             fetchUserDetails();
+        } else {
+            console.error("No token available.");
         }
-    }, [token]); 
+    }, [token]);
 
+    //회원탈퇴 함수(정지 당했을 시 탈퇴 불가)
     const handleDeleteAccount = async () => {
         if (window.confirm("정말로 계정을 삭제하시겠습니까?")) {
             // 이메일과 토큰을 사용하여 사용자의 정지 유무 확인
@@ -54,12 +53,11 @@ const MypageForm = ({ handleLogout }) => {
             if (banCheck.banReason) {
                 alert(`계정 삭제가 불가능합니다. 정지 사유: ${banCheck.banReason}`);
             } else {
-                // Proceed with account deletion if the user is not banned
                 const result = await deleteUserRequest(token);
                 switch (result.code) {
                     case "SU":
                         alert("계정이 성공적으로 삭제되었습니다.");
-                        handleLogout(); // 로그아웃 처리 후 로그인 페이지로 리다이렉트한다고 가정
+                        handleLogout(); 
                         break;
                     case "NU":
                         alert("해당 사용자가 존재하지 않습니다.");
@@ -78,21 +76,24 @@ const MypageForm = ({ handleLogout }) => {
         }
     };
 
+    //사용자 개인정보 수정 함수
     const handleUpdateUserDetails = async () => {
         const result = await updateMypageUserRequest(userDetails, token);
         if (result.code === "SU") {
             alert("정보가 성공적으로 업데이트 되었습니다.");
-            setEditMode(false); // 수정 모드 종료
+            setEditMode(false); 
         } else {
             alert(`Error: ${result.message}`);
         }
     };
 
+    //비밀번호 수정 모달 부르는 함수 
     const handleFindpassword = (e) => {
-        e.preventDefault(); // 폼 제출 방지 // 로그인 모달 닫기
-        setModalOpenfind(true); // 회원가입 정보 모달 열기
-      };
-      
+        e.preventDefault(); 
+        setModalOpenfind(true); 
+    };
+
+    //숫자만 입력할 수 있도록 설정하는 함수
     const handleNumberInput = (e) => {
         const value = e.target.value;
         setUserDetails({...userDetails, studentNum: value.replace(/[^0-9]/g, '')});
@@ -116,9 +117,12 @@ const MypageForm = ({ handleLogout }) => {
             <button type="button" onClick={() => setEditMode(true)}>정보 수정</button>
                 <button type="button" onClick={handleLogout}>로그아웃</button>
             </div>
-            <button className="delete_user" onClick={handleDeleteAccount}>회원탈퇴</button>
+            <button className="mypage_delete_user" onClick={handleDeleteAccount}>회원탈퇴</button>
             {editMode && (
                 <MyModal open={editMode} onCancel={() => setEditMode(false)} footer={[]}>
+                    <div className="loginHeaderContainer">
+                        <img src="header-name.png" alt="로그인 로고" style={{ width: '220px', height: 'auto' }} />
+                    </div> 
                     <div>
                         <label>이름:</label>
                         <input 
