@@ -97,7 +97,8 @@ public class UserServiceImplement implements UserService {
             User userEntity = userRepository.findByEmail(email);
             if(userEntity == null) return DeleteUserResponseDto.notExistUser();
 
-
+            
+            authorityRepository.deleteById(email);
             userRepository.delete(userEntity);
 
         }catch(Exception exception){
