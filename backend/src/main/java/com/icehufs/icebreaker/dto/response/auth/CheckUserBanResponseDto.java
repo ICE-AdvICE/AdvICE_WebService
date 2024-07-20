@@ -17,13 +17,14 @@ public class CheckUserBanResponseDto extends ResponseDto{
     private String email;
     private BanDurationEnum banDuration;
     private LocalDateTime banStartTime;
+    private LocalDateTime badEndTime;
     private BanReasonEnum banReason;
 
-    public static ResponseEntity<CheckUserBanResponseDto> success(String email, BanDurationEnum banDuration, LocalDateTime banStartTime, BanReasonEnum banReason) {
-        return ResponseEntity.ok(new CheckUserBanResponseDto(email, banDuration, banStartTime, banReason));
+    public static ResponseEntity<CheckUserBanResponseDto> success(String email, BanDurationEnum banDuration, LocalDateTime banStartTime, LocalDateTime banEndTime, BanReasonEnum banReason) {
+        return ResponseEntity.ok(new CheckUserBanResponseDto(email, banDuration, banStartTime, banEndTime, banReason));
     }
 
     public static ResponseEntity<? super CheckUserBanResponseDto> notBanned() {
-        return ResponseEntity.status(404).body(new CheckUserBanResponseDto(null, null, null, null));
+        return ResponseEntity.status(404).body(new CheckUserBanResponseDto(null, null, null, null, null));
     }
 }

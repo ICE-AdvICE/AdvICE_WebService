@@ -201,7 +201,7 @@ public class AuthServiceImplement implements AuthService {
         Article articleEntity = null;
         try {
 
-            //정지하려는 운영자 로그인 시간 초과
+            //정지하려는 운영자 로그인 시간 초과 -> 무슨 의미인가요?
             boolean existedUser1 = userRepository.existsByEmail(email);
             if (!existedUser1) return GiveUserBanResponseDto.notExistUser();
 
@@ -222,14 +222,18 @@ public class AuthServiceImplement implements AuthService {
                 return GiveUserBanResponseDto.duplicateId();
             }
 
-            
+            System.out.println("phase1");
             BanDurationEnum banDuration = BanDurationEnum.valueOf(dto.getBanDuration().toUpperCase());
             BanReasonEnum banReason = BanReasonEnum.valueOf(dto.getBanReason().toUpperCase());
             UserBan userBan = new UserBan();
+            System.out.println("phase1");
+            LocalDateTime currentDateTime = LocalDateTime.now();
+            LocalDateTime banEndTime = currentDateTime.plus(getPeriod(banDuration));
             userBan.setEmail(writen_email);
             userBan.setBanDuration(banDuration);
             userBan.setBanReason(banReason);
-            userBan.setBanStartTime(LocalDateTime.now());
+            userBan.setBanStartTime(currentDateTime);
+            userBan.setBanEndTime(banEndTime);
 
             // 사용자 정지와 함께 게시물 삭제를 할 경우 코드
             //commentRepository.deleteByArticleNum(articleNum);
@@ -287,10 +291,11 @@ public class AuthServiceImplement implements AuthService {
             UserBan userBan = userBanRepository.findByEmail(email);
             // 만일 계정이 정지되어있다면..
             if (userBan != null){
-                LocalDateTime banEndTime = userBan.getBanStartTime().plus(getPeriod(userBan.getBanDuration()));
+                // LocalDateTime banEndTime = userBan.getBanStartTime().plus(getPeriod(userBan.getBanDuration()));
                 // 활동 정지가 만료되지 않았을 경우
-                if (LocalDateTime.now().isBefore(banEndTime)) {
-                    return CheckUserBanResponseDto.success(userBan.getEmail(), userBan.getBanDuration(), userBan.getBanStartTime(), userBan.getBanReason());
+                if (LocalDateTime.now().isBefore(userBan.getBanEndTime())) {
+
+                    return CheckUserBanResponseDto.success(userBan.getEmail(), userBan.getBanDuration(), userBan.getBanStartTime(), userBan.getBanEndTime(), userBan.getBanReason());
                     // 활동 정지가 만료되었을 경우
                 } else {
                     userBanRepository.delete(userBan);
