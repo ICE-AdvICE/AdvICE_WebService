@@ -222,11 +222,9 @@ public class AuthServiceImplement implements AuthService {
                 return GiveUserBanResponseDto.duplicateId();
             }
 
-            System.out.println("phase1");
             BanDurationEnum banDuration = BanDurationEnum.valueOf(dto.getBanDuration().toUpperCase());
             BanReasonEnum banReason = BanReasonEnum.valueOf(dto.getBanReason().toUpperCase());
             UserBan userBan = new UserBan();
-            System.out.println("phase1");
             LocalDateTime currentDateTime = LocalDateTime.now();
             LocalDateTime banEndTime = currentDateTime.plus(getPeriod(banDuration));
             userBan.setEmail(writen_email);
