@@ -3,11 +3,8 @@ package com.icehufs.icebreaker.service;
 import com.icehufs.icebreaker.dto.response.auth.*;
 import org.springframework.http.ResponseEntity;
 
-import com.icehufs.icebreaker.dto.request.auth.CheckCertificationRequestDto;
-import com.icehufs.icebreaker.dto.request.auth.EmailCertificationRequestDto;
-import com.icehufs.icebreaker.dto.request.auth.GiveUserBanRequestDto;
-import com.icehufs.icebreaker.dto.request.auth.SignInRequestDto;
-import com.icehufs.icebreaker.dto.request.auth.SignUpRequestDto;
+import com.icehufs.icebreaker.dto.request.auth.*;
+
 
 public interface AuthService {
 

@@ -9,9 +9,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.icehufs.icebreaker.dto.request.codingzone.CodingZoneClassAssignRequestDto;
-import com.icehufs.icebreaker.dto.response.codingzone.CodingZoneClassAssignResponseDto;
+import com.icehufs.icebreaker.dto.request.codingzone.*;
+import com.icehufs.icebreaker.dto.response.codingzone.*;
 import com.icehufs.icebreaker.service.CodingZoneService;
+import java.util.List;
 
 import lombok.RequiredArgsConstructor;
 
@@ -30,5 +31,16 @@ public class EntireAdminController {
         ResponseEntity<? super CodingZoneClassAssignResponseDto> response = codingzoneService.codingzoneClassAssign(requestBody, email);
         return response;
     }
+
+    @PostMapping("/upload-group")
+    public ResponseEntity<? super GroupInfUpdateResponseDto> uploadInf(
+        @RequestBody @Valid List<GroupInfUpdateRequestDto> requestBody,
+        @AuthenticationPrincipal String email
+    ){
+        ResponseEntity<? super GroupInfUpdateResponseDto> response = codingzoneService.uploadInf(requestBody, email);
+        return response;
+    }
+   
+    
     
 }

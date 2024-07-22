@@ -152,7 +152,6 @@ public class UserServiceImplement implements UserService {
             if(authorityEntity == null) return Authority1ExistResponseDto.notExistUser();
  
             String admin1 = authorityEntity.getRoleAdmin1();
-            System.out.println(admin1);
             if("NULL".equals(admin1)){
                 return Authority1ExistResponseDto.notAdmin();
             }
