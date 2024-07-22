@@ -1,7 +1,5 @@
 package com.icehufs.icebreaker.service.implement;
 
-import jakarta.validation.Valid;
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
