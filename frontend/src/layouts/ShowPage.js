@@ -5,7 +5,7 @@ import { useCookies } from "react-cookie";
 import ToastViewer from './ToastViewer.js';  
 import './css/ShowPage.css';
 import moment from 'moment';
-import {handleResolveArticle,giveBanToUser,adminhandleDelete,checkAnonymousBoardAdmin,handleCommentEdit,handleCommentDelete,handleEdit as handleEditArticle ,getMypageRequest,fetchComments,handleDelete,handleCommentSubmit ,checkArticleOwnership} from '../apis/index.js';
+import {fetchLikeStatus, handleLike ,handleResolveArticle,giveBanToUser,adminhandleDelete,checkAnonymousBoardAdmin,handleCommentEdit,handleCommentDelete,handleEdit as handleEditArticle ,getMypageRequest,fetchComments,handleDelete,handleCommentSubmit ,checkArticleOwnership} from '../apis/index.js';
  
  
 const ShowPage = () => {
@@ -25,8 +25,8 @@ const ShowPage = () => {
     const [authorEmail, setAuthorEmail] = useState("");
     const navigate = useNavigate();
     const [canEdit, setCanEdit] = useState(false);
+    
     const handleBanUser = async () => {
-       
         const banReason = prompt(
             "정지 사유를 선택하세요:\n1) SPAM\n2) HARASSMENT\n3) INAPPROPRIATE_CONTENT\n4) HATE_SPEECH\n5) VIOLENCE\n6) FALSE_INFORMATION\n7) IMPERSONATION\n8) SCAM\n9) VIOLATION_OF_RULES\n10) OTHER",
             "1"
@@ -71,12 +71,12 @@ const ShowPage = () => {
             alert(`사용자 정지 실패: ${result.message}`);
         }
     };
-
+    //16.(Admin) 해결이 필요한 게시글을 해결된 게시글로 변경을 위한 API
     const handleResolve = async () => {
         try {
             await handleResolveArticle(articleNum, token, navigate, setCanEdit);
         } catch (error) {
-            console.error('Error resolving the article:', error);
+            console.error('에러가 발생했습니다.', error);
         }
     };
 
@@ -91,12 +91,11 @@ const ShowPage = () => {
     const handleDeleteComment = async (articleNum, commentNumber, token) => {
         try {
             const success = await handleCommentDelete(articleNum,commentNumber, token);
-            console.log("Deleting comment number:", commentNumber)
             if (success) {
                 fetchComments(articleNum,token, setComments);  
             }
         } catch (err) {
-            console.error("Error during comment deletion:", err);
+            console.error("에러가 발생했습니다.", err);
         }
     };
     
@@ -122,74 +121,22 @@ const ShowPage = () => {
         adminhandleDelete(articleNum, token, navigate);
     };
 
-    
-
-//좋아요 관련 코드
-    const getlikestatus = () => {
-        axios.get(`http://localhost:4000/api/v1/article/${articleNum}/like`, {
-            headers: { Authorization: `Bearer ${token}` }
-        }).then(res => {
-            if (res.data.code === "SU") {
-                setLiked(true);
-            } else if (res.data.code === "SN") {
-                setLiked(false);
-            } else {
-            }
-        }).catch(err => {
-            if (err.response) {
-                if (err.response.data.code === "DBE") {
-                    console.error("Database error occurred while fetching like status.");
-                }
-            }
-        });
-    };
-
-    const checkLikeStatus = () => {
-        axios.get(`http://localhost:4000/api/v1/article/${articleNum}/like`, {
-            headers: { Authorization: `Bearer ${token}` }
-        }).then(response => {
-            if (response.data.code === "SU") {
-                setLiked(true);
-            } else {
-                setLiked(false);
-            }
-        }).catch(error => {
-            console.error("Error checking like status:", error);
-        });
-    };
-
-    const handleLike = () => {
-        const action = liked ? 'dislike' : 'like'; 
-        axios.put(`http://localhost:4000/api/v1/article/${articleNum}/like`, {}, {
-            headers: { Authorization: `Bearer ${token}` }
-        }).then(response => {
-            if (response.data.code === "SU") {
-                setLiked(!liked);
-                setLikes(prev => liked ? prev - 1 : prev + 1);
-            } else {
-                console.error("Error updating like:", response.data.message);
-            }
-        }).catch(err => {
-            console.error("Error updating like:", err);
-        });
-    };
-
+//익명게시판권한 여부
     useEffect(() => {
         const checkAdmin = async () => {
             try {
                 const response = await checkAnonymousBoardAdmin(token);
-                console.log('Admin Check Response:', response);
                 if (response ) {
                     setIsAdmin(true);
                 }
             } catch (error) {
-                console.error('Error checking admin status:', error);
+                console.error('ERROR', error);
             }
         };
-
         checkAdmin();
     }, [token]);
 
+    
     useEffect(() => {
         if (articleNum && token) {
             axios.get(`http://localhost:4000/api/v1/article/${articleNum}/like`, {
@@ -208,8 +155,11 @@ const ShowPage = () => {
     }, [articleNum, token]);
     
     useEffect(() => {
-        getlikestatus();
-        checkLikeStatus();
+        const fetchInitialData = async () => {
+            await fetchLikeStatus(articleNum, token, setLiked);
+             
+        };
+        fetchInitialData();
     }, [articleNum, token]);
     
 
@@ -272,6 +222,7 @@ const ShowPage = () => {
     }, [articleNum, token]);
 
     const handleSubmit = async () => {
+        console.log("등록 버튼 클릭");
         try {
             await handleCommentSubmit(commentInput, setComments, setCommentInput, userEmail, articleNum, token);
         } catch (error) {
@@ -296,8 +247,8 @@ const ShowPage = () => {
         if (articleNum) {
             axios.get(`http://localhost:4000/api/v1/article/${articleNum}`)  
             .then(res => {
-                const {articleTitle, articleContent, likeCount, viewCount, category, articleDate, userEmail: authorEmail, comments: loadedComments } = res.data;
-                setArticle({ articleTitle, body: articleContent, views: viewCount, category, articleDate });
+                const {articleTitle, articleContent, likeCount, viewCount, category, authCheck,articleDate, userEmail: authorEmail, comments: loadedComments } = res.data;
+                setArticle({ articleTitle, body: articleContent, views: viewCount, category, articleDate, authCheck });
                 setLikes(likeCount);
                 setLiked(res.data.authCheck === 1);
                 setComments(loadedComments || []);
@@ -336,7 +287,10 @@ const ShowPage = () => {
     if (!article) {
         return <div>Loading...</div>;
     }
-    
+    const toggleLike = () => {
+        handleLike(articleNum, liked, token, setLiked, setLikes);
+    };
+
 
 
     return (
@@ -354,10 +308,12 @@ const ShowPage = () => {
                         <p>
                             {article.category === "GENERAL" 
                                 ? "일반" 
-                                : article.category === "REQUEST"
+                                : article.category === "REQUEST" && article.authCheck === 0
                                 ? "요청"
                                 : article.category === "NOTIFICATION"
                                 ? "공지"
+                                : article.category === "REQUEST" && article.authCheck === 1
+                                ? "해결"
                                 : "알 수 없는 카테고리"}
                         </p>
                     </div>
@@ -375,7 +331,7 @@ const ShowPage = () => {
                             <img src="/vector2.png" className="vector5"/>
                             <div className="Article-middle">
                                 <div className="Comment-Option">
-                                    <div className={`heart ${liked ? 'love' : ''}`} onClick={handleLike}></div>
+                                    <div className={`heart ${liked ? 'love' : ''}`} onClick={toggleLike}></div>
                                         <p>{likes}</p>  
                                 </div>
                                 {canEdit && (
@@ -389,14 +345,14 @@ const ShowPage = () => {
                                  <div className='stop'>
                                     <button onClick={adonDelete}>삭제</button>
                                     <button onClick={handleBanUser}>정지</button>
-                                    {article.category === "REQUEST" && (
-                                    <button onClick={handleResolve}>해결완료</button>
-                                )}
-                                
-
                                 </div>
-
-
+                            )}
+                            {isAdmin && (
+                                 <div className='resolve'>
+                                    {article.category === "REQUEST" && article.authCheck === 0 && (
+                                        <button onClick={handleResolve}>해결완료</button>
+                                    )}
+                                </div>
                             )}
                            
                            

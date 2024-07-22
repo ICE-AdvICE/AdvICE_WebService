@@ -325,12 +325,27 @@
 .stop {
   display: flex;        
   align-items: center;  
-  margin-left: 78%;
+  margin-left: 86%;
   width: 25%;
   z-index: 100;
   
 }
-
+.resolve {
+  display: flex;        
+  align-items: center;  
+  margin-left: 86%;
+  width: 25%;
+  z-index: 100;
+  margin-top: 1%;
+}
+.resolve button{
+  border:1px,solid;
+  color:black;
+  background: white;
+  cursor: pointer;
+  padding: 5px 43.5px;
+  z-index: 100;
+}
 .stop button:hover{
   color: white;
   background-color: #002D56;

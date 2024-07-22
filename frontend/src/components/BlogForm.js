@@ -3,12 +3,10 @@ import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { useCookies } from 'react-cookie';
-import { updateArticleRequest, createArticleRequest, createNotificationArticleRequest  } from '../apis/index';
+import {handleEdit,checkAnonymousBoardAdmin, updateArticleRequest, createArticleRequest, createNotificationArticleRequest  } from '../apis/index';
 import ReactQuill from 'react-quill';
 import '../layouts/css/BlogForm.css'
 import { useLocation } from 'react-router-dom';
-
-
 
 const BlogForm = ({ editing }) => {
     const navigate = useNavigate();
@@ -26,6 +24,13 @@ const BlogForm = ({ editing }) => {
     const [categoryString, setCategoryString] = useState('카테고리 선택');  
     const [isAdmin, setIsAdmin] = useState(false); // 운영자 권한 여부
 
+    const categoryMap = {
+        'REQUEST': '요청',
+        'GENERAL': '일반',
+        'NOTIFICATION': '공지',
+        '카테고리 선택': '카테고리 선택'
+    };
+
 
     
     //3. 게시글 수정 api
@@ -42,37 +47,25 @@ const BlogForm = ({ editing }) => {
                     setArticleTitle(articleTitle);
                     setArticleContent(articleContent);
                     setCategoryName(category);
-                } else {
-                    switch (res.data.code) {
-                        case "NA":
-                            setError("This article does not exist.");
-                            break;
-                        case "NU":
-                            setError("This user does not exist.");
-                            break;
-                        case "VF":
-                            setError("Validation failed.");
-                            break;
-                        case "NP":
-                            setError("Do not have permission.");
-                            break;
-                        case "DBE":
-                            setError("Database error.");
-                            break;
-                        default:
-                            setError("An unknown error occurred.");
-                            break;
-                    }
-                }
+                } 
             })
-            .catch(err => {
-                setError(err.response?.data?.message || "An unknown error occurred.");
-            })
-            .finally(() => setLoading(false));
         }
     }, [editing, articleNum, token]);
 
-    
+    useEffect(() => {
+        const checkAdmin = async () => {
+            try {
+                const response = await checkAnonymousBoardAdmin(token);
+                if (response ) {
+                    setIsAdmin(true);
+                }
+            } catch (error) {
+                console.error('Error checking admin status:', error);
+            }
+        };
+
+        checkAdmin();
+    }, [token]);
     useEffect(() => {
         if (editing && location.state?.article) {
             const { articleTitle, articleContent, category } = location.state.article;
@@ -98,25 +91,19 @@ const BlogForm = ({ editing }) => {
             articleTitle,
             articleContent,
             category: category,  
-        };
-    
-        console.log("Sending Category to Database:", category);
-        console.log("Post Data being sent:", postData);
-    
+        };    
         let response;
         if (editing) {
-            // 게시물 수정
             response = await updateArticleRequest(articleNum, postData, token);
             if (response && response.code === 'SU') {
                 navigate(`/article-main/${articleNum}`);
             }
         }  if (category === 'NOTIFICATION') {
-            // 공지 게시물 등록
             response = await createNotificationArticleRequest(postData, token);
             if (response === true) {
-                navigate('/article-main');  // 성공적으로 처리되면 메인 페이지로 이동
+                navigate('/article-main');  
             } else {
-                setError('Failed to create notification article.');
+                setError('게시글 작성을 실패했습니다');
             }
         } else {
             response = await createArticleRequest(postData, token);
@@ -142,8 +129,6 @@ const BlogForm = ({ editing }) => {
                 }
             }
         }
-    
-
     };
     
     return (
@@ -157,16 +142,17 @@ const BlogForm = ({ editing }) => {
             <div className="title-container">
                 <div className={`dropdown ${dropdownOpen ? 'active' : ''}`} onClick={() => setDropdownOpen(!dropdownOpen)}>
                     <div className="select">
-                        <span>{category}</span>
+                        <span>{categoryMap[category]}</span>
                         <i className="fa fa-chevron-left"></i>
                     </div>
                     <input type="hidden" name="category" value={categoryString} />
                 
                     <ul className="dropdown-menu">
-                        <li onClick={() => handleCategoryChange('', '카테고리 선택')}>카테고리 선택</li>
+                        <li onClick={() => handleCategoryChange('카테고리 선택', '카테고리 선택')}>카테고리 선택</li>
                         <li onClick={() => handleCategoryChange('REQUEST', '요청')}>요청</li>
                         <li onClick={() => handleCategoryChange('GENERAL', '일반')}>일반</li>
-                        <li onClick={() => handleCategoryChange('NOTIFICATION', '공지')}>공지</li>
+                        {isAdmin && (<li onClick={() => handleCategoryChange('NOTIFICATION', '공지')}>공지</li>)}
+
                       
                     </ul>
                 </div>
@@ -194,9 +180,6 @@ const BlogForm = ({ editing }) => {
                         취소
                     </button>
                 </div>
-
-                
-                
             </form>
         </div>
     );

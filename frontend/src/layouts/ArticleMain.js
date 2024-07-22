@@ -22,7 +22,7 @@ const ArticleMain = () => {
     const totalPages = Math.ceil(filteredArticles.length / articlesPerPage);
     const indexOfLastArticle = currentPage * articlesPerPage;
     const indexOfFirstArticle = indexOfLastArticle - articlesPerPage;
-     
+    const [userArticles, setUserArticles] = useState([]);
     const userEmail = cookies.userEmail;
     const [selectedCategory, setSelectedCategory] = useState('all');
     const [searchCategory, setSearchCategory] = useState('all');
@@ -36,10 +36,10 @@ const ArticleMain = () => {
         const indexOfFirstArticle = indexOfLastArticle - articlesPerPage;
         return filteredArticles.slice(indexOfFirstArticle, indexOfLastArticle);
     }, [currentPage, filteredArticles, articlesPerPage]);
-    
+
+    //글작성버튼
     const handleCreateArticleClick = async () => {
         const token = cookies.accessToken;  
-    
         if (!token) {
             alert("로그인이 필요합니다.");
             return;
@@ -51,12 +51,7 @@ const ArticleMain = () => {
             navigate("/article-main/create");  
         }
     };
-    //공지사항
-    const categoryLabels = {
-        NOTIFICATION: "공지",
-        GENERAL: "일반",
-        REQUEST: "요청"
-    };
+
     const filterNotificationArticles = (articles) => {
         const notifications = articles.filter(article => article.category === 'NOTIFICATION');
         const general = articles.filter(article => article.category !== 'NOTIFICATION');
@@ -82,29 +77,13 @@ const ArticleMain = () => {
         } else {
             searchArticles(); 
         }
-    }, [searchCategory]);
-
-    useEffect(() => {
-        const fetchUserDetails = async () => {
-            if (token) {  
-                try {
-                    const response = await getMypageRequest(token);
-                    if (response) {  
-                        setUserDetails({  
-                            email: response.email,
-                            studentNum: response.studentNum,
-                            name: response.name
-                        });
-                    } else {
-                        console.log('No user data returned from API');
-                    }
-                } catch (error) {
-                    console.error('Error fetching user details:', error);
-                }
-            }
-        };
-        fetchUserDetails();
-    }, [token]);  
+    }, [searchCategory]); 
+    //공지사항
+     const categoryLabels = {
+        NOTIFICATION: "공지",
+        GENERAL: "일반",
+        REQUEST: "요청"
+    };
     const categories = [
         { label: '모두 보여주기', value: 'all' },
         { label: '일반', value: 'GENERAL' },
@@ -112,27 +91,42 @@ const ArticleMain = () => {
         { label: '내가 쓴 글', value: 'my' }
     ];  
     const filterArticles = () => {
-        const results = articlesState.filter(article => {
-            if (article.category === 'NOTIFICATION') {
-                return false;  
-            } else if (selectedCategory === 'all') {
-                return true;
-            } else if (selectedCategory === 'my') {
-                return article.userEmail === userDetails.email;
-            } else if (article.category === 'REQUEST' && article.authCheck === 1) {
-                return false;   
-            } else {
-                return article.category === selectedCategory;  // 선택된 카테고리에 맞는 게시글만 표시
-            }
-        });
+        let results = [];
+        if (selectedCategory === 'my') {
+            results = userArticles;  
+        } else {
+            results = articlesState.filter(article => {
+                if (article.category === 'NOTIFICATION') {
+                    return false;
+                } else if (selectedCategory === 'all') {
+                    return true;
+                } else if (article.category === 'REQUEST' && article.authCheck === 1) {
+                    return false;
+                } else {
+                    return article.category === selectedCategory;
+                }
+            });
+        }
         results.sort((a, b) => new Date(b.articleDate) - new Date(a.articleDate));
         setFilteredArticles(results);
     };
     
-    const handleCategoryChange = (event) => {
-        const categoryValue = event.target.value;
+    const handleCategoryChange = async (event) => {
+        const categoryValue = event.target.value.trim();
         setSelectedCategory(categoryValue);
         setCurrentPage(1);
+    
+        if (categoryValue === 'my') {
+            const articles = await fetchUserArticles(token);
+            if (articles && articles.length > 0) {  
+                setUserArticles(articles);
+                setFilteredArticles(articles);
+            } else {
+                console.log("작성하신 게시글이 없습니다.");
+            }
+        } else {
+            filterArticles();
+        }
     };
     
     const incrementViews = async (articleNum, currentViews) => {
@@ -152,7 +146,7 @@ const ArticleMain = () => {
             await incrementViews(article.articleNum, article.viewCount);
             navigate(`/article-main/${article.articleNum}`);
         } catch (err) {
-            console.error('조회수 업데이트 중 오류 발생:', err);
+            console.error('홈페이지를 새로고침 해주세요.', err);
         }
     };
     const getArticleListResponse = (responseBody) => {
@@ -187,9 +181,17 @@ const ArticleMain = () => {
         fetchArticles();
     }, []);
     useEffect(() => {
-        filterArticles();  
-        
-    }, [selectedCategory, articlesState, userId, userEmail]); 
+        if (selectedCategory === 'my') {
+            const fetchArticles = async () => {
+                const articles = await fetchUserArticles(token);
+                setUserArticles(articles || []);
+            };
+            fetchArticles();
+        } else {
+            filterArticles();
+        }
+    }, [selectedCategory, articlesState, userId, userEmail]);
+    
     useEffect(() => {
         getArticleListRequest().then(getArticleListResponse);
     }, []);
