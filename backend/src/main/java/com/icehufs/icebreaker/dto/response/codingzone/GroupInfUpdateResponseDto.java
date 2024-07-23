@@ -11,7 +11,7 @@ import lombok.Getter;
 
 @Getter
 public class GroupInfUpdateResponseDto extends ResponseDto{
-        private GroupInfUpdateResponseDto(){
+    private GroupInfUpdateResponseDto(){
         super(ResponseCode.SUCCESS, ResponseMessage.SUCCESS);
     }
 

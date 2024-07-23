@@ -6,19 +6,14 @@ import com.icehufs.icebreaker.dto.response.auth.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.icehufs.icebreaker.dto.request.auth.CheckCertificationRequestDto;
-import com.icehufs.icebreaker.dto.request.auth.EmailCertificationRequestDto;
-import com.icehufs.icebreaker.dto.request.auth.GiveUserBanRequestDto;
-import com.icehufs.icebreaker.dto.request.auth.SignInRequestDto;
-import com.icehufs.icebreaker.dto.request.auth.SignUpRequestDto;
+import com.icehufs.icebreaker.dto.request.auth.*;
 import com.icehufs.icebreaker.service.AuthService;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 
 
-@Slf4j
+
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor

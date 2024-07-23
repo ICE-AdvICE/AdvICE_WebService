@@ -42,8 +42,11 @@ public class CodingZoneClass {
     @Column(name = "maximum_number")
     private int maximumNumber;
 
-    @Column(name = "category")
-    private String category;
+    @Column(name = "class_name")
+    private String className;
+
+    @Column(name = "week_day")
+    private String weekDay;
 
     public CodingZoneClass(CodingZoneClassAssignRequestDto dto) {
         this.assistantName = dto.getAssistantName();
@@ -51,6 +54,7 @@ public class CodingZoneClass {
         this.classDate = dto.getClassDate();
         this.currentNumber = 0;
         this.maximumNumber = dto.getMaximumNumber();
-        this.category = dto.getCategory();
+        this.className = dto.getClassName();
+        this.weekDay = dto.getWeekDay();
     }
 }

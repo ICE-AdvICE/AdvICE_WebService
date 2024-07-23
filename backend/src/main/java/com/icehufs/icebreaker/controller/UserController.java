@@ -7,21 +7,12 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.icehufs.icebreaker.dto.request.user.AuthorityRequestDto;
-import com.icehufs.icebreaker.dto.request.user.PatchUserPassRequestDto;
-import com.icehufs.icebreaker.dto.request.user.PatchUserRequestDto;
-import com.icehufs.icebreaker.dto.response.article.CheckArticleFavoriteResponseDto;
-import com.icehufs.icebreaker.dto.response.user.Authority1ExistResponseDto;
-import com.icehufs.icebreaker.dto.response.user.AuthorityResponseDto;
-import com.icehufs.icebreaker.dto.response.user.DeleteUserResponseDto;
-import com.icehufs.icebreaker.dto.response.user.GetSignInUserResponseDto;
-import com.icehufs.icebreaker.dto.response.user.PatchUserPassResponseDto;
-import com.icehufs.icebreaker.dto.response.user.PatchUserResponseDto;
+import com.icehufs.icebreaker.dto.request.user.*;
+import com.icehufs.icebreaker.dto.response.user.*;
 import com.icehufs.icebreaker.service.UserService;
 
 import lombok.RequiredArgsConstructor;
