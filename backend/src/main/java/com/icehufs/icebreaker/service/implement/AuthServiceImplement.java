@@ -10,19 +10,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.icehufs.icebreaker.common.CertificationNumber;
-import com.icehufs.icebreaker.dto.request.auth.CheckCertificationRequestDto;
-import com.icehufs.icebreaker.dto.request.auth.EmailCertificationRequestDto;
-import com.icehufs.icebreaker.dto.request.auth.GiveUserBanRequestDto;
-import com.icehufs.icebreaker.dto.request.auth.SignInRequestDto;
-import com.icehufs.icebreaker.dto.request.auth.SignUpRequestDto;
+import com.icehufs.icebreaker.dto.request.auth.*;
 import com.icehufs.icebreaker.dto.response.ResponseDto;
-import com.icehufs.icebreaker.dto.response.auth.CheckCertificationResponseDto;
-import com.icehufs.icebreaker.dto.response.auth.CheckUserBanResponseDto;
-import com.icehufs.icebreaker.dto.response.auth.EmailCertificationResponseDto;
-import com.icehufs.icebreaker.dto.response.auth.GiveUserBanResponseDto;
-import com.icehufs.icebreaker.dto.response.auth.PassChanEmailCertificationResponseDto;
-import com.icehufs.icebreaker.dto.response.auth.SignInResponseDto;
-import com.icehufs.icebreaker.dto.response.auth.SignUpResponseDto;
+import com.icehufs.icebreaker.dto.response.auth.*;
 import com.icehufs.icebreaker.entity.Article;
 import com.icehufs.icebreaker.entity.AuthorityEntity;
 import com.icehufs.icebreaker.entity.BanDurationEnum;
@@ -35,18 +25,12 @@ import com.icehufs.icebreaker.provider.JwtProvider;
 import com.icehufs.icebreaker.repository.ArticleRepository;
 import com.icehufs.icebreaker.repository.AuthorityRepository;
 import com.icehufs.icebreaker.repository.CertificationRepository;
-// import com.icehufs.icebreaker.repository.CommentRepository;
-// import com.icehufs.icebreaker.repository.FavoriteRepository;
 import com.icehufs.icebreaker.repository.UserBanRepository;
 import com.icehufs.icebreaker.repository.UserRepository;
-//import org.slf4j.Logger;
-//import org.slf4j.LoggerFactory;
 import com.icehufs.icebreaker.service.AuthService;
 
 import lombok.RequiredArgsConstructor;
-// import lombok.extern.slf4j.Slf4j;
 
-// @Slf4j
 @Service
 @RequiredArgsConstructor
 public class AuthServiceImplement implements AuthService {
@@ -61,8 +45,6 @@ public class AuthServiceImplement implements AuthService {
 
     // 운영자의 게시글 삭제 관련 레포지토리
     private final ArticleRepository articleRepository;
-    // private final CommentRepository commentRepository;
-    // private final FavoriteRepository favoriteRepository;
     private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     @Override
