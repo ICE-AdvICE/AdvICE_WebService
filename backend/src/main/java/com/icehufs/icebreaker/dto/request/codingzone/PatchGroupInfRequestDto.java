@@ -18,9 +18,6 @@ public class PatchGroupInfRequestDto {
     private int classNum;
 
     @NotBlank
-    private String groupId; //A,B 조
-
-    @NotBlank
     private String assistantName; //조교 이름
 
     @NotBlank

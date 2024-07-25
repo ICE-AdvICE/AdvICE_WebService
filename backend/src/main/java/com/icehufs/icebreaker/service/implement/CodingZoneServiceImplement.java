@@ -18,6 +18,7 @@ import com.icehufs.icebreaker.repository.GroupInfRepository;
 import com.icehufs.icebreaker.repository.UserRepository;
 import com.icehufs.icebreaker.service.CodingZoneService;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -69,17 +70,22 @@ public class CodingZoneServiceImplement implements CodingZoneService {
     return AuthorityExistResponseDto.success();
     }
 
+    @Transactional
     public ResponseEntity<? super GroupInfUpdateResponseDto> uploadInf(List<GroupInfUpdateRequestDto> requestBody, String email) {
         try {
-            // 사용자 계정이 존재하는지(로그인 시간이 초과됐는지) 확인하는 코드
             boolean existedUser = userRepository.existsByEmail(email);
             if (!existedUser) return GroupInfUpdateResponseDto.notExistUser();
-
-            for (GroupInfUpdateRequestDto requestDto : requestBody) {
-                GroupInfEntity groupInfEntity = new GroupInfEntity(requestDto);
-                groupInfRepository.save(groupInfEntity);
+    
+            // requestBody가 비어있지 않은지 확인하고 첫 번째 요소의 groupId를 사용
+            if (requestBody != null && !requestBody.isEmpty()) {
+                String groupId = requestBody.get(0).getGroupId();
+                groupInfRepository.deleteByGroupId(groupId); // 새로운 정보를 저장하기 전에 기존 (A/B)조의 정보 삭제
+    
+                for (GroupInfUpdateRequestDto requestDto : requestBody) {
+                    GroupInfEntity groupInfEntity = new GroupInfEntity(requestDto);
+                    groupInfRepository.save(groupInfEntity);
+                }
             }
-
         } catch (Exception exception) {
             exception.printStackTrace();
             return ResponseDto.databaseError();
@@ -118,7 +124,6 @@ public class CodingZoneServiceImplement implements CodingZoneService {
                     existingEntity.setAssistantName(dtos.getAssistantName());
                     existingEntity.setClassTime(dtos.getClassTime());
                     existingEntity.setWeekDay(dtos.getWeekDay());
-                    existingEntity.setGroupId(dtos.getGroupId());
                     existingEntity.setMaximumNumber(dtos.getMaximumNumber());
                     existingEntity.setClassName(dtos.getClassName());
                     groupInfRepository.save(existingEntity);
