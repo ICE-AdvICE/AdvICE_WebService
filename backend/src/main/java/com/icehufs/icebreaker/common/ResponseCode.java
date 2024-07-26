@@ -9,6 +9,9 @@ public interface ResponseCode {
     String DUPLICATE_EMAIL = "DE";
     String NOT_EXISTED_USER = "NU";
     String NOT_EXISTED_ARTICLE = "NA";
+    String FULL_CLASS = "FC";
+    String ALREADY_RESERVE = "AR";
+    String NOT_RESERVE_CLASS = "NR";
 
     //HTTP Status 401
     String SIGN_IN_FAIL = "SF";

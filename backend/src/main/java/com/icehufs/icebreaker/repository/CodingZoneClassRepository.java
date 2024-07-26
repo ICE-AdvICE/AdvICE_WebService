@@ -12,6 +12,6 @@ import com.icehufs.icebreaker.entity.CodingZoneClass;
 public interface CodingZoneClassRepository extends JpaRepository<CodingZoneClass, Integer> {
     
     // boolean existsByArticleNum(Integer articleNum); // 정확한 필드 이름을 사용
-    // Article findByArticleNum(Integer articleNum);   // 정확한 필드 이름을 사용
+    CodingZoneClass findByClassNum(Integer classNum);   // 정확한 필드 이름을 사용
 
 }

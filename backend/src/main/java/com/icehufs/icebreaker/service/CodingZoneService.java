@@ -9,9 +9,17 @@ import com.icehufs.icebreaker.dto.response.codingzone.*;
 import java.util.List;
 
 public interface CodingZoneService {
+    //admin(과사 조교) 권한을 위한 로직
     ResponseEntity<? super CodingZoneClassAssignResponseDto> codingzoneClassAssign(List<CodingZoneClassAssignRequestDto> dto, String email);
-    ResponseEntity<? super AuthorityExistResponseDto> authExist(String email);
     ResponseEntity<? super GroupInfUpdateResponseDto> uploadInf(List<GroupInfUpdateRequestDto> dto, String email);
     ResponseEntity<? super GetListOfGroupInfResponseDto> getList(GetListOfGroupInfRequestDto dto, String email);
     ResponseEntity<? super GroupInfUpdateResponseDto> patchInf(List<PatchGroupInfRequestDto> dto, String email);
+    ResponseEntity<? super DeleteClassOfGroupResponseDto> deleteClass(Integer classNum, String email);
+
+    //권한이 필요없는 로직
+    ResponseEntity<? super AuthorityExistResponseDto> authExist(String email);
+    ResponseEntity<? super CodingZoneRegisterResponseDto> classRegist(Integer classNum, String email);
+    ResponseEntity<? super CodingZoneCanceResponseDto> classCance(Integer classNum, String email);
+
+
 }
