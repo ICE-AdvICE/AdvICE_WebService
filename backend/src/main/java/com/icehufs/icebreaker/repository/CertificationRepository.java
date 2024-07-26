@@ -9,4 +9,5 @@ import com.icehufs.icebreaker.entity.CertificationEntity;
 public interface CertificationRepository extends JpaRepository<CertificationEntity, String> {
 
     CertificationEntity findByUserEmail(String userEmail);
+    
 }

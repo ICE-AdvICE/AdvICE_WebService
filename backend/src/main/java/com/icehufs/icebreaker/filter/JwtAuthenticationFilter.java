@@ -33,7 +33,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
     //JwtAuthenticationFilter가 conroller에 가기전 단계로 여기서 jwt의 검증이 되고, 검증된 jwt의학번과 권한을 나머지 request정보와 같이 Context에 저장해서 controller에게 넘겨줌
 
     private final JwtProvider jwtProvider;
-    private final UserRepository userRepository;
     private final AuthorityRepository authorityRepository;
 
     @Override

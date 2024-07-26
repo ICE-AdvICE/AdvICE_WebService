@@ -32,4 +32,7 @@ public class GroupInfUpdateRequestDto {
 
     @NotBlank
     private String weekDay; //요일
+
+    @NotNull
+    private Integer grade;
 }

@@ -46,6 +46,9 @@ public class GroupInfEntity {
     @Column(name = "class_name")
     private String className; //과목명
 
+    @Column(name = "grade")
+    private int grade;
+
     public GroupInfEntity(GroupInfUpdateRequestDto dto) {
         this.assistantName = dto.getAssistantName();
         this.classTime = dto.getClassTime();
@@ -53,6 +56,7 @@ public class GroupInfEntity {
         this.groupId = dto.getGroupId();
         this.maximumNumber = dto.getMaximumNumber();
         this.className = dto.getClassName();
+        this.grade = dto.getGrade();
     }
     
 }
