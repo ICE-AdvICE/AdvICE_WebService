@@ -21,5 +21,8 @@ public interface CodingZoneService {
     ResponseEntity<? super CodingZoneRegisterResponseDto> classRegist(Integer classNum, String email);
     ResponseEntity<? super CodingZoneCanceResponseDto> classCance(Integer classNum, String email);
 
+    //수업1 코딩존 조교 
+    ResponseEntity<? super PutAttendanceResponseDto> putAttend(Integer registNum, String email);
+
 
 }

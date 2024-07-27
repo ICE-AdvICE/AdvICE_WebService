@@ -47,4 +47,12 @@ public class CodingZoneRegisterEntity {
         this.userStudentNum = user_student_num;
         this.attendance = "0";
     }
+
+    public void putAttend() {
+        this.attendance = "1";
+    }
+
+    public void putNotAttend() {
+        this.attendance = "0";
+    }
 }

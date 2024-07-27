@@ -194,6 +194,7 @@ public class CodingZoneServiceImplement implements CodingZoneService {
             CodingZoneRegisterEntity newRegisterEntity = new CodingZoneRegisterEntity(email, userName, userStudentNum, classNum);
             codingZoneRegisterRepository.save(newRegisterEntity);
             codingZoneClass.increaseNum(); // 예약자 수 증가
+            codingZoneClassRepository.save(codingZoneClass);
     
         } catch (Exception exception) {
             exception.printStackTrace();
@@ -226,6 +227,8 @@ public class CodingZoneServiceImplement implements CodingZoneService {
     
             codingZoneRegisterRepository.delete(codingZoneRegisterEntity);
             codingZoneClass.decreaseNum();
+            codingZoneClassRepository.save(codingZoneClass);
+
     
         } catch (Exception exception) {
             exception.printStackTrace();
@@ -233,6 +236,31 @@ public class CodingZoneServiceImplement implements CodingZoneService {
         }
     
         return CodingZoneCanceResponseDto.success();
+    }
+
+    @Override
+    public ResponseEntity<? super PutAttendanceResponseDto> putAttend(Integer registNum, String email) {
+        try{
+            // 사용자 계정이 존재하는지(로그인 시간이 초과됐는지) 확인하는 코드
+        boolean existedUser = userRepository.existsByEmail(email);
+        if (!existedUser) return PutAttendanceResponseDto.notExistUser();
+
+        CodingZoneRegisterEntity codingZoneRegisterEntity = codingZoneRegisterRepository.findByRegistrationId(registNum);
+        if(codingZoneRegisterEntity == null) return PutAttendanceResponseDto.validationFailed();
+
+        // 출석 상태 업데이트
+        if ("0".equals(codingZoneRegisterEntity.getAttendance())) { // 결석(미출석) -> 출석
+            codingZoneRegisterEntity.putAttend();
+        } else {
+            codingZoneRegisterEntity.putNotAttend(); // 출석 -> 결석
+        }
+        codingZoneRegisterRepository.save(codingZoneRegisterEntity);
+
+        }catch(Exception exception) {
+            exception.printStackTrace();
+            return ResponseDto.databaseError();
+        }
+        return PutAttendanceResponseDto.success();
     }
 
     
