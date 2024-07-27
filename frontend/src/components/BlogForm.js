@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { useCookies } from 'react-cookie';
-import {handleEdit,checkAnonymousBoardAdmin, updateArticleRequest, createArticleRequest, createNotificationArticleRequest  } from '../apis/index';
+import {checkUserBanStatus,fetchArticle,handleEdit,checkAnonymousBoardAdmin, createArticleRequest, createNotificationArticleRequest  } from '../apis/index';
 import ReactQuill from 'react-quill';
 import '../layouts/css/BlogForm.css'
 import { useLocation } from 'react-router-dom';
 
 const BlogForm = ({ editing }) => {
     const navigate = useNavigate();
+    const [canEdit, setCanEdit] = useState(false);
     const { articleNum } = useParams();
     const [articleTitle, setArticleTitle] = useState('');
     const location = useLocation();
@@ -30,28 +30,29 @@ const BlogForm = ({ editing }) => {
         'NOTIFICATION': '공지',
         '카테고리 선택': '카테고리 선택'
     };
-
-
-    
-    //3. 게시글 수정 api
     useEffect(() => {
-        if (editing && articleNum) {
-            setLoading(true);
-            axios.get(`http://localhost:4000/api/v1/article/${articleNum}`, {
-                headers: { Authorization: `Bearer ${token}` }
-            })
-            .then(res => {
-                if (res.data.code === "SU") {
-                    const {articleTitle, articleContent,category } = res.data;
-                    setCategory(category);
-                    setArticleTitle(articleTitle);
-                    setArticleContent(articleContent);
-                    setCategoryName(category);
-                } 
-            })
-        }
-    }, [editing, articleNum, token]);
-
+        const loadArticleData = async () => {
+            if (editing && articleNum) {
+                setLoading(true);
+                try {
+                    const data = await fetchArticle(articleNum);
+                    if (data) {
+                        const {articleTitle, articleContent, category} = data;
+                        setCategory(category);
+                        setArticleTitle(articleTitle);
+                        setArticleContent(articleContent);
+                        setCategoryName(category);
+                    }
+                } catch (error) {
+                    console.error('Error fetching article:', error);
+                } finally {
+                    setLoading(false);
+                }
+            }
+        };
+        loadArticleData();
+    }, [editing, articleNum]);
+    
     useEffect(() => {
         const checkAdmin = async () => {
             try {
@@ -75,7 +76,6 @@ const BlogForm = ({ editing }) => {
         }
     }, [editing, location.state]);
 
-    
     const handleCategoryChange = (id, name) => {
         setCategory(id);
         setCategoryString(name);
@@ -86,7 +86,6 @@ const BlogForm = ({ editing }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
-    
         const postData = {
             articleTitle,
             articleContent,
@@ -94,11 +93,9 @@ const BlogForm = ({ editing }) => {
         };    
         let response;
         if (editing) {
-            response = await updateArticleRequest(articleNum, postData, token);
-            if (response && response.code === 'SU') {
-                navigate(`/article-main/${articleNum}`);
-            }
-        }  if (category === 'NOTIFICATION') {
+            await handleEdit(articleNum, token, navigate, setCanEdit, postData);
+        } 
+        if (category === 'NOTIFICATION') {
             response = await createNotificationArticleRequest(postData, token);
             if (response === true) {
                 navigate('/article-main');  
@@ -130,6 +127,17 @@ const BlogForm = ({ editing }) => {
             }
         }
     };
+    useEffect(() => {
+        const verifyAccess = async () => {
+            const banStatus = await checkUserBanStatus(token);
+            if (banStatus.banned) {
+                alert("계정이 정지된 상태입니다. 글 작성이 불가능합니다.");
+                navigate('/'); // 메인 페이지로 리디렉트
+            }
+        };
+
+        verifyAccess();
+    }, [token, navigate]);
     
     return (
         <div className='blog-container'>

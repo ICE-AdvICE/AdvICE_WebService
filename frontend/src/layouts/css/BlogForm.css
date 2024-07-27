@@ -4,7 +4,7 @@
 }
 .title-container{
     width: 30%;
-    margin-top: 10px;
+    margin-top: 1vw;
     height: 100%;
     position: relative;
 }
@@ -25,10 +25,11 @@
 .dropdown .select {
     cursor: pointer;
     display: block;
-    padding: 10px;
+    font-size: 1vw;
+    padding: 0.5vw;
 }
 .dropdown .select > i {
-    font-size: 13px;
+    font-size: 1vw;
     color: #888;
     cursor: pointer;
     transition: all .3s ease-in-out;
@@ -55,7 +56,7 @@
     position: absolute;
     background-color: #fff;
     width: 90%;
-    margin-top: 1px;
+    margin-top: 0.5vw;
     box-shadow: 0 1px 2px rgb(204, 204, 204);
     border-radius: 0 1px 2px 2px;
     overflow: hidden;
@@ -90,20 +91,23 @@
     width: 80%;
     position: relative;
     left:10%;
-    height: 30vw;
+    height: 40vw;
     
 }
 .quill{
-    height: 60%;
+    height: 25vw;
     margin-bottom: 0;
-    
+    position: relative;
     
 }
-
 .ql-container {
+    max-height: 25vw;   
+    overflow-y: auto;   
     font-family: 'Noto Sans', sans-serif;
 }
+
 .ql-container.ql-disabled .ql-tooltip{
-    height: 100px;
+    height: 25vw
 }
+
   

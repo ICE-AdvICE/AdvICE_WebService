@@ -1,32 +1,32 @@
 .blog-container{
   width: 100%;
+ 
   height: 100%;
   position: relative;
 }
 .img-container{
   width: 100%;
-  height: 47.7vh;
+ 
+  height: 26vw;
   display: flex;
   position: relative;
 }
 .header2-image{
   width:100%;
   position: absolute;
-  height: 47.7vh;
+  height: 26vw;
+  
   background-size: cover;
-  object-fit: cover;
-  display: block;
 }
 .header2-img img{
   width: 100%;
 }
-
 .words-image{
   position: absolute;
   width: 50%;
-  height: 83%;
+  height: 20vw;
   z-index: 111;
-  margin-top: 2%;
+  margin-top: 2.3vw;
   left: 30%;
 }
 .posts-overlay-container {
@@ -36,19 +36,76 @@
   width:100%;
   height: auto;
   position: relative;
-  object-fit: cover;
- 
 }   
+.article-icon-image{
+  position: absolute;
+  width: 57%;
+  height: 57%;
+  left: 22%;
+  top:13%;
+  z-index: 2;
+}
 .bar-container{
   width: 80%;
   left: 10%;
-  height: 10%;
+  height: 3%;
   position: absolute;
-  top: 10%;
+  top: 12%;
+  display: flex;
 }
 
-
-
+.category-dropdown{
+  position: absolute;
+  left: 18.1%;
+  width: 20%;
+  height: 100%;
+  z-index: 11;
+}
+.category-dropdown select{
+  width: 80%;
+  text-align: center;
+  position: absolute;
+  height: 100%;
+  border-color: #D0D5DD;
+}
+ .search-bar{
+  height: 100%;
+  width: 26vw;
+  position: absolute;
+  right: 10.9%;
+  display: flex;
+  align-items: center;  
+  justify-content: space-between; 
+  z-index: 11;
+}
+.search-bar select,
+.search-bar input
+{
+  height: 2.6vw;    
+  font-size: 1vw;
+  text-align: center; 
+  width: 8vw;
+  border-color: #D0D5DD;
+}
+.input-container {
+  display: flex;
+  position: absolute;
+  margin-left: 31%;
+  width: 12vw;
+  height: 100%;
+}
+input[type="text"] {
+  width: 12vw;
+  font-size: 1vw;
+  background-color: white;   
+  box-shadow: none;          
+  border: 1px solid #D0D5DD;    
+  padding: 8%;
+}
+input[type="text"]::placeholder {
+  color: rgba(128, 128, 128, 0.467);
+  text-align: left;  
+}
 .title_vector-container{
   width: 80%;
   height: 7%;
@@ -56,7 +113,6 @@
   position: absolute;
   top: 15%;
 }
-
 .title {
   font-weight: bold;
   width: 65%;
@@ -66,20 +122,23 @@
   display: flex;    
   align-items: center;    
   position: absolute;
-  top: 2%;
-
- 
-  
+  top: 5%;
 }
 .title p{
-  font-size: 90%;
+  font-size: 1.1vw;
   width: 100%;
   height: 50%;
   margin-bottom: 0;
 }
+.title p:nth-child(1) { margin-left: 11.5%; } 
+.title p:nth-child(1) { margin-right: 17%; }  
+.title p:nth-child(2) { margin-right: 22.3%; }  
+.title p:nth-child(3) { margin-right: 5%; } 
+.title p:nth-child(4) { margin-right: 1%; } 
+ 
 .main-top{
   width: 65%;
-  height: 100%;
+  height: 50%;
   position: absolute;
   top:1%;
   left: 18%;
@@ -88,113 +147,39 @@
 .vector2{
   position: absolute;
   width:98%;
-  height: 2%;
-
+  top: 5%;
+  height: 5%;
 }
 .main-top2{
   width: 65%;
-  height: 100%;
+  height: 50%;
   position: absolute;
   left: 18%;
   z-index: 111;
   top:65%;
 }
 
-.article-icon-image{
-  position: absolute;
-  width: 57%;
-  height: 57%;
-  left: 22%;
-  top:11%;
-  z-index: 2;
-}
-
-.title p:nth-child(1) { margin-left: 11.5%; } 
-.title p:nth-child(1) { margin-right: 17%; }  
-.title p:nth-child(2) { margin-right: 22.3%; }  
-.title p:nth-child(3) { margin-right: 5%; } 
-.title p:nth-child(4) { margin-right: 1%; } 
- 
-
-.category-dropdown{
-  position: absolute;
-  top:18%;
-  left: 18.1%;
-  width: 20%;
-  border-radius: 0;
-  height: 100%;
-  z-index: 11;
-  
-}
-
-.category-dropdown select{
-  width: 80%;
-  text-align: center;
-  height: 30%;
-  border-radius: 0;
-  border-color: #D0D5DD;
-}
- /* search-bar */ 
- .search-bar{
-  position: absolute;
-  top: 18%;
-  right: 18.3%;
-  display: flex;
-  align-items: center;  
-  justify-content: space-between; 
-  z-index: 11;
-}
-.search-bar select,
-.search-bar input
-{
-  
-  height: 2.6vw;    
-  text-align: center; 
-  width: 75px;
-  border-radius: 0;
-  border-color: #D0D5DD;
-}
-.input-container {
-  position: relative;
-  border-radius: 0;
-}
-
-input[type="text"] {
-  width: 100%;
-  background-color: white;   
-  box-shadow: none;          
-  border: 1px solid #D0D5DD;    
-  padding: 8%;
-  
-}
-input[type="text"]::placeholder {
-  color: rgba(128, 128, 128, 0.467);
-  text-align: left;  
-}
 .search-icon {
   position: absolute;
-  right: 0%;
   top: 50%;  
+  right: 1vw;
   transform: translateY(-50%);  
-  width: 40px;  
-  height: 40px;
+  width: 1.5vw;  
+  height: 1.5vw;
 }
-
-select {
-  margin-right: 3px;  
+select { 
+  font-size: 1vw;
 }
-/*박스들*/
 .posts-content {
   position: absolute;
   top: 22%;
-  left: 24.4%;
+  left: 24.5%;
   width: 51%;
   cursor: pointer;
   height: 60%;
   display: flex;
   z-index: 155;
   flex-Direction: column;
-  
 }
 .Notification-container{
   position: relative;
@@ -216,6 +201,7 @@ select {
   
 }
 
+
 /* card */ 
 .card {
   display: flex;
@@ -223,12 +209,11 @@ select {
   cursor: pointer;
   align-items: center;
   width: 100%;
-  height: 55px;
+  height: 4vw;
   flex-direction: column;
   justify-content: center;  
   background-color: rgba(255, 255, 255, 0.5);
-  margin-bottom: 20px;
-  
+  margin-bottom: 1.5vw;
 }
 .card-order { flex: 1; }  
 .card-category {flex: 1;}
@@ -240,7 +225,8 @@ select {
   margin-top: 0;
   margin-bottom: 0;
   display: flex;
-  align-items: center;  
+  align-items: center; 
+  font-size: 1.1vw; 
   justify-content: center;
   overflow: hidden;
   white-space: nowrap;
@@ -261,7 +247,6 @@ select {
   position: relative;
   left: 50%;
 }
-/*pagination*/
 .pagination-container{
   position: relative;
   width: 100%;
@@ -269,34 +254,52 @@ select {
   z-index: 11;
   display: flex;
 }
+.pagination .page-link {
+  font-size: 1vw; 
+  padding: 0.5vw 0.8vw;
+}
 
- 
 .btn1 {
   position: relative;
   width: 14%;  
   background-color: white;  
-  color: black; 
   display: flex;  
   justify-content: center;  
   align-items: center;  
   text-decoration: none;  
   z-index: 15;
-  margin-left: 86%;
-  border: 1px solid #ACACAC;
-  height: 80%;
+  margin-left: 85%;
+  border: 0.05vw solid #ACACAC;
+  height: 3vw;
   }
 .pencil{
   width: 18%;
   height: 35%;
 }
+
 .btn1 p{
-  margin-left: 8%;
-  margin-top: 14%;
+  margin-left: 1vw;
+  font-size: 1vw;
+  margin-top: 1vw;
+  margin-bottom: 1vw;
+  
 }
+.page-item{
+  height: 10px;
+}
+
 @media (max-width: 1500px) {
   .blog-container{
     width: 100%;
   }
  
  
+}
+.Comment-Edit{
+  position: absolute;
+  width: 100%;
+ 
+}
+.comment-edit-input{
+  position: relative;
 }
