@@ -12,10 +12,22 @@ const MainSection = () => {
   const [isLoading, setIsLoading] = useState(true); 
 
   useEffect(() => {
-    const images = options.map(option => new Image().src = option.backgroundImage);
-    Promise.all(images).then(() => setIsLoading(false));
+    const imagePromises = options.map(option => 
+      new Promise((resolve, reject) => {
+        const img = new Image();
+        img.src = option.backgroundImage;
+        img.onload = resolve;
+        img.onerror = reject;
+      })
+    );
+
+    Promise.all(imagePromises)
+      .then(() => setIsLoading(false))
+      .catch(err => {
+        console.error('Failed to load images', err);
+        setIsLoading(false); 
+      });
   }, []);
-  
   const handleOptionClick = (id) => {
     setActiveOption(id);  
   };

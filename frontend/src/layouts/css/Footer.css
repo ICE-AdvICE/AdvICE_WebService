@@ -1,25 +1,38 @@
 .footer-container{
     width: 100%;
-    height: 250px;
+    height: 17vw;
     background: #333;
-
-     
     margin: 0 auto;
     position: relative;
+    display: flex;
+    justify-content: center;
 }
 .footer-logo{
-    padding-top: 4%;
+    padding-top: 4vw;
     text-align: center;
+    height: 7vw;
+}
+.footer-inner{
+   
+    height: 17vw;
 }
 .footer-address{
     text-align: center;
+    padding-top: 1.5vw;
+    height: 5vw;
+    position: relative;
 }
 .footer p {
     color: #d5d5d5;
+    font-size: 1vw;
+    margin-bottom: 0.8vw;
 }
 .footer strong{
     color: #9f7c57;
 }
 .footer{
     position: relative;
+}
+.footer-image{
+    height: 4vw;
 }

@@ -1,12 +1,10 @@
 import React, { useMemo,useState, useEffect } from 'react';
-import {useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useCookies } from "react-cookie";
 import Card from '../components/Card';
 import Pagination from '../components/Pagination';
-import axios from 'axios';
-import { getArticleListRequest } from '../apis';
 import './css/BlogPage.css';
-import { fetchUserArticles,checkUserBanStatus,getMypageRequest } from '../apis/index.js';
+import { getArticleListRequest,fetchUserArticles,checkUserBanStatus} from '../apis/index.js';
 
 const ArticleMain = () => {
     const [notificationArticles, setNotificationArticles] = useState([]);
@@ -14,7 +12,6 @@ const ArticleMain = () => {
     const navigate = useNavigate();
     const [currentPage, setCurrentPage] = useState(1);
     const [articlesState, setArticlesState] = useState([]);
-    const [userId, setUserId] = useState(null);
     const articlesPerPage = 6;
     const [cookies] = useCookies(['accessToken', 'userEmail']);
     const [filteredArticles, setFilteredArticles] = useState([]);
@@ -22,24 +19,21 @@ const ArticleMain = () => {
     const totalPages = Math.ceil(filteredArticles.length / articlesPerPage);
     const indexOfLastArticle = currentPage * articlesPerPage;
     const indexOfFirstArticle = indexOfLastArticle - articlesPerPage;
-     
-    const userEmail = cookies.userEmail;
+    const [userArticles, setUserArticles] = useState([]);
     const [selectedCategory, setSelectedCategory] = useState('all');
     const [searchCategory, setSearchCategory] = useState('all');
     const paginate = pageNumber => setCurrentPage(pageNumber);
     const token = cookies.accessToken;
-    const [userDetails, setUserDetails] = useState({
-        email: '',
-    });
+
     const currentArticles = useMemo(() => {
         const indexOfLastArticle = currentPage * articlesPerPage;
         const indexOfFirstArticle = indexOfLastArticle - articlesPerPage;
         return filteredArticles.slice(indexOfFirstArticle, indexOfLastArticle);
     }, [currentPage, filteredArticles, articlesPerPage]);
-    
+
+    //글작성버튼
     const handleCreateArticleClick = async () => {
         const token = cookies.accessToken;  
-    
         if (!token) {
             alert("로그인이 필요합니다.");
             return;
@@ -51,12 +45,7 @@ const ArticleMain = () => {
             navigate("/article-main/create");  
         }
     };
-    //공지사항
-    const categoryLabels = {
-        NOTIFICATION: "공지",
-        GENERAL: "일반",
-        REQUEST: "요청"
-    };
+
     const filterNotificationArticles = (articles) => {
         const notifications = articles.filter(article => article.category === 'NOTIFICATION');
         const general = articles.filter(article => article.category !== 'NOTIFICATION');
@@ -82,29 +71,13 @@ const ArticleMain = () => {
         } else {
             searchArticles(); 
         }
-    }, [searchCategory]);
-
-    useEffect(() => {
-        const fetchUserDetails = async () => {
-            if (token) {  
-                try {
-                    const response = await getMypageRequest(token);
-                    if (response) {  
-                        setUserDetails({  
-                            email: response.email,
-                            studentNum: response.studentNum,
-                            name: response.name
-                        });
-                    } else {
-                        console.log('No user data returned from API');
-                    }
-                } catch (error) {
-                    console.error('Error fetching user details:', error);
-                }
-            }
-        };
-        fetchUserDetails();
-    }, [token]);  
+    }, [searchCategory]); 
+    //공지사항
+     const categoryLabels = {
+        NOTIFICATION: "공지",
+        GENERAL: "일반",
+        REQUEST: "요청"
+    };
     const categories = [
         { label: '모두 보여주기', value: 'all' },
         { label: '일반', value: 'GENERAL' },
@@ -112,89 +85,75 @@ const ArticleMain = () => {
         { label: '내가 쓴 글', value: 'my' }
     ];  
     const filterArticles = () => {
-        const results = articlesState.filter(article => {
-            if (article.category === 'NOTIFICATION') {
-                return false;  
-            } else if (selectedCategory === 'all') {
-                return true;
-            } else if (selectedCategory === 'my') {
-                return article.userEmail === userDetails.email;
-            } else if (article.category === 'REQUEST' && article.authCheck === 1) {
-                return false;   
-            } else {
-                return article.category === selectedCategory;  // 선택된 카테고리에 맞는 게시글만 표시
-            }
-        });
+        let results = [];
+        if (selectedCategory === 'my') {
+            results = userArticles;  
+        } else {
+            results = articlesState.filter(article => {
+                if (article.category === 'NOTIFICATION') {
+                    return false;
+                } else if (selectedCategory === 'all') {
+                    return true;
+                } else if (article.category === 'REQUEST' && article.authCheck === 1) {
+                    return false;
+                } else {
+                    return article.category === selectedCategory;
+                }
+            });
+        }
         results.sort((a, b) => new Date(b.articleDate) - new Date(a.articleDate));
         setFilteredArticles(results);
     };
     
-    const handleCategoryChange = (event) => {
-        const categoryValue = event.target.value;
+    const handleCategoryChange = async (event) => {
+        const categoryValue = event.target.value.trim();
         setSelectedCategory(categoryValue);
         setCurrentPage(1);
+        if (categoryValue === 'my') {
+            const articles = await fetchUserArticles(token);
+            if (articles && articles.length > 0) {  
+                setUserArticles(articles);
+                setFilteredArticles(articles);
+            } else {
+                console.log("작성하신 게시글이 없습니다.");
+            }
+        } else {
+            filterArticles();
+        }
     };
-    
-    const incrementViews = async (articleNum, currentViews) => {
-        const updatedViews = currentViews + 1;
-        try {
-            await axios.patch(`http://localhost:4000/api/v1/article/${articleNum}`, { views: updatedViews });
-            const updatedArticles = articlesState.map(article =>
-                article.articleNum === articleNum ? { ...article, viewCount: updatedViews } : article
-            );
-            setArticlesState(updatedArticles);
-        } catch (err) {
-            console.error("조회수 업데이트 중 오류 발생:", err);
+    const handleKeyDown = (event) => {
+        if (event.key === 'Enter') {
+            searchArticles();  
         }
     };
     const handleCardClick = async (article) => {
-        try {
-            await incrementViews(article.articleNum, article.viewCount);
-            navigate(`/article-main/${article.articleNum}`);
-        } catch (err) {
-            console.error('조회수 업데이트 중 오류 발생:', err);
-        }
+        navigate(`/article-main/${article.articleNum}`);
     };
-    const getArticleListResponse = (responseBody) => {
-        if (!responseBody) {
-            alert('네트워크 이상입니다.');
-            return;
-        }
-        const { code, articleList } = responseBody;
-        if (code === 'DBE') {
-            alert('데이터베이스 오류입니다.');
-        } else if (code === 'SU' && Array.isArray(articleList)) {
-            setArticlesState(articleList);  
-        } else {
-            alert('예상치 못한 데이터 형식입니다.');
-        }
-    };
+
     useEffect(() => {
         const fetchArticles = async () => {
-            try {
-                const response = await axios.get('http://localhost:4000/api/v1/article/list');
-                if (response.data.code === "SU") {
-                    setArticlesState(response.data.articleList);
-                    setFilteredArticles(response.data.articleList);
-                    filterNotificationArticles(response.data.articleList);
-                } else {
-                    console.error('Error fetching articles:', response.data.message);
-                }
-            } catch (err) {
-                console.error("API 요청 중 오류 발생:", err);
-            }
+            const response = await getArticleListRequest();
+            if (response.code === "SU") {
+                setArticlesState(response.articleList);
+                setFilteredArticles(response.articleList);
+                filterNotificationArticles(response.articleList);
+            } 
         };
         fetchArticles();
     }, []);
-    useEffect(() => {
-        filterArticles();  
-        
-    }, [selectedCategory, articlesState, userId, userEmail]); 
-    useEffect(() => {
-        getArticleListRequest().then(getArticleListResponse);
-    }, []);
     
-
+    useEffect(() => {
+        if (selectedCategory === 'my') {
+            const fetchArticles = async () => {
+                const articles = await fetchUserArticles(token);
+                setUserArticles(articles || []);
+            };
+            fetchArticles();
+        } else {
+            filterArticles();
+        }
+    }, [selectedCategory, articlesState]);
+    
     return (
         <div className="blog-container">
             <div className = "img-container">
@@ -215,28 +174,28 @@ const ArticleMain = () => {
                         </select>
                     </div>
                     <div className="search-bar">
-                    <select value={searchCategory} onChange={e => setSearchCategory(e.target.value)}>
-                        <option value="all">전체</option>
-                        <option value="title">제목</option>
-                        <option value="content">내용</option>
-                    </select>
-                    <div className="input-container">
-                        <input
-                            type="text"
-                            value={searchTerm}
-                            onChange={e => setSearchTerm(e.target.value)}
-                            placeholder='search'
-                        />
-                        <a href="#" onClick={(e) => {
-                            e.preventDefault();
-                            searchArticles();
-                        }}>
-                            <img className="search-icon" src="http://www.endlessicons.com/wp-content/uploads/2012/12/search-icon.png" alt="Search" />
-                        </a>
+                        <select value={searchCategory} onChange={e => setSearchCategory(e.target.value)}>
+                            <option value="all">전체</option>
+                            <option value="title">제목</option>
+                            <option value="content">내용</option>
+                        </select>
+                        <div className="input-container">
+                            <input
+                                type="text"
+                                value={searchTerm}
+                                onChange={e => setSearchTerm(e.target.value)}
+                                placeholder='search'
+                                onKeyDown={handleKeyDown}
+                            />
+                            <a href="#" onClick={(e) => {
+                                e.preventDefault();
+                                searchArticles();
+                            }}>
+                                <img className="search-icon" src="https://img.icons8.com/?size=100&id=132&format=png&color=000000" alt="Search" />
+                            </a>
+                        </div>
                     </div>
                 </div>
-                </div>
-                
                 <div className = "title_vector-container">
                     <div className="title">
                         <p>카테고리</p> <p>제목</p><p>작성일</p> <p>조회</p><p>좋아요</p>
@@ -306,14 +265,10 @@ const ArticleMain = () => {
                         </div>
                     </div>
                     <div className= "pagination-container">
-                        <Pagination paginate={paginate} currentPage={currentPage} totalPages={totalPages} className="pagination-bar"  />
+                        <Pagination paginate={paginate} currentPage={currentPage} totalPages={totalPages} className="pagination-bar" />
                         
                     </div>
-
                 </div>
-               
-              
-
             </div>
         </div>
     );
