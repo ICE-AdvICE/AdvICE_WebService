@@ -5,7 +5,10 @@ import org.springframework.stereotype.Repository;
 
 import com.icehufs.icebreaker.entity.CodingZoneRegisterEntity;
 
+
+
 @Repository
 public interface CodingZoneRegisterRepository extends JpaRepository<CodingZoneRegisterEntity, Integer> {
     CodingZoneRegisterEntity findByClassNumAndUserEmail(Integer classNum, String userEmail);
+    CodingZoneRegisterEntity findByRegistrationId(Integer registrationId);
 }
