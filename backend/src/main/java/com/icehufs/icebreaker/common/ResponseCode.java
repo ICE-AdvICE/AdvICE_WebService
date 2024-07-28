@@ -3,6 +3,8 @@ package com.icehufs.icebreaker.common;
 public interface ResponseCode {
     //HTTP Status 200
     String SUCCESS = "SU";
+    String CODING_ADMIN ="CA";
+    String ENTIRE_ADMIN ="EA";
 
     //HTTP Status 400
     String VALIDATION_FAILED= "VF";

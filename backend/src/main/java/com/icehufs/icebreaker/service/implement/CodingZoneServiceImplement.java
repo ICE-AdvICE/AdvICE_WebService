@@ -61,10 +61,15 @@ public class CodingZoneServiceImplement implements CodingZoneService {
             AuthorityEntity authorityEntity = authorityRepository.findByEmail(email);
             if(authorityEntity == null) return AuthorityExistResponseDto.notExistUser();
  
-            String admin = authorityEntity.getRoleAdmin();
+            String entireAdmin = authorityEntity.getRoleAdmin();
+            String codingC1Admin = authorityEntity.getRoleAdminC1();
+            String codingC2Admin = authorityEntity.getRoleAdminC2();
 
-            if("NULL".equals(admin)){
-                return AuthorityExistResponseDto.notAdmin();
+            if(!"NULL".equals(entireAdmin)){
+                return AuthorityExistResponseDto.entireAdmin();
+            }
+            if(!"NULL".equals(codingC1Admin) || !"NULL".equals(codingC2Admin)){
+                return AuthorityExistResponseDto.codingAdmin();
             }
 
         } catch (Exception exception){
@@ -239,6 +244,7 @@ public class CodingZoneServiceImplement implements CodingZoneService {
     }
 
     @Override
+    @Transactional
     public ResponseEntity<? super PutAttendanceResponseDto> putAttend(Integer registNum, String email) {
         try{
             // 사용자 계정이 존재하는지(로그인 시간이 초과됐는지) 확인하는 코드

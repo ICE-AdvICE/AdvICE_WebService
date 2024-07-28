@@ -22,7 +22,7 @@ import lombok.RequiredArgsConstructor;
 public class CodingZoneController {
     private final CodingZoneService codingzoneService;
  
-    @GetMapping("/auth-exist")
+    @GetMapping("/auth-type")
     public ResponseEntity<? super AuthorityExistResponseDto> authExist(
     @AuthenticationPrincipal String email
     ){

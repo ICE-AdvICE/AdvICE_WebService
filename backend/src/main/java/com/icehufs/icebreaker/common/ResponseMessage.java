@@ -3,6 +3,8 @@ package com.icehufs.icebreaker.common;
 public interface ResponseMessage {
         //HTTP Status 200
         String SUCCESS = "Success.";
+        String CODING_ADMIN ="This user is coding-zone admin.";
+        String ENTIRE_ADMIN ="This user is entire admin.";
 
         //HTTP Status 400
         String VALIDATION_FAILED= "Validation failed.";
