@@ -196,7 +196,8 @@ public class CodingZoneServiceImplement implements CodingZoneService {
             // 신청한 수업 등록
             String userName = userEntity.getName();
             String userStudentNum = userEntity.getStudentNum();
-            CodingZoneRegisterEntity newRegisterEntity = new CodingZoneRegisterEntity(email, userName, userStudentNum, classNum);
+            int grade = codingZoneClass.getGrade();
+            CodingZoneRegisterEntity newRegisterEntity = new CodingZoneRegisterEntity(grade, email, userName, userStudentNum, classNum);
             codingZoneRegisterRepository.save(newRegisterEntity);
             codingZoneClass.increaseNum(); // 예약자 수 증가
             codingZoneClassRepository.save(codingZoneClass);
@@ -269,6 +270,55 @@ public class CodingZoneServiceImplement implements CodingZoneService {
         return PutAttendanceResponseDto.success();
     }
 
-    
-    
+    @Override
+    public ResponseEntity<? super GetListOfCodingZoneClassResponseDto> getClassList(Integer grade, String email) {
+        List<CodingZoneClass> classEntities = new ArrayList<>();
+        try{
+            // 사용자 계정이 존재하는지(로그인 시간이 초과됐는지) 확인하는 코드
+            boolean existedUser = userRepository.existsByEmail(email);
+            if (!existedUser) return GetListOfCodingZoneClassResponseDto.notExistUser();
+
+            if(grade != 1 && grade != 2) return GetListOfCodingZoneClassResponseDto.validationFailed();
+
+            classEntities = codingZoneClassRepository.findByGrade(grade);
+            if(classEntities == null) return  GetListOfCodingZoneClassResponseDto.noExistArticle();
+
+        }catch(Exception exception) {
+            exception.printStackTrace();
+            return ResponseDto.databaseError();
+        }
+        return GetListOfCodingZoneClassResponseDto.success(classEntities);
+
+        
+    }
+
+    @Override
+    public ResponseEntity<? super GetCountOfAttendResponseDto> getAttend(Integer grade, String email) {
+        Integer NumOfAttend = 0;
+        List<CodingZoneRegisterEntity> classEntities = new ArrayList<>();
+        try{
+            // 사용자 계정이 존재하는지(로그인 시간이 초과됐는지) 확인하는 코드
+            boolean existedUser = userRepository.existsByEmail(email);
+            if (!existedUser) return GetCountOfAttendResponseDto.notExistUser();
+            System.out.println("hi");
+
+            if(grade != 1 && grade != 2) return GetCountOfAttendResponseDto.validationFailed();
+
+            classEntities = codingZoneRegisterRepository.findByGrade(grade);
+            if(classEntities == null) return GetCountOfAttendResponseDto.success(NumOfAttend);
+
+            System.out.println("test");
+            for (CodingZoneRegisterEntity entity : classEntities){
+                System.out.println(entity.getAttendance());
+                if(entity.getUserEmail() == email && entity.getAttendance() == "1"){
+                    NumOfAttend++;
+                }
+            }
+        }catch(Exception exception) {
+            exception.printStackTrace();
+            return ResponseDto.databaseError();
+        }
+        return GetCountOfAttendResponseDto.success(NumOfAttend);
+    }
+ 
 }

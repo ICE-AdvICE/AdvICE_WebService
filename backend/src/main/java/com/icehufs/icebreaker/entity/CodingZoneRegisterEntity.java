@@ -1,6 +1,7 @@
 package com.icehufs.icebreaker.entity;
 
 
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -12,13 +13,15 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-@AllArgsConstructor
+
 @NoArgsConstructor
+@AllArgsConstructor
 @ToString
 @Getter
 @Entity(name = "codingzoneregister")
 @Table(name = "codingzoneregister")
 public class CodingZoneRegisterEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "registration_id")
@@ -39,13 +42,16 @@ public class CodingZoneRegisterEntity {
     @Column(name = "attendance", nullable = false)
     private String attendance;
 
+    @Column(name = "grade")
+    private int grade;
 
-    public CodingZoneRegisterEntity(String email, String name, String user_student_num, Integer classNum) {
+    public CodingZoneRegisterEntity(int grade,String email, String name, String user_student_num, Integer classNum) {
         this.classNum = classNum;
         this.userEmail = email;
         this.userName = name;
         this.userStudentNum = user_student_num;
         this.attendance = "0";
+        this.grade = grade;
     }
 
     public void putAttend() {

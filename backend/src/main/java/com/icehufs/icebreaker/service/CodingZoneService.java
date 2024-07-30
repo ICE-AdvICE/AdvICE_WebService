@@ -20,6 +20,8 @@ public interface CodingZoneService {
     ResponseEntity<? super AuthorityExistResponseDto> authExist(String email);
     ResponseEntity<? super CodingZoneRegisterResponseDto> classRegist(Integer classNum, String email);
     ResponseEntity<? super CodingZoneCanceResponseDto> classCance(Integer classNum, String email);
+    ResponseEntity<? super GetListOfCodingZoneClassResponseDto> getClassList(Integer grade, String email);
+    ResponseEntity<? super GetCountOfAttendResponseDto> getAttend(Integer grade,String email);
 
     //수업1 코딩존 조교 
     ResponseEntity<? super PutAttendanceResponseDto> putAttend(Integer registNum, String email);
