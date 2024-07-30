@@ -14,6 +14,7 @@ import com.icehufs.icebreaker.service.CodingZoneService;
 
 import com.icehufs.icebreaker.dto.response.codingzone.*;
 
+
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -48,5 +49,21 @@ public class CodingZoneController {
             return response;
         }
 
-
+    @GetMapping("/class-list/{grade}")
+    public ResponseEntity<? super GetListOfCodingZoneClassResponseDto> getClassList(
+        @PathVariable Integer grade,
+        @AuthenticationPrincipal String email
+    ){
+        ResponseEntity<? super GetListOfCodingZoneClassResponseDto> response = codingzoneService.getClassList(grade, email);
+        return response;
+    } 
+    
+    @GetMapping("/count-of-attend/{grade}")
+    public ResponseEntity<? super GetCountOfAttendResponseDto> getCountAttend(
+        @PathVariable Integer grade,
+        @AuthenticationPrincipal String email
+    ){
+        ResponseEntity<? super GetCountOfAttendResponseDto> response = codingzoneService.getAttend(grade, email);
+        return response;
+    }   
 }
