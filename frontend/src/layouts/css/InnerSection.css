@@ -91,6 +91,7 @@
 .middle-container {
   position: relative;
   display:flex;
+  flex-direction: row;
   width: 100%;
   height: auto;
 }
@@ -108,8 +109,10 @@
   display:flex;   
 }
 .middle-note{
-  width:60%;
+  display: flex;
+  width:50%;
   height: 70%;
+
   position: absolute;
   z-index: 111;
   margin-left: 5%;
@@ -164,3 +167,9 @@
   margin-bottom: 5px;
 }
 
+.coding-zone{
+  display: flex;
+  width: 33%;
+  position: relative;
+  height: 100%;
+}

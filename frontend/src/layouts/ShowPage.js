@@ -254,6 +254,7 @@ const ShowPage = () => {
                             {canEdit && (
                                 <div className="Edit-Delete-Options">
                                     <button onClick={handleEditArticle}>수정</button>
+                                    <span> | </span>
                                     <button onClick={onDelete}>삭제</button>
                                 </div>
                             )}            

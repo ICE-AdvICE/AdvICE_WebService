@@ -5,11 +5,7 @@
   width: 100%;
   height: auto;
 }
-.blog-container{
-  width: 100%;
-  height: auto;
-  position: relative;
-}
+
 .ArticleContentbox {
   flex: 1;   
   position: relative;   
@@ -59,7 +55,7 @@
   border-radius: 5px;       
   position: relative;
   margin-top: 4vw;
-  left: 14%;
+  left: 15%;
   width: 6.7vw;
   display: flex;            
   align-items: center;      
@@ -80,9 +76,9 @@
   margin-top: 1vw;
   position: relative;
   display: flex;
-  left: 14%;
+  left: 15%;
   font-family: 'Inter', sans-serif;  
-  font-size: 2.8vw;  
+  font-size: 2.5vw;  
   font-weight: 700;
 }
 .ArticleTitle p{
@@ -95,8 +91,7 @@
 .ArticleDate {
   font-weight: 900;
   display: flex;   
-  left: 14%;
-  top:15%;
+  left: 15%;
   width: 70%;
   position: relative;      
   justify-content: space-between;  
@@ -111,9 +106,10 @@
   z-index: 1111;
   height: auto;
   width: 70%;
-  top: 18.5%;
   margin-bottom: 30px;
-  left: 14%;
+  left: 15%;
+  flex-direction: column;
+  display: flex;
 }
 
 /*선*/
@@ -133,12 +129,13 @@
 /*수정,삭제 버튼 */
 
 .Edit-Delete-Options {
-  width: 14%;
+  width: 10%;
   position: relative;
   z-index: 111;
   font-size: 1vw;
+  margin-right: 0;
   display: flex;  
-  justify-content: space-around; 
+  justify-content: flex-end;
 }
 .Edit-Delete-Options button {
   border: none !important;
@@ -195,7 +192,8 @@
   display: flex;   
   height: 40%;
   z-index: 11;       
-  align-items: center;  
+  align-items: center; 
+  margin-top: 1%; 
   width: 25%;
   flex-direction: row;
   margin-left:5px;
@@ -213,7 +211,11 @@
   height: auto;
  
 }
-
+.Edit-Delete-Options span{
+  height: 100%;
+  align-items: center;
+  display: flex;
+}
 
 
 .CommentBox-bottom{
@@ -293,7 +295,7 @@
 .quill p{
   font-family: 'Inter', sans-serif;
   font-weight: 400;
-  font-size: 1.5vw;
+  font-size: 1.2vw;
   line-height: 2.25vw;
 
 }
@@ -386,9 +388,13 @@ html, body {
   overflow-x: hidden;
 }
 
-@media (max-width: 1300px) {
-  .blog-container {
-      padding: 0;  /* 여백을 줄임 */
+.ql-editor {
+  padding: 3%;
+ 
+}
+@media (max-width: 600px) {
+  .quill p,.Comment-Content{
+    font-size: 1.5vw;
+  
   }
 }
-

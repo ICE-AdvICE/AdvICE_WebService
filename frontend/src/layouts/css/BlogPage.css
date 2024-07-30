@@ -1,12 +1,5 @@
-.blog-container{
-  width: 100%;
- 
-  height: 100%;
-  position: relative;
-}
 .img-container{
   width: 100%;
- 
   height: 26vw;
   display: flex;
   position: relative;
@@ -15,7 +8,6 @@
   width:100%;
   position: absolute;
   height: 26vw;
-  
   background-size: cover;
 }
 .header2-img img{
@@ -31,57 +23,60 @@
 }
 .posts-overlay-container {
   position: relative;
+  display: flex;
+  height: auto;
+  flex-direction: column;
 }
 .header3-image{
   width:100%;
-  height: auto;
-  position: relative;
+  height: 100%;
+  position: absolute;
 }   
 .article-icon-image{
   position: absolute;
-  width: 57%;
-  height: 57%;
-  left: 22%;
+  width: 55vw;
+  height: 45vw;
+  left: 23%;
   top:13%;
   z-index: 2;
 }
 .bar-container{
-  width: 80%;
-  left: 10%;
-  height: 3%;
-  position: absolute;
-  top: 12%;
+  width: 52%;
+  left: 24%;
+  height: 2.5vw;
+  position: relative;
+  justify-content: space-between;
+  margin-top: 9%;
   display: flex;
+  margin-bottom: 0.5%;
 }
 
 .category-dropdown{
-  position: absolute;
-  left: 18.1%;
+  display: flex;
   width: 20%;
   height: 100%;
   z-index: 11;
 }
 .category-dropdown select{
-  width: 80%;
+  width: 20%;
   text-align: center;
   position: absolute;
   height: 100%;
+  font-size: 1vw;
   border-color: #D0D5DD;
 }
  .search-bar{
   height: 100%;
-  width: 26vw;
-  position: absolute;
-  right: 10.9%;
   display: flex;
-  align-items: center;  
+ 
   justify-content: space-between; 
   z-index: 11;
 }
 .search-bar select,
 .search-bar input
 {
-  height: 2.6vw;    
+  margin-right: 1%;
+  height: 100%;    
   font-size: 1vw;
   text-align: center; 
   width: 8vw;
@@ -89,10 +84,7 @@
 }
 .input-container {
   display: flex;
-  position: absolute;
-  margin-left: 31%;
   width: 12vw;
-  height: 100%;
 }
 input[type="text"] {
   width: 12vw;
@@ -100,32 +92,33 @@ input[type="text"] {
   background-color: white;   
   box-shadow: none;          
   border: 1px solid #D0D5DD;    
-  padding: 8%;
 }
 input[type="text"]::placeholder {
   color: rgba(128, 128, 128, 0.467);
   text-align: left;  
 }
 .title_vector-container{
-  width: 80%;
-  height: 7%;
-  left: 10%;
-  position: absolute;
-  top: 15%;
+  width: 52%;
+  height: 4vw;
+  display: flex;
+  left: 24%;
+  position: relative;
+ 
 }
 .title {
-  font-weight: bold;
-  width: 65%;
-  height: 80%;
+  font-weight: 600;
+  width: 100%;
+  height: 100%;
   text-align: center;
-  left: 17%;
   display: flex;    
+  flex-wrap: nowrap;
   align-items: center;    
-  position: absolute;
-  top: 5%;
 }
 .title p{
-  font-size: 1.1vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1vw;
   width: 100%;
   height: 50%;
   margin-bottom: 0;
@@ -137,26 +130,18 @@ input[type="text"]::placeholder {
 .title p:nth-child(4) { margin-right: 1%; } 
  
 .main-top{
-  width: 65%;
-  height: 50%;
+  width: 100%;
+  height: 100%;
   position: absolute;
-  top:1%;
-  left: 18%;
   z-index: 111;
 }
-.vector2{
-  position: absolute;
-  width:98%;
-  top: 5%;
-  height: 5%;
-}
+ 
 .main-top2{
-  width: 65%;
-  height: 50%;
+  width: 100%;
+  height: 100%;
   position: absolute;
-  left: 18%;
   z-index: 111;
-  top:65%;
+ 
 }
 
 .search-icon {
@@ -167,16 +152,13 @@ input[type="text"]::placeholder {
   width: 1.5vw;  
   height: 1.5vw;
 }
-select { 
-  font-size: 1vw;
-}
 .posts-content {
-  position: absolute;
-  top: 22%;
-  left: 24.5%;
-  width: 51%;
+  position: relative;
+  height: 70%;
+  margin-top: 1%;
+  left: 24%;
+  width: 52%;
   cursor: pointer;
-  height: 60%;
   display: flex;
   z-index: 155;
   flex-Direction: column;
@@ -226,7 +208,7 @@ select {
   margin-bottom: 0;
   display: flex;
   align-items: center; 
-  font-size: 1.1vw; 
+  font-size: 1vw; 
   justify-content: center;
   overflow: hidden;
   white-space: nowrap;
@@ -243,14 +225,16 @@ select {
  width: 100%;
 }
 
-.writing-button{
+.writing-container{
   position: relative;
-  left: 50%;
+  display: flex;
+  justify-content: flex-end;
 }
 .pagination-container{
   position: relative;
   width: 100%;
-  left: 37%;
+  justify-content: center;
+  height: 20vw;
   z-index: 11;
   display: flex;
 }
@@ -268,13 +252,13 @@ select {
   align-items: center;  
   text-decoration: none;  
   z-index: 15;
-  margin-left: 85%;
+ 
   border: 0.05vw solid #ACACAC;
-  height: 3vw;
+  height: 100%;
   }
 .pencil{
-  width: 18%;
-  height: 35%;
+  width: 20%;
+  height: 40%;
 }
 
 .btn1 p{
@@ -287,7 +271,26 @@ select {
 .page-item{
   height: 10px;
 }
+.pagination{
+  height: 100%;
+}
 
+.main-top {
+  display: flex;
+  justify-content: center;  /* 가운데 정렬 */
+}
+.main-top2 {
+  display: flex;
+  justify-content: center;  
+
+  align-items: flex-end;
+}
+
+.separator {
+  height: 0.1vw;              /* 선의 두께 */
+  width: 100%;              /* 선의 너비를 컨테이너 너비만큼 */
+  background-color: black;   /* 선의 색상 */
+}
 @media (max-width: 1500px) {
   .blog-container{
     width: 100%;
@@ -295,11 +298,41 @@ select {
  
  
 }
+@media (max-width: 600px) {
+  .card{
+    height: 6vw;
+  }
+  .writing-container{
+    height: 4vw;
+  }
+  .title p ,.pagination .page-link,.btn1 p, .category-dropdown select, .search-bar select,input[type="text"],.card-order, .card-category, .card-title, .card-created, .card-views, .card-likes{
+    font-size: 1.5vw;
+  }
+  .posts-content,.bar-container{
+    width: 90%;
+    left: 5%;
+  }
+  .title_vector-container{
+    width: 90%;
+    left: 5%;
+    height: 5vw;
+  }
+  .article-icon-image {
+    position: absolute;
+    width: 60%;
+    height: 50%;
+    left: 20%;
+  }
+}
+
 .Comment-Edit{
   position: absolute;
   width: 100%;
  
 }
 .comment-edit-input{
+  position: relative;
+}
+.writing-button{
   position: relative;
 }
