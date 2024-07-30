@@ -1,0 +1,53 @@
+.img-container{
+  width: 100%;
+  display: flex;
+  position: relative;
+}
+.codingzonetop-image{
+  width:100%;
+  position: absolute;
+  height: 26vw;
+  background-size: cover;
+}
+.codingzone-body-container{
+  width: 100%;
+  flex-direction: column;
+  display: flex;
+  height: 50vw;
+}
+.cz-category-date{
+  display: flex;
+  align-items: center;
+  position: relative;
+  justify-content: space-between; 
+  height: 5%;
+  width: 15%;
+  margin-left: 40%
+}
+.cz-category-date button{
+  height: 100%;
+  background-color: white;
+}
+.codingzone-date{
+  display: flex;
+  align-items: center;
+  position: relative;
+  justify-content: space-between; 
+  height: 10%;
+  width: 80%;
+  margin-left: 10%
+
+}
+.codingzone-date button{
+  width: 15%;
+  height: 80%;
+  background-color: white;
+}
+.None{
+  height: 2%;
+  width: 80%;
+  position: relative;
+  display: flex;
+  margin-left: 10%;
+  background-color: #D9D9D9;
+}
