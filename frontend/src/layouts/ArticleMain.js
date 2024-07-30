@@ -200,13 +200,13 @@ const ArticleMain = () => {
                     <div className="title">
                         <p>카테고리</p> <p>제목</p><p>작성일</p> <p>조회</p><p>좋아요</p>
                     </div>
-                    <div className='main-top'>
-                        <img src="vector2.png" className="vector2"/>
+                    <div className="main-top">
+                        <div className="separator"></div>   
                     </div>
                     <div className='main-top2'>
-                        <img src="vector2.png" className="vector2"/>
+                        <div className="separator"></div>  
                     </div>
-                </div>
+                    </div>
                 <div className="posts-content">
                     <div className="Notification-container">
                         {notificationArticles.length > 0 ? (
@@ -258,7 +258,7 @@ const ArticleMain = () => {
                             <div>게시물이 없습니다</div>
                         )}
                     </div>
-                    <div classsName = 'writing-button'>
+                    <div className = "writing-container">
                         <div className="btn1" onClick={handleCreateArticleClick} style={{ cursor: 'pointer' }}>
                                 <img src="/pencil.png" className="pencil" />
                                 <p>글쓰기</p>

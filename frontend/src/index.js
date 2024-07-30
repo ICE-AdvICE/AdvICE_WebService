@@ -4,7 +4,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Main from './layouts/HomePage';
 import ArticleMain from './layouts/ArticleMain';
- 
+import CodingMain from './layouts/Coding-zone/CodingMain';
 import EditPage from'./layouts/EditPage';
 import NavBar from './components/NavBar';
 import Footer from './components/Footer';
@@ -20,6 +20,7 @@ ReactDOM.render(
       <Route path="/article-main/create" element={<CreatePage />} />
       <Route path="/article-main/:articleNum/edit" element={<EditPage />} />
       <Route path="/article-main/:articleNum" element={<ShowPage />} />
+      <Route path="/coding-zone" element={<CodingMain />} />
     </Routes>
     <Footer />
   </BrowserRouter>,

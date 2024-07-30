@@ -9,6 +9,9 @@ const InnerSection = () => {
   const handleMoreClick = () => {
     navigate('/article-main');  
   };
+  const handlecodingzone = async () => {
+    navigate(`/coding-zone`);
+};
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -55,6 +58,9 @@ const InnerSection = () => {
               <div>게시글이 없습니다</div>
             )}
           </div>
+        </div>
+        <div className = 'coding-zone'>
+          <button onClick={handlecodingzone}>코딩존</button>
         </div>
       </div>
     </section>

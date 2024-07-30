@@ -102,7 +102,7 @@
 }
 .ql-container {
     max-height: 25vw;   
-    overflow-y: auto;   
+    overflow-y: hidden;   
     font-family: 'Noto Sans', sans-serif;
 }
 
