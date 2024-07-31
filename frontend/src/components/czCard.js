@@ -1,13 +1,7 @@
 import PropTypes from "prop-types";
 
 const czCard = ({ 
-    category, 
-    onClick, 
-    children, 
-    assistantName, 
-    classTime, 
-    className, 
-    weekDay 
+    category, onClick, children, assistantName, classTime, className, weekDay ,currentNumber,maximumNumber
 }) => {
     
     return (
@@ -18,6 +12,8 @@ const czCard = ({
                 <p className='card-classTime'>{classTime}</p>
                 <p className='card-className'>{className}</p>
                 <p className='card-weekDay'>{weekDay}</p>
+                <p className='card-currentNumber'> {currentNumber}</p>
+                <p className='card-maximumNumber'> {maximumNumber}</p>
                 {children}
             </div>
         </div>
@@ -25,32 +21,27 @@ const czCard = ({
 };
 
 czCard.propTypes = {
-    title: PropTypes.string.isRequired,
-    createdAt: PropTypes.string,
-    order: PropTypes.number,
-    email: PropTypes.string,
-    category: PropTypes.number,   
+    category: PropTypes.number,
     onClick: PropTypes.func,
     children: PropTypes.element,
     assistantName: PropTypes.string,
     classTime: PropTypes.string,
     className: PropTypes.string,
     weekDay: PropTypes.string,
+    currentNumber: PropTypes.number,
+    maximumNumber: PropTypes.number
 };
 
 czCard.defaultProps = {
-    createdAt: null,
-    views: 0,
-    order: 0,
-    likes: 0,
-    category: 0,  // 기본값 설정
+    category: 0,
     onClick: () => {},
-    email: '',
     children: null,
     assistantName: '',
     classTime: '',
     className: '',
     weekDay: '',
+    currentNumber: 0,
+    maximumNumber: 0
 };
 
 export default czCard;
