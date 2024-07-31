@@ -36,11 +36,14 @@
     width: 80%;
     max-width: 500px;
     padding: 20px;
-    box-sizing: border-box; /* 패딩을 포함한 너비 계산 */
-    position: relative; /* 중앙 정렬을 위해 수정 */
-    pointer-events: auto; /* 모달 내부 이벤트 활성화 */
-    z-index: 1051;  /* 컨테이너의 z-index를 모달 배경보다 높게 설정 */
+    box-sizing: border-box;
+    position: relative;
+    pointer-events: auto;
+    z-index: 1051;
+    max-height: 80vh;  /* 최대 높이를 뷰포트 높이의 80%로 설정 */
+    overflow-y: auto;  /* 내용이 넘칠 경우에만 스크롤바 표시 */
 }
+
 .close{ /*x버튼*/
     position: absolute;
     top: 3px;

@@ -7,7 +7,6 @@ import ArticleMain from './layouts/ArticleMain';
 import CodingMain from './layouts/Coding-zone/CodingMain';
 import EditPage from'./layouts/EditPage';
 import NavBar from './components/NavBar';
-import Footer from './components/Footer';
 import CreatePage from './layouts/CreatePage';
 import ShowPage from './layouts/ShowPage';
 import './layouts/css/NavBar.css';
@@ -22,7 +21,6 @@ ReactDOM.render(
       <Route path="/article-main/:articleNum" element={<ShowPage />} />
       <Route path="/coding-zone" element={<CodingMain />} />
     </Routes>
-    <Footer />
   </BrowserRouter>,
   document.getElementById('root')
 );

@@ -1,0 +1,124 @@
+.header h1 {
+    font-weight: bold;
+    margin-bottom: 40px;
+}
+
+.header p {
+    color: #858282;
+    margin-bottom: 20px;
+}
+
+
+.main-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    padding: 20px;
+    background: linear-gradient(rgb(255, 255, 255) 70%, rgb(210, 210, 210), rgb(206, 206, 206));
+    min-height: 100vh;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 40px;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.buttons-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    flex-wrap: wrap;
+    margin-top: 30px;
+   
+}
+
+.service-box {
+    padding: 20px;
+    width: 300px;
+    height: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    margin: 10px;
+    border-radius: 2px;
+    box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.2);
+    background-color: #ffffff;
+}
+
+.coding-box {
+    margin: 20px;
+    border: 1.5px solid #052940;
+    transition: transform 0.3s ease-in-out; /* 부드러운 변환 효과 */
+}
+
+.coding-box:hover {
+    transform: scale(1.1); /* 호버시 요소 크기를 10% 증가 */
+}
+
+.icebreaker-box {
+    margin: 20px;
+    border: 1.5px solid #A78258;
+    transition: transform 0.3s ease-in-out;
+}
+
+.icebreaker-box:hover {
+    transform: scale(1.1); /* 호버시 요소 크기를 10% 증가 */
+}
+
+
+.study-box {
+    margin: 20px;
+    border: 1.5px solid #008080;
+    transition: transform 0.3s ease-in-out;
+}
+
+.study-box:hover {
+    transform: scale(1.1); /* 호버시 요소 크기를 10% 증가 */
+}
+
+.service-box p {
+    padding: 10px;
+    margin-top: 25px;
+    margin-bottom: 0px;
+    border-radius: 4px;
+    width: 100%;
+    text-align: center;
+    color: #858282;
+}
+
+.btn {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border: none;
+    border-radius: 0px;
+    color: white;
+    transition: background-color 0.3s;
+
+
+}
+
+.coding {
+    background-color: #052940;
+    box-shadow: 0px 2px 5px #052940;
+
+}
+
+.icebreaker {
+    background-color: #A78258;
+    box-shadow: 0px 2px 5px #A78258;
+}
+
+.study {
+    background-color: #008080;
+    box-shadow: 0px 2px 5px #008080;
+}
+
+.btn:hover {
+    opacity: 0.8;
+}

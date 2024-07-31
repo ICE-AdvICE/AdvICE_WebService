@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.ArrayList;
 
+import com.icehufs.icebreaker.dto.object.PersAttendManagListItem;
 import com.icehufs.icebreaker.dto.request.codingzone.*;
 import com.icehufs.icebreaker.dto.response.ResponseDto;
 import com.icehufs.icebreaker.dto.response.article.CheckOwnOfArticleResponseDto;
@@ -111,6 +112,8 @@ public class CodingZoneServiceImplement implements CodingZoneService {
             if (!existedUser) return GetListOfGroupInfResponseDto.notExistUser();
 
             groupInfEntities = groupInfRepository.findByGroupId(dto.getGroupId());
+            if(groupInfEntities.isEmpty()) return GetListOfGroupInfResponseDto.noExistArticle();
+            
         }catch(Exception exception) {
             exception.printStackTrace();
             return ResponseDto.databaseError();
@@ -281,7 +284,7 @@ public class CodingZoneServiceImplement implements CodingZoneService {
             if(grade != 1 && grade != 2) return GetListOfCodingZoneClassResponseDto.validationFailed();
 
             classEntities = codingZoneClassRepository.findByGrade(grade);
-            if(classEntities == null) return  GetListOfCodingZoneClassResponseDto.noExistArticle();
+            if(classEntities.isEmpty()) return  GetListOfCodingZoneClassResponseDto.noExistArticle();
 
         }catch(Exception exception) {
             exception.printStackTrace();
@@ -300,17 +303,14 @@ public class CodingZoneServiceImplement implements CodingZoneService {
             // 사용자 계정이 존재하는지(로그인 시간이 초과됐는지) 확인하는 코드
             boolean existedUser = userRepository.existsByEmail(email);
             if (!existedUser) return GetCountOfAttendResponseDto.notExistUser();
-            System.out.println("hi");
 
             if(grade != 1 && grade != 2) return GetCountOfAttendResponseDto.validationFailed();
 
             classEntities = codingZoneRegisterRepository.findByGrade(grade);
-            if(classEntities == null) return GetCountOfAttendResponseDto.success(NumOfAttend);
+            if(classEntities.isEmpty()) return GetCountOfAttendResponseDto.success(NumOfAttend);
 
-            System.out.println("test");
             for (CodingZoneRegisterEntity entity : classEntities){
-                System.out.println(entity.getAttendance());
-                if(entity.getUserEmail() == email && entity.getAttendance() == "1"){
+                if(entity.getUserEmail().equals(email) && entity.getAttendance().equals("1")){
                     NumOfAttend++;
                 }
             }
@@ -319,6 +319,32 @@ public class CodingZoneServiceImplement implements CodingZoneService {
             return ResponseDto.databaseError();
         }
         return GetCountOfAttendResponseDto.success(NumOfAttend);
+    }
+
+    @Override
+    public ResponseEntity<? super GetPersAttendListItemResponseDto> getPerAttendList(String email) {
+        List<PersAttendManagListItem> attendClassEntities = new ArrayList<>();
+        List<CodingZoneRegisterEntity> classEntities = new ArrayList<>();
+        try{
+            // 사용자 계정이 존재하는지(로그인 시간이 초과됐는지) 확인하는 코드
+            boolean existedUser = userRepository.existsByEmail(email);
+            if (!existedUser) return GetPersAttendListItemResponseDto.notExistUser();
+
+            //아직 출/결한 수업이 없을 때
+            classEntities = codingZoneRegisterRepository.findByUserEmail(email);
+            if(classEntities.isEmpty()) return GetPersAttendListItemResponseDto.noExistArticle();
+
+            for(CodingZoneRegisterEntity codingZoneRegisterEntity: classEntities){
+                CodingZoneClass codingZoneClass = codingZoneClassRepository.findByClassNum(codingZoneRegisterEntity.getClassNum());
+                PersAttendManagListItem persAttendManagListItem = new PersAttendManagListItem(codingZoneClass, codingZoneRegisterEntity);
+                attendClassEntities.add(persAttendManagListItem);
+            }
+        }catch(Exception exception) {
+            exception.printStackTrace();
+            return ResponseDto.databaseError();
+        }
+        return GetPersAttendListItemResponseDto.success(attendClassEntities);
+
     }
  
 }

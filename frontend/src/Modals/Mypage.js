@@ -22,9 +22,9 @@ const MypageForm = ({ handleLogout }) => {
     //사용자 정보 가져오는 함수
     useEffect(() => {
         const fetchUserDetails = async () => {
-            console.log("Trying to fetch data with token:", token);
+            
             const data = await getMypageRequest(token);
-            console.log("Received data:", data);
+            
             if (data && data.code === "SU") {
                 setUserDetails({
                     email: data.email,
