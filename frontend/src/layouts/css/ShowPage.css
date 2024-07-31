@@ -394,7 +394,8 @@ html, body {
 }
 @media (max-width: 600px) {
   .quill p,.Comment-Content{
-    font-size: 1.5vw;
+    font-size: 1.4vw;
+
   
   }
 }
