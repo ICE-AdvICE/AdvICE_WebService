@@ -66,4 +66,13 @@ public class CodingZoneController {
         ResponseEntity<? super GetCountOfAttendResponseDto> response = codingzoneService.getAttend(grade, email);
         return response;
     }   
+
+    @GetMapping("/attend-list")
+    public ResponseEntity<? super GetPersAttendListItemResponseDto> getPerAttendList(
+        @AuthenticationPrincipal String email
+    ){
+        ResponseEntity<? super GetPersAttendListItemResponseDto> response = codingzoneService.getPerAttendList(email);
+        return response;
+    } 
+
 }

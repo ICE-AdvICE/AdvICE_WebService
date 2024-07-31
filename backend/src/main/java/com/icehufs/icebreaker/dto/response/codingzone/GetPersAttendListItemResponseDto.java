@@ -1,29 +1,29 @@
 package com.icehufs.icebreaker.dto.response.codingzone;
 
-import com.icehufs.icebreaker.dto.response.ResponseDto;
-import com.icehufs.icebreaker.entity.GroupInfEntity;
-import com.icehufs.icebreaker.common.ResponseCode;
-import com.icehufs.icebreaker.common.ResponseMessage;
-import com.icehufs.icebreaker.dto.object.GroupInfListItem;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import com.icehufs.icebreaker.common.ResponseCode;
+import com.icehufs.icebreaker.common.ResponseMessage;
+import com.icehufs.icebreaker.dto.object.PersAttendManagListItem;
+import com.icehufs.icebreaker.dto.response.ResponseDto;
+
 import lombok.Getter;
 
-@Getter
-public class GetListOfGroupInfResponseDto extends ResponseDto{
-    
-    private List<GroupInfListItem> groupList;
+@Getter 
+public class GetPersAttendListItemResponseDto extends ResponseDto{
 
-    private GetListOfGroupInfResponseDto(List<GroupInfEntity> groupInfEntities){
+    private List<PersAttendManagListItem> attendList;
+
+    private GetPersAttendListItemResponseDto(List<PersAttendManagListItem> persAttendManagListItems){
     super(ResponseCode.SUCCESS, ResponseMessage.SUCCESS);
-    this.groupList = GroupInfListItem.getList(groupInfEntities);
+    this.attendList = PersAttendManagListItem.getList(persAttendManagListItems);
     }
 
-    public static ResponseEntity<GetListOfGroupInfResponseDto> success(List<GroupInfEntity> groupInfEntities){
-        GetListOfGroupInfResponseDto result = new GetListOfGroupInfResponseDto(groupInfEntities);
+    public static ResponseEntity<GetPersAttendListItemResponseDto> success(List<PersAttendManagListItem> persAttendManagListItems){
+        GetPersAttendListItemResponseDto result = new GetPersAttendListItemResponseDto(persAttendManagListItems);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
@@ -36,6 +36,4 @@ public class GetListOfGroupInfResponseDto extends ResponseDto{
         ResponseDto result = new ResponseDto(ResponseCode.NOT_EXISTED_ARTICLE, ResponseMessage.NOT_EXISTED_ARTICLE);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);
     }
-
-
 }
