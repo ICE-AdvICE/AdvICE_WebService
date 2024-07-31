@@ -16,16 +16,19 @@
   height: 50vw;
 }
 .cz-category-date{
+  margin-top: 1%;
   display: flex;
   align-items: center;
   position: relative;
   justify-content: space-between; 
-  height: 5%;
+  height: 3vw;
+  font-size: 0.8vw;
   width: 15%;
-  margin-left: 40%
+  margin-left: 43%
 }
 .cz-category-date button{
   height: 100%;
+ 
   background-color: white;
 }
 .codingzone-date{
@@ -50,4 +53,21 @@
   display: flex;
   margin-left: 10%;
   background-color: #D9D9D9;
+}
+.codingzone-list{
+  display: flex;
+  margin-top: 1%;
+  position: relative;
+  width: 80%;
+
+  margin-left: 10%;
+}
+.cz-card{
+  width: 100%;
+}
+.czcard{
+  margin-bottom: 2%;
+  background-color: #F6F6F6;
+  width: 100%;
+  display: flex;
 }

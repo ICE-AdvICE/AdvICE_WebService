@@ -1,17 +1,21 @@
 import PropTypes from "prop-types";
 
 const czCard = ({ 
-    category, onClick, children, assistantName, classTime, className, weekDay ,currentNumber,maximumNumber
+    category, onClick,classDate, children, assistantName, classTime, className, weekDay ,currentNumber,maximumNumber
 }) => {
     
     return (
-        <div className="card" onClick={onClick}>
+        <div className="czcard" onClick={onClick}>
             <div className="d-flex justify-content-between">
-                <p className="card-assistantName">{assistantName}</p>
-                <p className="card-category">{category}</p>
+                <p className='card-weekDay'>{weekDay}</p>
+                <p className="card-category">{classDate}</p>
                 <p className='card-classTime'>{classTime}</p>
                 <p className='card-className'>{className}</p>
-                <p className='card-weekDay'>{weekDay}</p>
+                <p className="card-assistantName">{assistantName}</p>
+                <p className="card-category">{category}</p>
+               
+                
+                
                 <p className='card-currentNumber'> {currentNumber}</p>
                 <p className='card-maximumNumber'> {maximumNumber}</p>
                 {children}
@@ -26,6 +30,7 @@ czCard.propTypes = {
     children: PropTypes.element,
     assistantName: PropTypes.string,
     classTime: PropTypes.string,
+    classDate: PropTypes.string,
     className: PropTypes.string,
     weekDay: PropTypes.string,
     currentNumber: PropTypes.number,
@@ -38,6 +43,7 @@ czCard.defaultProps = {
     children: null,
     assistantName: '',
     classTime: '',
+    classDate: '',
     className: '',
     weekDay: '',
     currentNumber: 0,
