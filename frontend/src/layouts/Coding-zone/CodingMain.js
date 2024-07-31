@@ -51,6 +51,15 @@ const CodingMain = () => {
 
     return (
         <div className = "codingzone-container">
+            <div className = 'select-container'>
+                <span> | </span>
+                <button>코딩존 예약</button>
+                <span> | </span>
+                <button>출결 관리</button>
+                <span> | </span>
+                <button>문의 하기</button>
+                <span> | </span>
+            </div>
             <div className = "img-container">
                 <img src="/coding-zone-main.png" className="codingzonetop-image"/>
             </div>
@@ -67,7 +76,22 @@ const CodingMain = () => {
                     <button>Thu</button>
                     <button>Fri</button>
                 </div>
-                <div className='None'></div>
+                <div className='category-name-container'>
+                    <div className="separator"></div> 
+                    <div className="codingzone-title">
+                        <div className = 'd-flex'>
+                            <p className = 'weekDay'>요일</p> 
+                            <p className = 'weekDate'>날짜</p>
+                            <p className = 'weekTime'>시간</p>
+                            <p className = 'weeksubject'>과목명</p>
+                            <p className = 'weekperson'>조교</p>
+                            <p className = 'weekcount'>인원</p>
+
+                        </div>
+                        
+                    </div>
+                    <div className="separator"></div>   
+                </div>
                 <div className = "codingzone-list">
                 <ClassList classList={classList} handleCardClick={handleCardClick} />
 

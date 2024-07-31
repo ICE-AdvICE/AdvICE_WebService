@@ -1,7 +1,27 @@
+.select-container{
+  display: flex;
+  width: 60%;
+  position: relative;
+  left: 20%;
+  justify-content: space-around;
+  margin-bottom: 1%;
+}
+.select-container button{
+  background-color: white;
+  border: none !important;
+}
+.select-container span{
+  padding: 1%;
+}
+
 .img-container{
   width: 100%;
   display: flex;
   position: relative;
+}
+.select-container button:hover{
+  color: #164694f4;
+  cursor: pointer;
 }
 .codingzonetop-image{
   width:100%;
@@ -28,8 +48,12 @@
 }
 .cz-category-date button{
   height: 100%;
- 
+  border-color: #D0D5DD;
   background-color: white;
+}
+.cz-category-date button:hover{
+  color: white;
+  background-color: #002D56;
 }
 .codingzone-date{
   display: flex;
@@ -38,6 +62,7 @@
   justify-content: space-between; 
   height: 10%;
   width: 80%;
+  
   margin-left: 10%
 
 }
@@ -45,14 +70,31 @@
   width: 15%;
   height: 80%;
   background-color: white;
+  border-color: #D0D5DD;
 }
-.None{
-  height: 2%;
+.category-name-container{
+ 
   width: 80%;
   position: relative;
   display: flex;
   margin-left: 10%;
-  background-color: #D9D9D9;
+  flex-direction: column;
+ 
+}
+
+.codingzone-title{
+  display: flex;
+  width: 100%;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.codingzone-title .d-flex p {
+  margin-top: 1%;
+  margin-bottom: 1%;
+  font-size: 1.2vw;
+}
+p.weekDay{
+  margin-left: 3%;
 }
 .codingzone-list{
   display: flex;
@@ -69,5 +111,22 @@
   margin-bottom: 2%;
   background-color: #F6F6F6;
   width: 100%;
+  height: 5vw;
+  align-items: center;
   display: flex;
+}
+p.card-weekDay {
+  color: #002D56;
+  font-weight: 900;
+  margin-left: 3%;
+}
+.czcard .d-flex p{
+  margin-top: 1%;
+  margin-bottom: 1%;
+  font-size: 1.2vw;
+}
+.d-flex p {
+  flex: 1; /* 모든 p 태그가 동일한 너비를 가지도록 설정 */
+   
+  text-align: center;
 }
