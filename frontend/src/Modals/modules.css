@@ -1,161 +1,211 @@
-
 .loginHeaderContainer {
-  text-align: center; /* 이미지 중앙 정렬 */
+  text-align: center;
+  /* 이미지 중앙 정렬 */
   padding: 20px;
-  border-bottom: 2.5px solid #052940; /* 상단에 실선 추가 */
+  border-bottom: 2.5px solid #052940;
+  /* 상단에 실선 추가 */
   margin-bottom: 50px;
 }
 
 .loginFormContainer {
-  display: flex;  /* Flexbox 사용 */
-  justify-content: center;  /* 가로축 중앙 정렬 */
+  display: flex;
+  /* Flexbox 사용 */
+  justify-content: center;
+  /* 가로축 중앙 정렬 */
   margin-top: 20px;
   margin-bottom: -15px;
   max-height: 80vh;
-  overflow-y: auto; /* 스크롤바 활성화 */
-  width: 100%; /* 컨테이너 너비를 명시적으로 정의 */
+  overflow-y: auto;
+  /* 스크롤바 활성화 */
+  width: 100%;
+  /* 컨테이너 너비를 명시적으로 정의 */
 }
 
-  .loginFormContainer input {
-    border: 1px solid #ccc; /* 경계선 추가 */
-    margin-bottom: 30px; /* 입력 필드 간의 간격 */
-    width: 95%; /* 입력 필드 너비 조정 */
-    height: 40px;
-    padding: 8px; /* 입력 필드 내부 패딩 */
-  }
-  
-  .login_passwordCss{
-    display: flex;  /* Flexbox 사용 */
-    justify-content: center;  /* 가로축 중앙 정렬 */
-    max-height: 80vh;
-    overflow-y: auto; /* 스크롤바 활성화 */
-     width: 100%; 
-  }
- 
-  .login_passwordCss input {
-    border: 1px solid #ccc; /* 경계선 추가 */
-    margin-bottom: 10px; /* 입력 필드 간의 간격 */
-    width:95%; /* 입력 필드 너비 조정 */
-    height: 40px;
-    padding: 8px; /* 입력 필드 내부 패딩 */
-  }
-
-  .loginFormContainer input::placeholder, .login_passwordCss input::placeholder {
-    color: #ccc;  /* 플레이스홀더 텍스트 색상을 빨간색으로 변경 */
-  }
-  
-  .loginButton {
-    width: 95%; /* 컨테이너의 90% 너비 */
-    max-width: 460px; /* 최대 너비 제한 */
-    height: 60px;
-    margin: 20px auto; /* 위아래 20px 마진, 좌우 자동 */
-    display: block; /* 블록 레벨 요소로 설정 */
-    border: none; 
-    outline: none;
-    background-color:rgb(56, 56, 63); /* 기본 배경 색상 설정 */
-    color: white;
-    font-weight: bold;
-    font-size: 20px;
-    text-align: center;
-    font-family: "Noto Sans KR", sans-serif;
-  }
-  
-  .loginButton:hover {
-    background-color: #052940; /* 호버 시 배경 색상 변경 */
-  }
-
-
-  .auth-sign-in-error-message {
-    text-align: center;
-    color: red; /* 텍스트 색상을 빨간색으로 설정 */
-    font-size: 10px; /* 텍스트 크기 조정 */
-    margin-bottom:  15px;
-  }
-
-
-.signUpContainer{
-  display: flex; /* Flexbox 사용하여 요소들을 한 줄에 배치 */
-  align-items: center; /* 세로 중앙 정렬 */
-
-}
-
-.signupHeaderContainer{
-  text-align: center; /* 이미지 중앙 정렬 */
-  padding: 20px;
-  border-bottom: 2.5px solid #052940; /* 상단에 실선 추가 */
-  margin-bottom: 20px;
-}
-
-
-.signUpContainer input {
-  width: 50%; /* 입력 필드 너비 조정 */
-  margin-right: 2px; /* 오른쪽에 여백 추가 */
-  height: 40px; /* 입력 필드 높이 조정 */
-  padding: 8px; /* 입력 필드 내부 패딩 */
-  }
-
-.signup_name{
-   margin-top: 30px;
-}
-
-.signup_name input{
-  margin-top: -10px;
-  margin-bottom: 5px; /* 입력 필드 간의 간격 */
-  width: 95%; /* 입력 필드 너비 조정 */
+.loginFormContainer input {
+  border: 1px solid #ccc;
+  /* 경계선 추가 */
+  margin-bottom: 30px;
+  /* 입력 필드 간의 간격 */
+  width: 95%;
+  /* 입력 필드 너비 조정 */
   height: 40px;
+  padding: 8px;
+  /* 입력 필드 내부 패딩 */
 }
 
-.signup_pw{
-  margin-top: 10px;
-  
+.login_passwordCss {
+  display: flex;
+  /* Flexbox 사용 */
+  justify-content: center;
+  /* 가로축 중앙 정렬 */
+  max-height: 80vh;
+  overflow-y: auto;
+  /* 스크롤바 활성화 */
+  width: 100%;
 }
 
-.signup_pw input{
-  margin-top: -10px;
-  margin-bottom: 5px; /* 입력 필드 간의 간격 */
-  width: 95%; /* 입력 필드 너비 조정 */
+.login_passwordCss input {
+  border: 1px solid #ccc;
+  /* 경계선 추가 */
+  margin-bottom: 10px;
+  /* 입력 필드 간의 간격 */
+  width: 95%;
+  /* 입력 필드 너비 조정 */
   height: 40px;
+  padding: 8px;
+  /* 입력 필드 내부 패딩 */
 }
 
-
-.emailpost{
-  margin-top: 20px;
-  display: flex; /* Flexbox 레이아웃 사용 */
-  flex-direction: width; /* 세로 방향 배치 */
-}
-.emailpost input {
-  margin-bottom: 5px; /* 입력 필드 간의 간격 */
-  width: 70%; /* 입력 필드 너비 조정 */
-  height: 40px;
-  padding: 8px; /* 입력 필드 내부 패딩 */
- display: flex; /* Flexbox 레이아웃 사용 */
-  flex-direction: width;
+.loginFormContainer input::placeholder,
+.login_passwordCss input::placeholder {
+  color: #ccc;
+  /* 플레이스홀더 텍스트 색상을 빨간색으로 변경 */
 }
 
-.signupButton{ 
-  width: 95%; /* 컨테이너의 90% 너비 */
-  max-width: 460px; /* 최대 너비 제한 */
-  height: 50px;
-  margin-top: 30px; /* 위아래 20px 마진, 좌우 자동 */
-  border: none; 
+.loginButton {
+  width: 95%;
+  /* 컨테이너의 90% 너비 */
+  max-width: 460px;
+  /* 최대 너비 제한 */
+  height: 60px;
+  margin: 20px auto;
+  /* 위아래 20px 마진, 좌우 자동 */
+  display: block;
+  /* 블록 레벨 요소로 설정 */
+  border: none;
   outline: none;
-  background-color:rgb(56, 56, 63); /* 기본 배경 색상 설정 */
+  background-color: rgb(56, 56, 63);
+  /* 기본 배경 색상 설정 */
   color: white;
   font-weight: bold;
   font-size: 20px;
   text-align: center;
   font-family: "Noto Sans KR", sans-serif;
 }
-.signupButton:hover{
-  background-color:  #052940;
+
+.loginButton:hover {
+  background-color: #052940;
+  /* 호버 시 배경 색상 변경 */
 }
 
-.post{
-  
+
+.auth-sign-in-error-message {
+  text-align: center;
+  color: red;
+  /* 텍스트 색상을 빨간색으로 설정 */
+  font-size: 10px;
+  /* 텍스트 크기 조정 */
+  margin-bottom: 15px;
+}
+
+
+.signUpContainer {
+  display: flex;
+  /* Flexbox 사용하여 요소들을 한 줄에 배치 */
+  align-items: center;
+  /* 세로 중앙 정렬 */
+
+}
+
+.signupHeaderContainer {
+  text-align: center;
+  /* 이미지 중앙 정렬 */
+  padding: 20px;
+  border-bottom: 2.5px solid #052940;
+  /* 상단에 실선 추가 */
+  margin-bottom: 20px;
+}
+
+
+.signUpContainer input {
+  width: 50%;
+  /* 입력 필드 너비 조정 */
+  margin-right: 2px;
+  /* 오른쪽에 여백 추가 */
+  height: 40px;
+  /* 입력 필드 높이 조정 */
+  padding: 8px;
+  /* 입력 필드 내부 패딩 */
+}
+
+.signup_name {
+  margin-top: 30px;
+}
+
+.signup_name input {
+  margin-top: -10px;
+  margin-bottom: 5px;
+  /* 입력 필드 간의 간격 */
+  width: 95%;
+  /* 입력 필드 너비 조정 */
+  height: 40px;
+}
+
+.signup_pw {
+  margin-top: 10px;
+
+}
+
+.signup_pw input {
+  margin-top: -10px;
+  margin-bottom: 5px;
+  /* 입력 필드 간의 간격 */
+  width: 95%;
+  /* 입력 필드 너비 조정 */
+  height: 40px;
+}
+
+
+.emailpost {
+  margin-top: 20px;
+  display: flex;
+  /* Flexbox 레이아웃 사용 */
+  flex-direction: width;
+  /* 세로 방향 배치 */
+}
+
+.emailpost input {
+  margin-bottom: 5px;
+  /* 입력 필드 간의 간격 */
+  width: 70%;
+  /* 입력 필드 너비 조정 */
+  height: 40px;
+  padding: 8px;
+  /* 입력 필드 내부 패딩 */
+  display: flex;
+  /* Flexbox 레이아웃 사용 */
+  flex-direction: width;
+}
+
+.signupButton {
+  width: 95%;
+  /* 컨테이너의 90% 너비 */
+  max-width: 460px;
+  /* 최대 너비 제한 */
+  height: 50px;
+  margin-top: 30px;
+  /* 위아래 20px 마진, 좌우 자동 */
+  border: none;
+  outline: none;
+  background-color: rgb(56, 56, 63);
+  /* 기본 배경 색상 설정 */
+  color: white;
+  font-weight: bold;
+  font-size: 20px;
+  text-align: center;
+  font-family: "Noto Sans KR", sans-serif;
+}
+
+.signupButton:hover {
+  background-color: #052940;
+}
+
+.post {
+
   margin-left: 10px;
   width: 100px;
   height: 40px;
-  border: none; 
+  border: none;
   outline: 0;
   color: rgb(56, 56, 63);
 
@@ -166,15 +216,15 @@
   font-family: "Noto Sans KR", sans-serif;
 }
 
-.post:hover{
-  background-color:  #052940;
+.post:hover {
+  background-color: #052940;
 }
 
-.SignupFormpost{
+.SignupFormpost {
   margin-left: 7px;
   width: 100px;
   height: 40px;
-  border: none; 
+  border: none;
   outline: 0;
   background-color: rgb(56, 56, 63);
 
@@ -183,11 +233,12 @@
   font-size: 18px;
   text-align: center;
   font-family: "Noto Sans KR", sans-serif;
-  
+
 }
 
 .activeButton {
-  background-color: green; /* 버튼 색상 변경 */
+  background-color: green;
+  /* 버튼 색상 변경 */
   color: white;
   cursor: pointer;
 }
@@ -199,14 +250,15 @@
   cursor: not-allowed;
 }
 
-.SignupFormpost:hover{
-  background-color:  #052940;
+.SignupFormpost:hover {
+  background-color: #052940;
 }
+
 .findpasswordpost {
   margin-left: 10px;
   width: 100px;
   height: 50px;
-  border: none; 
+  border: none;
   outline: 0;
   background-color: rgb(56, 56, 63);
 
@@ -216,7 +268,8 @@
   text-align: center;
   font-family: "Noto Sans KR", sans-serif;
 }
-.findpasswordpost:hover{
+
+.findpasswordpost:hover {
   background-color: #052940;
 }
 
@@ -224,112 +277,154 @@
   font-size: 15px;
   margin-top: -10px;
   margin-bottom: 20px;
-  background: none; /* 배경 제거 */
-  border: none; /* 테두리 제거 */
-  color: black; /* 글자 색상 설정, 예시로 파란색 사용 */
-  cursor: pointer; /* 마우스 오버 시 커서 변경 */
-  float: right; /* 오른쪽 정렬 */
-  padding: 10px; /* 클릭 영역 확장 */
+  background: none;
+  /* 배경 제거 */
+  border: none;
+  /* 테두리 제거 */
+  color: black;
+  /* 글자 색상 설정, 예시로 파란색 사용 */
+  cursor: pointer;
+  /* 마우스 오버 시 커서 변경 */
+  float: right;
+  /* 오른쪽 정렬 */
+  padding: 10px;
+  /* 클릭 영역 확장 */
 }
 
 .findPasswordButton:hover {
-  text-decoration: underline; /* 호버 시 밑줄 표시 */
+  text-decoration: underline;
+  /* 호버 시 밑줄 표시 */
 }
 
 .signupPrompt {
-  text-align: center; /* 중앙 정렬 */
- 
+  text-align: center;
+  /* 중앙 정렬 */
+
 }
 
 
-.signUpButton_Login{
-  
-  background: none; /* 배경 제거 */
-  border: none; /* 테두리 제거 */
-  color: black; /* 글자 색상 설정, 예시로 파란색 사용 */
-  cursor: pointer; /* 마우스 오버 시 커서 변경 */
+.signUpButton_Login {
+
+  background: none;
+  /* 배경 제거 */
+  border: none;
+  /* 테두리 제거 */
+  color: black;
+  /* 글자 색상 설정, 예시로 파란색 사용 */
+  cursor: pointer;
+  /* 마우스 오버 시 커서 변경 */
   margin-top: -20px;
-  padding: 0px; /* 클릭 영역 확장 */
+  padding: 0px;
+  /* 클릭 영역 확장 */
 
 }
 
 .signUpButton_Login:hover {
-  text-decoration: underline; /* 호버 시 밑줄 표시 */
+  text-decoration: underline;
+  /* 호버 시 밑줄 표시 */
 }
 
 /*MyPage CSS*/
 .mypage_icelogo {
-  display: flex;           /* Flexbox를 활용하여 요소를 정렬 */
-  justify-content: center; /* 가로축 중앙 정렬 */
-  align-items: center;     /* 세로축 중앙 정렬 */
-  width: 100%;             /* 부모 요소의 전체 너비를 차지하게 설정 */
-  height: auto;            /* 높이는 자동으로 설정 (내용물에 맞춰짐) */
+  display: flex;
+  /* Flexbox를 활용하여 요소를 정렬 */
+  justify-content: center;
+  /* 가로축 중앙 정렬 */
+  align-items: center;
+  /* 세로축 중앙 정렬 */
+  width: 100%;
+  /* 부모 요소의 전체 너비를 차지하게 설정 */
+  height: auto;
+  /* 높이는 자동으로 설정 (내용물에 맞춰짐) */
 }
 
 .mypage_icelogo img {
-  width: 150px;            
-  height: auto;            /* 높이는 비율에 맞춰 자동 조정 */
+  width: 150px;
+  height: auto;
+  /* 높이는 비율에 맞춰 자동 조정 */
 }
 
 .mypage_component p {
-  font-family: "Noto Sans KR", sans-serif; 
-  font-weight: bold;                     
-  font-size: 16px;                        
-  border-bottom: 1px solid #ccc;   
-  margin-top: 20px;       
-  padding-bottom: 8px;                    
-  margin-bottom: 12px;                    
+  font-family: "Noto Sans KR", sans-serif;
+  font-weight: bold;
+  font-size: 16px;
+  border-bottom: 1px solid #ccc;
+  margin-top: 20px;
+  padding-bottom: 8px;
+  margin-bottom: 12px;
 }
 
 .mypage_buttons {
   display: flex;
-  justify-content: center; /* 버튼들을 가운데 정렬합니다 */
-  align-items: center; /* 세로축 중앙 정렬 (필요한 경우) */
-  width: 100%; 
-  gap: 10px; /* 버튼 사이의 간격 */
-  margin-top: 50px; 
+  justify-content: center;
+  /* 버튼들을 가운데 정렬합니다 */
+  align-items: center;
+  /* 세로축 중앙 정렬 (필요한 경우) */
+  width: 100%;
+  gap: 10px;
+  /* 버튼 사이의 간격 */
+  margin-top: 50px;
 }
 
 .mypage_buttons button {
-  padding: 8px 16px; /* 버튼 패딩 */
-  background-color: rgb(56, 56, 63); /* 버튼 배경색 */
-  color: white; /* 텍스트 색상 */
-  border: none; /* 테두리 제거 */
-  border-radius: 2px; /* 테두리 둥글게 */
-  cursor: pointer; /* 마우스 오버시 커서 변경 */
-  font-size: 16px; /* 글씨 크기 */
+  padding: 8px 16px;
+  /* 버튼 패딩 */
+  background-color: rgb(56, 56, 63);
+  /* 버튼 배경색 */
+  color: white;
+  /* 텍스트 색상 */
+  border: none;
+  /* 테두리 제거 */
+  border-radius: 2px;
+  /* 테두리 둥글게 */
+  cursor: pointer;
+  /* 마우스 오버시 커서 변경 */
+  font-size: 16px;
+  /* 글씨 크기 */
   margin-top: 50px;
 }
 
 .mypage_buttons button:hover {
-  background-color: #052940; 
+  background-color: #052940;
 }
 
-.mypage_delete_user{
-  
+.mypage_delete_user {
+
   font-size: 15px;
   margin-top: 30px;
   margin-bottom: 10px;
-  background: none; /* 배경 제거 */
-  border: none; /* 테두리 제거 */
-  color: black; /* 글자 색상 설정, 예시로 파란색 사용 */
-  cursor: pointer; /* 마우스 오버 시 커서 변경 */
+  background: none;
+  /* 배경 제거 */
+  border: none;
+  /* 테두리 제거 */
+  color: black;
+  /* 글자 색상 설정, 예시로 파란색 사용 */
+  cursor: pointer;
+  /* 마우스 오버 시 커서 변경 */
   transform: translateX(245%);
 }
 
 
 .mypage_delete_user:hover {
-  text-decoration: underline; /* 호버 시 밑줄 표시 */
+  text-decoration: underline;
+  /* 호버 시 밑줄 표시 */
 }
 
 .mypage_update-button {
-  padding: 8px 16px; /* 버튼 패딩 */
-  background-color: rgb(56, 56, 63); /* 버튼 배경색 */
-  color: white; /* 텍스트 색상 */
-  border: none; /* 테두리 제거 */
-  border-radius: 2px; /* 테두리 둥글게 */
-  cursor: pointer; /* 마우스 오버시 커서 변경 */
-  font-size: 16px; /* 글씨 크기 */
+  padding: 8px 16px;
+  /* 버튼 패딩 */
+  background-color: rgb(56, 56, 63);
+  /* 버튼 배경색 */
+  color: white;
+  /* 텍스트 색상 */
+  border: none;
+  /* 테두리 제거 */
+  border-radius: 2px;
+  /* 테두리 둥글게 */
+  cursor: pointer;
+  /* 마우스 오버시 커서 변경 */
+  font-size: 16px;
+  /* 글씨 크기 */
   margin-top: 50px;
 }
 
@@ -337,35 +432,50 @@
   background-color: #052940;
 }
 
-.mypage_update_name, .mypage_update_studentNum {
-  width: 100%; /* 전체 너비 사용 */
-  padding: 8px 12px; /* 패딩 설정 */
-  margin-bottom: 10px; /* 하단 여백 */
-  border: 1px solid #ccc; /* 테두리 설정 */
-  border-radius: 4px; /* 테두리 둥글게 */
+.mypage_update_name,
+.mypage_update_studentNum {
+  width: 100%;
+  /* 전체 너비 사용 */
+  padding: 8px 12px;
+  /* 패딩 설정 */
+  margin-bottom: 10px;
+  /* 하단 여백 */
+  border: 1px solid #ccc;
+  /* 테두리 설정 */
+  border-radius: 4px;
+  /* 테두리 둥글게 */
 }
 
 /*pw css*/
-.pw_emailpost{
-  
-  display: flex; /* Flexbox 레이아웃 사용 */
-  align-items: center; /* Align items vertically in the center */
-  margin-bottom: 30px; /* Adjust according to your spacing needs */
+.pw_emailpost {
+
+  display: flex;
+  /* Flexbox 레이아웃 사용 */
+  align-items: center;
+  /* Align items vertically in the center */
+  margin-bottom: 30px;
+  /* Adjust according to your spacing needs */
 
 }
+
 .pw_emailpost input {
   /* 입력 필드 간의 간격 */
-  width: auto;  /* 입력 필드 너비 조정 */
+  width: auto;
+  /* 입력 필드 너비 조정 */
   height: 40px;
-  padding: 8px; /* 입력 필드 내부 패딩 */
+  padding: 8px;
+  /* 입력 필드 내부 패딩 */
 
 }
 
 .pw_emailDomain {
   margin-left: 5px;
-  margin-right: 12px; /* Add some space between the input and the domain text */
-  font-size: 16px; /* Adjust font size to match your design */
-  align-self: center; /* This ensures vertical alignment if needed */
+  margin-right: 12px;
+  /* Add some space between the input and the domain text */
+  font-size: 16px;
+  /* Adjust font size to match your design */
+  align-self: center;
+  /* This ensures vertical alignment if needed */
 }
 
 
@@ -373,7 +483,7 @@
   margin-left: 7px;
   width: 100px;
   height: 40px;
-  border: none; 
+  border: none;
   outline: 0;
   color: rgb(56, 56, 63);
 
@@ -384,16 +494,21 @@
   font-family: "Noto Sans KR", sans-serif;
 }
 
-.pw_emailcer{
-  
-  display: flex; /* Flexbox 레이아웃 사용 */
+.pw_emailcer {
+
+  display: flex;
+  /* Flexbox 레이아웃 사용 */
 
 }
+
 .pw_emailcer input {
-  margin-bottom: 30px; /* 입력 필드 간의 간격 */
-  width: 70%; /* 입력 필드 너비 조정 */
+  margin-bottom: 30px;
+  /* 입력 필드 간의 간격 */
+  width: 70%;
+  /* 입력 필드 너비 조정 */
   height: 40px;
-  padding: 8px; /* 입력 필드 내부 패딩 */
+  padding: 8px;
+  /* 입력 필드 내부 패딩 */
 
 }
 
@@ -401,7 +516,7 @@
   margin-left: 7px;
   width: 100px;
   height: 40px;
-  border: none; 
+  border: none;
   outline: 0;
   color: rgb(56, 56, 63);
 
@@ -411,24 +526,33 @@
   text-align: center;
   font-family: "Noto Sans KR", sans-serif;
 }
+
 .pw_new input {
-  margin-bottom: 30px; /* 입력 필드 간의 간격 */
-  width: 100%; /* 입력 필드 너비 조정 */
+  margin-bottom: 30px;
+  /* 입력 필드 간의 간격 */
+  width: 100%;
+  /* 입력 필드 너비 조정 */
   height: 40px;
-  padding: 8px; /* 입력 필드 내부 패딩 */
+  padding: 8px;
+  /* 입력 필드 내부 패딩 */
 
 }
 
-.pw_new_cer input{
-  margin-bottom: 10px; /* 입력 필드 간의 간격 */
-  width: 100%; /* 입력 필드 너비 조정 */
+.pw_new_cer input {
+  margin-bottom: 10px;
+  /* 입력 필드 간의 간격 */
+  width: 100%;
+  /* 입력 필드 너비 조정 */
   height: 40px;
-  padding: 8px; /* 입력 필드 내부 패딩 */
+  padding: 8px;
+  /* 입력 필드 내부 패딩 */
 }
 
 .pw-mismatch-error {
-  text-align: center; /* 텍스트 중앙 정렬 */
-  width: 100%; /* 부모 컨테이너의 전체 너비 사용 */
+  text-align: center;
+  /* 텍스트 중앙 정렬 */
+  width: 100%;
+  /* 부모 컨테이너의 전체 너비 사용 */
 }
 
 
@@ -437,17 +561,21 @@
   display: block;
   text-align: right;
   color: #0e5a8a;
-  font-size: 14px; /* 글씨 크기를 줄입니다 */
-  margin-top: 5px; /* 위쪽 여백을 추가하여 시각적으로 구분을 줍니다 */
+  font-size: 14px;
+  /* 글씨 크기를 줄입니다 */
+  margin-top: 5px;
+  /* 위쪽 여백을 추가하여 시각적으로 구분을 줍니다 */
 }
 
-.pw_countdown-timer{
+.pw_countdown-timer {
   display: block;
   text-align: right;
   color: #0e5a8a;
-  font-size: 14px; /* 글씨 크기를 줄입니다 */
-  margin-top: -30px; /* 위쪽 여백을 추가하여 시각적으로 구분을 줍니다 */
-  margin-bottom:10px;
+  font-size: 14px;
+  /* 글씨 크기를 줄입니다 */
+  margin-top: -30px;
+  /* 위쪽 여백을 추가하여 시각적으로 구분을 줍니다 */
+  margin-bottom: 10px;
 
 }
 
@@ -464,8 +592,10 @@
   align-items: center;
   font-size: 16px;
   cursor: pointer;
-  justify-content: flex-end; /* 체크박스와 라벨을 오른쪽으로 정렬 */
-  width: 100%; /* 라벨의 폭을 컨테이너의 전체 폭으로 설정 */
+  justify-content: flex-end;
+  /* 체크박스와 라벨을 오른쪽으로 정렬 */
+  width: 100%;
+  /* 라벨의 폭을 컨테이너의 전체 폭으로 설정 */
 }
 
 .signup_styledCheckbox {
@@ -476,16 +606,27 @@
   width: 20px;
   height: 20px;
   background-color: #fff;
-  border-radius: 50%;
+
   border: 1px solid #000;
-  margin-right: 10px; /* 오른쪽 정렬을 고려하여 마진 방향 조정 */
+  margin-right: 10px;
+  /* 오른쪽 정렬을 고려하여 마진 방향 조정 */
   display: inline-block;
 }
 
-.signup_styledCheckbox:checked + .signup_checkboxCustom {
+.signup_styledCheckbox:checked+.signup_checkboxCustom {
   background-color: #052940;
   border-color: #052940;
 }
 
 
-
+.signup_terms_checkbox_container {
+  border: 1px solid #052940;
+  /* 테두리 색상과 두께 설정 */
+  padding: 10px;
+  /* 내용 주변에 패딩 추가 */
+  margin-top: 10px;
+  /* 컨테이너 위쪽 여백 */
+  margin-bottom: 10px;
+  /* 컨테이너 아래쪽 여백 */
+  width: 95%;
+}
