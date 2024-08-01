@@ -11,7 +11,6 @@ import lombok.Getter;
 
 @Getter
 public class PutAttendanceResponseDto extends ResponseDto{
-
         private PutAttendanceResponseDto() {
         super(ResponseCode.SUCCESS, ResponseMessage.SUCCESS);
     }

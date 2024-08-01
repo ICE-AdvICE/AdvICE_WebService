@@ -72,6 +72,14 @@ public class EntireAdminController {
         ResponseEntity<? super DeleteClassOfGroupResponseDto> response = codingzoneService.deleteClass(classNum, email);
         return response;
     }
+
+    @GetMapping("/student-list")
+    public ResponseEntity<? super GetCodingZoneStudentListResponseDto> getStudentList(
+        @AuthenticationPrincipal String email
+    ){
+        ResponseEntity<? super GetCodingZoneStudentListResponseDto> response = codingzoneService.getStudentList(email);
+        return response;
+    } 
    
     
     

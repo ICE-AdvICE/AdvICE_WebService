@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.ArrayList;
 
+import com.icehufs.icebreaker.dto.object.CodingZoneStudentListItem;
 import com.icehufs.icebreaker.dto.object.PersAttendManagListItem;
 import com.icehufs.icebreaker.dto.request.codingzone.*;
 import com.icehufs.icebreaker.dto.response.ResponseDto;
@@ -344,6 +345,32 @@ public class CodingZoneServiceImplement implements CodingZoneService {
             return ResponseDto.databaseError();
         }
         return GetPersAttendListItemResponseDto.success(attendClassEntities);
+
+    }
+
+    @Override
+    public ResponseEntity<? super GetCodingZoneStudentListResponseDto> getStudentList(String email) {
+        List<CodingZoneStudentListItem> studentList = new ArrayList<>();
+        List<CodingZoneRegisterEntity> classEntities = new ArrayList<>();
+        try{
+            // 사용자 계정이 존재하는지(로그인 시간이 초과됐는지) 확인하는 코드
+            boolean existedUser = userRepository.existsByEmail(email);
+            if (!existedUser) return GetCodingZoneStudentListResponseDto.notExistUser();
+
+            //아직 출/결한 수업이 없을 때
+            classEntities = codingZoneRegisterRepository.findAllByOrderByUserStudentNumAsc();
+            if(classEntities.isEmpty()) return GetCodingZoneStudentListResponseDto.noExistArticle();
+
+            for(CodingZoneRegisterEntity codingZoneRegisterEntity: classEntities){
+                CodingZoneClass codingZoneClass = codingZoneClassRepository.findByClassNum(codingZoneRegisterEntity.getClassNum());
+                CodingZoneStudentListItem codingZoneStudentListItem = new CodingZoneStudentListItem(codingZoneClass, codingZoneRegisterEntity);
+                studentList.add(codingZoneStudentListItem);
+            }
+        }catch(Exception exception) {
+            exception.printStackTrace();
+            return ResponseDto.databaseError();
+        }
+        return GetCodingZoneStudentListResponseDto.success(studentList);
 
     }
  
