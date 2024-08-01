@@ -5,9 +5,12 @@ import { useNavigate } from 'react-router-dom';
 const MainPage = () => {
   const navigate = useNavigate();
   const handleMoreClick = () => {
-    navigate('/article-main');
+    navigate('/article-main');  
   };
 
+  const handlecodingzone = async () => {
+    navigate(`/coding-zone`);
+ };
 
   return (
     <div className="main-container">
@@ -21,7 +24,7 @@ const MainPage = () => {
       <div className="buttons-container">
         <div className="service-box coding-box">
           <p>정보통신공학과에서 운영하는 <br />코딩존 예약/관리 시스템 입니다.</p>
-          <button  className="btn coding">Coding Zone</button>
+          <button onClick={handlecodingzone} className="btn coding">Coding Zone</button>
         </div>
         <div className="service-box icebreaker-box">
           <p>ICEbreaker 익명게시판을 통해<br /> 학과 사람들과 소통해 보세요.</p>
