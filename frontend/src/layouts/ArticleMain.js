@@ -82,7 +82,8 @@ const ArticleMain = () => {
         { label: '모두 보여주기', value: 'all' },
         { label: '일반', value: 'GENERAL' },
         { label: '요청', value: 'REQUEST' },
-        { label: '내가 쓴 글', value: 'my' }
+        { label: '내가 쓴 글', value: 'my' },
+        { label: '해결', value: 'RESOLVE' }
     ];  
     const filterArticles = () => {
         let results = [];
@@ -90,8 +91,14 @@ const ArticleMain = () => {
             results = userArticles;  
         } else {
             results = articlesState.filter(article => {
-                if (article.category === 'NOTIFICATION') {
+                if (selectedCategory === 'RESOLVE') {
+                    return article.authCheck === 1;
+                }
+                else if (article.category === 'NOTIFICATION') {
                     return false;
+                } else if (selectedCategory === 'all') {
+                    return true;
+                    
                 } else if (selectedCategory === 'all') {
                     return true;
                 } else if (article.category === 'REQUEST' && article.authCheck === 1) {
@@ -229,9 +236,7 @@ const ArticleMain = () => {
                                         />
                                     );
                                 })
-                        ) : (
-                            <div>공지사항이 없습니다</div>
-                        )}
+                        ) : ''}
                     </div>
                     <div className="non-Notification-container">
                         {currentArticles.filter(article => article.category !== 'NOTIFICATION').length > 0 ? (
@@ -255,8 +260,7 @@ const ArticleMain = () => {
                                 );
                             })
                         ) : (
-                            <div>게시물이 없습니다</div>
-                        )}
+                           '')}
                     </div>
                     <div className = "writing-container">
                         <div className="btn1" onClick={handleCreateArticleClick} style={{ cursor: 'pointer' }}>
