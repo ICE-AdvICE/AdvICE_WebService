@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 
 const czCard = ({ 
-    category, onClick,classDate, children, assistantName, classTime, className, weekDay ,currentNumber,maximumNumber
+    onReserveClick , onClick,classDate, children, assistantName, classTime, className, weekDay ,currentNumber,maximumNumber,isReserved
 }) => {
     function getShortWeekDay(weekDay) {
         const days = {
@@ -16,12 +16,11 @@ const czCard = ({
     }
     function formatDate(dateString) {
         const date = new Date(dateString);
-        const month = date.getMonth() + 1; // 월은 0부터 시작하므로 1을 더합니다.
+        const month = date.getMonth() + 1;  
         const day = date.getDate();
         return `${month}/${day}`;
     }
     function formatTime(timeString) {
-        // AM/PM 제거
         return timeString.replace(/( AM| PM)/, '');
     }
     return (
@@ -34,6 +33,16 @@ const czCard = ({
                 <p className="card-assistantName">{assistantName}</p>
                 <p className='card-currentNumber'>{`${currentNumber}/${maximumNumber}`}</p>
                 {children}
+                <button
+                    onClick={(e) => {
+                        e.stopPropagation(); // 이벤트 버블링을 방지
+                        onReserveClick(); // 예약 클릭 핸들러 호출
+                    }}
+                    className="card-reservation" // CSS 클래스 추가
+                >
+                    {isReserved ? '예약 완료' : '예약'}
+                </button>
+
             </div>
         </div>
     );
@@ -49,7 +58,8 @@ czCard.propTypes = {
     className: PropTypes.string,
     weekDay: PropTypes.string,
     currentNumber: PropTypes.number,
-    maximumNumber: PropTypes.number
+    maximumNumber: PropTypes.number,
+    onReserveClick: PropTypes.func
 };
 
 czCard.defaultProps = {
@@ -62,7 +72,8 @@ czCard.defaultProps = {
     className: '',
     weekDay: '',
     currentNumber: 0,
-    maximumNumber: 0
+    maximumNumber: 0,
+    onReserveClick: () => {} 
 };
 
 export default czCard;

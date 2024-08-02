@@ -59,7 +59,6 @@ const NavBar = () => {
                                     <NavLink
                                         className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}
                                         to="#"
-                                        style={{ marginRight: '20px' }}
                                         onClick={handleLogout}
                                     >
                                         Log Out

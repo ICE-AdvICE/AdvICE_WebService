@@ -32,8 +32,9 @@
 .codingzone-body-container{
   width: 100%;
   flex-direction: column;
+  position: relative;
   display: flex;
-  height: 50vw;
+  height: auto;
 }
 .cz-category-date{
   margin-top: 1%;
@@ -60,10 +61,10 @@
   align-items: center;
   position: relative;
   justify-content: space-between; 
-  height: 10%;
+  height: 4vw;
   width: 80%;
-  
-  margin-left: 10%
+  margin-left: 10%;
+  margin-bottom: 1%;
 
 }
 .codingzone-date button{
@@ -127,6 +128,23 @@ p.card-weekDay {
 }
 .d-flex p {
   flex: 1; /* 모든 p 태그가 동일한 너비를 가지도록 설정 */
-   
+  font-weight: 500;
   text-align: center;
+}
+ 
+.codingzone-title .weekcount{
+  margin-right: 7.9%;
+}
+ 
+p.card-currentNumber {
+  color: #002D56;
+  font-weight: 600;
+ 
+}
+.card-reservation{
+  background-color: rgba(128, 128, 128, 0.189);
+  border: none !important;
+  width: 7%;
+  margin-right: 1%;
+  border-radius: 0.5vw;
 }
