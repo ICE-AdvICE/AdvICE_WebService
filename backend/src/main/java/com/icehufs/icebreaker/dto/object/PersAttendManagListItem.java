@@ -30,7 +30,7 @@ public class PersAttendManagListItem {
         this.attendance = other.attendance;
     }
 
-    // 해당 생성자는 CodingZoneClass와 CodingZoneRegisterEntity 인스턴스를 기반으로 새 PersAttendManagListItem 객체를 초기화
+    //CodingZoneClass와 CodingZoneRegisterEntity 인스턴스를 기반으로 새 PersAttendManagListItem 객체를 초기화
     public PersAttendManagListItem(CodingZoneClass codingZoneClass, CodingZoneRegisterEntity codingZoneRegisterEntity) {
         this.className = codingZoneClass.getClassName();
         this.classDate = codingZoneClass.getClassDate();

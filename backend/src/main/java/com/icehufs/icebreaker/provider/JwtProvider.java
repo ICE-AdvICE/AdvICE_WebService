@@ -43,9 +43,9 @@ public class JwtProvider {
 
         try {
             claims = Jwts.parserBuilder()
-                    .setSigningKey(key)
+                    .setSigningKey(key) //토큰 서명을 검증을 위해 키 설정
                     .build()
-                    .parseClaimsJws(jwt)
+                    .parseClaimsJws(jwt) //JWT의 만료 시간을 확인
                     .getBody()
                     .getSubject();
         } catch (Exception exception) {

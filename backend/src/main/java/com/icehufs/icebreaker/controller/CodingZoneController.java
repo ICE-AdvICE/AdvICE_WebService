@@ -75,4 +75,13 @@ public class CodingZoneController {
         return response;
     } 
 
+    @GetMapping("/reserved-list/{classDate}")
+    public ResponseEntity<? super GetReservedClassListItemResponseDto> getReservedList(
+        @PathVariable String classDate,
+        @AuthenticationPrincipal String email
+    ){
+        ResponseEntity<? super GetReservedClassListItemResponseDto> response = codingzoneService.getReservedClass(classDate, email);
+        return response;
+    } 
+
 }

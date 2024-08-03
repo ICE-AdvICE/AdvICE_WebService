@@ -15,6 +15,8 @@ public interface CodingZoneService {
     ResponseEntity<? super GetListOfGroupInfResponseDto> getList(GetListOfGroupInfRequestDto dto, String email);
     ResponseEntity<? super GroupInfUpdateResponseDto> patchInf(List<PatchGroupInfRequestDto> dto, String email);
     ResponseEntity<? super DeleteClassOfGroupResponseDto> deleteClass(Integer classNum, String email);
+    ResponseEntity<? super GetCodingZoneStudentListResponseDto> getStudentList(String email);
+    ResponseEntity<? super DeleteAllInfResponseDto> deleteAll(String email);
 
     //권한이 필요없는 로직
     ResponseEntity<? super AuthorityExistResponseDto> authExist(String email);
@@ -23,8 +25,9 @@ public interface CodingZoneService {
     ResponseEntity<? super GetListOfCodingZoneClassResponseDto> getClassList(Integer grade, String email);
     ResponseEntity<? super GetCountOfAttendResponseDto> getAttend(Integer grade,String email);
     ResponseEntity<? super GetPersAttendListItemResponseDto> getPerAttendList(String email);
+    ResponseEntity<? super GetReservedClassListItemResponseDto> getReservedClass(String classDate, String email);
 
-    //수업1 코딩존 조교 
+    //수업 코딩존 조교 
     ResponseEntity<? super PutAttendanceResponseDto> putAttend(Integer registNum, String email);
 
 

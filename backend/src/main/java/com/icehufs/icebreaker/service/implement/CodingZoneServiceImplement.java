@@ -5,7 +5,9 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.ArrayList;
 
+import com.icehufs.icebreaker.dto.object.CodingZoneStudentListItem;
 import com.icehufs.icebreaker.dto.object.PersAttendManagListItem;
+import com.icehufs.icebreaker.dto.object.ReservedClassListItem;
 import com.icehufs.icebreaker.dto.request.codingzone.*;
 import com.icehufs.icebreaker.dto.response.ResponseDto;
 import com.icehufs.icebreaker.dto.response.article.CheckOwnOfArticleResponseDto;
@@ -345,6 +347,117 @@ public class CodingZoneServiceImplement implements CodingZoneService {
         }
         return GetPersAttendListItemResponseDto.success(attendClassEntities);
 
+    }
+
+    @Override
+    public ResponseEntity<? super GetCodingZoneStudentListResponseDto> getStudentList(String email) {
+        List<CodingZoneStudentListItem> studentList = new ArrayList<>();
+        List<CodingZoneRegisterEntity> classEntities = new ArrayList<>();
+        try{
+            // 사용자 계정이 존재하는지(로그인 시간이 초과됐는지) 확인하는 코드
+            boolean existedUser = userRepository.existsByEmail(email);
+            if (!existedUser) return GetCodingZoneStudentListResponseDto.notExistUser();
+
+            //아직 출/결한 수업이 없을 때
+            classEntities = codingZoneRegisterRepository.findAllByOrderByUserStudentNumAsc();
+            if(classEntities.isEmpty()) return GetCodingZoneStudentListResponseDto.noExistArticle();
+
+            for(CodingZoneRegisterEntity codingZoneRegisterEntity: classEntities){
+                CodingZoneClass codingZoneClass = codingZoneClassRepository.findByClassNum(codingZoneRegisterEntity.getClassNum());
+                CodingZoneStudentListItem codingZoneStudentListItem = new CodingZoneStudentListItem(codingZoneClass, codingZoneRegisterEntity);
+                studentList.add(codingZoneStudentListItem);
+            }
+        }catch(Exception exception) {
+            exception.printStackTrace();
+            return ResponseDto.databaseError();
+        }
+        return GetCodingZoneStudentListResponseDto.success(studentList);
+
+    }
+
+    @Override
+    public ResponseEntity<? super GetReservedClassListItemResponseDto> getReservedClass(String classDate,
+            String email) {
+                List<ReservedClassListItem> studentList = new ArrayList<>();
+                List<CodingZoneRegisterEntity> classEntities = new ArrayList<>();
+                int kindOfClass = 0;
+                try{
+                    // 사용자 계정이 존재하는지(로그인 시간이 초과됐는지) 확인하는 코드
+                    User user = userRepository.findByEmail(email);
+                    if (user == null) return GetReservedClassListItemResponseDto.notExistUser();
+
+                    AuthorityEntity authorityEntity = authorityRepository.findByEmail(email);
+                    if(!"NULL".equals(authorityEntity.getRoleAdminC1())){
+                        kindOfClass = 1;
+                    }
+                    if(!"NULL".equals(authorityEntity.getRoleAdminC2())){
+                        kindOfClass = 2;
+                    }
+
+                    classEntities = codingZoneRegisterRepository.findByGrade(kindOfClass);
+                    //예약한 학생이 없을 때
+                    if(classEntities.isEmpty()) return GetReservedClassListItemResponseDto.noExistArticle();
+        
+                    for(CodingZoneRegisterEntity codingZoneRegisterEntity: classEntities){
+                        CodingZoneClass codingZoneClass = codingZoneClassRepository.findByClassNum(codingZoneRegisterEntity.getClassNum());
+                        if(classDate.equals(codingZoneClass.getClassDate())){
+                            ReservedClassListItem reservedClassListItem = new ReservedClassListItem(codingZoneClass, codingZoneRegisterEntity);
+                            studentList.add(reservedClassListItem);
+                        }
+                    }
+                }catch(Exception exception) {
+                    exception.printStackTrace();
+                    return ResponseDto.databaseError();
+                }
+                return GetReservedClassListItemResponseDto.success(studentList);
+
+    }
+
+    @Override
+    public ResponseEntity<? super DeleteAllInfResponseDto> deleteAll(String email) {
+        try {
+            boolean existedUser = userRepository.existsByEmail(email);
+            if (!existedUser) return DeleteAllInfResponseDto.notExistUser();
+
+            // 코딩존 관련 모든 테이블 초기화
+            deleteAllData();
+
+            // 코딩존 조교 권한 취소
+            updateAuthorities();
+
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            return ResponseDto.databaseError();
+        }
+        return DeleteAllInfResponseDto.success();
+    }
+
+    //학기 초기화를 위한 트렌젝션 분리
+    @Transactional
+    private void deleteAllData() {
+        codingZoneRegisterRepository.deleteAll();
+        groupInfRepository.deleteAll();
+        codingZoneClassRepository.deleteAll();
+    }
+
+    //학기 초기화를 위한 트렌젝션 분리
+    @Transactional
+    private void updateAuthorities() {
+        String C1 = "ROLE_ADMINC1";
+        String C2 = "ROLE_ADMINC2";
+        List<AuthorityEntity> users = authorityRepository.findByRoleAdminC1(C1);
+        List<AuthorityEntity> users2 = authorityRepository.findByRoleAdminC2(C2);
+
+        users.forEach(authorityEntity -> {
+            authorityEntity.setRoleAdminC1("NULL");
+            authorityEntity.setGivenDateAdminC(null);
+            authorityRepository.save(authorityEntity);
+        });
+        users2.forEach(authorityEntity -> {
+            authorityEntity.setRoleAdminC2("NULL");
+            authorityEntity.setGivenDateAdminC(null);
+            authorityRepository.save(authorityEntity);
+        });
     }
  
 }
