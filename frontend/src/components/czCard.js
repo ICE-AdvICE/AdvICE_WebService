@@ -21,8 +21,10 @@ const czCard = ({
         return `${month}/${day}`;
     }
     function formatTime(timeString) {
-        return timeString.replace(/( AM| PM)/, '');
+         
+        return timeString.substring(0, 5);
     }
+    
     return (
         <div className="czcard" onClick={onClick}>
             <div className="d-flex justify-content-between">

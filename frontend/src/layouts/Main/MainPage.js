@@ -1,16 +1,24 @@
 import React from 'react';
 import '../css/MainPage.css';
 import { useNavigate } from 'react-router-dom';
+import { useCookies } from "react-cookie";
 
 const MainPage = () => {
+  const [cookies] = useCookies('accessToken');
   const navigate = useNavigate();
   const handleMoreClick = () => {
     navigate('/article-main');  
   };
 
-  const handlecodingzone = async () => {
-    navigate(`/coding-zone`);
- };
+  const handlecodingzone = () => {
+    const token = cookies.accessToken; 
+    
+    if (!token) {
+      alert('로그인이 필요합니다.');
+    } else {
+      navigate(`/coding-zone`);
+    }
+  };
 
   return (
     <div className="main-container">
