@@ -181,7 +181,7 @@ const ShowPage = () => {
     
     useEffect(() => {
         if (articleNum) {
-            fetchArticle(articleNum)
+            fetchArticle(articleNum,navigate)
                 .then(res => {
                     const {articleTitle, articleContent, likeCount, viewCount, category, authCheck,articleDate, userEmail: authorEmail, comments: loadedComments } = res;
                     setArticle({ articleTitle, body: articleContent, views: viewCount, category, articleDate, authCheck });
@@ -209,7 +209,7 @@ const ShowPage = () => {
     };
 
     if (!article) {
-        return <div>Loading...</div>;
+        return <div>게시글이 존재하지 않습니다.</div>;
     }
 
     return (

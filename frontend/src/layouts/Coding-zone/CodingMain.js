@@ -34,32 +34,50 @@ const CodingMain = () => {
     const [grade, setGrade] = useState(1);  
     const [weekDay, setWeekDay] = useState('');  
     const [cookies] = useCookies('accessToken');
+ 
+
+
+    const filterByDay = (day) => {
+        const filteredData = classList.filter(classItem => {
+            console.log("Class item day:", classItem.weekDay);
+            return classItem.weekDay.toLowerCase() === day.toLowerCase();
+        });
+        setClassList(filteredData);
+        return filteredData;   
+    };
 
     useEffect(() => {
         const fetchData = async () => {
-            const token = cookies.accessToken; 
-            const classes = await getcodingzoneListRequest(token, grade, weekDay); // API 요청 시 요일 추가
-            if (classes) {
-                const updatedClasses = classes.map(classItem => ({
-                    ...classItem,
-                    isReserved: false
-                }));
-                setClassList(updatedClasses);
+            const token = cookies.accessToken;
+            try {
+                const classes = await getcodingzoneListRequest(token, grade, weekDay);
+    
+                if (classes && classes.length > 0) {  
+                    const updatedClasses = classes.map(classItem => ({
+                        ...classItem,
+                        isReserved: false  
+                    }));
+                    setClassList(updatedClasses);  
+                } else {  
+                    setClassList([]);
+                }
+            } catch (error) {  
+                setClassList([]);   
             }
         };
         fetchData();
-    }, [token, grade, weekDay]); // weekDay 의존성 추가
+    }, [token, grade, weekDay]);  
     
     const handleCardClick = (classItem) => {
-        console.log("Class Clicked:", classItem);
+        console.log('');
     };
+ 
     const handleToggleReservation = async (classItem) => {
         const token = cookies.accessToken;
         if (!token) {
             alert("You are not logged in.");
             return;
         }
-        // 예약 상태에 따라 함수 분기
         if (classItem.isReserved) {
             const result = await deleteCodingZoneClass(token, classItem.classNum);
             if (result) {
@@ -105,12 +123,12 @@ const CodingMain = () => {
                 </div>
                 
                 <div className="codingzone-date">
-                    <button onClick={() => setWeekDay('Monday')}>Mon</button>
-                    <button onClick={() => setWeekDay('Tuesday')}>Tue</button>
-                    <button onClick={() => setWeekDay('Wednesday')}>Wed</button>
-                    <button onClick={() => setWeekDay('Thursday')}>Thu</button>
-                    <button onClick={() => setWeekDay('Friday')}>Fri</button>
-                </div>
+                <button onClick={() => filterByDay('Monday')}>Mon</button>
+                <button onClick={() => filterByDay('tuesday')}>Tue</button>
+                <button onClick={() => filterByDay('wednesday')}>Wed</button>
+                <button onClick={() => filterByDay('thursday')}>Thu</button>
+                <button onClick={() =>filterByDay('friday')}>Fri</button>
+            </div>
                 <div className='category-name-container'>
                     <div className="separator"></div> 
                     <div className="codingzone-title">

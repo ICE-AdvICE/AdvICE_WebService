@@ -78,13 +78,18 @@ const ArticleMain = () => {
         GENERAL: "일반",
         REQUEST: "요청"
     };
-    const categories = [
-        { label: '모두 보여주기', value: 'all' },
-        { label: '일반', value: 'GENERAL' },
-        { label: '요청', value: 'REQUEST' },
-        { label: '내가 쓴 글', value: 'my' },
-        { label: '해결', value: 'RESOLVE' }
-    ];  
+    const categories = useMemo(() => {
+        const baseCategories = [
+            { label: '모두 보여주기', value: 'all' },
+            { label: '일반', value: 'GENERAL' },
+            { label: '요청', value: 'REQUEST' },
+            { label: '해결', value: 'RESOLVE' }
+        ];
+        if (token) {
+            baseCategories.push({ label: '내가 쓴 글', value: 'my' });
+        }
+        return baseCategories;
+    }, [token]); 
     const filterArticles = () => {
         let results = [];
         if (selectedCategory === 'my') {
@@ -172,7 +177,7 @@ const ArticleMain = () => {
                 <img src="/main2-icon.png"  className="article-icon-image"/>
                 <div className = "bar-container">
                     <div className="category-dropdown">
-                        <select value={selectedCategory} onChange={handleCategoryChange}>
+                        <select value={selectedCategory} onChange={handleCategoryChange} className="select-dropdown">
                             {categories.map(category => (
                                 <option key={category.value} value={category.value}>
                                     {category.label}
