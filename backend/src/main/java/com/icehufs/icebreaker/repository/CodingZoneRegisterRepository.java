@@ -12,6 +12,5 @@ public interface CodingZoneRegisterRepository extends JpaRepository<CodingZoneRe
     CodingZoneRegisterEntity findByRegistrationId(Integer registrationId);
     List<CodingZoneRegisterEntity> findByGrade(int grade);
     List<CodingZoneRegisterEntity> findByUserEmail(String userEmail);
-    List<CodingZoneRegisterEntity> findAllByOrderByUserStudentNumAsc();
-
+    List<CodingZoneRegisterEntity> findAllByOrderByUserStudentNumAsc();   
 }

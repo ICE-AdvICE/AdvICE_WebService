@@ -80,6 +80,15 @@ public class EntireAdminController {
         ResponseEntity<? super GetCodingZoneStudentListResponseDto> response = codingzoneService.getStudentList(email);
         return response;
     } 
+
+    @DeleteMapping("/delete-allinf") //모든 정보 초기화
+    public ResponseEntity<? super DeleteAllInfResponseDto> deleteAll(
+        @AuthenticationPrincipal String email
+
+    ){
+        ResponseEntity<? super DeleteAllInfResponseDto> response = codingzoneService.deleteAll(email);
+        return response;
+    }
    
     
     
