@@ -3,10 +3,12 @@ import '../css/codingzone/codingzone-main.css';
 import { useCookies } from "react-cookie";
 import CzCard from '../../components/czCard';  
 import { getcodingzoneListRequest } from '../../apis/Codingzone-api.js'; // API 함수 임포트
+import { useNavigate } from 'react-router-dom';
 
  
 const ClassList = ({ classList, handleCardClick }) => {
   return (
+    
     <div className='cz-card'>
       {classList.map((classItem) => (
         <CzCard
@@ -31,6 +33,11 @@ const CodingMain = () => {
     const [token, setToken] = useState('');  
     const [grade, setGrade] = useState(1);  
     const [cookies] = useCookies('accessToken');
+    const navigate = useNavigate();
+
+    const handlecodingzoneattendence =  () => {
+        navigate(`/coding-zone/Codingzone_Attendence`);
+     };
 
     useEffect(() => {
         const fetchData = async () => {
@@ -55,7 +62,7 @@ const CodingMain = () => {
                 <span> | </span>
                 <button>코딩존 예약</button>
                 <span> | </span>
-                <button>출결 관리</button>
+                <button onClick={handlecodingzoneattendence} >출결 관리</button>
                 <span> | </span>
                 <button>문의 하기</button>
                 <span> | </span>

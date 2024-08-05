@@ -9,7 +9,7 @@ const MainPage = () => {
   };
 
   const handlecodingzone = async () => {
-    navigate(`/coding-zone`);
+    navigate(`/coding-zone/CodingMain`);
  };
 
   return (

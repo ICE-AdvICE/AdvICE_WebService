@@ -2,9 +2,16 @@ import axios from 'axios';
 
 const DOMAIN = 'http://localhost:4000';
 const API_DOMAIN = `${DOMAIN}/api/v1`;
- 
+
+const GET_CZ_AUTH_TYPE = () => `${API_DOMAIN}/coding-zone/auth-type`;
+const GET_CZ_ATTEND_LIST = () => `${API_DOMAIN}/coding-zone/attend-list`;
+const authorization = (accessToken) => {
+    return { headers: { Authorization: `Bearer ${accessToken}` } }
+};
+
+
 // 11.모든 게시글을 리스트 형태로 불러오는 API
-export const getcodingzoneListRequest  = async (token, grade) => {
+export const getcodingzoneListRequest = async (token, grade) => {
     try {
         const response = await axios.get(`${API_DOMAIN}/coding-zone/class-list/${grade}`, {
             headers: { Authorization: `Bearer ${token}` }
@@ -38,3 +45,26 @@ export const getcodingzoneListRequest  = async (token, grade) => {
         return false;
     }
 };
+
+// 7.운영자 권한 종류 확인 API
+export const getczauthtypetRequest = async (accessToken) => {
+    try {
+        const response = await axios.get(GET_CZ_AUTH_TYPE(), authorization(accessToken));
+        return response.data;
+    } catch (error) {
+        if (!error.response || !error.response.data) return null;
+        return error.response.data;
+    }
+};
+// 12.특정 사용자의 출/결석된 수업 리스트로 반환 API 
+export const getczattendlistRequest = async (accessToken) => {
+    try {
+        const response = await axios.get(GET_CZ_ATTEND_LIST(), authorization(accessToken));
+        return response.data;
+    } catch (error) {
+        if (!error.response || !error.response.data) return null;
+        return error.response.data;
+    }
+};
+
+
