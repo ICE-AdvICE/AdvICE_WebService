@@ -409,6 +409,7 @@ public class CodingZoneServiceImplement implements CodingZoneService {
                     exception.printStackTrace();
                     return ResponseDto.databaseError();
                 }
+                if(studentList.isEmpty()) return GetReservedClassListItemResponseDto.noExistArticle();
                 return GetReservedClassListItemResponseDto.success(studentList);
 
     }

@@ -2,6 +2,7 @@ import axios from 'axios';
 
 const DOMAIN = 'http://localhost:4000';
 const API_DOMAIN = `${DOMAIN}/api/v1`;
+const API_DOMAIN_ADMIN = `${DOMAIN}/api/admin`;
  
 // 11.모든 게시글을 리스트 형태로 불러오는 API
 export const getcodingzoneListRequest  = async (token, grade) => {
@@ -36,5 +37,23 @@ export const getcodingzoneListRequest  = async (token, grade) => {
             console.log("네트워크 오류가 발생하였습니다.");
         }
         return false;
+    }
+};
+
+//특정 (A/B)조의 정보 등록 API
+export const uploadGroupData = async (groupData, token) => {
+    try {
+        const response = await axios.post(`${API_DOMAIN_ADMIN}/upload-group`, groupData, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+        return response.data;
+    } catch (error) {
+        if (!error.response) {
+            // 네트워크 오류 또는 서버 응답 없음
+            return { code: 'NETWORK_ERROR', message: '네트워크 상태를 확인해주세요.' };
+        }
+        return error.response.data;
     }
 };

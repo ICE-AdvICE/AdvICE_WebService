@@ -1,0 +1,429 @@
+.class-regist-main-container{
+}
+.header-select-container{
+    display: flex;
+    position: relative;
+    justify-content: space-around;
+    margin-bottom: 1%;
+    padding-right: 8%;
+    padding-left: 8%;
+    
+  }
+  .header-select-container button{
+    background-color: white;
+    border: none !important;
+    color: #BFBFBF;
+    font-weight: bold;
+  }
+  .header-select-container span{
+    padding: 1%;
+  }
+  
+  .img-container{
+    width: 100%;
+    display: flex;
+    position: relative;
+  }
+  .header-select-container button:hover{
+    color: #002D56;
+    cursor: pointer;
+  }
+  .codingzonetop-image{
+    width:100%;
+    position: absolute;
+    height: 26vw;
+    background-size: cover;
+  }
+  .main-body-container{ 
+    width: 100%;
+    flex-direction: column;
+    display: flex;
+    height: 50vw;
+    padding-right: 17%;
+    padding-left: 17%;
+    display: flex;
+    min-height: 100vh;
+    overflow: auto; /* 필요 시 스크롤바 생성 */
+  }
+  .main-category-bar{
+    margin-top: 1%;
+    margin-bottom: 1%;
+    display: flex;
+    align-items: center;
+    position: relative; 
+    justify-content: space-between;
+    height: 5vw;
+    font-size: 1vw;
+    padding-right: 12%;
+    padding-left: 12%;
+  }
+  .main-category-bar button {
+    height: 80%;
+    width: 50%;
+    border-color: #BFBFBF; /* 회색 테두리 색상 */
+    border: 1px solid #D0D5DD;
+    background-color: white;
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    color: #BFBFBF; /* 텍스트 색상 설정 */
+}
+  .main-category-bar button:hover {
+    color: #002D56;
+    background-color: white; /* 배경 색상 변경 */
+    border-color: #002D56; /* 테두리 색상 변경 */
+  }
+.main-span{
+    padding-right: 1%;
+    padding-left: 1%;
+}
+
+  .category-bar{
+    display: flex;
+    align-items: center;
+    position: relative;
+    height: 8%;
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .category-bar button {
+    width: auto;
+    height: auto;
+    padding: 8px 16px;
+    border-color: #BFBFBF;
+    border: 1px solid #D0D5DD;
+    background-color: white;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    color: #BFBFBF;
+}
+
+.category-bar button:hover, .category-bar button.active {
+    color: white;
+    background-color: #002D56; /* 선택된 버튼과 호버 시 배경 색상 */
+    border-color: #002D56; /* 선택된 버튼과 호버 시 테두리 색상 */
+}
+
+.inner-category-bar{
+    display: flex;
+    align-items: center;
+    position: relative;
+    height: 8%;
+    width: 100%;
+}
+
+.inner-category-bar2 {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end; /* 내용을 오른쪽으로 정렬 */
+    position: relative;
+    height: 80%;
+    width: 100%;
+}
+
+.separator {
+  height: 1px; /* 높이를 10픽셀로 설정 */
+  background-color: #A5A5A5; /* 배경색을 회색으로 설정 */
+  
+}
+  .main-category-name-container{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+
+  }
+  
+  .element-title {
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+    align-items: center;
+    position: relative;
+    height: 75%;
+  }
+  
+  .part1-element-title {
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    height: 90%;
+    width: 100%;
+    flex: 5; /* 40% */
+  }
+  .weekDay, .weekTime, .assistent {
+    display: inline-block; /* 요소들을 inline-block으로 설정 */
+    margin-right: 25%; /* 오른쪽에 20px의 공간을 추가 */
+  }
+  /* 마지막 요소의 경우 마진을 0으로 설정하여 여분의 공간을 제거 */
+  .assistent {
+    margin-right: 0;
+  }
+  
+  .part2-element-title {
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    height: 90%;
+    width: 100%;
+    flex: 3; /* 30% */
+  }
+  .className{
+    margin-left: 20%
+  }
+  
+  .part3-element-title {
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    height: 90%;
+    width: 100%;
+    flex: 2; /* 30% */
+  }
+  .grade{
+    display: inline-block;
+    margin-left: 10%
+  }
+  .maxPers{
+    display: inline-block;
+    margin-left: 38%
+  }
+
+  .class-input-container {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+}
+.class-input-box {
+    flex-direction: row;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    position: relative;
+    width: 100%;
+    margin-bottom: 1%;
+}
+
+.class-input-box > .Day-input,
+.class-input-box > .Time-input,
+.class-input-box > .Date-input,
+.class-input-box > .Assistent-input {
+  min-width: 0;
+  white-space: nowrap;
+  flex: 4; /* Day, Time, Assistent 입력필드의 비율 설정 */
+}
+
+.class-input-box > .ClassName-input {
+  min-width: 0;
+  white-space: nowrap;
+  flex: 10; /* ClassName 입력필드의 비율 설정 */
+}
+
+.class-input-box > .Grade-input,
+.class-input-box > .MaxPers-input {
+  min-width: 0;
+  white-space: nowrap;
+  flex: 3; /* Grade, MaxPers 입력필드의 비율 설정 */
+}
+.class-input-box input{
+  margin-right: 5px;
+  padding: 5px;
+}
+.MaxPers-input{
+  margin-right: 0 !important;
+}
+.class-input-box select{
+  margin-right: 5px;
+  padding: 7.5px;
+}
+
+.button-area{
+  display: flex;
+  align-items: center;
+  position: relative;
+  height: 8%;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.add-button-container button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent; /* 배경색 제거 */
+  border: none;
+  cursor: pointer; /* 커서 스타일 변경 */
+  width: 60px; /* 버튼의 너비 설정 */
+  height: 60px; /* 버튼의 높이 설정 */
+  padding: 10px; /* 버튼 내부 패딩 조정 */
+  transition: transform 0.3s ease; /* 애니메이션 효과 추가 */
+}
+
+.add-button-container button:hover {
+  transform: scale(1.1); /* 버튼이 10% 커지게 설정 */
+}
+
+.add-button-container svg {
+  width: 24px; /* SVG 아이콘의 크기 조정 */
+  height: 24px;
+}
+
+.class-submit-button{
+  margin-top: 1%;
+  margin-bottom: 1%;
+  display: flex;
+  align-items: center;
+  position: relative; 
+  height: 5vw;
+  font-size: 1vw;
+  margin-right: 1%;
+
+}
+.class-submit-button button {
+  height: 50%;
+  width: 100%;
+  border-color: #002D56; /* 회색 테두리 색상 */
+  border: 1px solid #002D56;
+  background-color: white;
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+  color: #002D56; /* 텍스트 색상 설정 */
+}
+.class-submit-button button:hover {
+  color: white;
+  background-color: #002D56; /* 배경 색상 변경 */
+  border-color: white; /* 테두리 색상 변경 */
+}
+
+
+/*수업 등록 요소*/
+
+.separator2 {
+  height: 1px; /* 높이를 10픽셀로 설정 */
+  background-color: #A5A5A5; /* 배경색을 회색으로 설정 */
+  
+}
+  .main-category-name-container2{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+
+  }
+  
+  .element-title2 {
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+    align-items: center;
+    position: relative;
+    height: 75%;
+  }
+  
+  .part1-element-title2 {
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    position: relative;
+    height: 90%;
+    width: 100%;
+    flex: 4; /* 40% */
+  }
+  .weekDay2, .weekTime2, .classDate2,.assistent2 {
+    display: inline-block; /* 요소들을 inline-block으로 설정 */
+    margin-right: 23%; /* 오른쪽에 20px의 공간을 추가 */
+  }
+  .weekDay2{
+    margin-left: 3.3%;
+  }
+  .assistent2 {
+    margin-right: 0;
+  }
+  
+  .part2-element-title2 {
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    height: 90%;
+    width: 100%;
+    flex: 3; /* 30% */
+  }
+  .className2{
+    margin-left: 43%
+  }
+  
+  .part3-element-title2 {
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    height: 90%;
+    width: 100%;
+    flex: 2; /* 30% */
+  }
+  .grade2{
+    display: inline-block;
+    margin-left: 19%
+  }
+  .maxPers2{
+    display: inline-block;
+    margin-left: 34%;
+    margin-right: 10%;
+  }
+
+
+.button-area2{
+  display: flex;
+  align-items: center;
+  position: relative;
+  height: 8%;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.add-button-container2 button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent; /* 배경색 제거 */
+  border: none;
+  cursor: pointer; /* 커서 스타일 변경 */
+  width: 60px; /* 버튼의 너비 설정 */
+  height: 60px; /* 버튼의 높이 설정 */
+  padding: 10px; /* 버튼 내부 패딩 조정 */
+  transition: transform 0.3s ease; /* 애니메이션 효과 추가 */
+}
+
+.add-button-container2 button:hover {
+  transform: scale(1.1); /* 버튼이 10% 커지게 설정 */
+}
+
+.add-button-container2 svg {
+  width: 24px; /* SVG 아이콘의 크기 조정 */
+  height: 24px;
+}
+
+.class-submit-button2{
+  margin-top: 1%;
+  margin-bottom: 1%;
+  display: flex;
+  align-items: center;
+  position: relative; 
+  height: 5vw;
+  font-size: 1vw;
+  margin-right: 1%;
+
+}
+.class-submit-button2 button {
+  height: 50%;
+  width: 100%;
+  border-color: #002D56; /* 회색 테두리 색상 */
+  border: 1px solid #002D56;
+  background-color: white;
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+  color: #002D56; /* 텍스트 색상 설정 */
+}
+.class-submit-button2 button:hover {
+  color: white;
+  background-color: #002D56; /* 배경 색상 변경 */
+  border-color: white; /* 테두리 색상 변경 */
+}

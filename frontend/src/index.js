@@ -5,6 +5,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Main from './layouts/HomePage';
 import ArticleMain from './layouts/ArticleMain';
 import CodingMain from './layouts/Coding-zone/CodingMain';
+import CodingClassRegist from './layouts/Coding-zone/CodingClassRegist';
 import EditPage from'./layouts/EditPage';
 import NavBar from './components/NavBar';
 import Footer from './components/Footer';
@@ -21,6 +22,7 @@ ReactDOM.render(
       <Route path="/article-main/:articleNum/edit" element={<EditPage />} />
       <Route path="/article-main/:articleNum" element={<ShowPage />} />
       <Route path="/coding-zone" element={<CodingMain />} />
+      <Route path="/coding-zone/coding-class-regist" element={<CodingClassRegist />} />
     </Routes>
     <Footer />
   </BrowserRouter>,
