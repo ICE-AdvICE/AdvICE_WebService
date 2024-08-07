@@ -106,14 +106,14 @@ public class CodingZoneServiceImplement implements CodingZoneService {
     }
 
     @Override
-    public ResponseEntity<? super GetListOfGroupInfResponseDto> getList(GetListOfGroupInfRequestDto dto, String email) {
+    public ResponseEntity<? super GetListOfGroupInfResponseDto> getList(String groupId, String email) {
         List<GroupInfEntity> groupInfEntities = new ArrayList<>();
         try{
             // 사용자 계정이 존재하는지(로그인 시간이 초과됐는지) 확인하는 코드
             boolean existedUser = userRepository.existsByEmail(email);
             if (!existedUser) return GetListOfGroupInfResponseDto.notExistUser();
 
-            groupInfEntities = groupInfRepository.findByGroupId(dto.getGroupId());
+            groupInfEntities = groupInfRepository.findByGroupId(groupId);
             if(groupInfEntities.isEmpty()) return GetListOfGroupInfResponseDto.noExistArticle();
             
         }catch(Exception exception) {
