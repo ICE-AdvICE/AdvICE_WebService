@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import '../css/codingzone/codingzone-main.css';
 import { useCookies } from "react-cookie";
 import CzCard from '../../components/czCard';  
-import { deleteCodingZoneClass,reserveCodingZoneClass,getcodingzoneListRequest } from '../../apis/Codingzone-api.js'; // API 함수 임포트
+import { getAttendanceCount,deleteCodingZoneClass,reserveCodingZoneClass,getcodingzoneListRequest } from '../../apis/Codingzone-api.js'; // API 함수 임포트
 
 const ClassList = ({ classList, handleCardClick,handleToggleReservation }) => {
   return (
@@ -34,12 +34,12 @@ const CodingMain = () => {
     const [grade, setGrade] = useState(1);  
     const [weekDay, setWeekDay] = useState('');  
     const [cookies] = useCookies('accessToken');
- 
+    const [originalClassList, setOriginalClassList] = useState([]); 
+    const [attendanceCount, setAttendanceCount] = useState(0); 
 
 
     const filterByDay = (day) => {
-        const filteredData = classList.filter(classItem => {
-            console.log("Class item day:", classItem.weekDay);
+        const filteredData = originalClassList.filter(classItem => {
             return classItem.weekDay.toLowerCase() === day.toLowerCase();
         });
         setClassList(filteredData);
@@ -57,16 +57,34 @@ const CodingMain = () => {
                         ...classItem,
                         isReserved: false  
                     }));
-                    setClassList(updatedClasses);  
-                } else {  
+                    setOriginalClassList(updatedClasses); 
+                    setClassList(updatedClasses);
+                } else {
+                    setOriginalClassList([]);
                     setClassList([]);
                 }
             } catch (error) {  
-                setClassList([]);   
+                setOriginalClassList([]);
+                setClassList([]);
             }
         };
         fetchData();
     }, [token, grade, weekDay]);  
+    useEffect(() => {
+        const fetchAttendance = async () => {
+            const token = cookies.accessToken;
+            if (token) {
+                try {
+                    const count = await getAttendanceCount(token, grade);
+                    setAttendanceCount(count);
+                } catch (error) {
+                    console.error("Failed to fetch attendance count:", error);
+                }
+            }
+        };
+        fetchAttendance();
+    }, [token, grade]);
+
     
     const handleCardClick = (classItem) => {
         console.log('');
@@ -117,10 +135,17 @@ const CodingMain = () => {
                 <img src="/coding-zone-main.png" className="codingzonetop-image"/>
             </div>
             <div className='codingzone-body-container'>
-                <div className="cz-category-date">
-                    <button onClick={() => setGrade(1)}>Coding Zone1</button>
-                    <button onClick={() => setGrade(2)}>Coding Zone2</button>
+                <div className= "cz-category-top">
+                    <div className="cz-category-date">
+                        <button onClick={() => setGrade(1)}>Coding Zone1</button>
+                        <button onClick={() => setGrade(2)}>Coding Zone2</button>
+                    </div>
+                    <div className='cz-count-container'>
+                        출석횟수 : {attendanceCount}/6
+
+                    </div>
                 </div>
+                
                 
                 <div className="codingzone-date">
                 <button onClick={() => filterByDay('Monday')}>Mon</button>
@@ -136,9 +161,11 @@ const CodingMain = () => {
                             <p className='weekDay'>요일</p> 
                             <p className='weekDate'>날짜</p>
                             <p className='weekTime'>시간</p>
+                            <p className='card-hidden-space '>시간</p>
                             <p className='weeksubject'>과목명</p>
                             <p className='weekperson'>조교</p>
                             <p className='weekcount'>인원</p>
+                            <p className='registerbutton'></p>
                              
                         </div>
                     </div>

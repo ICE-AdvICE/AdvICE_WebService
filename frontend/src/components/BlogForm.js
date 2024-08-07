@@ -156,6 +156,7 @@ const BlogForm = ({ editing }) => {
                     <input type="hidden" name="category" value={categoryString} />
                 
                     <ul className="dropdown-menu">
+                        <li onClick={() => handleCategoryChange('카테고리 선택', '카테고리 선택')}>카테고리 선택</li>
                         <li onClick={() => handleCategoryChange('REQUEST', '요청')}>요청</li>
                         <li onClick={() => handleCategoryChange('GENERAL', '일반')}>일반</li>
                         {isAdmin && (<li onClick={() => handleCategoryChange('NOTIFICATION', '공지')}>공지</li>)}
