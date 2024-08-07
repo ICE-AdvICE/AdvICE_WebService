@@ -17,27 +17,18 @@ const ClassRegist = () => {
         window.location.reload();
       };
 
-    const handleButtonClick = () => {
+      const handleButtonClick = () => {
+        // 모든 필드가 채워져 있는지 검사
+        const allFilled = boxes.every(box => Object.values(box).every(value => value.trim() !== ''));
+        if (!allFilled) {
+            alert("입력하지 않은 정보가 있습니다. 확인해 주세요.");
+            return;
+        }
         handleSubmit();
-        refreshPage();
-      };  
-
-    useEffect(() => {
-        const handleScroll = () => {
-            const footer = document.querySelector('.footer');
-            const scrollPosition = window.scrollY + window.innerHeight;
-            const footerPosition = footer.offsetTop;
-
-            if (scrollPosition > footerPosition) {
-                window.scrollTo({
-                    top: footerPosition,
-                    behavior: 'smooth'
-                });
-            }
-        };
-        window.addEventListener('resize', handleScroll);
-        return () => window.removeEventListener('resize', handleScroll);
-    }, []);
+        setTimeout(() => {
+            refreshPage();
+        }, 100);// 100밀리초 후에 실행
+    }; 
 
     useEffect(() => {
         loadGroupClasses();
@@ -52,8 +43,7 @@ const ClassRegist = () => {
         switch (code) {
             case 'SU':
                 alert('성공적으로 등록되었습니다.');
-                handleCategoryClick('registerClass')
-                break;
+                 break;
             case 'AF':
                 alert('권한이 없습니다.');
                 break;
@@ -137,18 +127,6 @@ const ClassRegist = () => {
 
     const addBox = () => {
         setBoxes([...boxes, { day: '', time: '', assistant: '', className: '', grade: '', maxPers: '' }]);
-        setTimeout(() => {
-            const footer = document.querySelector('.footer');
-            const scrollPosition = window.scrollY + window.innerHeight;
-            const footerPosition = footer.offsetTop;
-
-            if (scrollPosition >= footerPosition) {
-                window.scrollTo({
-                    top: footerPosition,
-                    behavior: 'smooth'
-                });
-            }
-        }, 0);
     };
 
     const handleChange = (index, field, value) => {
@@ -173,18 +151,6 @@ const ClassRegist = () => {
 
     const addBox2 = () => {
         setBoxes2([...boxes2, { day: '', date: '', time: '', assistant: '', className: '', grade: '', maxPers: '' }]);
-        setTimeout(() => {
-            const footer = document.querySelector('.footer');
-            const scrollPosition = window.scrollY + window.innerHeight;
-            const footerPosition = footer.offsetTop;
-
-            if (scrollPosition >= footerPosition) {
-                window.scrollTo({
-                    top: footerPosition,
-                    behavior: 'smooth'
-                });
-            }
-        }, 0);
     };
 
     const handleChange2 = (index, field, value) => {
@@ -194,12 +160,18 @@ const ClassRegist = () => {
     };
 
     const handleSubmit2 = async () => {
+        const allFilled = boxes2.every(box => Object.values(box).every(value => value.trim() !== '' && (box.date ? isValidDate(box.date) : true)));
+        if (!allFilled) {
+            alert("입력하지 않은 정보가 있거나, 정보 형식이 잘못되었습니다. 다시 확인해 주세요.");
+            return;
+        }
+        
         const currentYear = new Date().getFullYear();
         const formattedData = boxes2.map(box => {
             const dateParts = box.date ? box.date.split('-') : ['01', '01']; // 기본값 설정
             const [month, day] = dateParts;
             const formattedDate = `${currentYear}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
-        
+    
             return {
                 assistantName: box.assistant,
                 classDate: formattedDate,
@@ -214,6 +186,7 @@ const ClassRegist = () => {
         const response = await uploadClassForWeek(formattedData, cookies.accessToken);
         handleuploadClassForWeekResponse(response);
     };
+    
 
     const handleCategoryClick = (category) => {
         setActiveCategory(category);
@@ -235,6 +208,13 @@ const ClassRegist = () => {
             return false;
         }
         return true;
+    };
+
+    const removeBox = (index) => {
+        setBoxes(currentBoxes => currentBoxes.filter((_, i) => i !== index));
+    };
+    const removeBox2 = (index) => {
+        setBoxes2(currentBoxes => currentBoxes.filter((_, i) => i !== index));
     };
 
     const renderActiveSection = () => {
@@ -292,14 +272,20 @@ const ClassRegist = () => {
                                 <option value="1">1</option>
                                 <option value="2">2</option>
                             </select>
-                            <input className="MaxPers-input" type="number" placeholder="MaxPers" min="1" step="1" value={box.maxPers} onChange={(e) => handleChange(index, 'maxPers', e.target.value)} />
+                            <input className="MaxPers-input" type="number" placeholder="MaxPer" min="1" step="1" value={box.maxPers} onChange={(e) => handleChange(index, 'maxPers', e.target.value)} />
+                            <button onClick={() => removeBox(index)} className="remove-button">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-x-octagon" viewBox="0 0 16 16">
+                                <path d="M4.54.146A.5.5 0 0 1 4.893 0h6.214a.5.5 0 0 1 .353.146l4.394 4.394a.5.5 0 0 1 .146.353v6.214a.5.5 0 0 1-.146.353l-4.394 4.394a.5.5 0 0 1-.353.146H4.893a.5.5 0 0 1-.353-.146L.146 11.46A.5.5 0 0 1 0 11.107V4.893a.5.5 0 0 1 .146-.353zM5.1 1 1 5.1v5.8L5.1 15h5.8l4.1-4.1V5.1L10.9 1z"/>
+                                <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/>
+                            </svg>
+                            </button>
                          </div>
                     ))}
                     </div>
                     <div className='button-area'>
                         <div className="add-button-container">
                             <button onClick={addBox}>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
                                     <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z"/>
                                 </svg>
                             </button>
@@ -344,7 +330,7 @@ const ClassRegist = () => {
                                     <option value="목요일">THU</option>
                                     <option value="금요일">FRI</option>
                                 </select>
-                                <input className={`Date-input ${box.date && !isValidDate(box.date) ? 'invalid-date' : ''}`} placeholder="예) 07-26" value={box.date} onChange={(e) => handleChange2(index, 'date', e.target.value)} />
+                                <input className={`Date-input ${box.date && !isValidDate(box.date) ? 'invalid-date' : ''}`} placeholder="ex) 03-17" value={box.date} onChange={(e) => handleChange2(index, 'date', e.target.value)} />
                                 <select className="Time-input" value={box.time} onChange={(e) => handleChange2(index, 'time', e.target.value)}>
                                     <option value="">Time</option>
                                     <option value="09:00:00">09:00</option>
@@ -367,20 +353,26 @@ const ClassRegist = () => {
                                     <option value="1">1</option>
                                     <option value="2">2</option>
                                 </select>
-                                <input className="MaxPers-input" type="number" placeholder="MaxPers" min="1" step="1" value={box.maxPers} onChange={(e) => handleChange2(index, 'maxPers', e.target.value)} />
+                                <input className="MaxPers-input" type="number" placeholder="MaxPer" min="1" step="1" value={box.maxPers} onChange={(e) => handleChange2(index, 'maxPers', e.target.value)} />
+                                <button onClick={() => removeBox2(index)} className="remove-button">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-x-octagon" viewBox="0 0 16 16">
+                                        <path d="M4.54.146A.5.5 0 0 1 4.893 0h6.214a.5.5 0 0 1 .353.146l4.394 4.394a.5.5 0 0 1 .146.353v6.214a.5.5 0 0 1-.146.353l-4.394 4.394a.5.5 0 0 1-.353.146H4.893a.5.5 0 0 1-.353-.146L.146 11.46A.5.5 0 0 1 0 11.107V4.893a.5.5 0 0 1 .146-.353zM5.1 1 1 5.1v5.8L5.1 15h5.8l4.1-4.1V5.1L10.9 1z"/>
+                                        <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/>
+                                    </svg>
+                                </button>
                             </div>
                         ))}
                     </div>
                     <div className='button-area2'>
                         <div className="add-button-container2">
                             <button onClick={addBox2}>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
                                     <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z"/>
                                 </svg>
                             </button>
                         </div>
                         <div className='class-submit-button2'>
-                            <button onClick={handleSubmit2}>등l록</button>
+                            <button onClick={handleSubmit2}>등록</button>
                         </div>
                     </div>
                 </>
@@ -426,13 +418,8 @@ const ClassRegist = () => {
                             조 정보 등록
                         </button>
                         <span className="main-span"></span>
-                        <button className={`category-button ${activeCategory === 'editGroupInfo' ? 'active' : ''}`}
-                            onClick={() => handleCategoryClick('editGroupInfo')}>
-                            조 정보 수정
-                        </button>
-                        <span className="main-span"></span>
                         <button className={`category-button ${activeCategory === 'registerClass' ? 'active' : ''}`}
-                            onClick={() => handleCategoryClick('registerClass')}>
+                            onClick={() => refreshPage()}>
                             수업 등록
                         </button>
                     </div>

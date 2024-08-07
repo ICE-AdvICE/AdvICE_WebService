@@ -184,7 +184,7 @@ const ArticleMain = () => {
                                 type="text"
                                 value={searchTerm}
                                 onChange={e => setSearchTerm(e.target.value)}
-                                placeholder='search'
+                                placeholder=' search'
                                 onKeyDown={handleKeyDown}
                             />
                             <a href="#" onClick={(e) => {
