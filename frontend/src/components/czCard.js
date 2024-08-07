@@ -31,16 +31,17 @@ const czCard = ({
                 <p className='card-weekDay'>{getShortWeekDay(weekDay)}</p>
                 <p className="card-cateDate">{formatDate(classDate)}</p>
                 <p className='card-classTime'>{formatTime(classTime)}</p>
+                <p className='card-hidden-space '>''</p>
                 <p className='card-className'>{className}</p>
                 <p className="card-assistantName">{assistantName}</p>
                 <p className='card-currentNumber'>{`${currentNumber}/${maximumNumber}`}</p>
                 {children}
                 <button
                     onClick={(e) => {
-                        e.stopPropagation(); // 이벤트 버블링을 방지
-                        onReserveClick(); // 예약 클릭 핸들러 호출
+                        e.stopPropagation();  
+                        onReserveClick(); 
                     }}
-                    className="card-reservation" // CSS 클래스 추가
+                    className="card-reservation"  
                 >
                     {isReserved ? '예약 완료' : '예약'}
                 </button>
