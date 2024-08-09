@@ -1,12 +1,11 @@
 package com.icehufs.icebreaker.provider;
 
-import java.nio.charset.StandardCharsets;
+
 import java.security.Key;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import io.jsonwebtoken.Claims;

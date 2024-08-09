@@ -86,6 +86,16 @@
     width: 100%;
     justify-content: space-between;
   }
+  .reset-button {
+    margin-left: 5%;
+    border-radius: 5px; /* 테두리를 둥글게 함 */
+    transition: background-color 0.3s; /* 배경색 변경에 애니메이션 효과 적용 */
+}
+
+.reset-button:hover {
+    background-color: red !important; /* 커서를 갖다대면 배경색이 빨간색으로 변경 */
+    border-color: white !important;
+}
 
   .category-bar button {
     width: auto;

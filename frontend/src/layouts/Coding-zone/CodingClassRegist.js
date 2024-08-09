@@ -417,10 +417,14 @@ const ClassRegist = () => {
                             onClick={() => handleCategoryClick('registerGroupInfo')}>
                             조 정보 등록
                         </button>
-                        <span className="main-span"></span>
+                        <span className="main-span"> | </span>
                         <button className={`category-button ${activeCategory === 'registerClass' ? 'active' : ''}`}
                             onClick={() => refreshPage()}>
                             수업 등록
+                        </button>
+                        <span className="main-span"></span>
+                        <button className={`reset-button`} onClick={() => refreshPage()}>
+                            학기 초기화
                         </button>
                     </div>
                     <div className="inner-category-bar2">
