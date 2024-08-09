@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import '../css/codingzone/CodingClassRegist.css';
 import { useCookies } from "react-cookie";
-import { uploadGroupData, fetchGroupClasses, uploadClassForWeek } from '../../apis/Codingzone-api';
+import { uploadGroupData, fetchGroupClasses, uploadClassForWeek, resetCodingZoneData } from '../../apis/Codingzone-api';
 import MyModal from '../../MyModal';
 import LoginForm from '../../Modals/LoginForm';
 
@@ -125,6 +125,33 @@ const ClassRegist = () => {
         }
     };
 
+    const handleResetResponse = (response) => {
+        if (!response) {
+            alert('오류 발생: 네트워크 상태를 확인해주세요.');
+            return;
+        }
+        const { code, message } = response;
+        switch (code) {
+            case 'SU':
+                alert('학기 초기화가 성공적으로 완료되었습니다.');
+                refreshPage(); // 페이지 새로고침으로 UI를 업데이트
+                break;
+            case 'AF':
+                alert('권한이 없습니다.');
+                break;
+            case 'NU':
+                alert('로그인 시간이 만료되었습니다. 다시 로그인 해주세요.');
+                setShowLoginModal(true);
+                break;
+            case 'DBE':
+                alert('데이터베이스 오류입니다.');
+                break;
+            default:
+                alert('오류 발생: ' + message);
+                break;
+        }
+    };
+
     const addBox = () => {
         setBoxes([...boxes, { day: '', time: '', assistant: '', className: '', grade: '', maxPers: '' }]);
     };
@@ -187,6 +214,14 @@ const ClassRegist = () => {
         handleuploadClassForWeekResponse(response);
     };
     
+    const handleResetSemester = async () => {
+        // 사용자에게 확인 받기
+        if (window.confirm("정말 코딩존 관련 모든 정보를 초기화하시겠습니까?")) {
+            const response = await resetCodingZoneData(cookies.accessToken);
+            handleResetResponse(response);
+        } else {
+        }
+    };
 
     const handleCategoryClick = (category) => {
         setActiveCategory(category);
@@ -423,7 +458,7 @@ const ClassRegist = () => {
                             수업 등록
                         </button>
                         <span className="main-span"></span>
-                        <button className={`reset-button`} onClick={() => refreshPage()}>
+                        <button className={`reset-button`} onClick={handleResetSemester}>
                             학기 초기화
                         </button>
                     </div>

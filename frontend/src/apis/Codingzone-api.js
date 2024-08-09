@@ -93,3 +93,20 @@ export const uploadClassForWeek = async (groupData, token) => {
         return error.response.data;
     }
 };
+
+// 학기 초기화 API
+export const resetCodingZoneData = async (token) => {
+    try {
+        const response = await axios.delete(`${API_DOMAIN_ADMIN}/delete-allinf`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+        return response.data; 
+    } catch (error) {
+        if (!error.response) {
+            return { code: 'NETWORK_ERROR', message: '네트워크 상태를 확인해주세요.' };
+        }
+        return error.response.data; // Return error response
+    }
+};
