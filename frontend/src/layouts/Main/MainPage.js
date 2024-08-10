@@ -36,7 +36,7 @@ const MainPage = () => {
     if (!token) {
       alert('로그인이 필요합니다.');
     } else {
-      navigate(`/coding-zone/CodingMain`);
+      navigate(`/coding-zone`);
     }
   };
 
