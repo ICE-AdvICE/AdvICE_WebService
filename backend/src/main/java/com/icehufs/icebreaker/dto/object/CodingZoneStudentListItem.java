@@ -22,6 +22,7 @@ public class CodingZoneStudentListItem {
     private String classTime;
     private String assistantName;
     private String attendance;
+    private int grade;
 
     public CodingZoneStudentListItem(CodingZoneStudentListItem other){
         this.className = other.className;
@@ -33,6 +34,7 @@ public class CodingZoneStudentListItem {
         this.userStudentNum = other.userStudentNum;
         this.userName = other.userName;
         this.userEmail = other.userEmail;
+        this.grade = other.grade;
     }
 
     public CodingZoneStudentListItem(CodingZoneClass codingZoneClass, CodingZoneRegisterEntity codingZoneRegisterEntity){
@@ -45,6 +47,7 @@ public class CodingZoneStudentListItem {
         this.userStudentNum = codingZoneRegisterEntity.getUserStudentNum();
         this.userName = codingZoneRegisterEntity.getUserName();
         this.userEmail = codingZoneRegisterEntity.getUserEmail();
+        this.grade = codingZoneClass.getGrade();
     }
 
     public static List<CodingZoneStudentListItem> getList(List<CodingZoneStudentListItem> codingZoneStudentListItems) {
