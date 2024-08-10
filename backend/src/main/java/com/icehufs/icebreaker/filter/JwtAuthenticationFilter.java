@@ -23,7 +23,6 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import com.icehufs.icebreaker.entity.AuthorityEntity;
 import com.icehufs.icebreaker.provider.JwtProvider;
 import com.icehufs.icebreaker.repository.AuthorityRepository;
-import com.icehufs.icebreaker.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -44,9 +43,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
             filterChain.doFilter(request, response);
             return;
         }
-        String email = jwtProvider.validate(token); //validate과정에서 기간이 만료 되었거나, secretKey가 안 맞으면 null
-        if (email == null){
-            filterChain.doFilter(request, response);
+        
+        String email = jwtProvider.validate(token);
+        if (email == null) {
+            setJsonResponse(response, HttpServletResponse.SC_UNAUTHORIZED, "NU", "This user does not exist.");
             return;
         }
 
@@ -90,17 +90,19 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
         filterChain.doFilter(request, response);
     }
 
-    private String parseBearerToken(HttpServletRequest request){ //request에서 헤더 부분(beartoken)을 꺼내는 함수
-        String authorization = request.getHeader("Authorization"); //request 헤더 내용 추출
+    private void setJsonResponse(HttpServletResponse response, int status, String code, String message) throws IOException {
+        response.setStatus(status);
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.getWriter().write(String.format("{\"code\":\"%s\", \"message\":\"%s\"}", code, message));
+    }
 
-        boolean hasAuthorization = StringUtils.hasText(authorization); // authorization 부분을 가지고 있는지 확인
-        if (!hasAuthorization) return null;
-
-        boolean isBearer = authorization.startsWith("Bearer "); // Bearer 방식인지 아닌지 확인
-        if (!isBearer) return null;
-
-        String token = authorization.substring(7); //beartoken으로부터 토큰을 추출 -> "Bearer " 이어지는 인덱스부터 값이 필요하기 때문에 7
-        return token;
+    private String parseBearerToken(HttpServletRequest request) {
+        String authorization = request.getHeader("Authorization");
+        if (StringUtils.hasText(authorization) && authorization.startsWith("Bearer ")) {
+            return authorization.substring(7);
+        }
+        return null;
     }
     
 }

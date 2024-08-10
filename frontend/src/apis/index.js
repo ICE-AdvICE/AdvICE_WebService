@@ -73,6 +73,7 @@ export const giveBanToUser = async (articleNum, token, banDuration, banReason) =
 };
 
 //1-11 사용자 정지확인 api
+ 
 export const checkUserBanStatus = async (token) => {
     try {
         const response = await axios.post(`${API_DOMAIN}/auth/check-user-ban`, {}, {
@@ -82,19 +83,26 @@ export const checkUserBanStatus = async (token) => {
         if (data.email !== null) {
             return {
                 banned: true,
-                details: data
+                details: data,
+                banReason: data.banReason,
+                banDuration: data.banDuration,
+                banEndTime: data.badEndTime
+
             };
         } else {
             return {
                 banned: false
             };
         }
-    } catch (error) {
+    } catch (error) {     
         if (error.response) {
             const errorCode = error.response.data.code;
             switch (errorCode) {
                 case "DBE":
                     console.log("데이터베이스 오류가 발생했습니다.");
+                    break;
+                default:
+                    console.log("알 수 없는 오류 코드:", errorCode);
             }
         }
         return {
@@ -103,6 +111,7 @@ export const checkUserBanStatus = async (token) => {
         };
     }
 };
+
 //1. 게시물(일반,요청)을 등록하는 API
 export const createArticleRequest = async (postData, accessToken) => {
     try {

@@ -11,8 +11,6 @@ import MyModal from './MyModal';
 import './MyModal.module.css';
 
 
-
-
 function App(){
   const [modalOpen, setModalOpen] = useState(false); //회원가입 인증
   const [modalOpenin, setModalOpenin] = useState(false); //로그인

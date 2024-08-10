@@ -2,6 +2,7 @@ import axios from 'axios';
 
 const DOMAIN = 'http://localhost:4000';
 const API_DOMAIN = `${DOMAIN}/api/v1`;
+const API_DOMAIN_ADMIN = `${DOMAIN}/api/admin`;
 
 const GET_CZ_AUTH_TYPE = () => `${API_DOMAIN}/coding-zone/auth-type`;
 const GET_CZ_ATTEND_LIST = () => `${API_DOMAIN}/coding-zone/attend-list`;
@@ -10,10 +11,7 @@ const GET_CZ_ALL_ATTEND = () => `${DOMAIN}/api/admin/student-list`;
 const authorization = (accessToken) => {
     return { headers: { Authorization: `Bearer ${accessToken}` } }
 };
-
-
-// 11.모든 게시글을 리스트 형태로 불러오는 API
-export const getcodingzoneListRequest = async (token, grade) => {
+export const getcodingzoneListRequest  = async (token, grade, weekDay) => {
     try {
         const response = await axios.get(`${API_DOMAIN}/coding-zone/class-list/${grade}`, {
             headers: { Authorization: `Bearer ${token}` }
@@ -48,11 +46,113 @@ export const getcodingzoneListRequest = async (token, grade) => {
     }
 };
 
-// 7.운영자 권한 종류 확인 API
-export const getczauthtypetRequest = async (accessToken) => {
+
+export const uploadGroupData = async (groupData, token) => {
     try {
-        const response = await axios.get(GET_CZ_AUTH_TYPE(), authorization(accessToken));
+        const response = await axios.post(`${API_DOMAIN_ADMIN}/upload-group`, groupData, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
         return response.data;
+    } catch (error) {
+        if (!error.response) {
+            return { code: 'NETWORK_ERROR', message: '네트워크 상태를 확인해주세요.' };
+        }
+        return error.response.data;
+    }
+};
+
+export const fetchGroupClasses = async (groupId, token) => {
+    try {
+        const response = await axios.get(`${API_DOMAIN_ADMIN}/get-group/${groupId}`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+        return response.data; // API 응답 반환
+    } catch (error) {
+        if (!error.response) {
+            return { code: 'NETWORK_ERROR', message: '네트워크 상태를 확인해주세요.' };
+        }
+        return error.response.data; // 에러 응답 반환
+    }
+};
+
+export const uploadClassForWeek = async (groupData, token) => {
+    try {
+        const response = await axios.post(`${API_DOMAIN_ADMIN}/upload-codingzone`, groupData, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+        return response.data;
+    } catch (error) {
+        if (!error.response) {
+            return { code: 'NETWORK_ERROR', message: '네트워크 상태를 확인해주세요.' };
+        }
+        return error.response.data;
+    }
+};
+
+export const resetCodingZoneData = async (token) => {
+    try {
+        const response = await axios.delete(`${API_DOMAIN_ADMIN}/delete-allinf`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+        return response.data; 
+    } catch (error) {
+        if (!error.response) {
+            return { code: 'NETWORK_ERROR', message: '네트워크 상태를 확인해주세요.' };
+        }
+        return error.response.data;
+    }
+};
+
+export const checkAdminType = async (token) => {
+    try {
+        const response = await axios.get(`${API_DOMAIN}/coding-zone/auth-type`, {
+            headers: { Authorization: `Bearer ${token}` }
+        });
+        if (response.data.code === "SU") {
+            return true;
+        }
+        return false;
+    } catch (error) {
+        if (error.response) {
+            switch (error.response.data.code) {
+                case "NU":
+                    console.log("사용자가 존재하지 않습니다.");
+                    break;
+                case "DBE":
+                    console.log("데이터베이스에 문제가 발생했습니다.");
+                    break;
+                case "EA":
+                    console.log("성공: 사용자는 과사 조교입니다.");
+                    break;
+                case "CA":
+                    console.log("성공: 사용자는 코딩존 조교입니다.");
+                    break;
+                default:
+                    console.log("예상치 못한 문제가 발생하였습니다.");
+                    break;
+            }
+        }
+        return false;  // 오류 발생시 false 반환
+    }
+};
+
+export const reserveCodingZoneClass = async (token, classNum) => {
+    try {
+        const response = await axios.post(`${API_DOMAIN}/coding-zone/reserve-class/${classNum}`, {
+            headers: { Authorization: `Bearer ${token}` }
+        });
+        if (response.data.code === "SU") {
+            return true;
+        }
+        return false;
     } catch (error) {
         if (!error.response || !error.response.data) return null;
         return error.response.data;
@@ -73,15 +173,61 @@ export const getczattendlistRequest = async (accessToken) => {
 export const getczreservedlistRequest = async (accessToken, classDate) => { // classDate 매개변수 추가
     const GET_CZ_RESERVED_LIST = () =>`${API_DOMAIN}/coding-zone/reserved-list/${classDate}`;
     try {
-        const response = await axios.get(GET_CZ_RESERVED_LIST(), {
-            headers: { Authorization: `Bearer ${accessToken}` }
+        const response = await axios.delete(`${API_DOMAIN}/coding-zone/cancel-class/${classNum}`, {
+            headers: { Authorization: `Bearer ${token}` }
         });
+        if (response.data.code === "SU") {
+            return true;
+        }
+        return false;
+    } catch (error) {
+        if (!error.response || !error.response.data) return null;
+        return error.response.data;
+    }
+};
+
+export const getAttendanceCount = async (token, grade) => {
+    try {
+        const response = await axios.put(`${API_DOMAIN}/coding-zone/count-of-attend/${grade}`, {
+            headers: { Authorization: `Bearer ${token}` }
+        });
+
+        if (response.data.code === "SU") {
+            console.log("출석 횟수:", response.data.numOfAttend);
+            return response.data.numOfAttend;
+        }
+        return null;  // 오류 발생 시 null 반환
+    } catch (error) {
+        if (error.response) {
+            switch (error.response.data.code) {
+                case "NU":
+                    console.log("사용자가 존재하지 않습니다.");
+                    break;
+                case "DBE":
+                    console.log("데이터베이스에 문제가 발생했습니다.");
+                    break;
+                default:
+                    console.log("예상치 못한 문제가 발생하였습니다.");
+                    break;
+            }
+        } else {
+            console.log("서버와 통신하는 동안 문제가 발생했습니다.");
+        }
+        return null;  // 오류 발생 시 null 반환
+    }
+};
+
+// 7.운영자 권한 종류 확인 API
+export const getczauthtypetRequest = async (accessToken) => {
+    try {
+        const response = await axios.get(GET_CZ_AUTH_TYPE(), authorization(accessToken));
         return response.data;
     } catch (error) {
         if (!error.response || !error.response.data) return null;
         return error.response.data;
     }
 };
+
 
 
 export const putczattendc1Request = async (registNum,accessToken) => {
