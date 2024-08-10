@@ -4,11 +4,17 @@ const DOMAIN = 'http://localhost:4000';
 const API_DOMAIN = `${DOMAIN}/api/v1`;
 const API_DOMAIN_ADMIN = `${DOMAIN}/api/admin`;
 
+const GET_CZ_AUTH_TYPE = () => `${API_DOMAIN}/coding-zone/auth-type`;
+const GET_CZ_ATTEND_LIST = () => `${API_DOMAIN}/coding-zone/attend-list`;
+const GET_CZ_ALL_ATTEND = () => `${DOMAIN}/api/admin/student-list`;
+
+const authorization = (accessToken) => {
+    return { headers: { Authorization: `Bearer ${accessToken}` } }
+};
 export const getcodingzoneListRequest  = async (token, grade, weekDay) => {
     try {
         const response = await axios.get(`${API_DOMAIN}/coding-zone/class-list/${grade}`, {
-            headers: { Authorization: `Bearer ${token}` },
-            params: { weekDay }
+            headers: { Authorization: `Bearer ${token}` }
         });
         if (response.data.code === "SU") {
             console.log("성공: 수업 리스트를 성공적으로 가져왔습니다.");
@@ -39,6 +45,7 @@ export const getcodingzoneListRequest  = async (token, grade, weekDay) => {
         return false;
     }
 };
+
 
 export const uploadGroupData = async (groupData, token) => {
     try {
@@ -147,29 +154,24 @@ export const reserveCodingZoneClass = async (token, classNum) => {
         }
         return false;
     } catch (error) {
-        if (error.response) {
-            switch (error.response.data.code) {
-                case "FC":
-                    alert("예약가능한 인원이 꽉 찼습니다.");
-                    break;
-                case "NU":
-                    console.log("사용자가 존재하지 않습니다.");
-                    break;
-                case "DBE":
-                    console.log("데이터베이스에 문제가 발생했습니다.");
-                    break;
-                default:
-                    console.log("예상치 못한 문제가 발생하였습니다.");
-                    break;
-            }
-        } else {
-            console.log("네트워크 오류가 발생하였습니다.");
-        }
-        return false;
+        if (!error.response || !error.response.data) return null;
+        return error.response.data;
+    }
+};
+// 12.특정 사용자의 출/결석된 수업 리스트로 반환 API 
+export const getczattendlistRequest = async (accessToken) => {
+    try {
+        const response = await axios.get(GET_CZ_ATTEND_LIST(), authorization(accessToken));
+        return response.data;
+    } catch (error) {
+        if (!error.response || !error.response.data) return null;
+        return error.response.data;
     }
 };
 
-export const deleteCodingZoneClass = async (token, classNum) => {
+// 14.특정 날짜에 1학년/2학년 코딩존 수업 예약한 학생들 리스트로 반환 API
+export const getczreservedlistRequest = async (accessToken, classDate) => { // classDate 매개변수 추가
+    const GET_CZ_RESERVED_LIST = () =>`${API_DOMAIN}/coding-zone/reserved-list/${classDate}`;
     try {
         const response = await axios.delete(`${API_DOMAIN}/coding-zone/cancel-class/${classNum}`, {
             headers: { Authorization: `Bearer ${token}` }
@@ -179,25 +181,8 @@ export const deleteCodingZoneClass = async (token, classNum) => {
         }
         return false;
     } catch (error) {
-        if (error.response) {
-            switch (error.response.data.code) {
-                case "NR":
-                    console.log("Not reserve class.");
-                    break;
-                case "NU":
-                    console.log("사용자가 존재하지 않습니다.");
-                    break;
-                case "DBE":
-                    console.log("데이터베이스에 문제가 발생했습니다.");
-                    break;
-                default:
-                    console.log("예상치 못한 문제가 발생하였습니다.");
-                    break;
-            }
-        } else {
-            console.log("네트워크 오류가 발생하였습니다.");
-        }
-        return false;
+        if (!error.response || !error.response.data) return null;
+        return error.response.data;
     }
 };
 
@@ -229,5 +214,53 @@ export const getAttendanceCount = async (token, grade) => {
             console.log("서버와 통신하는 동안 문제가 발생했습니다.");
         }
         return null;  // 오류 발생 시 null 반환
+    }
+};
+
+// 7.운영자 권한 종류 확인 API
+export const getczauthtypetRequest = async (accessToken) => {
+    try {
+        const response = await axios.get(GET_CZ_AUTH_TYPE(), authorization(accessToken));
+        return response.data;
+    } catch (error) {
+        if (!error.response || !error.response.data) return null;
+        return error.response.data;
+    }
+};
+
+
+
+export const putczattendc1Request = async (registNum,accessToken) => {
+    try {
+        const response = await axios.put(`${DOMAIN}/api/admin-c1/attendance/${registNum}`, {}, {
+            headers: { Authorization: `Bearer ${accessToken}` }
+        });
+        return response.data;
+    } catch (error) {
+        if (!error.response || !error.response.data) return null;
+        return error.response.data;
+    }
+};
+
+export const putczattendc2Request = async (registNum,accessToken) => {
+    try {
+        const response = await axios.put(`${DOMAIN}/api/admin-c2/attendance/${registNum}`, {}, {
+            headers: { Authorization: `Bearer ${accessToken}` }
+        });
+        return response.data;
+    } catch (error) {
+        if (!error.response || !error.response.data) return null;
+        return error.response.data;
+    }
+};
+
+//13) 해당 학기에 출/결한 모든 학생들 리스트로 반환 API
+export const getczallattendRequest = async (accessToken) => {
+    try {
+        const response = await axios.get(GET_CZ_ALL_ATTEND(), authorization(accessToken));
+        return response.data;
+    } catch (error) {
+        if (!error.response || !error.response.data) return null;
+        return error.response.data;
     }
 };

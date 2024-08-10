@@ -1,0 +1,24 @@
+.btn-attendance {
+    color: green; /* 출석 버튼의 글자색을 녹색으로 설정 */
+    background-color: #dff0d8; /* 출석 버튼의 배경색을 연한 녹색으로 설정 */
+    border-color: #d6e9c6; /* 출석 버튼의 테두리 색을 조금 더 진한 녹색으로 설정 */
+}
+
+.btn-absence {
+    color: red; /* 결석 버튼의 글자색을 빨간색으로 설정 */
+    background-color: #f2dede; /* 결석 버튼의 배경색을 연한 빨간색으로 설정 */
+    border-color: #ebccd1; /* 결석 버튼의 테두리 색을 조금 더 진한 빨간색으로 설정 */
+}
+
+.btn-attendance-disabled {
+    color: gray; /* 비활성화된 출석 버튼의 글자색을 회색으로 설정 */
+    background-color: #f0f0f0; /* 비활성화된 출석 버튼의 배경색을 연한 회색으로 설정 */
+    border-color: #ccc; /* 비활성화된 출석 버튼의 테두리 색을 진한 회색으로 설정 */
+    cursor: not-allowed; /* 마우스 커서를 금지 표시로 변경 */
+}
+.btn-absence-disabled {
+    color: gray; /* 비활성화된 결석 버튼의 글자색을 회색으로 설정 */
+    background-color: #f0f0f0; /* 비활성화된 결석 버튼의 배경색을 연한 회색으로 설정 */
+    border-color: #ccc; /* 비활성화된 결석 버튼의 테두리 색을 진한 회색으로 설정 */
+    cursor: not-allowed; /* 마우스 커서를 금지 표시로 변경 */
+}
