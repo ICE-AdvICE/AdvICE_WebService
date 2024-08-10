@@ -23,7 +23,7 @@ const ShowPage = () => {
     const [canEdit, setCanEdit] = useState(false);
     const handleBanUser = async () => {
         const banReason = prompt(
-            "정지 사유를 선택하세요:\n1) 스팸\n2) 부적절한 내용\n3) 증오 발언\n4) 허위 정보\n5) 사칭\n6) 사기\n7) 규칙 위반\n8) 기타",
+            "아래 목록에서 해당되는 정지 사유의 숫자를 입력하세요:\n1) 스팸\n2) 부적절한 내용\n3) 증오 발언\n4) 허위 정보\n5) 사칭\n6) 사기\n7) 규칙 위반\n8) 기타",
         );
         const banReasonMap = {
             "1": "SPAM",
@@ -37,11 +37,11 @@ const ShowPage = () => {
         };
         const selectedBanReason = banReasonMap[banReason];
         if (!selectedBanReason) {
-            alert("정지 사유를 선택하세요.");
+            alert("올바른 숫자를 입력하여 정지 사유를 선택하세요.");
             return;
         }
         const banDuration = prompt(
-            "정지 기간을 선택하세요:\n1) 1개월\n2) 6개월 \n3) 1년\n4) 영구 정지"
+            "아래 목록에서 원하는 정지 기간의 숫자를 입력하세요:\n1) 1개월\n2) 6개월 \n3) 1년\n4) 영구 정지"
         );
         const banDurationMap = {
             "1": "ONE_MONTH",
@@ -51,7 +51,7 @@ const ShowPage = () => {
         };
         const selectedBanDuration = banDurationMap[banDuration];
         if (!selectedBanDuration) {
-            alert("정지 기간을 선택하세요.");
+            alert("올바른 숫자를 입력하여 정지 기간을 선택하세요.");
             return;
         }
         const result = await giveBanToUser(articleNum, token, selectedBanDuration, selectedBanReason);
@@ -181,7 +181,7 @@ const ShowPage = () => {
     
     useEffect(() => {
         if (articleNum) {
-            fetchArticle(articleNum)
+            fetchArticle(articleNum,navigate)
                 .then(res => {
                     const {articleTitle, articleContent, likeCount, viewCount, category, authCheck,articleDate, userEmail: authorEmail, comments: loadedComments } = res;
                     setArticle({ articleTitle, body: articleContent, views: viewCount, category, articleDate, authCheck });
@@ -209,7 +209,7 @@ const ShowPage = () => {
     };
 
     if (!article) {
-        return <div>Loading...</div>;
+        return <div>게시글이 존재하지 않습니다.</div>;
     }
 
     return (

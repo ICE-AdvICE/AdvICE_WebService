@@ -1,16 +1,44 @@
-import React from 'react';
+import React, { useEffect , useState} from 'react';
 import '../css/MainPage.css';
+import { getMypageRequest } from '../../apis/index.js';
+
 import { useNavigate } from 'react-router-dom';
+import { useCookies } from "react-cookie";
 
 const MainPage = () => {
+  const [cookies] = useCookies('accessToken');
   const navigate = useNavigate();
+  const [userData, setUserData] = useState(null);
   const handleMoreClick = () => {
     navigate('/article-main');  
   };
+  const handlereservationClick = () => {
+    window.location.href = 'https://open.kakao.com/o/giOS427b';  
+  };
+  useEffect(() => {
+    const fetchData = async () => {
+        const data = await getMypageRequest(cookies.accessToken);
+        if (data) {
+            setUserData(data);
+            navigate('/');
 
-  const handlecodingzone = async () => {
-    navigate(`/coding-zone`);
- };
+        } else {
+            
+            navigate('/');
+        }
+    };
+
+    fetchData();
+}, [cookies.accessToken, navigate]);
+  const handlecodingzone = () => {
+    const token = cookies.accessToken; 
+    
+    if (!token) {
+      alert('로그인이 필요합니다.');
+    } else {
+      navigate(`/coding-zone`);
+    }
+  };
 
   return (
     <div className="main-container">
@@ -32,7 +60,7 @@ const MainPage = () => {
         </div>
         <div className="service-box study-box">
           <p>정보통신공학과 스터디룸<br /> 예약 오픈채팅방 입니다.</p>
-          <button className="btn study">Study Room</button>
+          <button onClick={handlereservationClick} className="btn study">Study Room</button>
         </div>
       </div>
     </div>

@@ -32,10 +32,12 @@
 .codingzone-body-container{
   width: 100%;
   flex-direction: column;
+  position: relative;
   display: flex;
-  height: 50vw;
+  height: auto;
+  margin-bottom: 5%;
 }
-.cz-category-date{
+.cz-category-top{
   margin-top: 1%;
   display: flex;
   align-items: center;
@@ -43,8 +45,11 @@
   justify-content: space-between; 
   height: 3vw;
   font-size: 0.8vw;
-  width: 15%;
+  width: 46%;
   margin-left: 43%
+}
+.cz-category-date{
+  height: 100%;
 }
 .cz-category-date button{
   height: 100%;
@@ -60,17 +65,22 @@
   align-items: center;
   position: relative;
   justify-content: space-between; 
-  height: 10%;
+  height: 4vw;
   width: 80%;
-  
-  margin-left: 10%
+  margin-left: 10%;
+  margin-bottom: 1%;
 
 }
 .codingzone-date button{
   width: 15%;
+  font-size: 1vw;
   height: 80%;
+  font-weight: 700;
   background-color: white;
   border-color: #D0D5DD;
+}
+.cz-count-container{
+  position: relative;
 }
 .category-name-container{
  
@@ -86,23 +96,25 @@
   display: flex;
   width: 100%;
   flex-direction: row;
+  text-align: center;
   justify-content: space-between;
 }
+ 
+ 
 .codingzone-title .d-flex p {
   margin-top: 1%;
+  flex: 1;
   margin-bottom: 1%;
   font-size: 1.2vw;
 }
-p.weekDay{
-  margin-left: 3%;
-}
+ 
 .codingzone-list{
   display: flex;
   margin-top: 1%;
   position: relative;
   width: 80%;
-
   margin-left: 10%;
+
 }
 .cz-card{
   width: 100%;
@@ -115,18 +127,42 @@ p.weekDay{
   align-items: center;
   display: flex;
 }
-p.card-weekDay {
-  color: #002D56;
-  font-weight: 900;
-  margin-left: 3%;
-}
+ 
 .czcard .d-flex p{
   margin-top: 1%;
   margin-bottom: 1%;
-  font-size: 1.2vw;
+  font-size: 1.1vw;
+  font-family: Arial, Helvetica, sans-serif;
 }
-.d-flex p {
-  flex: 1; /* 모든 p 태그가 동일한 너비를 가지도록 설정 */
-   
-  text-align: center;
+.d-flex p.card-weekDay {
+  font-weight: 900;
+  flex: 1;  
+  text-align: center;  
+  color: #002D56;
+}
+.d-flex p , .d-flex button{
+  font-weight: 400;
+  flex: 1;  
+  text-align: center;  
+  flex-basis: 0;
+  box-sizing: border-box;
+  padding: 0;
+}
+.card-hidden-space {
+  flex: 2;  
+  visibility: hidden;  
+}
+ 
+ 
+p.card-currentNumber {
+  color: #002D56;
+  font-weight: 600;
+ 
+}
+.card-reservation{
+  background-color: rgba(128, 128, 128, 0.189);
+  border: none !important;
+  font-size: 1.2vw;
+  border-radius: 0.5vw;
+  
 }

@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 
 const czCard = ({ 
-    category, onClick,classDate, children, assistantName, classTime, className, weekDay ,currentNumber,maximumNumber
+    onReserveClick , onClick,classDate, children, assistantName, classTime, className, weekDay ,currentNumber,maximumNumber,isReserved
 }) => {
     function getShortWeekDay(weekDay) {
         const days = {
@@ -16,24 +16,36 @@ const czCard = ({
     }
     function formatDate(dateString) {
         const date = new Date(dateString);
-        const month = date.getMonth() + 1; // 월은 0부터 시작하므로 1을 더합니다.
+        const month = date.getMonth() + 1;  
         const day = date.getDate();
         return `${month}/${day}`;
     }
     function formatTime(timeString) {
-        // AM/PM 제거
-        return timeString.replace(/( AM| PM)/, '');
+         
+        return timeString.substring(0, 5);
     }
+    
     return (
         <div className="czcard" onClick={onClick}>
             <div className="d-flex justify-content-between">
                 <p className='card-weekDay'>{getShortWeekDay(weekDay)}</p>
                 <p className="card-cateDate">{formatDate(classDate)}</p>
                 <p className='card-classTime'>{formatTime(classTime)}</p>
+                <p className='card-hidden-space '>''</p>
                 <p className='card-className'>{className}</p>
                 <p className="card-assistantName">{assistantName}</p>
                 <p className='card-currentNumber'>{`${currentNumber}/${maximumNumber}`}</p>
                 {children}
+                <button
+                    onClick={(e) => {
+                        e.stopPropagation();  
+                        onReserveClick(); 
+                    }}
+                    className="card-reservation"  
+                >
+                    {isReserved ? '예약 완료' : '예약'}
+                </button>
+
             </div>
         </div>
     );
@@ -49,7 +61,8 @@ czCard.propTypes = {
     className: PropTypes.string,
     weekDay: PropTypes.string,
     currentNumber: PropTypes.number,
-    maximumNumber: PropTypes.number
+    maximumNumber: PropTypes.number,
+    onReserveClick: PropTypes.func
 };
 
 czCard.defaultProps = {
@@ -62,7 +75,8 @@ czCard.defaultProps = {
     className: '',
     weekDay: '',
     currentNumber: 0,
-    maximumNumber: 0
+    maximumNumber: 0,
+    onReserveClick: () => {} 
 };
 
 export default czCard;

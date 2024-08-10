@@ -46,6 +46,7 @@
   background: transparent;
   cursor: pointer;
   margin-bottom: 1%;
+  font-weight: 600;
    
 }
 /*카테고리 일반 or 요청*/
@@ -212,7 +213,7 @@
  
 }
 .Edit-Delete-Options span{
-  height: 100%;
+  height: 99%;
   align-items: center;
   display: flex;
 }

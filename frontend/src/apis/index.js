@@ -22,7 +22,7 @@ const authorization = (accessToken) => {
 
 const COMMENT_WRITE = (articleNum) => `${API_DOMAIN}/article/${articleNum}/comment`;
 const EDIT_ARTICLE = (articleNum) => `${API_DOMAIN}/article/${articleNum}`;
-
+ 
 
 // 1-10 사용자 정지 부여 API
 export const giveBanToUser = async (articleNum, token, banDuration, banReason) => {
@@ -73,6 +73,7 @@ export const giveBanToUser = async (articleNum, token, banDuration, banReason) =
 };
 
 //1-11 사용자 정지확인 api
+ 
 export const checkUserBanStatus = async (token) => {
     try {
         const response = await axios.post(`${API_DOMAIN}/auth/check-user-ban`, {}, {
@@ -82,19 +83,26 @@ export const checkUserBanStatus = async (token) => {
         if (data.email !== null) {
             return {
                 banned: true,
-                details: data
+                details: data,
+                banReason: data.banReason,
+                banDuration: data.banDuration,
+                banEndTime: data.badEndTime
+
             };
         } else {
             return {
                 banned: false
             };
         }
-    } catch (error) {
+    } catch (error) {     
         if (error.response) {
             const errorCode = error.response.data.code;
             switch (errorCode) {
                 case "DBE":
                     console.log("데이터베이스 오류가 발생했습니다.");
+                    break;
+                default:
+                    console.log("알 수 없는 오류 코드:", errorCode);
             }
         }
         return {
@@ -103,6 +111,7 @@ export const checkUserBanStatus = async (token) => {
         };
     }
 };
+
 //1. 게시물(일반,요청)을 등록하는 API
 export const createArticleRequest = async (postData, accessToken) => {
     try {
@@ -112,10 +121,10 @@ export const createArticleRequest = async (postData, accessToken) => {
         if (error.response) {
             switch (error.response.data.code) {
                 case "NU":
-                    alert("로그인 정보롤 다시 확인해 주세요");
+                    alert("로그인이 필요합니다.");
                     break;
                 case "VF":
-                    alert("카테고리를 선택해주세요");
+                    alert("내용을 입력해주세요");
                     break;
                 case "DBE":
                     console.log("데이터베이스에 문제가 발생했습니다");
@@ -141,7 +150,7 @@ export const createNotificationArticleRequest = async (postData, token) => {
         if (error.response) {
             switch (error.response.data.code) {
                 case "NU":
-                    alert("로그인을 다시 해주세요");
+                    alert("로그인이 필요합니다.");
                     break;
                 case "AF":
                     alert("공지글 올릴 수 있는 권한이 없습니다.");
@@ -162,7 +171,7 @@ export const createNotificationArticleRequest = async (postData, token) => {
 
 };
 // 3.특정 게시물을 불러오는 API
-export const fetchArticle = async (articleNum) => {
+export const fetchArticle = async (articleNum,navigate) => {
     try {
         const response = await axios.get(`${API_DOMAIN}/article/${articleNum}`);
         return response.data;
@@ -175,6 +184,7 @@ export const fetchArticle = async (articleNum) => {
             switch (error.response.data.code) {
                 case "NA":
                     alert("존재하지 않는 게시글입니다.");
+                    navigate(`/article-main`);
                     break;
                 case "DBE":
                     console.log("데이터베이스에 문제가 발생했습니다");
@@ -237,7 +247,7 @@ export const handleDelete = async (articleNum, token, navigate) => {
                         alert("존재하지 않는 게시글입니다.");
                         break;
                     case "NU":
-                        alert("로그인을 다시해주세요.");
+                        alert("로그인이 필요합니다.");
                         break;
                     case "VF":
                         alert("유효성 검사 실패하였습니다.");
@@ -278,7 +288,7 @@ export const handleLike = async (articleNum, liked, token, setLiked, setLikes) =
                     alert("데이터베이스 오류가 발생했습니다.");
                     break;
                 case "NU":
-                    alert("다시 로그인 해주세요.");
+                    alert("로그인이 필요합니다.");
                     break;
                 case "VF":
                     alert("유효성 검사 실패하였습니다.");
@@ -318,7 +328,7 @@ export const handleCommentSubmit = async (event,commentInput, setComments, setCo
                     alert("댓글 작성 권한이 없습니다.");
                     break;
                 case "NU":
-                    alert("다시 로그인해주세요.");
+                    alert("로그인이 필요합니다.");
                     break;
                 case "VF":
                     alert("유효성 검사 실패하였습니다.");
@@ -356,7 +366,7 @@ export const fetchComments = (articleNum, token, setComments) => {
             const {code} = err.response.data;
             switch (code) {
                 case "NA":
-                    alert("이 게시글은 존재하지 않습니다.");
+                    console.log("이 게시글은 존재하지 않습니다.");
                     break;
                 case "DBE":
                     alert("데이터베이스 오류가 발생했습니다.");
@@ -388,7 +398,7 @@ export const handleCommentEdit = async (commentNumber, newContent, token) => {
                     alert("댓글 수정 권한이 없습니다.");
                     break;
                 case "NU":
-                    alert("다시 로그인해주세요.");
+                    alert("로그인이 필요합니다.");
                     break;
                 case "NP":
                     alert("다른 사람의 댓글입니다.");
@@ -426,7 +436,7 @@ export const handleCommentDelete = async (articleNum, commentNumber, token) => {
                         alert("댓글 삭제 권한이 없습니다.");
                         break;
                     case "NU":
-                        alert("다시 로그인해주세요.");
+                        alert("로그인이 필요합니다.");
                         break;
                     case "NP":
                         alert("다른 사람의 댓글입니다.");
@@ -480,7 +490,7 @@ export const fetchUserArticles = async (token) => {
         if (error.response) {
             switch (error.response.data.code) {
                 case "NU":
-                    alert("로그인을 다시 해주세요.");
+                    alert("로그인이 필요합니다.");
                     break;
                 case "VF":
                     alert("유효성 검사 실패했습니다.");
@@ -529,10 +539,10 @@ export const checkArticleOwnership = async (articleNum, token) => {
         if (error.response) {
             switch (error.response.data.code) {
                 case "NA":
-                    alert("해당 게시글이 없습니다.");
+                    console.log("해당 게시글이 없습니다.");
                     break;
                 case "NU":
-                    alert("다시 로그인해주세요.");
+                    alert("로그인이 필요합니다.");
                     break;
                 case "NP":
                     return { isOwner: false, message: "You do not have permission." };
@@ -567,7 +577,7 @@ export const adminhandleDelete = async (articleNum, token, navigate) => {
                         alert("게시글 삭제 권한이 없습니다.");
                         break;
                     case "NU":
-                        alert("다시 로그인 해주세요");
+                        alert("로그인이 필요합니다.");
                         break;
                     case "VF":
                         alert("유효성 검사 실패하였습니다.");
@@ -600,7 +610,7 @@ export const handleResolveArticle = async (articleNum, token, navigate, setResol
         } else if (code === "NA") {
             alert("해당 게시글이 존재하지 않습니다.");
         } else if (code === "NU") {
-            alert("다시 로그인해주세요.");
+            alert("로그인이 필요합니다.");
         } else if (code === "VF") {
             alert("유효성 검사 실패하였습니다.");
         } else if (code === "DBE") {

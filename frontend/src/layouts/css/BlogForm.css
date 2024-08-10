@@ -67,6 +67,7 @@
 }
 .dropdown.active .dropdown-menu {
     display: block;
+    width: 100%;
 }
 .dropdown .dropdown-menu li {
     padding: 10px;
