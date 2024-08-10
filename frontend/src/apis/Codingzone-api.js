@@ -4,7 +4,7 @@ const DOMAIN = 'http://localhost:4000';
 const API_DOMAIN = `${DOMAIN}/api/v1`;
 const API_DOMAIN_ADMIN = `${DOMAIN}/api/admin`;
 
-export const getcodingzoneListRequest  = async (token, grade,weekDay) => {
+export const getcodingzoneListRequest  = async (token, grade, weekDay) => {
     try {
         const response = await axios.get(`${API_DOMAIN}/coding-zone/class-list/${grade}`, {
             headers: { Authorization: `Bearer ${token}` },
@@ -40,7 +40,6 @@ export const getcodingzoneListRequest  = async (token, grade,weekDay) => {
     }
 };
 
-//특정 (A/B)조의 정보 등록 API
 export const uploadGroupData = async (groupData, token) => {
     try {
         const response = await axios.post(`${API_DOMAIN_ADMIN}/upload-group`, groupData, {
@@ -51,14 +50,12 @@ export const uploadGroupData = async (groupData, token) => {
         return response.data;
     } catch (error) {
         if (!error.response) {
-            // 네트워크 오류 또는 서버 응답 없음
             return { code: 'NETWORK_ERROR', message: '네트워크 상태를 확인해주세요.' };
         }
         return error.response.data;
     }
 };
 
-//특정 (A/B)조의 정보 반환 API
 export const fetchGroupClasses = async (groupId, token) => {
     try {
         const response = await axios.get(`${API_DOMAIN_ADMIN}/get-group/${groupId}`, {
@@ -69,14 +66,12 @@ export const fetchGroupClasses = async (groupId, token) => {
         return response.data; // API 응답 반환
     } catch (error) {
         if (!error.response) {
-            // 네트워크 오류 또는 서버 응답 없음
             return { code: 'NETWORK_ERROR', message: '네트워크 상태를 확인해주세요.' };
         }
         return error.response.data; // 에러 응답 반환
     }
 };
 
-//코딩존 수업 등록 API
 export const uploadClassForWeek = async (groupData, token) => {
     try {
         const response = await axios.post(`${API_DOMAIN_ADMIN}/upload-codingzone`, groupData, {
@@ -87,14 +82,12 @@ export const uploadClassForWeek = async (groupData, token) => {
         return response.data;
     } catch (error) {
         if (!error.response) {
-            // 네트워크 오류 또는 서버 응답 없음
             return { code: 'NETWORK_ERROR', message: '네트워크 상태를 확인해주세요.' };
         }
         return error.response.data;
     }
 };
 
-// 학기 초기화 API
 export const resetCodingZoneData = async (token) => {
     try {
         const response = await axios.delete(`${API_DOMAIN_ADMIN}/delete-allinf`, {
@@ -107,15 +100,19 @@ export const resetCodingZoneData = async (token) => {
         if (!error.response) {
             return { code: 'NETWORK_ERROR', message: '네트워크 상태를 확인해주세요.' };
         }
-        return error.response.data; // Return error response
+        return error.response.data;
+    }
+};
+
 export const checkAdminType = async (token) => {
     try {
-        const response = await axios.get(`${API_DOMAIN}/coding-zone/auth-type`, {}, {
-            headers: { Authorization: `Bearer ${token}` },
+        const response = await axios.get(`${API_DOMAIN}/coding-zone/auth-type`, {
+            headers: { Authorization: `Bearer ${token}` }
         });
-        if (response.data.code == "SU"){
+        if (response.data.code === "SU") {
             return true;
         }
+        return false;
     } catch (error) {
         if (error.response) {
             switch (error.response.data.code) {
@@ -142,12 +139,13 @@ export const checkAdminType = async (token) => {
 
 export const reserveCodingZoneClass = async (token, classNum) => {
     try {
-        const response = await axios.post(`${API_DOMAIN}/coding-zone/reserve-class/${classNum}`, {}, {
-            headers: { Authorization: `Bearer ${token}` },
+        const response = await axios.post(`${API_DOMAIN}/coding-zone/reserve-class/${classNum}`, {
+            headers: { Authorization: `Bearer ${token}` }
         });
-        if (response.data.code == "SU"){
+        if (response.data.code === "SU") {
             return true;
         }
+        return false;
     } catch (error) {
         if (error.response) {
             switch (error.response.data.code) {
@@ -173,12 +171,13 @@ export const reserveCodingZoneClass = async (token, classNum) => {
 
 export const deleteCodingZoneClass = async (token, classNum) => {
     try {
-        const response = await axios.delete(`${API_DOMAIN}/coding-zone/cence-class/${classNum}`, {}, {
-            headers: { Authorization: `Bearer ${token}` },
+        const response = await axios.delete(`${API_DOMAIN}/coding-zone/cancel-class/${classNum}`, {
+            headers: { Authorization: `Bearer ${token}` }
         });
-        if (response.data.code == "SU"){
+        if (response.data.code === "SU") {
             return true;
         }
+        return false;
     } catch (error) {
         if (error.response) {
             switch (error.response.data.code) {
@@ -201,16 +200,18 @@ export const deleteCodingZoneClass = async (token, classNum) => {
         return false;
     }
 };
+
 export const getAttendanceCount = async (token, grade) => {
     try {
-        const response = await axios.put(`${API_DOMAIN}/coding-zone/count-of-attend/${grade}`, {}, {
-            headers: { Authorization: `Bearer ${token}` },
+        const response = await axios.put(`${API_DOMAIN}/coding-zone/count-of-attend/${grade}`, {
+            headers: { Authorization: `Bearer ${token}` }
         });
 
         if (response.data.code === "SU") {
             console.log("출석 횟수:", response.data.numOfAttend);
             return response.data.numOfAttend;
         }
+        return null;  // 오류 발생 시 null 반환
     } catch (error) {
         if (error.response) {
             switch (error.response.data.code) {
