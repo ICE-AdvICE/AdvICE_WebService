@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import '../css/codingzone/CodingClassRegist.css';
 import { useCookies } from "react-cookie";
 import { uploadGroupData, fetchGroupClasses, uploadClassForWeek, resetCodingZoneData } from '../../apis/Codingzone-api';
+//로그인 모달창 import 위한 코드
 import MyModal from '../../MyModal';
 import LoginForm from '../../Modals/LoginForm';
 
@@ -13,27 +14,15 @@ const ClassRegist = () => {
     const [activeCategory, setActiveCategory] = useState('registerClass');
     const [showLoginModal, setShowLoginModal] = useState(false); 
 
-    const refreshPage = () => {
-        window.location.reload();
-      };
-
-      const handleButtonClick = () => {
-        // 모든 필드가 채워져 있는지 검사
-        const allFilled = boxes.every(box => Object.values(box).every(value => value.trim() !== ''));
-        if (!allFilled) {
-            alert("입력하지 않은 정보가 있습니다. 확인해 주세요.");
-            return;
-        }
-        handleSubmit();
-        setTimeout(() => {
-            refreshPage();
-        }, 100);// 100밀리초 후에 실행
-    }; 
-
     useEffect(() => {
         loadGroupClasses();
     }, [groupId]);
 
+    const closeModal = () => { //모달창 닫기위한 코드
+        setShowLoginModal(false);
+    };
+
+    //조 정보 등록 API 응답 함수
     const handleGroupUploadResponse = (response) => {
         if (!response) {
             alert('오류 발생: 네트워크 상태를 확인해주세요.');
@@ -49,7 +38,7 @@ const ClassRegist = () => {
                 break;
             case 'NU':
                 alert('로그인 시간이 만료되었습니다. 다시 로그인 해주세요.');
-                setShowLoginModal(true);
+                setShowLoginModal(true); //바로 로그인을 할 수 있게 로그인창 뛰어주기
                 break;
             case 'DBE':
                 alert('데이터베이스 오류입니다.');
@@ -60,6 +49,7 @@ const ClassRegist = () => {
         }
     };
 
+    //수업 등록 API 응답 함수
     const handleuploadClassForWeekResponse = (response) => {
         if (!response) {
             alert('오류 발생: 네트워크 상태를 확인해주세요.');
@@ -76,7 +66,7 @@ const ClassRegist = () => {
                 break;
             case 'NU':
                 alert('로그인 시간이 만료되었습니다. 다시 로그인 해주세요.');
-                setShowLoginModal(true);
+                setShowLoginModal(true); //바로 로그인을 할 수 있게 로그인창 뛰어주기
                 break;
             case 'DBE':
                 alert('데이터베이스 오류입니다.');
@@ -87,6 +77,7 @@ const ClassRegist = () => {
         }
     };
 
+    //등록된 조 정보 반환 API 응답 함수
     const loadGroupClasses = async () => {
         const data = await fetchGroupClasses(groupId, cookies.accessToken);
         if (!data) {
@@ -124,7 +115,8 @@ const ClassRegist = () => {
                 break;
         }
     };
-
+    
+    //학기 초기화 API 응답 함수
     const handleResetResponse = (response) => {
         if (!response) {
             alert('오류 발생: 네트워크 상태를 확인해주세요.');
@@ -152,6 +144,28 @@ const ClassRegist = () => {
         }
     };
 
+    //새로고침 함수
+    const refreshPage = () => {
+        window.location.reload();
+        };
+        
+    //조 정보 등록 버튼 함수(모든 필드 채워져있는지 확인 -> 열린 박스들을 닫기 위해 새로 고침)  
+    const handleButtonClick = () => {
+        // 모든 필드가 채워져 있는지 검사
+        const allFilled = boxes.every(box => Object.values(box).every(value => value.trim() !== ''));
+        if (!allFilled) {
+            alert("입력하지 않은 정보가 있습니다. 확인해 주세요.");
+            return;
+        }
+        handleSubmit();
+
+        //정상적으로 등록 됐다는 alert를 닫을 시간 제공위해 100밀리초 후에 새로고침
+        setTimeout(() => {
+                refreshPage();
+            }, 100);
+    }; 
+
+    //조 정보 등록을 위한 functions
     const addBox = () => {
         setBoxes([...boxes, { day: '', time: '', assistant: '', className: '', grade: '', maxPers: '' }]);
     };
@@ -176,6 +190,11 @@ const ClassRegist = () => {
         handleGroupUploadResponse(response);
     };
 
+    const removeBox = (index) => {
+        setBoxes(currentBoxes => currentBoxes.filter((_, i) => i !== index));
+    };    
+
+    //수업 등록을 위한 functions
     const addBox2 = () => {
         setBoxes2([...boxes2, { day: '', date: '', time: '', assistant: '', className: '', grade: '', maxPers: '' }]);
     };
@@ -192,10 +211,9 @@ const ClassRegist = () => {
             alert("입력하지 않은 정보가 있거나, 정보 형식이 잘못되었습니다. 다시 확인해 주세요.");
             return;
         }
-        
         const currentYear = new Date().getFullYear();
         const formattedData = boxes2.map(box => {
-            const dateParts = box.date ? box.date.split('-') : ['01', '01']; // 기본값 설정
+            const dateParts = box.date ? box.date.split('-') : ['01', '01'];
             const [month, day] = dateParts;
             const formattedDate = `${currentYear}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
     
@@ -209,11 +227,15 @@ const ClassRegist = () => {
                 grade: parseInt(box.grade)
             };
         });
-    
         const response = await uploadClassForWeek(formattedData, cookies.accessToken);
         handleuploadClassForWeekResponse(response);
     };
+
+    const removeBox2 = (index) => {
+        setBoxes2(currentBoxes => currentBoxes.filter((_, i) => i !== index));
+    };    
     
+    //학기 초가화 버튼을 위한 function
     const handleResetSemester = async () => {
         // 사용자에게 확인 받기
         if (window.confirm("정말 코딩존 관련 모든 정보를 초기화하시겠습니까?")) {
@@ -223,14 +245,12 @@ const ClassRegist = () => {
         }
     };
 
+    //조 정보 등록과 수업 등록 페이지 이동 function
     const handleCategoryClick = (category) => {
         setActiveCategory(category);
     };
 
-    const closeModal = () => { //모달창 닫기위한 코드
-        setShowLoginModal(false);
-    };
-
+    // 날짜 등록 칸에서 맞는 유형인지 확인 함수
     const isValidDate = (date) => {
         if (!date) return true; // 입력 값이 비어있으면 유효한 것으로 간주합니다.
         const regex = /^(0?[1-9]|1[0-2])-(0?[1-9]|[12][0-9]|3[01])$/; // 'MM-DD' 형식 검사
@@ -245,13 +265,7 @@ const ClassRegist = () => {
         return true;
     };
 
-    const removeBox = (index) => {
-        setBoxes(currentBoxes => currentBoxes.filter((_, i) => i !== index));
-    };
-    const removeBox2 = (index) => {
-        setBoxes2(currentBoxes => currentBoxes.filter((_, i) => i !== index));
-    };
-
+    //조 정보 등록과 수업 등록 페이지
     const renderActiveSection = () => {
         if (activeCategory === 'registerGroupInfo') {
             return (
@@ -418,7 +432,8 @@ const ClassRegist = () => {
 
     return (
         <div className="class-regist-main-container">
-            <MyModal
+
+            <MyModal //로그인 도달창 뛰우기 위한 HTML 추가 코드
                 open={showLoginModal}
                 onCancel={closeModal}
                 footer={[]}>
@@ -426,6 +441,7 @@ const ClassRegist = () => {
                     closeModal();
                 }} closeModal={closeModal} />
             </MyModal>
+
             <div className="header-select-container">
                 <span> | </span>
                 <button>코딩존 예약</button>
@@ -452,19 +468,19 @@ const ClassRegist = () => {
                             onClick={() => handleCategoryClick('registerGroupInfo')}>
                             조 정보 등록
                         </button>
-                        <span className="main-span"> | </span>
+                        <span className="main-span2"> | </span>
                         <button className={`category-button ${activeCategory === 'registerClass' ? 'active' : ''}`}
                             onClick={() => refreshPage()}>
                             수업 등록
                         </button>
-                        <span className="main-span"></span>
+                        <span className="main-span2"></span>
                         <button className={`reset-button`} onClick={handleResetSemester}>
                             학기 초기화
                         </button>
                     </div>
                     <div className="inner-category-bar2">
                     <button className={`Agroup-button ${groupId === 'A' ? 'active' : ''}`} onClick={() => setGroupId('A')}>A 조</button>
-                    <span className="main-span"> | </span>
+                    <span className="main-span2"> | </span>
                     <button className={`Bgroup-button ${groupId === 'B' ? 'active' : ''}`} onClick={() => setGroupId('B')}>B 조</button>
                     </div>
                 </div>
