@@ -113,6 +113,7 @@ export const resetCodingZoneData = async (token) => {
     }
 };
 
+// 7. 운영자 권한 종류 확인 API
 export const checkAdminType = async (token) => {
     try {
         const response = await axios.get(`${API_DOMAIN}/coding-zone/auth-type`, {
@@ -145,7 +146,7 @@ export const checkAdminType = async (token) => {
         return false;  // 오류 발생시 false 반환
     }
 };
-
+// 8. 선택된 학년의 예약 가능한 수업 리스트로 반환 API
 export const reserveCodingZoneClass = async (token, classNum) => {
     try {
         const response = await axios.post(`${API_DOMAIN}/coding-zone/reserve-class/${classNum}`, {
@@ -175,6 +176,38 @@ export const reserveCodingZoneClass = async (token, classNum) => {
             console.log("네트워크 오류가 발생하였습니다.");
         }
         return false;
+    }
+}
+// 9. 선택 학년의 예약 가능한 수업 리스트로 반환 API (ForNotLogIn)
+export const getAvailableClassesForNotLogin = async (grade) => {
+    try {
+        const response = await axios.get(`${API_DOMAIN}/coding-zone/class-list/for-not-login/${grade}`);
+        if (response.data.code === "SU") {
+            return response.data.classList; 
+        } else {
+            console.log(response.data.message);
+            return [];
+        }
+    } catch (error) {
+        if (error.response) {
+            switch (error.response.data.code) {
+                case "NU":
+                    console.log("사용자가 존재하지 않습니다.");
+                    break;
+                case "NA":
+                    console.log("등록된 수업이 없습니다.");
+                    break;
+                case "DBE":
+                    console.log("데이터베이스에 문제가 발생했습니다.");
+                    break;
+                default:
+                    console.log("예상치 못한 문제가 발생하였습니다.");
+                    break;
+            }
+        } else {
+            console.log("네트워크 오류가 발생하였습니다.");
+        }
+        return [];
     }
 };
 
