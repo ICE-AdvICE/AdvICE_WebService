@@ -8,7 +8,7 @@ const Card = ({ title, createdAt, views, likes, onDelete, order,onClick, childre
     
     return (
         <div className="card" onClick={onClick}>
-            <div className="d-flex justify-content-between">
+         
                 <p className="card-order">{order}</p>
                 <p className="card-category">{category}</p>
                 <p className='card-title'>{title}</p>
@@ -24,7 +24,7 @@ const Card = ({ title, createdAt, views, likes, onDelete, order,onClick, childre
                 <p className='card-likes'>{likes}</p>
                 {children}
             </div>
-        </div>
+       
     );
 };
 

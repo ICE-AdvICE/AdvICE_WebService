@@ -230,6 +230,7 @@ const ShowPage = () => {
             <div className = "ArticleContentbox-container">
                 <div className="ArticleContentbox">
                     <img src="/main2-image.png"  className="header10-image"/>
+                    <div className = "body-container">
                     <img src="/main2-icon.png"  className="icon-image"/>
                     <div className='ArticleCategory'>
                         <p>
@@ -336,6 +337,8 @@ const ShowPage = () => {
                             </div>
                         )}                        
                         </div>          
+                    </div>
+                    
                     </div>
                 </div>
             </div>

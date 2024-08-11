@@ -66,9 +66,8 @@
   align-items: center;
   position: relative;
   justify-content: space-between; 
- 
   font-size: 8px;
-  margin-left: 39%;
+  margin-left: 39.5%;
 }
 .cz-category-date{
   height: 40px;
@@ -76,7 +75,7 @@
 }
 .cz-category-date button{
   height: 100%;
-  width: 80px;
+  width: 100px;
   align-items: center;
   justify-content: center;
   display: flex;
@@ -266,14 +265,18 @@
     flex: 1 4 0;
     min-width: 0;
   }
-}
+  .cz-category-date button{
+    width: 10vw;
+  }
+  }
+
 @media (max-width: 860px) {
-  .codingzone-date button {
-    height: 4.5vw;
+  .cz-category-top {
+    font-size: 8px;
   }
   .cz-category-date button{
     height: 100%;
-    width: 9vw;
+ 
     border-color: #D0D5DD;
     background-color: white;
   }
