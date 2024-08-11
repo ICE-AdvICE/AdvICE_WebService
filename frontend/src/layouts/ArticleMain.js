@@ -86,24 +86,6 @@ const ArticleMain = () => {
             alert("계정 상태를 확인하는 중 오류가 발생했습니다. 다시 시도해주세요.");
         }
     };
-     useEffect(() => {
-        if (window.location.pathname.includes("article-main")) {
-            // 모든 .d-flex p 요소를 선택
-            const dFlexPElements = document.querySelectorAll('.d-flex p');
-            
-            // 모든 .d-flex button 요소를 선택
-            const dFlexButtonElements = document.querySelectorAll('.d-flex button');
-            
-            // 선택된 요소들에 대해 flex-basis 스타일 제거
-            dFlexPElements.forEach(element => {
-                element.style.flexBasis = '0'; // 또는 element.style.flexBasis = 'auto';
-            });
-        
-            dFlexButtonElements.forEach(element => {
-                element.style.flexBasis = 'unset'; // 또는 element.style.flexBasis = 'auto';
-            });
-        }
-    }, []);
 
     const filterNotificationArticles = (articles) => {
         const notifications = articles.filter(article => article.category === 'NOTIFICATION');

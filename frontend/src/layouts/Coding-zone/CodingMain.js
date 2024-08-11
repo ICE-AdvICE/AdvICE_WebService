@@ -3,6 +3,7 @@ import '../css/codingzone/codingzone-main.css';
 import { useCookies } from "react-cookie";
 import CzCard from '../../components/czCard';  
 import { getAttendanceCount,deleteCodingZoneClass,reserveCodingZoneClass,getcodingzoneListRequest } from '../../apis/Codingzone-api.js'; // API 함수 임포트
+import { useNavigate } from 'react-router-dom';
 
 const ClassList = ({ classList, handleCardClick,handleToggleReservation }) => {
   return (
@@ -37,7 +38,7 @@ const CodingMain = () => {
     const [cookies] = useCookies('accessToken');
     const [originalClassList, setOriginalClassList] = useState([]); 
     const [attendanceCount, setAttendanceCount] = useState(0); 
-
+    const navigate = useNavigate();
     useEffect(() => {
         if (window.location.pathname.includes("coding-zone")) {
             // 모든 .d-flex p 요소를 선택
@@ -124,6 +125,9 @@ const CodingMain = () => {
             }
         }
     };
+    const handlecodingzoneattendence = () => {
+        navigate(`/coding-zone/Codingzone_Attendence`);
+    };
 
 
     const updateClassItem = (classNum, isReserved) => {
@@ -140,7 +144,7 @@ const CodingMain = () => {
                 <span> | </span>
                 <button>코딩존 예약</button>
                 <span> | </span>
-                <button>출결 관리</button>
+                <button onClick={handlecodingzoneattendence}>출결 관리</button>
                 <span> | </span>
                 <button>문의 하기</button>
                 <span> | </span>

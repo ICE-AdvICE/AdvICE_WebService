@@ -6,6 +6,7 @@ import Main from './layouts/HomePage';
 import ArticleMain from './layouts/ArticleMain';
 import CodingMain from './layouts/Coding-zone/CodingMain';
 import EditPage from './layouts/EditPage';
+import CodingClassRegist from './layouts/Coding-zone/CodingClassRegist';
 import NavBar from './components/NavBar';
 import Footer from './components/Footer';
 import CreatePage from './layouts/CreatePage';
@@ -25,6 +26,7 @@ const App = () => {
         <Route path="/article-main/:articleNum/edit" element={<EditPage />} />
         <Route path="/article-main/:articleNum" element={<ShowPage />} />
         <Route path="/coding-zone" element={<CodingMain />} />
+        <Route path="/coding-zone/coding-class-regist" element={<CodingClassRegist />} />
       </Routes>
       {location.pathname !== '/' && <Footer />}
     </>

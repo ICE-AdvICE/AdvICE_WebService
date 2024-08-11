@@ -45,12 +45,12 @@ public class EntireAdminController {
         return response;
     }
 
-    @GetMapping("/get-group") //특정 (A/B)조 정보 반환 API
+    @GetMapping("/get-group/{groupId}") //특정 (A/B)조 정보 반환 API
     public ResponseEntity<? super GetListOfGroupInfResponseDto> getList(
-        @RequestBody @Valid GetListOfGroupInfRequestDto requestBody,
+        @PathVariable String groupId,
         @AuthenticationPrincipal String email
     ){
-        ResponseEntity<? super GetListOfGroupInfResponseDto> response = codingzoneService.getList(requestBody, email);
+        ResponseEntity<? super GetListOfGroupInfResponseDto> response = codingzoneService.getList(groupId, email);
         return response;
     }
 
@@ -70,6 +70,23 @@ public class EntireAdminController {
 
     ){
         ResponseEntity<? super DeleteClassOfGroupResponseDto> response = codingzoneService.deleteClass(classNum, email);
+        return response;
+    }
+
+    @GetMapping("/student-list")
+    public ResponseEntity<? super GetCodingZoneStudentListResponseDto> getStudentList(
+        @AuthenticationPrincipal String email
+    ){
+        ResponseEntity<? super GetCodingZoneStudentListResponseDto> response = codingzoneService.getStudentList(email);
+        return response;
+    } 
+
+    @DeleteMapping("/delete-allinf") //모든 정보 초기화
+    public ResponseEntity<? super DeleteAllInfResponseDto> deleteAll(
+        @AuthenticationPrincipal String email
+
+    ){
+        ResponseEntity<? super DeleteAllInfResponseDto> response = codingzoneService.deleteAll(email);
         return response;
     }
    
