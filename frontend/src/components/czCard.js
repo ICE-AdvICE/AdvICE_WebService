@@ -27,11 +27,10 @@ const czCard = ({
     
     return (
         <div className="czcard" onClick={onClick}>
-            <div className="d-flex justify-content-between">
                 <p className='card-weekDay'>{getShortWeekDay(weekDay)}</p>
-                <p className="card-cateDate">{formatDate(classDate)}</p>
+                <p className="card-weekDate">{formatDate(classDate)}</p>
                 <p className='card-classTime'>{formatTime(classTime)}</p>
-                <p className='card-hidden-space '>''</p>
+                <p className='card-hidden-space '></p>
                 <p className='card-className'>{className}</p>
                 <p className="card-assistantName">{assistantName}</p>
                 
@@ -48,7 +47,7 @@ const czCard = ({
                 </button>
 
             </div>
-        </div>
+         
     );
 };
 
