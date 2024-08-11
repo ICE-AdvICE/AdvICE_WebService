@@ -227,6 +227,35 @@ const ArticleMain = () => {
         { label: '제목', value: 'title' },
         { label: '내용', value: 'content' }
     ]);
+    useEffect(() => {
+        const handleResize = () => {
+            const inputElement = document.querySelector('.input-container input[type="text"]');
+ 
+            const windowWidth = window.innerWidth;
+    
+            // input[type="text"]의 너비 조정
+            if (inputElement) { // inputElement가 존재하는지 확인
+                if (windowWidth <= 420) {
+                    const newWidth = 150 - (420 - windowWidth);
+                    inputElement.style.width = `${Math.max(newWidth, 100)}px`; // 최소 너비를 100px로 설정
+                } else {
+                    inputElement.style.width = '150px'; // 창 너비가 421px 이상일 때 고정 너비 150px
+                }
+            }
+
+        };
+    
+        // 윈도우 리사이즈 이벤트에 핸들러 추가
+        window.addEventListener('resize', handleResize);
+    
+        // 컴포넌트 마운트 시 초기 크기에 맞게 설정
+        handleResize();
+    
+        // 컴포넌트 언마운트 시 이벤트 리스너 제거
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+    
+    
 
     return (
         <div className="blog-container">
@@ -378,5 +407,4 @@ const ArticleMain = () => {
         </div>
     );
 };
-
 export default ArticleMain;

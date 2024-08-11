@@ -17,7 +17,7 @@ const Codingzone_Attendence = () => {
     const navigate = useNavigate();
 
     const handlecodingzoneattendence =  () => {
-        navigate(`/Codingzone_Attendence`);
+        navigate(`/coding-zone/Codingzone_Attendence`);
      };
     const handlecodingzonemanager = () => {
         navigate(`/coding-zone/Codingzone_Manager`);
