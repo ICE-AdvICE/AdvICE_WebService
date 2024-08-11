@@ -3,6 +3,7 @@ import '../css/codingzone/codingzone-main.css';
 import { useCookies } from "react-cookie";
 import CzCard from '../../components/czCard';  
 import { getAttendanceCount,deleteCodingZoneClass,reserveCodingZoneClass,getcodingzoneListRequest } from '../../apis/Codingzone-api.js'; // API 함수 임포트
+import { useNavigate } from 'react-router-dom';
 
 const ClassList = ({ classList, handleCardClick,handleToggleReservation }) => {
   return (
@@ -28,6 +29,7 @@ const ClassList = ({ classList, handleCardClick,handleToggleReservation }) => {
   );
 };
 
+
 const CodingMain = () => {
     const [classList, setClassList] = useState([]);
     const [token, setToken] = useState('');  
@@ -36,8 +38,21 @@ const CodingMain = () => {
     const [cookies] = useCookies('accessToken');
     const [originalClassList, setOriginalClassList] = useState([]); 
     const [attendanceCount, setAttendanceCount] = useState(0); 
-
-
+    const navigate = useNavigate();
+    useEffect(() => {
+        if (window.location.pathname.includes("coding-zone")) {
+            // 모든 .d-flex p 요소를 선택
+            const dFlexPElements = document.querySelectorAll('.d-flex p');
+            
+         
+            // 선택된 요소들에 대해 flex-basis 스타일 제거
+            dFlexPElements.forEach(element => {
+                element.style.flexBasis = '150px'; // 또는 element.style.flexBasis = 'auto';
+            });
+        
+       
+        }
+    }, []);
     const filterByDay = (day) => {
         const filteredData = originalClassList.filter(classItem => {
             return classItem.weekDay.toLowerCase() === day.toLowerCase();
@@ -110,6 +125,9 @@ const CodingMain = () => {
             }
         }
     };
+    const handlecodingzoneattendence = () => {
+        navigate(`/coding-zone/Codingzone_Attendence`);
+    };
 
 
     const updateClassItem = (classNum, isReserved) => {
@@ -126,7 +144,7 @@ const CodingMain = () => {
                 <span> | </span>
                 <button>코딩존 예약</button>
                 <span> | </span>
-                <button>출결 관리</button>
+                <button onClick={handlecodingzoneattendence}>출결 관리</button>
                 <span> | </span>
                 <button>문의 하기</button>
                 <span> | </span>
@@ -137,7 +155,7 @@ const CodingMain = () => {
             <div className='codingzone-body-container'>
                 <div className= "cz-category-top">
                     <div className="cz-category-date">
-                        <button onClick={() => setGrade(1)}>Coding Zone1</button>
+                        <button className='cz-1' onClick={() => setGrade(1)}>Coding Zone1</button>
                         <button onClick={() => setGrade(2)}>Coding Zone2</button>
                     </div>
                     <div className='cz-count-container'>
@@ -146,12 +164,15 @@ const CodingMain = () => {
                     </div>
                 </div>
                 
-                
                 <div className="codingzone-date">
                 <button onClick={() => filterByDay('Monday')}>Mon</button>
+                <span> | </span>
                 <button onClick={() => filterByDay('tuesday')}>Tue</button>
+                <span> | </span>
                 <button onClick={() => filterByDay('wednesday')}>Wed</button>
+                <span> | </span>
                 <button onClick={() => filterByDay('thursday')}>Thu</button>
+                <span> | </span>
                 <button onClick={() =>filterByDay('friday')}>Fri</button>
             </div>
                 <div className='category-name-container'>
@@ -161,7 +182,7 @@ const CodingMain = () => {
                             <p className='weekDay'>요일</p> 
                             <p className='weekDate'>날짜</p>
                             <p className='weekTime'>시간</p>
-                            <p className='card-hidden-space '>시간</p>
+                            <p className='card-hidden-space '>''</p>
                             <p className='weeksubject'>과목명</p>
                             <p className='weekperson'>조교</p>
                             <p className='weekcount'>인원</p>

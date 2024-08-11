@@ -9,6 +9,7 @@
 .select-container button{
   background-color: white;
   border: none !important;
+  font-size: 1vw;
 }
 .select-container span{
   padding: 1%;
@@ -29,8 +30,13 @@
   height: 26vw;
   background-size: cover;
 }
+.codingzone-container{
+  height: auto;
+}
 .codingzone-body-container{
-  width: 100%;
+  max-width: 1024px;
+  margin: 0 auto;
+  padding: 10px;
   flex-direction: column;
   position: relative;
   display: flex;
@@ -44,9 +50,8 @@
   position: relative;
   justify-content: space-between; 
   height: 3vw;
-  font-size: 0.8vw;
-  width: 46%;
-  margin-left: 43%
+  font-size: 0.9vw;
+  margin-left: 39%;
 }
 .cz-category-date{
   height: 100%;
@@ -55,6 +60,9 @@
   height: 100%;
   border-color: #D0D5DD;
   background-color: white;
+}
+.cz-1{
+  margin-right: 10px;
 }
 .cz-category-date button:hover{
   color: white;
@@ -66,14 +74,12 @@
   position: relative;
   justify-content: space-between; 
   height: 4vw;
-  width: 80%;
-  margin-left: 10%;
   margin-bottom: 1%;
 
 }
 .codingzone-date button{
   width: 15%;
-  font-size: 1vw;
+  font-size: 1.1vw;
   height: 80%;
   font-weight: 700;
   background-color: white;
@@ -83,11 +89,9 @@
   position: relative;
 }
 .category-name-container{
- 
-  width: 80%;
   position: relative;
   display: flex;
-  margin-left: 10%;
+ 
   flex-direction: column;
  
 }
@@ -103,7 +107,7 @@
  
 .codingzone-title .d-flex p {
   margin-top: 1%;
-  flex: 1;
+  flex-grow: 1;
   margin-bottom: 1%;
   font-size: 1.2vw;
 }
@@ -112,9 +116,7 @@
   display: flex;
   margin-top: 1%;
   position: relative;
-  width: 80%;
-  margin-left: 10%;
-
+ 
 }
 .cz-card{
   width: 100%;
@@ -131,20 +133,19 @@
 .czcard .d-flex p{
   margin-top: 1%;
   margin-bottom: 1%;
-  font-size: 1.1vw;
-  font-family: Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  
 }
 .d-flex p.card-weekDay {
   font-weight: 900;
-  flex: 1;  
   text-align: center;  
   color: #002D56;
 }
 .d-flex p , .d-flex button{
   font-weight: 400;
-  flex: 1;  
+  flex-grow: 1;  
   text-align: center;  
-  flex-basis: 0;
+  flex-basis: 150px;
   box-sizing: border-box;
   padding: 0;
 }
@@ -152,6 +153,7 @@
   flex: 2;  
   visibility: hidden;  
 }
+
  
  
 p.card-currentNumber {
@@ -165,4 +167,38 @@ p.card-currentNumber {
   font-size: 1.2vw;
   border-radius: 0.5vw;
   
+}
+@media (max-width: 1024px) {
+  .card-hidden-space, .card-hidden-space  {
+    flex-shrink: 2;
+  }
+}
+@media (max-width: 740px) {
+  .card-hidden-space, .card-hidden-space  {
+    display: none  !important;
+  }
+  .czcard .d-flex p {
+    font-size: 12px;
+  }
+}
+@media (max-width: 610px) {
+ 
+  .czcard .d-flex p {
+    font-size: 10px;
+    
+  }
+}
+@media (max-width: 510px) {
+ 
+  .czcard .d-flex p {
+    font-size: 8px;
+    
+  }
+}
+@media (max-width: 410px) {
+ 
+  .czcard .d-flex p {
+    font-size: 6px;
+    
+  }
 }

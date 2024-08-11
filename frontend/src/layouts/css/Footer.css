@@ -1,11 +1,12 @@
 .footer-container{
     width: 100%;
-    height: 17vw;
+    height: auto;
     background: #333;
     margin: 0 auto;
     position: relative;
     display: flex;
     justify-content: center;
+ 
 }
 .footer-logo{
     padding-top: 4vw;

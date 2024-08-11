@@ -34,6 +34,7 @@ const czCard = ({
                 <p className='card-hidden-space '>''</p>
                 <p className='card-className'>{className}</p>
                 <p className="card-assistantName">{assistantName}</p>
+                
                 <p className='card-currentNumber'>{`${currentNumber}/${maximumNumber}`}</p>
                 {children}
                 <button

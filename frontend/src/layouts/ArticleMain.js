@@ -86,7 +86,7 @@ const ArticleMain = () => {
             alert("계정 상태를 확인하는 중 오류가 발생했습니다. 다시 시도해주세요.");
         }
     };
-    
+
     const filterNotificationArticles = (articles) => {
         const notifications = articles.filter(article => article.category === 'NOTIFICATION');
         const general = articles.filter(article => article.category !== 'NOTIFICATION');
@@ -236,87 +236,114 @@ const ArticleMain = () => {
             </div>
             <div className="posts-overlay-container">
                 <img src="/main2-image.png" className="header3-image" />
-                <img src="/main2-icon.png" className="article-icon-image" />
-                <div className="bar-container">
-                    <div className="search-bar">
-                        <div className="Category-dropdown" onClick={() => setDropdownOpenCategory(!dropdownOpenCategory)}>
-                            <span className="category-label">
-                                {selectedCategory === 'all' ? '모두 보여주기' :
-                                    selectedCategory === 'GENERAL' ? '일반' :
-                                        selectedCategory === 'REQUEST' ? '요청' :
-                                            selectedCategory === 'RESOLVE' ? '해결' : '내가 쓴 글'}
-                            </span>
-                            <FontAwesomeIcon icon={faChevronDown} className="ico-common-menu-hide-big-default" />
-                            <ul className={`dropdown-menu ${dropdownOpenCategory ? 'show' : ''}`}>
-                                {categorizedItems.map((category, index) =>
-                                    category.isSeparator ? (
-                                        <li key={`separator-${index}`} className="separator"></li>
-                                    ) : (
-                                        <li key={category.value} onClick={() => { setSelectedCategory(category.value); setDropdownOpenCategory(false); }}>
-                                            {category.label}
-                                        </li>
-                                    )
-                                )}
-                            </ul>
+                <div className='blog-skin-body'>
+                    <img src="/main2-icon.png" className="article-icon-image" />
+                    <div className='Layout_bar'>
+                        <div className="bar-container">
+                            <div className="search2-bar">
+                                <div className="Category-dropdown" onClick={() => setDropdownOpenCategory(!dropdownOpenCategory)}>
+                                    <span className="category-label">
+                                        {selectedCategory === 'all' ? '모두 보여주기' :
+                                            selectedCategory === 'GENERAL' ? '일반' :
+                                                selectedCategory === 'REQUEST' ? '요청' :
+                                                    selectedCategory === 'RESOLVE' ? '해결' : '내가 쓴 글'}
+                                    </span>
+                                    <FontAwesomeIcon icon={faChevronDown} className="ico-common-menu-hide-big-default" />
+                                    <ul className={`dropdown-menu ${dropdownOpenCategory ? 'show' : ''}`}>
+                                        {categorizedItems.map((category, index) =>
+                                            category.isSeparator ? (
+                                                <li key={`separator-${index}`} className="separator"></li>
+                                            ) : (
+                                                <li key={category.value} onClick={() => { setSelectedCategory(category.value); setDropdownOpenCategory(false); }}>
+                                                    {category.label}
+                                                </li>
+                                            )
+                                        )}
+                                    </ul>
+                                </div>
+                            </div>
+                            <div className="search-bar">
+                                <div className="category-dropdown" onClick={() => setDropdownOpenSearch(!dropdownOpenSearch)}>
+                                    <span className="category-label">{searchCategory === 'all' ? '전체' : searchCategory === 'title' ? '제목' : '내용'}</span>
+                                    <FontAwesomeIcon icon={faChevronDown} className="ico-common-menu-hide-big-default" />
+                                    <ul className={`dropdown-menu ${dropdownOpenSearch ? 'show' : ''}`}>
+                                        {searchCategories.map((category, index) =>
+                                            category.isSeparator ? (
+                                                <li key={`separator-${index}`} className="separator"></li>
+                                            ) : (
+                                                <li key={category.value} onClick={() => { setSearchCategory(category.value); setDropdownOpenSearch(false); }}>
+                                                    {category.label}
+                                                </li>
+                                            )
+                                        )}
+                                    </ul>
+                                </div>
+                                <div className="input-container">
+                                    <input
+                                        type="text"
+                                        value={searchTerm}
+                                        onChange={e => setSearchTerm(e.target.value)}
+                                        placeholder="Search"
+                                        onKeyDown={handleKeyDown}
+                                    />
+                                    <a href="#" onClick={(e) => {
+                                        e.preventDefault();
+                                        searchArticles();
+                                    }}>
+                                        <img className="search-icon" src="https://img.icons8.com/?size=100&id=132&format=png&color=000000" alt="Search" />
+                                    </a>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div className="search-bar">
-                        <div className="category-dropdown" onClick={() => setDropdownOpenSearch(!dropdownOpenSearch)}>
-                            <span className="category-label">{searchCategory === 'all' ? '전체' : searchCategory === 'title' ? '제목' : '내용'}</span>
-                            <FontAwesomeIcon icon={faChevronDown} className="ico-common-menu-hide-big-default" />
-                            <ul className={`dropdown-menu ${dropdownOpenSearch ? 'show' : ''}`}>
-                                {searchCategories.map((category, index) =>
-                                    category.isSeparator ? (
-                                        <li key={`separator-${index}`} className="separator"></li>
-                                    ) : (
-                                        <li key={category.value} onClick={() => { setSearchCategory(category.value); setDropdownOpenSearch(false); }}>
-                                            {category.label}
-                                        </li>
-                                    )
-                                )}
-                            </ul>
+                
+                    <div className="title_vector-container">
+                        <div className="title">
+                            <p className='title-blank'></p>
+                            <p className='title-category'>카테고리</p>
+                            <p className='title-name'>제목</p>
+                            <p className= 'title-day'>작성일</p>
+                            <p className='title-view'>조회</p>
+                            <p className='title-like'>좋아요</p>
                         </div>
-                        <div className="input-container">
-                            <input
-                                type="text"
-                                value={searchTerm}
-                                onChange={e => setSearchTerm(e.target.value)}
-                                placeholder=' search'
-                                onKeyDown={handleKeyDown}
-                            />
-                            <a href="#" onClick={(e) => {
-                                e.preventDefault();
-                                searchArticles();
-                            }}>
-                                <img className="search-icon" src="https://img.icons8.com/?size=100&id=132&format=png&color=000000" alt="Search" />
-                            </a>
+                        <div className="main-top">
+                            <div className="separator"></div>
+                        </div>
+                        <div className='main-top2'>
+                            <div className="separator"></div>
                         </div>
                     </div>
-                </div>
-                <div className="title_vector-container">
-                    <div className="title">
-                        <p className='title-blank'></p>
-                        <p className='title-category'>카테고리</p>
-                        <p className='title-name'>제목</p>
-                        <p>작성일</p>
-                        <p>조회</p>
-                        <p>좋아요</p>
-                    </div>
-                    <div className="main-top">
-                        <div className="separator"></div>
-                    </div>
-                    <div className='main-top2'>
-                        <div className="separator"></div>
-                    </div>
-                </div>
-                <div className="posts-content">
-                    <div className="Notification-container">
-                        {notificationArticles.length > 0 ? (
-                            notificationArticles
-                                .sort((a, b) => new Date(b.articleDate) - new Date(a.articleDate))
-                                .slice(0, 3)
-                                .map((article) => {
-                                    const categoryLabel = categoryLabels[article.category];
+                    <div className="posts-content">
+                        <div className="Notification-container">
+                            {notificationArticles.length > 0 ? (
+                                notificationArticles
+                                    .sort((a, b) => new Date(b.articleDate) - new Date(a.articleDate))
+                                    .slice(0, 3)
+                                    .map((article) => {
+                                        const categoryLabel = categoryLabels[article.category];
+                                        return (
+                                            <Card
+                                                key={article.articleNum}
+                                                title={article.articleTitle}
+                                                createdAt={article.articleDate}
+                                                views={article.viewCount}
+                                                likes={article.likeCount}
+                                                order="공지"
+                                                category={`[${categoryLabel}]`}
+                                                onClick={() => handleCardClick(article)}
+                                                email={article.userEmail}
+                                            />
+                                        );
+                                    })
+                            ) : ''}
+                        </div>
+                        <div className="non-Notification-container">
+                            {currentArticles.filter(article => article.category !== 'NOTIFICATION').length > 0 ? (
+                                currentArticles.filter(article => article.category !== 'NOTIFICATION').map((article, index) => {
+                                    let categoryLabel = categoryLabels[article.category];
+                                    if (article.category === "REQUEST" && article.authCheck === 1) {
+                                        categoryLabel = "해결";
+                                    }
                                     return (
                                         <Card
                                             key={article.articleNum}
@@ -324,49 +351,29 @@ const ArticleMain = () => {
                                             createdAt={article.articleDate}
                                             views={article.viewCount}
                                             likes={article.likeCount}
-                                            order="공지"
+                                            order={article.articleNum}
                                             category={`[${categoryLabel}]`}
                                             onClick={() => handleCardClick(article)}
                                             email={article.userEmail}
                                         />
                                     );
                                 })
-                        ) : ''}
-                    </div>
-                    <div className="non-Notification-container">
-                        {currentArticles.filter(article => article.category !== 'NOTIFICATION').length > 0 ? (
-                            currentArticles.filter(article => article.category !== 'NOTIFICATION').map((article, index) => {
-                                let categoryLabel = categoryLabels[article.category];
-                                if (article.category === "REQUEST" && article.authCheck === 1) {
-                                    categoryLabel = "해결";
-                                }
-                                return (
-                                    <Card
-                                        key={article.articleNum}
-                                        title={article.articleTitle}
-                                        createdAt={article.articleDate}
-                                        views={article.viewCount}
-                                        likes={article.likeCount}
-                                        order={article.articleNum}
-                                        category={`[${categoryLabel}]`}
-                                        onClick={() => handleCardClick(article)}
-                                        email={article.userEmail}
-                                    />
-                                );
-                            })
-                        ) : (
-                            '')}
-                    </div>
-                    <div className="writing-container">
-                        <div className="btn1" onClick={handleCreateArticleClick} style={{ cursor: 'pointer' }}>
-                            <img src="/pencil.png" className="pencil" />
-                            <p>글쓰기</p>
+                            ) : (
+                                '')}
+                        </div>
+                        <div className="writing-container">
+                            <div className="btn1" onClick={handleCreateArticleClick} style={{ cursor: 'pointer' }}>
+                                <img src="/pencil.png" className="pencil" />
+                                <p>글쓰기</p>
+                            </div>
+                        </div>
+                        <div className="pagination-container">
+                            <Pagination paginate={paginate} currentPage={currentPage} totalPages={totalPages} className="pagination-bar" />
                         </div>
                     </div>
-                    <div className="pagination-container">
-                        <Pagination paginate={paginate} currentPage={currentPage} totalPages={totalPages} className="pagination-bar" />
-                    </div>
+
                 </div>
+                
             </div>
         </div>
     );

@@ -86,8 +86,9 @@
   margin-bottom: 0;
 }
 .ql-container {
-  height: 90%;
+  height: auto;
 }
+
 /*날짜*/
 .ArticleDate {
   font-weight: 900;
@@ -400,3 +401,20 @@ html, body {
   
   }
 }
+.quill{
+  height: auto; /* 글의 길이에 따라 자동으로 높이 조절 */
+  margin-bottom: 0.5%; /* 마지막 문장에서 아래 여백을 10px로 설정 */
+  position: relative;
+  
+}
+.ql-container {
+  max-height: none;  /* 글 길이에 따른 최대 높이 제한 해제 */
+  overflow-y: visible; /* 내용에 따라 자동으로 높이 조절 */
+  font-family: 'Noto Sans', sans-serif;
+}
+
+.ql-container.ql-disabled .ql-tooltip{
+  height: auto;
+}
+
+
