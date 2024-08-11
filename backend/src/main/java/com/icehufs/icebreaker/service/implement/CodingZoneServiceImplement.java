@@ -298,6 +298,22 @@ public class CodingZoneServiceImplement implements CodingZoneService {
     }
 
     @Override
+    public ResponseEntity<? super GetListOfCodingZoneClassResponseDto> getClassList2(Integer grade) {
+        List<CodingZoneClass> classEntities = new ArrayList<>();
+        try{
+            if(grade != 1 && grade != 2) return GetListOfCodingZoneClassResponseDto.validationFailed();
+
+            classEntities = codingZoneClassRepository.findByGrade(grade);
+            if(classEntities.isEmpty()) return  GetListOfCodingZoneClassResponseDto.noExistArticle();
+
+        }catch(Exception exception) {
+            exception.printStackTrace();
+            return ResponseDto.databaseError();
+        }
+        return GetListOfCodingZoneClassResponseDto.success(classEntities);
+    }
+
+    @Override
     public ResponseEntity<? super GetCountOfAttendResponseDto> getAttend(Integer grade, String email) {
         Integer NumOfAttend = 0;
         List<CodingZoneRegisterEntity> classEntities = new ArrayList<>();
