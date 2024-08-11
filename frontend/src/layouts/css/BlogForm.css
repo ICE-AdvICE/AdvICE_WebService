@@ -89,21 +89,21 @@
 
 
 .form-container{
-    width: 80%;
+    width: 80%; 
     position: relative;
     left:10%;
-    height: 40vw;
+    height: auto;
     
 }
 .quill{
-    height: 25vw;
-    margin-bottom: 0;
+ 
+    margin-bottom: 0 !important;
     position: relative;
     
 }
 .ql-container {
     max-height: 25vw;   
-    overflow-y: hidden;   
+    overflow-y: auto;   
     font-family: 'Noto Sans', sans-serif;
 }
 
@@ -112,3 +112,10 @@
 }
 
   
+.ql-container {
+    height: 25vw;
+}
+.posts-overlay-container .d-flex p, 
+.posts-overlay-container .d-flex button {
+    flex-basis: 0;
+}

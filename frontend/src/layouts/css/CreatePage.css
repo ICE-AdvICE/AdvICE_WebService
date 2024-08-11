@@ -1,11 +1,8 @@
 .button-container{
-    width: 100%;
-    height: 7%;
-    position: relative;
     display: flex;
     justify-content: flex-end;
-    margin-top: 2vw;
-    margin-bottom: 1vw;
+    margin-top: 1%;
+    margin-bottom: 2%;
     
 }
 .mb-3{
@@ -53,3 +50,28 @@
 }
 
  
+.CreatePage .form-container{
+    width: 80%;
+    position: relative;
+    left:10%;
+    height: auto;
+    
+}
+.BlogForm .quill{
+    height: 30vw;
+    margin-bottom: 0;
+    position: relative;
+    
+}
+.CreatePage.ql-container {
+    max-height: 30vw;   
+    overflow-y: auto;   
+    font-family: 'Noto Sans', sans-serif;
+}
+
+.CreatePage.ql-container.ql-disabled .ql-tooltip{
+    height: 30vw
+}
+body.BlogForm .ql-container {
+    height: 25vw;
+}

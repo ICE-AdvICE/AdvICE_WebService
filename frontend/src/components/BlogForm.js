@@ -127,6 +127,10 @@ const BlogForm = ({ editing }) => {
             }
         }
     };
+    const qlContainerElement = document.querySelector('.ql-container');
+    if (qlContainerElement) {
+      qlContainerElement.style.setProperty('height', '25vw', 'important');
+    }
     useEffect(() => {
         const verifyAccess = async () => {
             const banStatus = await checkUserBanStatus(token);
@@ -196,5 +200,7 @@ const BlogForm = ({ editing }) => {
 BlogForm.propTypes = {
     editing: PropTypes.bool,
 };
+ 
+
 
 export default BlogForm;

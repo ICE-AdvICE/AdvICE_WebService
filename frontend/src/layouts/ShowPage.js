@@ -94,6 +94,15 @@ const ShowPage = () => {
         adminhandleDelete(articleNum, token, navigate);
     };
 
+    useEffect(() => {
+        // ShowPage에서는 .quill의 height를 auto로 설정
+        const quillElement = document.querySelector('.ql-container');
+        if (quillElement) {
+            quillElement.style.setProperty('height', 'auto', 'important');
+        }
+
+      
+    }, []);
     //익명게시판권한 여부
     useEffect(() => {
         const checkAdmin = async () => {
@@ -332,5 +341,6 @@ const ShowPage = () => {
             </div>
     );
 }
+
 
 export default ShowPage;
