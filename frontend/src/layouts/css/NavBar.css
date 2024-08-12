@@ -5,7 +5,7 @@
     height: 50px;
     min-width: 350px;
     margin: 0 auto;
-    padding: 10px;
+    padding-left: 20px;
     position: relative;
     display: flex;
     justify-content: space-between;
