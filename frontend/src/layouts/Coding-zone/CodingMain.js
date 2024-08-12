@@ -70,6 +70,31 @@ const CodingMain = () => {
       return timeToNumber(a.classTime) - timeToNumber(b.classTime);
     });
   };
+  useEffect(() => {
+    const adjustContainerHeight = () => {
+      const windowHeight = window.innerHeight;
+      const availableHeight = windowHeight - 136
+
+      const codingzoneContainer = document.querySelector('.codingzone-container');
+      if (codingzoneContainer) {
+        const codingzoneHeight = codingzoneContainer.clientHeight;
+
+        if (availableHeight > codingzoneHeight) {
+          codingzoneContainer.style.height = `${availableHeight}px`;
+        } else {
+          codingzoneContainer.style.height = 'auto'; // 기본 높이 설정
+        }
+      }
+    };
+
+    adjustContainerHeight();
+    window.addEventListener('resize', adjustContainerHeight);
+
+    return () => {
+      window.removeEventListener('resize', adjustContainerHeight);
+    };
+  }, []); 
+
 
   const filterByDay = (day) => {
     const filteredData = originalClassList.filter(classItem => {

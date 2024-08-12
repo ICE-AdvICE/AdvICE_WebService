@@ -366,13 +366,12 @@ export const fetchComments = (articleNum, token, setComments) => {
             const {code} = err.response.data;
             switch (code) {
                 case "NA":
-                    console.log("이 게시글은 존재하지 않습니다.");
+                    alert("이 게시글은 존재하지 않습니다.");
                     break;
                 case "DBE":
                     alert("데이터베이스 오류가 발생했습니다.");
                     break;
                 default:
-                    alert("예상치 못한 오류가 발생했습니다.");
                     break;
             }
         } 

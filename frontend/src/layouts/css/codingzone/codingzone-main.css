@@ -60,7 +60,7 @@
   flex-direction: column;
   position: relative;
   display: flex;
-  height: 100%;
+ 
  
 }
 .cz-category-top{
@@ -101,7 +101,6 @@
   background-color: #002D56;
 }
 .select-container button.selected {
-   
   color:purple;
 }
 .codingzone-date{

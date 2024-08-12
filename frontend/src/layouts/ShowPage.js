@@ -62,10 +62,40 @@ const ShowPage = () => {
         }
     };
 
+    useEffect(() => {
+        const adjustContainerHeight = () => {
+          const windowHeight = window.innerHeight;
+          const availableHeight = windowHeight - 136
+          const imgContainer = document.querySelector('.img-container');
+          const blogcontainer = document.querySelector('.blog-container');
+          const header10image = document.querySelector('.header10-image');
+          if (blogcontainer) {
+            const blogcontainerHeight = blogcontainer.clientHeight;
+            const imgContainerHeight = imgContainer.clientHeight;
+    
+            if (availableHeight > blogcontainerHeight) {
+                blogcontainer.style.height = `${availableHeight}px`;
+                const header10imageHeight = availableHeight - imgContainerHeight;
+                header10image.style.height = `${header10imageHeight}px`;
+            } else {
+                blogcontainer.style.height = 'auto'; // 기본 높이 설정
+            }
+          }
+        };
+    
+        adjustContainerHeight();
+        window.addEventListener('resize', adjustContainerHeight);
+    
+        return () => {
+          window.removeEventListener('resize', adjustContainerHeight);
+        };
+      }, []); 
+
     //16.(Admin) 해결이 필요한 게시글을 해결된 게시글로 변경을 위한 API
     const handleResolve = async () => {
     await handleResolveArticle(articleNum, token, navigate, setCanEdit);
 };
+
 
     const handleComposition = (event) => {
         if (event.type === 'compositionend') {
@@ -112,7 +142,7 @@ const ShowPage = () => {
                     setIsAdmin(true);
                 }
             } catch (error) {
-                console.error('ERROR', error);
+                setIsAdmin(false);
             }
         };
         checkAdmin();
@@ -230,6 +260,7 @@ const ShowPage = () => {
             <div className = "ArticleContentbox-container">
                 <div className="ArticleContentbox">
                     <img src="/main2-image.png"  className="header10-image"/>
+                    
                     <div className = "body-container">
                     <img src="/main2-icon.png"  className="icon-image"/>
                     <div className='ArticleCategory'>

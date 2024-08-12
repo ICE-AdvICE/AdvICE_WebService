@@ -51,6 +51,45 @@ const ArticleMain = () => {
         const indexOfFirstArticle = indexOfLastArticle - articlesPerPage;
         return filteredArticles.slice(indexOfFirstArticle, indexOfLastArticle);
     }, [currentPage, filteredArticles, articlesPerPage]);
+    const adjustContainerHeight = () => {
+        const windowHeight = window.innerHeight;
+        const navbarHeight = 66;
+        const footerHeight = 70;
+        const availableHeight = windowHeight - navbarHeight - footerHeight;
+
+        const imgContainer = document.querySelector('.img-container');
+        const postsOverlayContainer = document.querySelector('.posts-overlay-container');
+        const blogContainer = document.querySelector('.blog-container');
+
+        if (imgContainer && postsOverlayContainer && blogContainer) {
+            const imgContainerHeight = imgContainer.clientHeight;
+            const postsOverlayHeight = postsOverlayContainer.clientHeight;
+            const totalContentHeight = imgContainerHeight + postsOverlayHeight;
+
+            // img-container와 posts-overlay-container의 높이의 합이 availableHeight보다 작을 때
+            if (totalContentHeight < availableHeight) {
+                blogContainer.style.height = `${availableHeight}px`;
+
+                // blogContainer 높이가 설정된 후, postsOverlayContainer 높이를 조정
+                const newPostsOverlayHeight = availableHeight - imgContainerHeight;
+                postsOverlayContainer.style.height = `${newPostsOverlayHeight}px`;
+            } else {
+                blogContainer.style.height = 'auto';  // 기본 높이로 설정
+                postsOverlayContainer.style.height = 'auto';  // 기본 높이로 설정
+            }
+        }
+    };
+
+    // 컴포넌트가 처음 렌더링될 때와 화면 크기가 변경될 때 높이 조정
+    useEffect(() => {
+        adjustContainerHeight();
+        window.addEventListener('resize', adjustContainerHeight);
+    
+        return () => {
+            window.removeEventListener('resize', adjustContainerHeight);
+        };
+    }, [currentPage, filteredArticles]);
+    
 
     const handleCreateArticleClick = async () => {
         const token = cookies.accessToken;
