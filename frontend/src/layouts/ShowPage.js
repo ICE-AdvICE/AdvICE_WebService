@@ -62,35 +62,53 @@ const ShowPage = () => {
         }
     };
 
-    useEffect(() => {
-        const adjustContainerHeight = () => {
-          const windowHeight = window.innerHeight;
-          const availableHeight = windowHeight - 136
-          const imgContainer = document.querySelector('.img-container');
-          const blogcontainer = document.querySelector('.blog-container');
-          const header10image = document.querySelector('.header10-image');
-          if (blogcontainer) {
+  
+    const adjustContainerHeight = () => {
+        const windowHeight = window.innerHeight;
+        const navbar = document.querySelector('.navbar');
+        const footer = document.querySelector('.footer');
+        const navbarHeight = navbar.clientHeight;
+        const footerHeight = footer.clientHeight;
+        const availableHeight = windowHeight-navbarHeight-footerHeight;
+
+        const imgContainer = document.querySelector('.img-container');
+        const blogcontainer = document.querySelector('.blog-container');
+        const header10image = document.querySelector('.header10-image');
+        const articleContentBox = document.querySelector('.ArticleContentbox-container');
+        const iconimage = document.querySelector('.icon-image');
+        const bodycontainer = document.querySelector('.body-container');
+    
+        if (blogcontainer && header10image && articleContentBox) {
             const blogcontainerHeight = blogcontainer.clientHeight;
             const imgContainerHeight = imgContainer.clientHeight;
+            const header10imageHeight = header10image.clientHeight;
     
+            // `iconimage`와 `bodycontainer` 높이를 비교하여 `bodycontainer`의 높이 설정
+            const iconimageHeight = iconimage.clientHeight;
+            const bodycontainerHeight = bodycontainer.clientHeight;
+    
+          
             if (availableHeight > blogcontainerHeight) {
                 blogcontainer.style.height = `${availableHeight}px`;
-                const header10imageHeight = availableHeight - imgContainerHeight;
-                header10image.style.height = `${header10imageHeight}px`;
+                const newHeader10ImageHeight = availableHeight - imgContainerHeight;
+                articleContentBox.style.height = `${newHeader10ImageHeight}px`;
             } else {
-                blogcontainer.style.height = 'auto'; // 기본 높이 설정
+                console.log(availableHeight);
+                console.log(blogcontainerHeight);
+                blogcontainer.style.height = `${availableHeight}px`;
             }
-          }
-        };
+        }
+    };
     
+    
+    useEffect(() => {
         adjustContainerHeight();
         window.addEventListener('resize', adjustContainerHeight);
     
         return () => {
-          window.removeEventListener('resize', adjustContainerHeight);
+            window.removeEventListener('resize', adjustContainerHeight);
         };
-      }, []); 
-
+    }, []);
     //16.(Admin) 해결이 필요한 게시글을 해결된 게시글로 변경을 위한 API
     const handleResolve = async () => {
     await handleResolveArticle(articleNum, token, navigate, setCanEdit);
@@ -260,7 +278,6 @@ const ShowPage = () => {
             <div className = "ArticleContentbox-container">
                 <div className="ArticleContentbox">
                     <img src="/main2-image.png"  className="header10-image"/>
-                    
                     <div className = "body-container">
                     <img src="/main2-icon.png"  className="icon-image"/>
                     <div className='ArticleCategory'>

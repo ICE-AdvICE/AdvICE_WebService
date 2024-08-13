@@ -70,23 +70,29 @@ const CodingMain = () => {
       return timeToNumber(a.classTime) - timeToNumber(b.classTime);
     });
   };
-  useEffect(() => {
+ 
     const adjustContainerHeight = () => {
       const windowHeight = window.innerHeight;
-      const availableHeight = windowHeight - 136
-
+      const navbar = document.querySelector('.navbar');
+      const footer = document.querySelector('.footer');
       const codingzoneContainer = document.querySelector('.codingzone-container');
-      if (codingzoneContainer) {
-        const codingzoneHeight = codingzoneContainer.clientHeight;
-
-        if (availableHeight > codingzoneHeight) {
-          codingzoneContainer.style.height = `${availableHeight}px`;
-        } else {
-          codingzoneContainer.style.height = 'auto'; // 기본 높이 설정
-        }
+      const codingzoneHeight =  codingzoneContainer.clientHeight;
+      const navbarHeight = navbar.clientHeight;
+      const footerHeight = footer.clientHeight;
+      const availableHeight = windowHeight-navbarHeight-footerHeight;
+      console.log(navbarHeight);
+      console.log(footerHeight);
+      console.log(availableHeight);
+     
+      if (availableHeight > codingzoneHeight) {
+        codingzoneContainer.style.height = `${availableHeight}px`;
+      }  
+      else {
+        codingzoneContainer.style.height = 'auto';
       }
+      
     };
-
+  useEffect(() => {
     adjustContainerHeight();
     window.addEventListener('resize', adjustContainerHeight);
 
