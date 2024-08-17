@@ -345,10 +345,8 @@ export const handleCommentSubmit = async (event,commentInput, setComments, setCo
     }
 };
 // 8.게시글 댓글 리스트 불러오기 API
-export const fetchComments = (articleNum, token, setComments) => {
-    axios.get(`${API_DOMAIN}/article/${articleNum}/comment-list`, {
-        headers: { Authorization: `Bearer ${token}` }
-    })
+export const fetchComments = (articleNum, setComments) => {
+    axios.get(`${API_DOMAIN}/article/${articleNum}/comment-list`)
     .then(response => {
         const comments = response.data.commentList;
         const formattedComments = comments.map(comment => {
@@ -425,7 +423,7 @@ export const handleCommentDelete = async (articleNum, commentNumber, token) => {
                 headers: { Authorization: `Bearer ${token}` }
             });
             if (response.data.code === "SU") {
-                alert("게시글이 삭제되었습니다.");
+                alert("댓글이 삭제되었습니다.");
                 return true;  
             }
         } catch (error) {

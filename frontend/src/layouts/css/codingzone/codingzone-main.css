@@ -32,10 +32,8 @@
   justify-content: center;
 }
 .codingzonetop2-image{
-  width: auto;
-  max-width: calc(100% - 40px);
+  width: 1000px;
   max-height: 330px;
-  vertical-align: bottom;
   margin-left: 20px;
   margin-right: 20px;
 }
@@ -51,6 +49,7 @@
 }
 .codingzone-container{
   height: auto;
+  flex:1;
   min-width: 360px;
 }
 .codingzone-body-container{
@@ -60,8 +59,6 @@
   flex-direction: column;
   position: relative;
   display: flex;
- 
- 
 }
 .cz-category-top{
   margin-top: 1%;
@@ -158,7 +155,6 @@
 }
  
 .codingzone-list{
- 
   margin-top: 1%;
   position: relative;
   max-width: 1000px;
@@ -166,17 +162,16 @@
 }
  
 .czcard {
-  margin-bottom: 2%;
+  margin-bottom: 3%;
   background-color: #F6F6F6;
- 
-  height: 5vw;
+  justify-content: space-between;
+  height: 80px;
   align-items: center;
   display: flex;
  
 }
  
 .czcard p, .codingzone-title p{
- 
   margin: 0;
   font-size: 14px;
 }
@@ -188,9 +183,7 @@
 .weekDate {
   text-align: center;
   width: 50px;  
-  
 }
-
 .weeksubject{
   text-align: center;
   width: 300px;  
@@ -239,6 +232,7 @@
   font-size: 1.2vw;
   border-radius: 0.5vw;
   width: 100px; 
+  
 }
 .card-hidden-space {
   width: 100px;
@@ -255,7 +249,11 @@
   .cz-category-date button{
     width: 10vw;
   }
+  .codingzonetop2-image{
+    max-width: calc(100% - 40px);
   }
+ 
+}
 
 @media (max-width: 860px) {
   .cz-category-top {
@@ -269,7 +267,7 @@
   }
 }
 
-@media (max-width: 455px) {
+@media (max-width: 465px) {
   .czcard p, .codingzone-title p,.codingzone-date button{
     font-size: 12px;
   }

@@ -1,72 +1,54 @@
 .ArticleContentbox-container {
   position: relative;
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  height: auto;
-}
-.body-container{
-  max-width: 1000px;
-  margin: 0 auto;
-  padding: 10px;
-}
-.ArticleContentbox {
-  flex: 1;   
-  position: relative;   
-  width: 100%;
-
+  flex:1;
 }
 .header10-image{
-  width:100%;
   height: 100%;
   position: absolute;
-  background-size: cover;
- 
+  width: 100%;
 }  
-.Comment{
-  height: 5.5vw;
+.body-container{
+  max-width: 1000px;
+  min-height: 50vw;
+  margin: 0 auto;
+  padding: 10px;
 }
 .icon-image{
   position: absolute;
   width: 55vw;
   height: 50vw;
   top:5%;
-  z-index: 11;
   left: 25%;
 }
-.Admin-de_Ca-bottom{
-  width: 12%;
-  align-items: center;
+.Comment{
+  border-bottom: 1px solid #333;
+  height: auto;
+}
+.CommentBox-bottom-container{
   height: 100%;
-  text-align: center;
   display: flex;
-
+  flex-direction: column;
+}
+.Admin-de_Ca-bottom{
+  display: flex;
+  margin-left: 3px;
 }
 .Admin-de_Ca-bottom button{
-  margin-left: 10%;
-  width: 50%;
-  height: 100%;
   border: none !important;
-  font-size: 0.8vw;
+  font-size: 10px;
   background: transparent;
   cursor: pointer;
-  margin-bottom: 1%;
-  font-weight: 600;
    
 }
-/*카테고리 일반 or 요청*/
 .ArticleCategory {
   background-color: black;  
   color: white;                
   border-radius: 5px;       
   position: relative;
   margin-top: 4vw;
-  
   width: 6.7vw;
   display: flex;            
-  align-items: center;      
   justify-content: center;  
-  z-index: 11;           
 }
 .ArticleCategory p {
   font-family: 'Inter', sans-serif;  
@@ -75,14 +57,9 @@
   margin-top: 0.3vw;    
   margin-bottom: 0;  
 }
-
-/*제목*/
 .ArticleTitle{
-  z-index:11;
   margin-top: 1vw;
   position: relative;
-  display: flex;
- 
   font-family: 'Inter', sans-serif;  
   font-size: 2.5vw;  
   font-weight: 700;
@@ -90,43 +67,33 @@
 .ArticleTitle p{
   margin-bottom: 0;
 }
-.ql-container {
-  height: auto;
-}
-
-/*날짜*/
 .ArticleDate {
   font-weight: 900;
   display: flex;   
   position: relative;      
-  justify-content: space-between;  
-  align-items: center;   
+  justify-content: space-between;   
   font-family: 'Inter', sans-serif; 
   font-size: 1.3vw; 
   color: #00000093;
 }
+.ql-container {
+  height: auto;
+}
+
 
 .Article-Main{
   position: relative;
-  z-index: 1111;
-  height: auto;
- 
   margin-bottom: 30px;
- 
   flex-direction: column;
   display: flex;
 }
 
 /*선*/
-.vector5 {
-  width: 100%;
-  height: 0.2vw;
-  border: 1px solid #000000;  
-}
 
 .Article-middle{
   display: flex;  
   width: 100%;
+  margin-top: 3px;
   height: auto;
   position: relative;
   justify-content: space-between; 
@@ -148,11 +115,9 @@
   cursor: pointer;
 }
 .comment-input-area{
-  margin-top: 1.5vw;
-  height: 40%;
-  font-size: 1vw;
-  padding-left: 1.5vw;
-  padding-top: 3vw;
+  padding: 30px 10px 10px 20px;
+  font-size: 12px;
+
 }
 
 .Commentbox-name{
@@ -173,24 +138,19 @@
   padding: 0 15px;  
 }
 
-
 .Comment-Content{
   margin-left: 1.5%;
-  font-size: 1vw;
-  height: auto;
-  white-space: pre-line;
+  font-size: 13px;
   padding: 0.5vw;
   margin-bottom: 0;
 }
 .Comment-Header{
-  margin-bottom: 0;
   margin-top: 1vw;
   margin-left: 5px;
+  align-items: center;
+  display: flex;
 }
-
-
-
-
+ 
 /*하트위치*/
 .Comment-Option{
   position: relative;
@@ -204,17 +164,12 @@
   margin-left:5px;
 }
 .Comment-Option p{
-  margin-left: 12px;
-  margin-top: 8px;
+  margin: 0;
 }
 
 /*댓글*/
 .CommentBox-container{
-  z-index: 11;
-  position: relative;
-  width: 100%;
-  height: auto;
- 
+  margin-top: 3px;
 }
 .Edit-Delete-Options span{
   height: 99%;
@@ -225,101 +180,66 @@
 
 .CommentBox-bottom{
   position: relative;
-  width: 100%;
-  height: 25vw;
+  margin-top: 10px;
   border: 0.05 solid var(--skinCommentWriterBorder);
   box-sizing: border-box;
   background: var(--skinCommentWriterBg);
 }
-
-
-
-
-.Comment-Divider {
-  border-top: 0.1vw solid black;
-  margin: 0.5vw 0;
-  width: 100%;
-}
-
-
-
 .Comment-Author {
   font-weight: bold;
   margin-right: 5px;
   color: rgb(21, 21, 151);
-  font-size: 1.1vw;
+  font-size: 14px;
 }
 
 .Comment-Date {
   color: rgba(90, 89, 89, 0.884);
-  font-size: 1vw;
+  font-size: 13px;
   margin-left: 1%;
 }
-.Comment-Header {
-  display: flex;
-  width: 100%;
-  align-items: center;
-  height: 1.5vw;
-  position: relative;
-}
+
 .Comment-Header p{
   margin-bottom: 0;
 }
 /*하트 css 부분 */
 .heart {
-  width: 1vw;  
-  height: 1vw;  
-  background-color: #d5d4d4;  
-  position: relative;
-  transform: rotate(-45deg);  
-  cursor: pointer;
+  cursor: pointer;  
+  display: inline-flex;  
+  align-items: center;  
+  margin-right: 5px; 
 }
-.heart:before, .heart:after {
-  content: "";
-  position: absolute;
-  width: 1vw;  
-  height: 1vw;  
-  border-radius: 50%;  
-  background-color: #d5d4d4;  
+
+.heart svg {
+  color: #ff6b6b; /* 하트 아이콘의 색상 설정 (기본 빨간색) */
+  font-size: 20px; /* 하트 아이콘의 크기 설정 */
+  transition: color 0.3s ease; /* 색상이 부드럽게 변경되도록 설정 */
 }
-.heart:before {
-  top: 0;
-  left: 7.5px; 
+
+.heart:hover svg {
+  color: #ff4a4a; /* 마우스 오버 시 하트 아이콘의 색상 변경 */
 }
-.heart:after {
-  top: -7.5px;  
-  left: 0;
-}
-.heart.love {
-  background-color: #F80808; 
-}
-.heart.love:before,
-.heart.love:after {
-  background-color: #F80808;  
-}
+
+
 .quill p{
   font-family: 'Inter', sans-serif;
   font-weight: 400;
-  font-size: 1.2vw;
-  line-height: 2.25vw;
-
+  font-size: 20px;
 }
 .submit-button {
   position: absolute;
-  font-size: 1vw;
-  margin-top: 9vw; 
-  right: 10px;  
+  font-size: 12px;
+  bottom: 0;
+  align-self: flex-end;
   padding: 5px 10px;
   background-color:transparent;
   color: rgba(0, 0, 0, 0.559);
   border: none;
 }
 .CommentBox-bottom p{
-  margin-top: 3%;
-  margin-left: 1%;
-  font-size: 1vw;
+  font-size: 13px;
   font-weight: bold;
   position: absolute;
+  padding: 10px;
   
 }
 .Comment-Edit p{
@@ -397,22 +317,20 @@ html, body {
   padding: 3%;
  
 }
-@media (max-width: 600px) {
-  .quill p,.Comment-Content{
-    font-size: 1.4vw;
 
-  
-  }
-}
 .quill{
   height: auto; /* 글의 길이에 따라 자동으로 높이 조절 */
   margin-bottom: 0.5%; /* 마지막 문장에서 아래 여백을 10px로 설정 */
   position: relative;
   
 }
+.quill-container{
+  border-top: 1px solid #333;
+  border-bottom: 1px solid #333;
+} 
 .ql-container {
-  max-height: none;  /* 글 길이에 따른 최대 높이 제한 해제 */
-  overflow-y: visible; /* 내용에 따라 자동으로 높이 조절 */
+  max-height: 500px;   
+  overflow-y: auto;  
   font-family: 'Noto Sans', sans-serif;
 }
 
@@ -420,4 +338,10 @@ html, body {
   height: auto;
 }
 
+@media (max-width: 1000px) {
+  .quill p{
+    font-size: 13px;
 
+  
+  }
+}

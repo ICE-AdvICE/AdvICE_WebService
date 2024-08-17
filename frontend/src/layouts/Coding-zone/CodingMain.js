@@ -3,7 +3,7 @@ import '../css/codingzone/codingzone-main.css';
 import { useCookies } from "react-cookie";
 import CzCard from '../../components/czCard';  
 import { getAvailableClassesForNotLogin, getAttendanceCount, deleteCodingZoneClass, reserveCodingZoneClass, getcodingzoneListRequest } from '../../apis/Codingzone-api.js'; 
-import { useNavigate,useLocation } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const ClassList = ({ classList, handleCardClick, handleToggleReservation }) => {
   return (
@@ -33,13 +33,14 @@ const CodingMain = () => {
   const [token, setToken] = useState('');  
   const [grade, setGrade] = useState(1);  
   const [weekDay, setWeekDay] = useState('');  
-  const [cookies] = useCookies('accessToken');
+  const [cookies] = useCookies(['accessToken']);
   const [originalClassList, setOriginalClassList] = useState([]); 
   const [attendanceCount, setAttendanceCount] = useState(0); 
   const navigate = useNavigate();
   const [selectedZone, setSelectedZone] = useState(1);
   const [selectedButton, setSelectedButton] = useState(''); 
   const location = useLocation();  
+  
   useEffect(() => {
     if (window.location.pathname.includes("coding-zone")) {
       const dFlexPElements = document.querySelectorAll('.d-flex p');
@@ -54,6 +55,7 @@ const CodingMain = () => {
       setSelectedButton('codingzone');
     } 
   }, [location]);
+
   const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
 
   const timeToNumber = (timeStr) => {
@@ -70,77 +72,55 @@ const CodingMain = () => {
       return timeToNumber(a.classTime) - timeToNumber(b.classTime);
     });
   };
- 
-    const adjustContainerHeight = () => {
-      const windowHeight = window.innerHeight;
-      const navbar = document.querySelector('.navbar');
-      const footer = document.querySelector('.footer');
-      const codingzoneContainer = document.querySelector('.codingzone-container');
-      const codingzoneHeight =  codingzoneContainer.clientHeight;
-      const navbarHeight = navbar.clientHeight;
-      const footerHeight = footer.clientHeight;
-      const availableHeight = windowHeight-navbarHeight-footerHeight;
-      console.log(navbarHeight);
-      console.log(footerHeight);
-      console.log(availableHeight);
-     
-      if (availableHeight > codingzoneHeight) {
-        codingzoneContainer.style.height = `${availableHeight}px`;
-      }  
-      else {
-        codingzoneContainer.style.height = 'auto';
-      }
-      
-    };
-  useEffect(() => {
-    adjustContainerHeight();
-    window.addEventListener('resize', adjustContainerHeight);
-
-    return () => {
-      window.removeEventListener('resize', adjustContainerHeight);
-    };
-  }, []); 
-
 
   const filterByDay = (day) => {
     const filteredData = originalClassList.filter(classItem => {
-        return classItem.weekDay.toLowerCase() === day.toLowerCase();
+      return classItem.weekDay.toLowerCase() === day.toLowerCase();
     });
     setClassList(filteredData);
     return filteredData;   
-};
-
-useEffect(() => {
-  const fetchData = async () => {
-    try {
-      let classes = [];
-      if (cookies.accessToken) {
-        classes = await getcodingzoneListRequest(cookies.accessToken, grade, weekDay);
-      } else {
-        const response = await getAvailableClassesForNotLogin(grade);
-        if (response && response.length > 0) {
-          classes = response;
-        }
-      }
-      if (classes && classes.length > 0) {
-        const updatedClasses = classes.map(classItem => ({
-          ...classItem,
-          isReserved: false  
-        }));
-        const sortedClasses = sortClassList(updatedClasses);
-        setOriginalClassList(sortedClasses);
-        setClassList(sortedClasses);
-      } else {
-        setOriginalClassList([]);
-        setClassList([]);
-      }
-    } catch (error) {
-      setOriginalClassList([]);
-      setClassList([]);
-    }
   };
-  fetchData();
-}, [cookies.accessToken, grade, weekDay]);  
+
+  useEffect(() => {
+    const fetchData = async () => {
+        try {
+            let classes = [];
+            if (cookies.accessToken) {
+                // 로그인 상태에서 API 호출
+                classes = await getcodingzoneListRequest(cookies.accessToken, grade, weekDay);
+
+                // 로그인된 경우 예약 상태를 false로 기본 설정
+                classes = classes.map(classItem => ({
+                    ...classItem,
+                    isReserved: classItem.isReserved !== undefined ? classItem.isReserved : false 
+                }));
+
+            } else {
+                // 비로그인 상태에서 API 호출
+                const response = await getAvailableClassesForNotLogin(grade);
+                if (response && response.length > 0) {
+                    classes = response.map(classItem => ({
+                        ...classItem,
+                        isReserved: undefined  // 비로그인 상태에서 예약 버튼이 보이지 않도록 설정
+                    }));
+                }
+            }
+
+            if (classes && classes.length > 0) {
+                const sortedClasses = sortClassList(classes);
+                setOriginalClassList(sortedClasses);
+                setClassList(sortedClasses);
+            } else {
+                setOriginalClassList([]);
+                setClassList([]);
+            }
+        } catch (error) {
+            setOriginalClassList([]);
+            setClassList([]);
+        }
+    };
+    fetchData();
+}, [cookies.accessToken, grade, weekDay]);
 
   useEffect(() => {
     const fetchAttendance = async () => {
@@ -155,7 +135,7 @@ useEffect(() => {
       }
     };
     fetchAttendance();
-  }, [token, grade]);
+  }, [cookies.accessToken, grade]);
 
   const handleCardClick = (classItem) => {
     console.log('');
@@ -267,7 +247,7 @@ useEffect(() => {
           <span> | </span>
           <button onClick={() => filterByDay('thursday')}>Thu</button>
           <span> | </span>
-          <button onClick={() =>filterByDay('friday')}>Fri</button>
+          <button onClick={() => filterByDay('friday')}>Fri</button>
         </div>
         
         <div className='category-name-container'>
@@ -280,7 +260,9 @@ useEffect(() => {
             <p className='weeksubject'>과목명</p>
             <p className='weekperson'>조교</p>
             <p className='weekcount'>인원</p>
-            <p className='registerbutton'></p>
+            {cookies.accessToken && (
+              <p className='registerbutton'></p>
+            )}
           </div>
           <div className="separator"></div>   
         </div>
