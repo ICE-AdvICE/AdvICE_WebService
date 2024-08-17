@@ -4,7 +4,10 @@ import { useCookies } from "react-cookie";
 import ToastViewer from './ToastViewer.js';  
 import './css/ShowPage.css';
 import {fetchArticle,fetchLikeStatus, handleLike ,handleResolveArticle,giveBanToUser,adminhandleDelete,checkAnonymousBoardAdmin,handleCommentEdit,handleCommentDelete,fetchComments,handleDelete,handleCommentSubmit ,checkArticleOwnership} from '../apis/index.js';
- 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faHeart as solidHeart } from '@fortawesome/free-solid-svg-icons';
+import { faHeart as regularHeart } from '@fortawesome/free-regular-svg-icons';
+
 const ShowPage = () => {
     const [isComposing, setIsComposing] = useState(false);
     const [editingCommentId, setEditingCommentId] = useState(null);
@@ -62,10 +65,13 @@ const ShowPage = () => {
         }
     };
 
+  
+
     //16.(Admin) 해결이 필요한 게시글을 해결된 게시글로 변경을 위한 API
     const handleResolve = async () => {
     await handleResolveArticle(articleNum, token, navigate, setCanEdit);
 };
+
 
     const handleComposition = (event) => {
         if (event.type === 'compositionend') {
@@ -79,7 +85,7 @@ const ShowPage = () => {
         try {
             const success = await handleCommentDelete(articleNum,commentNumber, token);
             if (success) {
-                fetchComments(articleNum,token, setComments);  
+                fetchComments(articleNum, setComments);  
             }
         } catch (err) {
             console.error("에러가 발생했습니다.", err);
@@ -112,7 +118,7 @@ const ShowPage = () => {
                     setIsAdmin(true);
                 }
             } catch (error) {
-                console.error('ERROR', error);
+                setIsAdmin(false);
             }
         };
         checkAdmin();
@@ -204,7 +210,7 @@ const ShowPage = () => {
   
     useEffect(() => {
         if (articleNum) {
-            fetchComments(articleNum, token, setComments);
+            fetchComments(articleNum, setComments);
         }
     }, [articleNum, token]);
     
@@ -253,14 +259,18 @@ const ShowPage = () => {
                         <p>조회수 {article.views}</p>
                     </div>
                     <div className="Article-Main">
-                        <img src="/vector2.png" className="vector5"/>
-                        <ToastViewer html={article.body} />
-                        <img src="/vector2.png" className="vector5"/>
+                        <div className='quill-container'>
+                            <ToastViewer html={article.body} />
+                        </div>
+                        
                         <div className="Article-middle">
-                            <div className="Comment-Option">
-                                <div className={`heart ${liked ? 'love' : ''}`} onClick={toggleLike}></div>
-                                    <p>{likes}</p>  
-                            </div>
+                        <div className="Comment-Option">
+                        <div className="heart" onClick={toggleLike}>
+                            <FontAwesomeIcon icon={liked ? solidHeart : regularHeart} />
+                        </div>
+                            <p>{likes}</p>  
+                        </div>
+
                             {canEdit && (
                                 <div className="Edit-Delete-Options">
                                     <button onClick={handleEditArticle}>수정</button>
@@ -315,25 +325,27 @@ const ShowPage = () => {
                                             <p className="Comment-Content">{comment.content}</p>
                                         </div>
                                     )}
-                                    {index < comments.length - 1 && <hr className="Comment-Divider" />}
                                 </div>
                             ))}
                         </div>
                         {isAdmin && (   
                             <div className="CommentBox-bottom">
-                                <p>운영자</p>
-                                <textarea
-                                    className="comment-input-area"
-                                    value={commentInput}
-                                    onChange={handleCommentChange}
-                                    onCompositionStart={handleComposition}
-                                    onCompositionEnd={handleComposition}
-                                    onKeyDown={handleKeyDown}        
-                                    placeholder="댓글을 남겨보세요"
-                                    rows="3"
-                                    style={{ width: '100%' }}
-                                />
-                                <button className="submit-button" onClick={handleSubmit}>등록</button>
+                                <div className='CommentBox-bottom-container'>
+                                    
+                                    <p class="comment-label">운영자</p>
+                                    <textarea
+                                        className="comment-input-area"
+                                        value={commentInput}
+                                        onChange={handleCommentChange}
+                                        onCompositionStart={handleComposition}
+                                        onCompositionEnd={handleComposition}
+                                        onKeyDown={handleKeyDown}        
+                                        placeholder="댓글을 남겨보세요"
+                                        rows="3"
+                                        style={{ width: '100%' }}
+                                    />
+                                    <button className="submit-button" onClick={handleSubmit}>등록</button>
+                                </div>
                             </div>
                         )}                        
                         </div>          

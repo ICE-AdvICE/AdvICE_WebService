@@ -32,9 +32,10 @@
   justify-content: center;
 }
 .codingzonetop2-image{
-  width: auto;
   width: 1000px;
   max-height: 330px;
+  margin-left: 20px;
+  margin-right: 20px;
 }
 .select-container button:hover{
   color: #164694f4;
@@ -48,7 +49,8 @@
 }
 .codingzone-container{
   height: auto;
-  min-width: 353px;
+  flex:1;
+  min-width: 360px;
 }
 .codingzone-body-container{
   max-width: 1000px;
@@ -57,8 +59,6 @@
   flex-direction: column;
   position: relative;
   display: flex;
-  height: auto;
-  margin-bottom: 30vw;
 }
 .cz-category-top{
   margin-top: 1%;
@@ -96,6 +96,9 @@
 .codingzone-date button.selected {
   color: white;
   background-color: #002D56;
+}
+.select-container button.selected {
+  color:purple;
 }
 .codingzone-date{
   display: flex;
@@ -152,43 +155,35 @@
 }
  
 .codingzone-list{
- 
   margin-top: 1%;
   position: relative;
   max-width: 1000px;
-
+  min-height: 100px;
 }
  
 .czcard {
-  margin-bottom: 2%;
+  margin-bottom: 3%;
   background-color: #F6F6F6;
- 
-  height: 5vw;
+  justify-content: space-between;
+  height: 80px;
   align-items: center;
   display: flex;
  
 }
  
 .czcard p, .codingzone-title p{
- 
   margin: 0;
   font-size: 14px;
 }
 
-.weekDay {
+.weekDay,.weekTime,  .weekcount ,.registerbutton,.card-hidden-space {
   text-align: center;  
   width: 100px;  
 }
 .weekDate {
   text-align: center;
   width: 50px;  
-  
 }
- .weekTime {
-  text-align: center;
-  width: 100px;   
-}
- 
 .weeksubject{
   text-align: center;
   width: 300px;  
@@ -197,16 +192,7 @@
   text-align: center;
   width: 150px; 
  }
- .weekcount {
-  text-align: center;
-  width: 100px; 
-}
-.registerbutton{
-  width: 100px; 
-}
-.card-hidden-space {
-  width: 100px;
-}
+
 .card-weekDay {
   font-weight: 900;
   text-align: center;  
@@ -214,31 +200,25 @@
   width: 100px;  
  
 }
-
  .card-weekDate {
   text-align: center;
   width: 50px;  
-  
+ 
 }
-
  .card-classTime {
   text-align: center;
   width: 100px;  
   
 }
-
  .card-className {
   text-align: center;
   width: 300px;  
- 
-}
 
+}
  .card-assistantName {
   text-align: center;
   width: 150px; 
- 
 }
-
  .card-currentNumber {
   color: #002D56;
   font-weight: 600;
@@ -252,6 +232,7 @@
   font-size: 1.2vw;
   border-radius: 0.5vw;
   width: 100px; 
+  
 }
 .card-hidden-space {
   width: 100px;
@@ -268,7 +249,11 @@
   .cz-category-date button{
     width: 10vw;
   }
+  .codingzonetop2-image{
+    max-width: calc(100% - 40px);
   }
+ 
+}
 
 @media (max-width: 860px) {
   .cz-category-top {
@@ -282,7 +267,7 @@
   }
 }
 
-@media (max-width: 455px) {
+@media (max-width: 465px) {
   .czcard p, .codingzone-title p,.codingzone-date button{
     font-size: 12px;
   }

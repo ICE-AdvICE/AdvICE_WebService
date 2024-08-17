@@ -1,6 +1,8 @@
 .blog-container{
     width: 100%;
-    height: auto;
+    flex:1;
+    display: flex;
+    flex-direction: column;
 }
 .title-container{
     width: 30%;

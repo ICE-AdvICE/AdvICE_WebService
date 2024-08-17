@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import '../css/codingzone/codingzone-main.css';
 import { useCookies } from "react-cookie";
 import CzCard from '../../components/czCard';  
-import { getAttendanceCount, deleteCodingZoneClass, reserveCodingZoneClass, getcodingzoneListRequest } from '../../apis/Codingzone-api.js'; 
-import { useNavigate } from 'react-router-dom';
+import { getAvailableClassesForNotLogin, getAttendanceCount, deleteCodingZoneClass, reserveCodingZoneClass, getcodingzoneListRequest } from '../../apis/Codingzone-api.js'; 
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const ClassList = ({ classList, handleCardClick, handleToggleReservation }) => {
   return (
@@ -33,12 +33,14 @@ const CodingMain = () => {
   const [token, setToken] = useState('');  
   const [grade, setGrade] = useState(1);  
   const [weekDay, setWeekDay] = useState('');  
-  const [cookies] = useCookies('accessToken');
+  const [cookies] = useCookies(['accessToken']);
   const [originalClassList, setOriginalClassList] = useState([]); 
   const [attendanceCount, setAttendanceCount] = useState(0); 
   const navigate = useNavigate();
   const [selectedZone, setSelectedZone] = useState(1);
-
+  const [selectedButton, setSelectedButton] = useState(''); 
+  const location = useLocation();  
+  
   useEffect(() => {
     if (window.location.pathname.includes("coding-zone")) {
       const dFlexPElements = document.querySelectorAll('.d-flex p');
@@ -48,11 +50,17 @@ const CodingMain = () => {
     }
   }, []);
 
+  useEffect(() => {
+    if (location.pathname.includes('coding-zone')) {
+      setSelectedButton('codingzone');
+    } 
+  }, [location]);
+
   const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
 
   const timeToNumber = (timeStr) => {
     const [hours, minutes] = timeStr.split(':').map(Number);
-    return hours * 60 + minutes;  // 시간을 분으로 변환
+    return hours * 60 + minutes;   
   };
 
   const sortClassList = (classList) => {
@@ -67,38 +75,52 @@ const CodingMain = () => {
 
   const filterByDay = (day) => {
     const filteredData = originalClassList.filter(classItem => {
-        return classItem.weekDay.toLowerCase() === day.toLowerCase();
+      return classItem.weekDay.toLowerCase() === day.toLowerCase();
     });
     setClassList(filteredData);
     return filteredData;   
-};
+  };
 
   useEffect(() => {
     const fetchData = async () => {
-      const token = cookies.accessToken;
-      try {
-        const classes = await getcodingzoneListRequest(token, grade, weekDay);
+        try {
+            let classes = [];
+            if (cookies.accessToken) {
+                // 로그인 상태에서 API 호출
+                classes = await getcodingzoneListRequest(cookies.accessToken, grade, weekDay);
 
-        if (classes && classes.length > 0) {
-          const updatedClasses = classes.map(classItem => ({
-            ...classItem,
-            isReserved: false  
-          }));
+                // 로그인된 경우 예약 상태를 false로 기본 설정
+                classes = classes.map(classItem => ({
+                    ...classItem,
+                    isReserved: classItem.isReserved !== undefined ? classItem.isReserved : false 
+                }));
 
-          const sortedClasses = sortClassList(updatedClasses);  
-          setOriginalClassList(sortedClasses); 
-          setClassList(sortedClasses);
-        } else {
-          setOriginalClassList([]);
-          setClassList([]);
+            } else {
+                // 비로그인 상태에서 API 호출
+                const response = await getAvailableClassesForNotLogin(grade);
+                if (response && response.length > 0) {
+                    classes = response.map(classItem => ({
+                        ...classItem,
+                        isReserved: undefined  // 비로그인 상태에서 예약 버튼이 보이지 않도록 설정
+                    }));
+                }
+            }
+
+            if (classes && classes.length > 0) {
+                const sortedClasses = sortClassList(classes);
+                setOriginalClassList(sortedClasses);
+                setClassList(sortedClasses);
+            } else {
+                setOriginalClassList([]);
+                setClassList([]);
+            }
+        } catch (error) {
+            setOriginalClassList([]);
+            setClassList([]);
         }
-      } catch (error) {  
-        setOriginalClassList([]);
-        setClassList([]);
-      }
     };
     fetchData();
-  }, [token, grade, weekDay]);
+}, [cookies.accessToken, grade, weekDay]);
 
   useEffect(() => {
     const fetchAttendance = async () => {
@@ -113,7 +135,7 @@ const CodingMain = () => {
       }
     };
     fetchAttendance();
-  }, [token, grade]);
+  }, [cookies.accessToken, grade]);
 
   const handleCardClick = (classItem) => {
     console.log('');
@@ -141,15 +163,18 @@ const CodingMain = () => {
   };
 
   const handlecodingzone = () => {
-    
+    setSelectedButton('codingzone');   
     navigate(`/coding-zone`);
-    
   };
 
   const handlecodingzoneattendence = () => {
+    setSelectedButton('attendence');   
     navigate(`/coding-zone/Codingzone_Attendence`);
   };
 
+  const handleInquiry = () => {
+    setSelectedButton('inquiry');   
+  };
 
   const updateClassItem = (classNum, isReserved) => {
     const updatedList = classList.map(item =>
@@ -162,11 +187,25 @@ const CodingMain = () => {
     <div className="codingzone-container">
       <div className='select-container'>
         <span> | </span>
-        <button onClick={handlecodingzone}>코딩존 예약</button>
+        <button 
+          onClick={handlecodingzone} 
+          className={selectedButton === 'codingzone' ? 'selected' : ''}
+        >
+          코딩존 예약
+        </button>
         <span> | </span>
-        <button onClick={handlecodingzoneattendence}>출결 관리</button>
+        <button 
+          onClick={handlecodingzoneattendence} 
+          className={selectedButton === 'attendence' ? 'selected' : ''}
+        >
+          출결 관리
+        </button>
         <span> | </span>
-        <button>문의 하기</button>
+        <button 
+          onClick={handleInquiry} 
+          className={selectedButton === 'inquiry' ? 'selected' : ''}
+        >문의 하기
+        </button>
         <span> | </span>
       </div>
       <div className="codingzone-top-container">
@@ -192,9 +231,11 @@ const CodingMain = () => {
               Coding Zone2
             </button>
           </div>
-          <div className='cz-count-container'>
-            출석횟수 : {attendanceCount}/6
-          </div>
+          {cookies.accessToken && (
+            <div className='cz-count-container'>
+              출석횟수 : {attendanceCount}/6
+            </div>
+          )}
         </div>
         
         <div className="codingzone-date">
@@ -206,7 +247,7 @@ const CodingMain = () => {
           <span> | </span>
           <button onClick={() => filterByDay('thursday')}>Thu</button>
           <span> | </span>
-          <button onClick={() =>filterByDay('friday')}>Fri</button>
+          <button onClick={() => filterByDay('friday')}>Fri</button>
         </div>
         
         <div className='category-name-container'>
@@ -219,7 +260,9 @@ const CodingMain = () => {
             <p className='weeksubject'>과목명</p>
             <p className='weekperson'>조교</p>
             <p className='weekcount'>인원</p>
-            <p className='registerbutton'></p>
+            {cookies.accessToken && (
+              <p className='registerbutton'></p>
+            )}
           </div>
           <div className="separator"></div>   
         </div>

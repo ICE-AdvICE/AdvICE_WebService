@@ -33,19 +33,19 @@ const czCard = ({
                 <p className='card-hidden-space '></p>
                 <p className='card-className'>{className}</p>
                 <p className="card-assistantName">{assistantName}</p>
-                
                 <p className='card-currentNumber'>{`${currentNumber}/${maximumNumber}`}</p>
                 {children}
-                <button
-                    onClick={(e) => {
-                        e.stopPropagation();  
-                        onReserveClick(); 
-                    }}
-                    className="card-reservation"  
-                >
-                    {isReserved ? '예약 완료' : '예약'}
-                </button>
-
+                {isReserved !== undefined && (
+                    <button
+                        onClick={(e) => {
+                            e.stopPropagation();  
+                            onReserveClick(); 
+                        }}
+                        className="card-reservation"  
+                    >
+                        {isReserved ? '예약 완료' : '예약'}
+                    </button>
+                )}
             </div>
          
     );

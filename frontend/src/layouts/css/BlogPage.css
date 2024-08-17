@@ -3,11 +3,13 @@
   height: 26vw;
   display: flex;
   position: relative;
+  vertical-align: bottom;
 }
 .header2-image{
   width:100%;
   position: absolute;
   height: 26vw;
+  vertical-align: bottom;
   background-size: cover;
 }
 .header2-img img{
@@ -26,6 +28,10 @@
   display: flex;
   height: auto;
   flex-direction: column;
+  flex: 1;
+  overflow: auto;
+  box-sizing: border-box;
+   
 }
 .header3-image{
   width:100%;
@@ -391,7 +397,9 @@ input::placeholder {
   .card-order, .title-blank {
       display: none  !important;
   }
- 
+  .Layout_bar{
+    margin-bottom: 3%;
+  }
  
 }
  

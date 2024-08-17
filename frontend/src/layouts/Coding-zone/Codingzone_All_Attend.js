@@ -93,14 +93,17 @@ const Codingzone_All_Attend = () => {
     
         return Object.values(aggregatedData);
     };
-
+    const handlecodingzone = () => {
+ 
+        navigate(`/coding-zone`);
+      };
 
     return (
         <div>
             <div className="codingzone-container">
                 <div className='select-container'>
                     <span> | </span>
-                    <button>코딩존 예약</button>
+                    <button  onClick={handlecodingzone}  >코딩존 예약</button>
                     <span> | </span>
                     <button onClick={handlecodingzoneattendence}>출결 관리</button>
                     <span> | </span>

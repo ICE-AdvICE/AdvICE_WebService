@@ -32,13 +32,9 @@ const MainPage = () => {
 }, [cookies.accessToken, navigate]);
 
   const handlecodingzone = () => {
-    const token = cookies.accessToken; 
-    
-    if (!token) {
-     
-    } else {
+ 
       navigate(`/coding-zone`);
-    }
+    
   };
 
   return (
