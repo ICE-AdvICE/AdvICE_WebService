@@ -17,6 +17,8 @@ public interface CodingZoneService {
     ResponseEntity<? super DeleteClassOfGroupResponseDto> deleteClass(Integer classNum, String email);
     ResponseEntity<? super GetCodingZoneStudentListResponseDto> getStudentList(String email);
     ResponseEntity<? super DeleteAllInfResponseDto> deleteAll(String email);
+    ResponseEntity<? super GiveAuthResponseDto> giveAuth(String email, HandleAuthRequestDto dto);
+    ResponseEntity<? super DepriveAuthResponseDto> depriveAuth(String email,HandleAuthRequestDto dto);
 
     //권한이 필요없는 로직
     ResponseEntity<? super AuthorityExistResponseDto> authExist(String email);
