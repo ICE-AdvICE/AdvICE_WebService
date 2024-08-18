@@ -12,6 +12,7 @@ import com.icehufs.icebreaker.dto.request.codingzone.*;
 import com.icehufs.icebreaker.dto.response.ResponseDto;
 import com.icehufs.icebreaker.dto.response.article.CheckOwnOfArticleResponseDto;
 import com.icehufs.icebreaker.dto.response.codingzone.*;
+import com.icehufs.icebreaker.dto.response.user.AuthorityResponseDto;
 import com.icehufs.icebreaker.entity.AuthorityEntity;
 import com.icehufs.icebreaker.entity.CodingZoneClass;
 import com.icehufs.icebreaker.entity.CodingZoneRegisterEntity;
@@ -476,5 +477,67 @@ public class CodingZoneServiceImplement implements CodingZoneService {
             authorityRepository.save(authorityEntity);
         });
     }
- 
+
+    @Override
+    public ResponseEntity<? super GiveAuthResponseDto> giveAuth(String email, HandleAuthRequestDto dto) {
+        try{
+            //로그인된 사용자 토큰 시간 만료시 발생
+            boolean existedUser = userRepository.existsByEmail(email);
+            if (!existedUser) return GiveAuthResponseDto.notExistUser();
+
+            //권한을 주려하는 사용자가 회원가입이 안되어있을 때
+            AuthorityEntity authorityEntity = authorityRepository.findByEmail(dto.getEmail());
+            if (authorityEntity == null) return GiveAuthResponseDto.notSingUpUser();
+
+            if("ROLE_ADMIN1".equals(dto.getRole())){
+                if(authorityEntity.getRoleAdmin1().equals(dto.getRole())) return GiveAuthResponseDto.alreadyPerm(); //특정 권한이 이미 있을 떄
+                authorityEntity.giveAdmin1Auth();
+            }else if("ROLE_ADMINC1".equals(dto.getRole())){
+                if(authorityEntity.getRoleAdminC1().equals("ROLE_ADMINC1") || authorityEntity.getRoleAdminC2().equals("ROLE_ADMINC2")) return GiveAuthResponseDto.alreadyPerm(); //특정 권한이 이미 있을 떄
+                authorityEntity.giveAdminC1Auth();
+            }else if("ROLE_ADMINC2".equals(dto.getRole())){
+                if(authorityEntity.getRoleAdminC1().equals("ROLE_ADMINC1") || authorityEntity.getRoleAdminC2().equals("ROLE_ADMINC2")) return GiveAuthResponseDto.alreadyPerm(); //특정 권한이 이미 있을 떄
+                authorityEntity.giveAdminC2Auth();
+            }
+            authorityRepository.save(authorityEntity);
+
+        } catch (Exception exception){
+            exception.printStackTrace();
+            return GiveAuthResponseDto.databaseError();
+    }
+    return GiveAuthResponseDto.success();
+    }
+
+    @Override
+    public ResponseEntity<? super DepriveAuthResponseDto> depriveAuth(String email, HandleAuthRequestDto dto){
+        try{
+            //로그인된 사용자 토큰 시간 만료시 발생
+            boolean existedUser = userRepository.existsByEmail(email);
+            if (!existedUser) return DepriveAuthResponseDto.notExistUser();
+
+            //권한을 주려하는 사용자가 회원가입이 안되있을 때
+            AuthorityEntity authorityEntity = authorityRepository.findByEmail(dto.getEmail());
+            if (authorityEntity == null) return DepriveAuthResponseDto.notSingUpUser();
+
+            if("ROLE_ADMIN1".equals(dto.getRole())){
+                if(authorityEntity.getRoleAdmin1().equals("NULL")) return GiveAuthResponseDto.alreadyPerm(); // 박탈하려히는 특정 권한이 없을 때
+                authorityEntity.setRoleAdmin1("NULL");
+                authorityEntity.setGivenDateAdmin1(null);
+            }else if("ROLE_ADMINC1".equals(dto.getRole())){
+                if(authorityEntity.getRoleAdminC1().equals("NULL")) return GiveAuthResponseDto.alreadyPerm(); // 박탈하려히는 특정 권한이 없을 때
+                authorityEntity.setRoleAdminC1("NULL");
+                authorityEntity.setGivenDateAdminC(null);
+            }else if("ROLE_ADMINC2".equals(dto.getRole())){
+                if(authorityEntity.getRoleAdminC2().equals("NULL")) return GiveAuthResponseDto.alreadyPerm(); // 박탈하려히는 특정 권한이 없을 때
+                authorityEntity.setRoleAdminC2("NULL");
+                authorityEntity.setGivenDateAdminC(null);
+            }
+            authorityRepository.save(authorityEntity);
+
+        } catch (Exception exception){
+            exception.printStackTrace();
+            return DepriveAuthResponseDto.databaseError();
+    }
+    return DepriveAuthResponseDto.success();
+    }
 }

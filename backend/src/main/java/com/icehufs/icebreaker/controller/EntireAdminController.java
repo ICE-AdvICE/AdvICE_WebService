@@ -89,7 +89,23 @@ public class EntireAdminController {
         ResponseEntity<? super DeleteAllInfResponseDto> response = codingzoneService.deleteAll(email);
         return response;
     }
-   
-    
-    
+
+
+    @PatchMapping("/give-auth") //사용자 특정 권한 부여
+    public ResponseEntity<? super GiveAuthResponseDto> giveAuth(
+        @RequestBody @Valid HandleAuthRequestDto requestBody,
+        @AuthenticationPrincipal String email
+    ) {
+        ResponseEntity<? super GiveAuthResponseDto> response = codingzoneService.giveAuth(email, requestBody);
+        return response;
+    }
+
+    @PatchMapping("/deprive-auth") //사용자 특정 권한 박탈
+    public ResponseEntity<? super DepriveAuthResponseDto> depriveAuth(
+        @RequestBody @Valid HandleAuthRequestDto requestBody,
+        @AuthenticationPrincipal String email
+    ) {
+        ResponseEntity<? super DepriveAuthResponseDto> response = codingzoneService.depriveAuth(email, requestBody);
+        return response;
+    }
 }
