@@ -292,42 +292,130 @@ height: 8%;
 width: 100%;
 justify-content: space-between;
 }
-
-.add-button-container button {
-display: flex;
-align-items: center;
-justify-content: center;
-background-color: transparent; /* 배경색 제거 */
-border: none;
-cursor: pointer; /* 커서 스타일 변경 */
-width: 60px; /* 버튼의 너비 설정 */
-height: 60px; /* 버튼의 높이 설정 */
-padding: 10px; /* 버튼 내부 패딩 조정 */
-transition: transform 0.3s ease; /* 애니메이션 효과 추가 */
+.btn-5 {
+  width: 50px;
+  height: 35px;
+  line-height: 42px;
+  padding: 0;
+  border: none;
+  background: #002D56;
+  background: linear-gradient(0deg, #002D56, #002D56 100%);
+  display: flex; /* flexbox 레이아웃 사용 */
+  justify-content: center; /* 수평 중앙 정렬 */
+  align-items: center; /* 수직 중앙 정렬 */
+  color: #fff; /* 텍스트 색상 */
+  position: relative; /* 위치 조정을 위해 */
+  overflow: hidden; /* 내부 요소가 범위를 넘어서지 않게 함 */
 }
 
-.add-button-container button:hover {
-transform: scale(1.1); /* 버튼이 10% 커지게 설정 */
+.btn-5:hover {
+  color: #002D56; /* 호버 시 텍스트 색 변경 */
+  background: transparent; /* 호버 시 배경 투명 */
+  box-shadow: none; /* 박스 그림자 제거 */
 }
 
-.add-button-container svg {
-width: 24px; /* SVG 아이콘의 크기 조정 */
-height: 24px;
+.btn-5:before,
+.btn-5:after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 2px;
+  width: 0;
+  background: #002D56;
+  box-shadow:
+    -1px -1px 5px 0px #fff,
+    7px 7px 20px 0px #0003,
+    4px 4px 5px 0px #0002;
+  transition: 400ms ease all;
+}
+
+.btn-5:after {
+  right: inherit;
+  top: inherit;
+  left: 0;
+  bottom: 0;
+}
+
+.btn-5:hover:before,
+.btn-5:hover:after {
+  width: 100%; /* 호버 시 가로 길이 100%로 확장 */
+  transition: 800ms ease all;
+}
+
+.btn-6 {
+  width: 25px;
+  height: 25px;
+  line-height: 42px;
+  margin-left: 10px;
+  border: none;
+  background: #002D56;
+  background: linear-gradient(0deg, #002D56, #002D56 100%);
+  display: flex; /* flexbox 레이아웃 사용 */
+  justify-content: center; /* 수평 중앙 정렬 */
+  align-items: center; /* 수직 중앙 정렬 */
+  color: #fff; /* 텍스트 색상 */
+  position: relative; /* 위치 조정을 위해 */
+  overflow: hidden; /* 내부 요소가 범위를 넘어서지 않게 함 */
+}
+
+.btn-6:hover {
+  color: #002D56; /* 호버 시 텍스트 색 변경 */
+  background: transparent; /* 호버 시 배경 투명 */
+  box-shadow: none; /* 박스 그림자 제거 */
+}
+
+.btn-6:before,
+.btn-6:after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 2px;
+  width: 0;
+  background: #002D56;
+  box-shadow:
+    -1px -1px 5px 0px #fff,
+    7px 7px 20px 0px #0003,
+    4px 4px 5px 0px #0002;
+  transition: 400ms ease all;
+}
+
+.btn-6:after {
+  right: inherit;
+  top: inherit;
+  left: 0;
+  bottom: 0;
+}
+
+.btn-6:hover:before,
+.btn-6:hover:after {
+  width: 100%; /* 호버 시 가로 길이 100%로 확장 */
+  transition: 800ms ease all;
 }
 
 .class-submit-button{
 margin-top: 1%;
-margin-bottom: 1%;
-display: flex;
-align-items: center;
-position: relative; 
+margin-bottom: 1%; /* 내부 요소가 범위를 넘어서지 않게 함 */
 height: 55px;
-margin-right: 1%;
+margin-right: 35px;
+white-space: nowrap;
+display: flex; /* flexbox 레이아웃 사용 */
+justify-content: center; /* 수평 중앙 정렬 */
+align-items: center; /* 수직 중앙 정렬 */
+color: #fff; /* 텍스트 색상 */
+position: relative; /* 위치 조정을 위해 */
+overflow: hidden;
 
 }
 .class-submit-button button {
-height: 45%;
-width: 100%;
+display: flex; /* flexbox 레이아웃 사용 */
+justify-content: center; /* 수평 중앙 정렬 */
+align-items: center; /* 수직 중앙 정렬 */
+position: relative; /* 위치 조정을 위해 */
+overflow: hidden;
+width: 50px;
+height: 35px;
 border-color: #002D56; /* 회색 테두리 색상 */
 border: 1px solid #002D56;
 background-color: white;
