@@ -87,25 +87,14 @@
   flex-direction: column;
   display: flex;
 }
-
-/*선*/
-
 .Article-middle{
   display: flex;  
-  width: 100%;
   margin-top: 3px;
-  height: auto;
-  position: relative;
-  justify-content: space-between; 
+  justify-content: space-between;
 }
-/*수정,삭제 버튼 */
 
 .Edit-Delete-Options {
-  width: 10%;
-  position: relative;
-  z-index: 111;
-  font-size: 1vw;
-  margin-right: 0;
+  font-size: 10px;
   display: flex;  
   justify-content: flex-end;
 }
@@ -141,7 +130,7 @@
 .Comment-Content{
   margin-left: 1.5%;
   font-size: 13px;
-  padding: 0.5vw;
+  padding: 1vw;
   margin-bottom: 0;
 }
 .Comment-Header{
@@ -150,8 +139,7 @@
   align-items: center;
   display: flex;
 }
- 
-/*하트위치*/
+
 .Comment-Option{
   position: relative;
   display: flex;   
@@ -166,8 +154,6 @@
 .Comment-Option p{
   margin: 0;
 }
-
-/*댓글*/
 .CommentBox-container{
   margin-top: 3px;
 }
@@ -176,7 +162,6 @@
   align-items: center;
   display: flex;
 }
-
 
 .CommentBox-bottom{
   position: relative;
@@ -210,16 +195,14 @@
 }
 
 .heart svg {
-  color: #ff6b6b; /* 하트 아이콘의 색상 설정 (기본 빨간색) */
-  font-size: 20px; /* 하트 아이콘의 크기 설정 */
-  transition: color 0.3s ease; /* 색상이 부드럽게 변경되도록 설정 */
+  color: #ff6b6b;  
+  font-size: 20px;  
+  transition: color 0.3s ease;  
 }
 
 .heart:hover svg {
-  color: #ff4a4a; /* 마우스 오버 시 하트 아이콘의 색상 변경 */
+  color: #ff4a4a;  
 }
-
-
 .quill p{
   font-family: 'Inter', sans-serif;
   font-weight: 400;
@@ -247,51 +230,33 @@
   font-weight: bold;
 }
 .comment-edit-input{
-  height: 100%;
-  font-size: 1vw;
-  padding-left: 3%;
-  padding-top: 2%;
+  margin-top: 10px;
+  font-size: 11px;
+  padding: 10px;
 }
 .ed-comment{
   display: flex;       
   align-items: center; 
-  height: 3vw;
-  position:absolute;
-  top: 50%;
-  font-size: 1vw;
-  margin-left: 90%;
-  width: 15%;
+  justify-content: flex-end;
+  font-size: 12px;
 }
 .ed-bt{
   margin-right: 2%;
-  padding: 1vw;
 }
-
-
 .stop button{
-  border:0.05vw,solid;
-  color:black;
-  font-size: 1vw;
-  background: white;
+  border:none !important;
   cursor: pointer;
-  margin-right: 2%;
-  padding: 3% 10%;
-  z-index: 100;
+  background: transparent;
 }
 .stop {
   display: flex;        
-  align-items: center;  
-  margin-left: 89%;
-  width: 14%;
-  z-index: 100;
-  
+  justify-content: flex-end;
+  font-size: 10px;
+  align-items: center;   
 }
 .resolve {
   display: flex;        
-  align-items: center;  
-  margin-left: 89.8%;
-  width: 25%;
-  z-index: 100;
+  justify-content: flex-end;
   margin-top: 1%;
 }
 .resolve button{
@@ -299,9 +264,7 @@
   color:black;
   background: white;
   cursor: pointer;
-  padding: 3% 10%;
-  font-size: 1vw;
-  z-index: 100;
+  font-size: 10px;
 }
 
 .stop button:hover{
