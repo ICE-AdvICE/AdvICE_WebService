@@ -9,6 +9,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 
+import com.icehufs.icebreaker.dto.object.CodingZoneAssitantListItem;
 import com.icehufs.icebreaker.dto.object.CodingZoneStudentListItem;
 import com.icehufs.icebreaker.dto.object.PersAttendManagListItem;
 import com.icehufs.icebreaker.dto.object.ReservedClassListItem;
@@ -158,23 +159,23 @@ public class CodingZoneServiceImplement implements CodingZoneService {
     }
 
     @Override
-    public ResponseEntity<? super DeleteClassOfGroupResponseDto> deleteClass(Integer classNum, String email) {
+    public ResponseEntity<? super DeleteClassResponseDto> deleteClass(Integer classNum, String email) {
         try{
             // 사용자 계정이 존재하는지(로그인 시간이 초과됐는지) 확인하는 코드
             boolean existedUser = userRepository.existsByEmail(email);
-            if (!existedUser) return GroupInfUpdateResponseDto.notExistUser();
+            if (!existedUser) return DeleteClassResponseDto.notExistUser();
 
-            GroupInfEntity groupInfEntity = groupInfRepository.findByClassNum(classNum);
-            if (groupInfEntity == null) return DeleteClassOfGroupResponseDto.noExistArticle();
+            CodingZoneClass codingZoneClass = codingZoneClassRepository.findByClassNum(classNum);
+            if (codingZoneClass == null) return DeleteClassResponseDto.noExistArticle();
 
-            groupInfRepository.delete(groupInfEntity);
+            codingZoneClassRepository.delete(codingZoneClass);
 
         }catch(Exception exception){
             exception.printStackTrace();
             return ResponseDto.databaseError();
         }
 
-        return DeleteClassOfGroupResponseDto.success();
+        return DeleteClassResponseDto.success();
     }
 
 
@@ -195,7 +196,7 @@ public class CodingZoneServiceImplement implements CodingZoneService {
     
             CodingZoneRegisterEntity codingZoneRegisterEntity = codingZoneRegisterRepository.findByClassNumAndUserEmail(classNum, email);
             if (codingZoneRegisterEntity != null) {
-                return CodingZoneRegisterResponseDto.alreadyReserve();
+                return CodingZoneRegisterResponseDto.alreadyReserve(); //해당 수업을 이미 예약했을 때
             }
     
             // 인원 초과 처리
@@ -283,6 +284,7 @@ public class CodingZoneServiceImplement implements CodingZoneService {
     @Override
     public ResponseEntity<? super GetListOfCodingZoneClassResponseDto> getClassList(Integer grade, String email) {
         List<CodingZoneClass> classEntities = new ArrayList<>();
+        int registedClassNum = 0;
         try {
             // 사용자 계정이 존재하는지(로그인 시간이 초과됐는지) 확인하는 코드
             boolean existedUser = userRepository.existsByEmail(email);
@@ -308,22 +310,29 @@ public class CodingZoneServiceImplement implements CodingZoneService {
                 nextMonday.format(DateTimeFormatter.ISO_LOCAL_DATE), 
                 nextSunday.format(DateTimeFormatter.ISO_LOCAL_DATE)
             );
-        
             if (classEntities.isEmpty()) return GetListOfCodingZoneClassResponseDto.noExistArticle();
+            
+            for (CodingZoneClass classEntitie : classEntities) {
+                CodingZoneRegisterEntity codingZoneRegisterEntity = codingZoneRegisterRepository.findByClassNumAndUserEmail(classEntitie.getClassNum(), email);
+                if (codingZoneRegisterEntity != null) {
+                    registedClassNum = classEntitie.getClassNum();
+                    break;
+                }
+            }
 
         } catch (Exception exception) {
             exception.printStackTrace();
             return ResponseDto.databaseError();
         }
-        return GetListOfCodingZoneClassResponseDto.success(classEntities);
+        return GetListOfCodingZoneClassResponseDto.success(registedClassNum,classEntities);
     }
 
     @Override
-    public ResponseEntity<? super GetListOfCodingZoneClassResponseDto> getClassList2(Integer grade) {
+    public ResponseEntity<? super GetListOfCodingZoneClassForNotLogInResponseDto> getClassList2(Integer grade) {
         List<CodingZoneClass> classEntities = new ArrayList<>();
         try {
             // 사용자 계정이 존재하는지(로그인 시간이 초과됐는지) 확인하는 코드
-            if (grade != 1 && grade != 2) return GetListOfCodingZoneClassResponseDto.validationFailed();
+            if (grade != 1 && grade != 2) return GetListOfCodingZoneClassForNotLogInResponseDto.validationFailed();
 
             // 현재 날짜가 수요일에서 일요일 사이인지 확인
             LocalDate today = LocalDate.now();
@@ -344,13 +353,13 @@ public class CodingZoneServiceImplement implements CodingZoneService {
                 nextSunday.format(DateTimeFormatter.ISO_LOCAL_DATE)
             );
         
-            if (classEntities.isEmpty()) return GetListOfCodingZoneClassResponseDto.noExistArticle();
+            if (classEntities.isEmpty()) return GetListOfCodingZoneClassForNotLogInResponseDto.noExistArticle();
 
         } catch (Exception exception) {
             exception.printStackTrace();
             return ResponseDto.databaseError();
         }
-        return GetListOfCodingZoneClassResponseDto.success(classEntities);
+        return GetListOfCodingZoneClassForNotLogInResponseDto.success(classEntities);
     }
 
     @Override
@@ -578,5 +587,32 @@ public class CodingZoneServiceImplement implements CodingZoneService {
             return DepriveAuthResponseDto.databaseError();
     }
     return DepriveAuthResponseDto.success();
+    }
+
+    @Override
+    public ResponseEntity<? super GetCodingZoneAssitantListResponseDto> getAssistantList() {
+        List<User> ListOfCodingZone1 = new ArrayList<>();
+        List<User> ListOfCodingZone2 = new ArrayList<>();
+        try {
+            String C1 = "ROLE_ADMINC1";
+            String C2 = "ROLE_ADMINC2";
+            List<AuthorityEntity> users = authorityRepository.findByRoleAdminC1(C1);
+            List<AuthorityEntity> users2 = authorityRepository.findByRoleAdminC2(C2);
+            if(users.isEmpty() || users2.isEmpty()) return GetCodingZoneAssitantListResponseDto.notExistUser();
+    
+            users.forEach(authorityEntity -> {
+                User user = userRepository.findByEmail(authorityEntity.getEmail());
+                ListOfCodingZone1.add(user);
+            });
+            users2.forEach(authorityEntity -> {
+                User user = userRepository.findByEmail(authorityEntity.getEmail());
+                ListOfCodingZone2.add(user);
+            });
+
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            return ResponseDto.databaseError();
+        }
+        return GetCodingZoneAssitantListResponseDto.success(ListOfCodingZone1, ListOfCodingZone2);
     }
 }

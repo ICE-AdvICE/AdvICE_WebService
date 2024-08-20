@@ -7,13 +7,13 @@ import com.icehufs.icebreaker.common.ResponseCode;
 import com.icehufs.icebreaker.common.ResponseMessage;
 import com.icehufs.icebreaker.dto.response.ResponseDto;
 
-public class DeleteClassOfGroupResponseDto extends ResponseDto{
-        private DeleteClassOfGroupResponseDto(){
+public class DeleteClassResponseDto extends ResponseDto{
+        private DeleteClassResponseDto(){
         super(ResponseCode.SUCCESS, ResponseMessage.SUCCESS);
     }
 
-        public static ResponseEntity<DeleteClassOfGroupResponseDto> success(){
-            DeleteClassOfGroupResponseDto result = new DeleteClassOfGroupResponseDto();
+        public static ResponseEntity<DeleteClassResponseDto> success(){
+            DeleteClassResponseDto result = new DeleteClassResponseDto();
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
         public static ResponseEntity<ResponseDto> notExistUser (){
