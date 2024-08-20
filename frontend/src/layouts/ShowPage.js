@@ -282,6 +282,7 @@ const ShowPage = () => {
                         {isAdmin && (
                              <div className='stop'>
                                 <button onClick={adonDelete}>삭제</button>
+                                <span> | </span>
                                 <button onClick={handleBanUser}>정지</button>
                             </div>
                         )}

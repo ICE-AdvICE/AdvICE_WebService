@@ -86,22 +86,18 @@ const CodingMain = () => {
         try {
             let classes = [];
             if (cookies.accessToken) {
-                // 로그인 상태에서 API 호출
                 classes = await getcodingzoneListRequest(cookies.accessToken, grade, weekDay);
-
-                // 로그인된 경우 예약 상태를 false로 기본 설정
                 classes = classes.map(classItem => ({
                     ...classItem,
                     isReserved: classItem.isReserved !== undefined ? classItem.isReserved : false 
                 }));
 
             } else {
-                // 비로그인 상태에서 API 호출
                 const response = await getAvailableClassesForNotLogin(grade);
                 if (response && response.length > 0) {
                     classes = response.map(classItem => ({
                         ...classItem,
-                        isReserved: undefined  // 비로그인 상태에서 예약 버튼이 보이지 않도록 설정
+                        isReserved: undefined 
                     }));
                 }
             }
@@ -121,21 +117,23 @@ const CodingMain = () => {
     };
     fetchData();
 }, [cookies.accessToken, grade, weekDay]);
-
-  useEffect(() => {
-    const fetchAttendance = async () => {
-      const token = cookies.accessToken;
-      if (token) {
-        try {
-          const count = await getAttendanceCount(token, grade);
-          setAttendanceCount(count);
-        } catch (error) {
-          console.error("Failed to fetch attendance count:", error);
-        }
+useEffect(() => {
+  const fetchAttendance = async () => {
+    const token = cookies.accessToken;
+    if (token) {
+      try {
+        const count = await getAttendanceCount(token, grade);  console.log("Attendance count fetched successfully:", count);  
+        setAttendanceCount(count);
+      } catch (error) {
+        console.error("Failed to fetch attendance count:", error);  
       }
-    };
-    fetchAttendance();
-  }, [cookies.accessToken, grade]);
+    } else {
+      console.log("No token available.");
+    }
+  };
+  fetchAttendance();
+}, [cookies.accessToken, grade]);
+
 
   const handleCardClick = (classItem) => {
     console.log('');
@@ -251,7 +249,6 @@ const CodingMain = () => {
         </div>
         
         <div className='category-name-container'>
-          <div className="separator"></div> 
           <div className="codingzone-title">
             <p className='weekDay'>요일</p> 
             <p className='weekDate'>날짜</p>
@@ -260,11 +257,11 @@ const CodingMain = () => {
             <p className='weeksubject'>과목명</p>
             <p className='weekperson'>조교</p>
             <p className='weekcount'>인원</p>
+
             {cookies.accessToken && (
               <p className='registerbutton'></p>
             )}
           </div>
-          <div className="separator"></div>   
         </div>
         
         <div className="codingzone-list">

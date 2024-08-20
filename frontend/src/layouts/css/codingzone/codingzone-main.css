@@ -13,6 +13,9 @@
   
    
 }
+.cz-count-container{
+  font-size: 12px;
+}
 .select-container span{
   font-size: 13px;
   width: 100px;
@@ -110,13 +113,14 @@
   margin-bottom: 1%;
 
 }
+ 
 .codingzone-date button{
   width: 160px;
   font-size: 13px;
   height: 40px;
   font-weight: 700;
   background-color: white;
-  border-color: #D0D5DD;
+  border:none;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -134,11 +138,13 @@
   position: relative;
 }
 .category-name-container{
-  position: relative;
+  border-bottom: 1px solid #333;
+  border-top: 1px solid #333;
   display: flex;
+  height: 30px;
   max-width: 1000px;
   flex-direction: column;
- 
+  justify-content: center;
 }
 .codingzone-title{
   display: flex;
@@ -229,10 +235,10 @@
 .card-reservation {
   background-color: rgba(128, 128, 128, 0.189);
   border: none !important;
-  font-size: 1.2vw;
+  font-size: 12px;
   border-radius: 0.5vw;
   width: 100px; 
-  
+  padding: 0;
 }
 .card-hidden-space {
   width: 100px;
