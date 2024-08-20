@@ -63,13 +63,13 @@ public class EntireAdminController {
         return response;
     }
 
-    @DeleteMapping("/delete-class/{classNum}") //(A/B)조의 특정 수업 삭제 API
-    public ResponseEntity<? super DeleteClassOfGroupResponseDto> deleteClass(
+    @DeleteMapping("/delete-class/{classNum}") //등록된 특정 수업 삭제 API
+    public ResponseEntity<? super DeleteClassResponseDto> deleteClass(
         @PathVariable Integer classNum,
         @AuthenticationPrincipal String email
 
     ){
-        ResponseEntity<? super DeleteClassOfGroupResponseDto> response = codingzoneService.deleteClass(classNum, email);
+        ResponseEntity<? super DeleteClassResponseDto> response = codingzoneService.deleteClass(classNum, email);
         return response;
     }
 

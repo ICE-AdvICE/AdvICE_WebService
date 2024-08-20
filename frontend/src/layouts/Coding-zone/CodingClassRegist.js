@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import {useNavigate } from 'react-router-dom';
 import '../css/codingzone/CodingClassRegist.css';
 import { useCookies } from "react-cookie";
 import { uploadGroupData, fetchGroupClasses, uploadClassForWeek, resetCodingZoneData } from '../../apis/Codingzone-api';
-//로그인 모달창 import 위한 코드
-import MyModal from '../../MyModal';
-import LoginForm from '../../Modals/LoginForm';
+
 
 const ClassRegist = () => {
     const [boxes, setBoxes] = useState([{ day: '', time: '', assistant: '', className: '', grade: '', maxPers: '' }]);
@@ -12,15 +11,11 @@ const ClassRegist = () => {
     const [groupId, setGroupId] = useState('A');
     const [cookies] = useCookies(['accessToken']);
     const [activeCategory, setActiveCategory] = useState('registerClass');
-    const [showLoginModal, setShowLoginModal] = useState(false); 
+    const navigate = useNavigate();
 
     useEffect(() => {
         loadGroupClasses();
     }, [groupId]);
-
-    const closeModal = () => { //모달창 닫기위한 코드
-        setShowLoginModal(false);
-    };
 
     //조 정보 등록 API 응답 함수
     const handleGroupUploadResponse = (response) => {
@@ -38,7 +33,7 @@ const ClassRegist = () => {
                 break;
             case 'NU':
                 alert('로그인 시간이 만료되었습니다. 다시 로그인 해주세요.');
-                setShowLoginModal(true); //바로 로그인을 할 수 있게 로그인창 뛰어주기
+                navigate('/');
                 break;
             case 'DBE':
                 alert('데이터베이스 오류입니다.');
@@ -66,7 +61,7 @@ const ClassRegist = () => {
                 break;
             case 'NU':
                 alert('로그인 시간이 만료되었습니다. 다시 로그인 해주세요.');
-                setShowLoginModal(true); //바로 로그인을 할 수 있게 로그인창 뛰어주기
+                navigate('/');
                 break;
             case 'DBE':
                 alert('데이터베이스 오류입니다.');
@@ -102,7 +97,7 @@ const ClassRegist = () => {
                 break;
             case 'NU':
                 alert('로그인 시간이 만료되었습니다. 다시 로그인 해주세요.');
-                setShowLoginModal(true);
+                navigate('/');
                 break;
             case 'NA':
                 setBoxes2([{ day: '', date: '', time: '', assistant: '', className: '', grade: '', maxPers: '' }]);
@@ -133,7 +128,7 @@ const ClassRegist = () => {
                 break;
             case 'NU':
                 alert('로그인 시간이 만료되었습니다. 다시 로그인 해주세요.');
-                setShowLoginModal(true);
+                navigate('/');
                 break;
             case 'DBE':
                 alert('데이터베이스 오류입니다.');
@@ -398,7 +393,7 @@ const ClassRegist = () => {
                                     <option value="2">2</option>
                                 </select>
                                 <input className="MaxPers-input" type="number" placeholder="MaxPer" min="1" step="1" value={box.maxPers} onChange={(e) => handleChange2(index, 'maxPers', e.target.value)} />
-                                <button onClick={() => removeBox(index)} class="custom-btn btn-6">
+                                <button onClick={() => removeBox2(index)} class="custom-btn btn-6">
                                     X
                                 </button>
                             </div>
@@ -422,16 +417,6 @@ const ClassRegist = () => {
 
     return (
         <div className="class-regist-main-container">
-
-            <MyModal //로그인 도달창 뛰우기 위한 HTML 추가 코드
-                open={showLoginModal}
-                onCancel={closeModal}
-                footer={[]}>
-                <LoginForm onLogin={(loginSuccess) => {
-                    closeModal();
-                }} closeModal={closeModal} />
-            </MyModal>
-
             <div className="header-select-container">
                 <span> | </span>
                 <button>코딩존 예약</button>

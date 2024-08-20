@@ -1,21 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import './css/AuthHandle.css';
 import { useCookies } from "react-cookie";
+import {useNavigate } from 'react-router-dom';
 import {grantPermission, deprivePermission} from '../apis/Codingzone-api';
-//로그인 모달창 import 위한 코드
-import MyModal from '../MyModal';
-import LoginForm from '../Modals/LoginForm';
+
 
 const AuthHandle = () => {
     const [cookies] = useCookies(['accessToken']);
     const [activeCategory, setActiveCategory] = useState('giveAuth');
-    const [showLoginModal, setShowLoginModal] = useState(false); 
     const [email, setEmail] = useState('');
     const [role, setRole] = useState('');
+    const navigate = useNavigate();
 
-    const closeModal = () => { //모달창 닫기위한 코드
-        setShowLoginModal(false);
-    };
     
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -59,7 +55,7 @@ const AuthHandle = () => {
                 break;
             case 'NU':
                 alert('로그인 시간이 만료되었습니다. 다시 로그인 해주세요.');
-                setShowLoginModal(true);  // 로그인 모달창 띄우기
+                navigate('/');
                 break;
             case 'AF':
                 alert('권한이 없습니다.');
@@ -86,7 +82,7 @@ const AuthHandle = () => {
                 break;
             case 'NU':
                 alert('로그인 시간이 만료되었습니다. 다시 로그인 해주세요.');
-                setShowLoginModal(true);  // 로그인 모달창 띄우기
+                navigate('/');
                 break;
             case 'AF':
                 alert('권한이 없습니다.');
@@ -108,14 +104,6 @@ const AuthHandle = () => {
 
     return (
         <div className="main-container-AHpage">
-            <MyModal //로그인 도달창 뛰우기 위한 HTML 추가 코드
-                open={showLoginModal}
-                onCancel={closeModal}
-                footer={[]}>
-                <LoginForm onLogin={(loginSuccess) => {
-                    closeModal();
-                }} closeModal={closeModal} />
-            </MyModal>
             <div className="category-bar-AHpage">
                 <button className={`category-button ${activeCategory === 'giveAuth' ? 'active' : ''}`}
                     onClick={() => setActiveCategory('giveAuth')}>권한 부여</button>

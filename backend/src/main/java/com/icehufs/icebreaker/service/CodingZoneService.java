@@ -14,7 +14,7 @@ public interface CodingZoneService {
     ResponseEntity<? super GroupInfUpdateResponseDto> uploadInf(List<GroupInfUpdateRequestDto> dto, String email);
     ResponseEntity<? super GetListOfGroupInfResponseDto> getList(String groupId, String email);
     ResponseEntity<? super GroupInfUpdateResponseDto> patchInf(List<PatchGroupInfRequestDto> dto, String email);
-    ResponseEntity<? super DeleteClassOfGroupResponseDto> deleteClass(Integer classNum, String email);
+    ResponseEntity<? super DeleteClassResponseDto> deleteClass(Integer classNum, String email);
     ResponseEntity<? super GetCodingZoneStudentListResponseDto> getStudentList(String email);
     ResponseEntity<? super DeleteAllInfResponseDto> deleteAll(String email);
     ResponseEntity<? super GiveAuthResponseDto> giveAuth(String email, HandleAuthRequestDto dto);
@@ -25,10 +25,11 @@ public interface CodingZoneService {
     ResponseEntity<? super CodingZoneRegisterResponseDto> classRegist(Integer classNum, String email);
     ResponseEntity<? super CodingZoneCanceResponseDto> classCance(Integer classNum, String email);
     ResponseEntity<? super GetListOfCodingZoneClassResponseDto> getClassList(Integer grade, String email);
-    ResponseEntity<? super GetListOfCodingZoneClassResponseDto> getClassList2(Integer grade);
+    ResponseEntity<? super GetListOfCodingZoneClassForNotLogInResponseDto> getClassList2(Integer grade);
     ResponseEntity<? super GetCountOfAttendResponseDto> getAttend(Integer grade,String email);
     ResponseEntity<? super GetPersAttendListItemResponseDto> getPerAttendList(String email);
     ResponseEntity<? super GetReservedClassListItemResponseDto> getReservedClass(String classDate, String email);
+    ResponseEntity<? super GetCodingZoneAssitantListResponseDto> getAssistantList();
 
     //수업 코딩존 조교 
     ResponseEntity<? super PutAttendanceResponseDto> putAttend(Integer registNum, String email);
