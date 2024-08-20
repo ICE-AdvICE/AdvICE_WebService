@@ -287,15 +287,13 @@ public ResponseEntity<? super GetListOfCodingZoneClassResponseDto> getClassList(
         // 사용자 계정이 존재하는지(로그인 시간이 초과됐는지) 확인하는 코드
         boolean existedUser = userRepository.existsByEmail(email);
         if (!existedUser) return GetListOfCodingZoneClassResponseDto.notExistUser();
-        System.out.println("1");
 
         if (grade != 1 && grade != 2) return GetListOfCodingZoneClassResponseDto.validationFailed();
 
         // 현재 날짜가 화요일에서 일요일 사이인지 확인
         LocalDate today = LocalDate.now();
         DayOfWeek dayOfWeek = today.getDayOfWeek();
-        if (dayOfWeek == DayOfWeek.MONDAY) {
-            System.out.println("2");
+        if (dayOfWeek.getValue() < DayOfWeek.WEDNESDAY.getValue()) {
             return GetListOfCodingZoneClassResponseDto.noExistArticle();
         }
 
@@ -311,7 +309,6 @@ public ResponseEntity<? super GetListOfCodingZoneClassResponseDto> getClassList(
             nextSunday.format(DateTimeFormatter.ISO_LOCAL_DATE)
         );
         
-        System.out.println("3");
         if (classEntities.isEmpty()) return GetListOfCodingZoneClassResponseDto.noExistArticle();
 
     } catch (Exception exception) {
