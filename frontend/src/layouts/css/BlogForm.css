@@ -49,17 +49,10 @@
     transform: rotate(-90deg);
 }
 .dropdown .dropdown-menu {
-    position: absolute;
-    background-color: #fff;
-    width: 90%;
-    margin-top: 0.5vw;
-    box-shadow: 0 1px 2px rgb(204, 204, 204);
-    border-radius: 0 1px 2px 2px;
     overflow: hidden;
     display: none;
     max-height: 144px;
     overflow-y: auto;
-    z-index: 9;
 }
 .dropdown.active .dropdown-menu {
     display: block;

@@ -14,6 +14,8 @@ public interface ResponseCode {
     String FULL_CLASS = "FC";
     String ALREADY_RESERVE = "AR";
     String NOT_RESERVE_CLASS = "NR";
+    String NOT_SIGNUP_USER = "NS";
+    String PERMITTED_ERROR = "PE";
 
     //HTTP Status 401
     String SIGN_IN_FAIL = "SF";
