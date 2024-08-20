@@ -23,10 +23,11 @@ public class DeleteArticleResponseDto extends ResponseDto {
 
     public static ResponseEntity<ResponseDto> noExistArticle(){
         ResponseDto result = new ResponseDto(ResponseCode.NOT_EXISTED_ARTICLE, ResponseMessage.NOT_EXISTED_ARTICLE);
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result); }
-
-        
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result); 
+    }
+    
     public static ResponseEntity<ResponseDto> noPermission(){
         ResponseDto result = new ResponseDto(ResponseCode.NO_PERMISSION, ResponseMessage.NO_PERMISSION);
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(result); }
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(result); 
+    }
 }

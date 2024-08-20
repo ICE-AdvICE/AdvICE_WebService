@@ -11,6 +11,7 @@ public interface ResponseCode {
     String DUPLICATE_EMAIL = "DE";
     String NOT_EXISTED_USER = "NU";
     String NOT_EXISTED_ARTICLE = "NA";
+    String NOT_EXISTED_COMMET = "NC";
     String FULL_CLASS = "FC";
     String ALREADY_RESERVE = "AR";
     String NOT_RESERVE_CLASS = "NR";

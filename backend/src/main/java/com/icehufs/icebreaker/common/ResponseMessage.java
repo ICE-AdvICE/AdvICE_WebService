@@ -11,6 +11,7 @@ public interface ResponseMessage {
         String DUPLICATE_EMAIL = "Duplicate email.";
         String NOT_EXISTED_USER = "This user does not exist.";
         String NOT_EXISTED_ARTICLE = "This article does not exist.";
+        String NOT_EXISTED_COMMET = "Thie comment does not exist.";
         String FULL_CLASS = "This class already full.";
         String ALREADY_RESERVE = "Alredy reserve class.";
         String NOT_RESERVE_CLASS = "Not reserve class.";
