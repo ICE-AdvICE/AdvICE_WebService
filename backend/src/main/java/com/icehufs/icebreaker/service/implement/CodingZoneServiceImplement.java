@@ -3,6 +3,10 @@ package com.icehufs.icebreaker.service.implement;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 
 import com.icehufs.icebreaker.dto.object.CodingZoneStudentListItem;
@@ -277,26 +281,45 @@ public class CodingZoneServiceImplement implements CodingZoneService {
     }
 
     @Override
-    public ResponseEntity<? super GetListOfCodingZoneClassResponseDto> getClassList(Integer grade, String email) {
-        List<CodingZoneClass> classEntities = new ArrayList<>();
-        try{
-            // 사용자 계정이 존재하는지(로그인 시간이 초과됐는지) 확인하는 코드
-            boolean existedUser = userRepository.existsByEmail(email);
-            if (!existedUser) return GetListOfCodingZoneClassResponseDto.notExistUser();
+public ResponseEntity<? super GetListOfCodingZoneClassResponseDto> getClassList(Integer grade, String email) {
+    List<CodingZoneClass> classEntities = new ArrayList<>();
+    try {
+        // 사용자 계정이 존재하는지(로그인 시간이 초과됐는지) 확인하는 코드
+        boolean existedUser = userRepository.existsByEmail(email);
+        if (!existedUser) return GetListOfCodingZoneClassResponseDto.notExistUser();
+        System.out.println("1");
 
-            if(grade != 1 && grade != 2) return GetListOfCodingZoneClassResponseDto.validationFailed();
+        if (grade != 1 && grade != 2) return GetListOfCodingZoneClassResponseDto.validationFailed();
 
-            classEntities = codingZoneClassRepository.findByGrade(grade);
-            if(classEntities.isEmpty()) return  GetListOfCodingZoneClassResponseDto.noExistArticle();
-
-        }catch(Exception exception) {
-            exception.printStackTrace();
-            return ResponseDto.databaseError();
+        // 현재 날짜가 화요일에서 일요일 사이인지 확인
+        LocalDate today = LocalDate.now();
+        DayOfWeek dayOfWeek = today.getDayOfWeek();
+        if (dayOfWeek == DayOfWeek.MONDAY) {
+            System.out.println("2");
+            return GetListOfCodingZoneClassResponseDto.noExistArticle();
         }
-        return GetListOfCodingZoneClassResponseDto.success(classEntities);
 
+
+        // 다음 주 월요일과 일요일 계산
+        LocalDate nextMonday = today.with(TemporalAdjusters.next(DayOfWeek.MONDAY));
+        LocalDate nextSunday = nextMonday.plusDays(6);
+
+        // 다음 주 월요일부터 일요일까지의 수업만 조회
+        classEntities = codingZoneClassRepository.findByGradeAndClassDateBetween(
+            grade, 
+            nextMonday.format(DateTimeFormatter.ISO_LOCAL_DATE), 
+            nextSunday.format(DateTimeFormatter.ISO_LOCAL_DATE)
+        );
         
+        System.out.println("3");
+        if (classEntities.isEmpty()) return GetListOfCodingZoneClassResponseDto.noExistArticle();
+
+    } catch (Exception exception) {
+        exception.printStackTrace();
+        return ResponseDto.databaseError();
     }
+    return GetListOfCodingZoneClassResponseDto.success(classEntities);
+}
 
     @Override
     public ResponseEntity<? super GetListOfCodingZoneClassResponseDto> getClassList2(Integer grade) {
