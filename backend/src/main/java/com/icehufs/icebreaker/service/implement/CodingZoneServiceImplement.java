@@ -293,9 +293,9 @@ public class CodingZoneServiceImplement implements CodingZoneService {
             // 현재 날짜가 수요일에서 일요일 사이인지 확인
             LocalDate today = LocalDate.now();
             DayOfWeek dayOfWeek = today.getDayOfWeek();
-            if (dayOfWeek.getValue() < DayOfWeek.WEDNESDAY.getValue()) {
-                return GetListOfCodingZoneClassResponseDto.noExistArticle();
-            }
+            //if (dayOfWeek.getValue() < DayOfWeek.WEDNESDAY.getValue()) {
+                //return GetListOfCodingZoneClassResponseDto.noExistArticle();
+            //}
 
 
             // 다음 주 월요일과 일요일 계산
