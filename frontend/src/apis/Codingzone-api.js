@@ -245,17 +245,23 @@ export const deleteCodingZoneClass = async (token, classNum) => {
 
 export const getAttendanceCount = async (token, grade) => {
     try {
-        const response = await axios.put(`${API_DOMAIN}/coding-zone/count-of-attend/${grade}`, {
-            headers: { Authorization: `Bearer ${token}` }
-        });
-
+        const response = await axios.get(
+            `${API_DOMAIN}/coding-zone/count-of-attend/${grade}`,
+            {}, 
+            {
+                headers: { Authorization: `Bearer ${token}` }
+            }
+        );
         if (response.data.code === "SU") {
-            console.log("출석 횟수:", response.data.numOfAttend);
             return response.data.numOfAttend;
+            
+        } else {
+            console.log("Unexpected response code:", response.data.code);
         }
-        return null;  // 오류 발생 시 null 반환
+        return null;  
     } catch (error) {
         if (error.response) {
+            console.log("API Error Response:", error.response.data); // 오류 응답 데이터 확인
             switch (error.response.data.code) {
                 case "NU":
                     console.log("사용자가 존재하지 않습니다.");
@@ -270,7 +276,7 @@ export const getAttendanceCount = async (token, grade) => {
         } else {
             console.log("서버와 통신하는 동안 문제가 발생했습니다.");
         }
-        return null;  // 오류 발생 시 null 반환
+        return null;  
     }
 };
 
