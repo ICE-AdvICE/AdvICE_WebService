@@ -16,7 +16,7 @@ const MainPage = () => {
     window.location.href = 'https://open.kakao.com/o/giOS427b';  
   };
   const handlefeedbackClick = () => {
-    window.location.href = 'https://open.kakao.com/o/sMSg8UJg';  
+    window.location.href = 'https://open.kakao.com/o/swnIYgKg';  
   };
   useEffect(() => {
     const fetchData = async () => {
