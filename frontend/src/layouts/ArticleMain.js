@@ -233,9 +233,9 @@ const ArticleMain = () => {
             const inputElement = document.querySelector('.input-container input[type="text"]');
             const windowWidth = window.innerWidth;
             if (inputElement) {  
-                if (windowWidth <= 420) {
-                    const newWidth = 150 - (420 - windowWidth);
-                    inputElement.style.width = `${Math.max(newWidth, 100)}px`;  
+                if (windowWidth <= 440) {
+                    const newWidth = 150 - (440 - windowWidth);
+                    inputElement.style.width = `${Math.max(newWidth, 80)}px`;  
                 } else {
                     inputElement.style.width = '150px';  
                 }

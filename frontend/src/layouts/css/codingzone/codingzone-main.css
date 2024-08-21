@@ -232,7 +232,7 @@
   width: 100px; 
  
 }
-.card-reservation {
+.card-reservation,.card-delete {
   background-color: rgba(128, 128, 128, 0.189);
   border: none !important;
   font-size: 12px;

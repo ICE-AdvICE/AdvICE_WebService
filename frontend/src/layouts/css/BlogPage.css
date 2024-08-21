@@ -91,7 +91,9 @@
   align-items: center;
   border-radius: 5px;
 }
-
+.search2-bar{
+  padding-right: 20px;
+}
 .Category-dropdown {
   position: relative;
   display: flex;
