@@ -119,10 +119,16 @@ export const checkAdminType = async (token) => {
         const response = await axios.get(`${API_DOMAIN}/coding-zone/auth-type`, {
             headers: { Authorization: `Bearer ${token}` }
         });
-        if (response.data.code === "SU") {
-            return true;
+        console.log('API Response:', response.data);  // 응답 값 출력
+        if (response.data.code === "SU") 
+            return "SU"
+        else if (response.data.code === "EA") {
+            return "EA";  
+        } 
+        else if (response.data.code === "CA") {
+            return "CA";  
         }
-        return false;
+      
     } catch (error) {
         if (error.response) {
             switch (error.response.data.code) {
@@ -132,12 +138,6 @@ export const checkAdminType = async (token) => {
                 case "DBE":
                     console.log("데이터베이스에 문제가 발생했습니다.");
                     break;
-                case "EA":
-                    console.log("성공: 사용자는 과사 조교입니다.");
-                    break;
-                case "CA":
-                    console.log("성공: 사용자는 코딩존 조교입니다.");
-                    break;
                 default:
                     console.log("예상치 못한 문제가 발생하였습니다.");
                     break;
@@ -146,6 +146,8 @@ export const checkAdminType = async (token) => {
         return false;  // 오류 발생시 false 반환
     }
 };
+
+
 // 8. 선택된 학년의 예약 가능한 수업 리스트로 반환 API
 export const reserveCodingZoneClass = async (token, classNum) => {
     try {
@@ -204,9 +206,7 @@ export const getAvailableClassesForNotLogin = async (grade) => {
                     console.log("예상치 못한 문제가 발생하였습니다.");
                     break;
             }
-        } else {
-            console.log("네트워크 오류가 발생하였습니다.");
-        }
+        }  
         return [];
     }
 };
@@ -236,45 +236,35 @@ export const deleteCodingZoneClass = async (token, classNum) => {
                     console.log("예상치 못한 문제가 발생하였습니다.");
                     break;
             }
-        } else {
-            console.log("네트워크 오류가 발생하였습니다.");
-        }
+        } 
         return false;
     }
 };
-
+//10.출석 횟수 반환 API
 export const getAttendanceCount = async (token, grade) => {
     try {
         const response = await axios.get(
             `${API_DOMAIN}/coding-zone/count-of-attend/${grade}`,
-            {}, 
             {
                 headers: { Authorization: `Bearer ${token}` }
             }
         );
         if (response.data.code === "SU") {
-            return response.data.numOfAttend;
-            
-        } else {
-            console.log("Unexpected response code:", response.data.code);
-        }
+            return response.data.numOfAttend;  
+        } 
         return null;  
     } catch (error) {
         if (error.response) {
-            console.log("API Error Response:", error.response.data); // 오류 응답 데이터 확인
             switch (error.response.data.code) {
                 case "NU":
-                    console.log("사용자가 존재하지 않습니다.");
+                    alert("로그인이 필요합니다.");
                     break;
                 case "DBE":
                     console.log("데이터베이스에 문제가 발생했습니다.");
                     break;
                 default:
-                    console.log("예상치 못한 문제가 발생하였습니다.");
                     break;
             }
-        } else {
-            console.log("서버와 통신하는 동안 문제가 발생했습니다.");
         }
         return null;  
     }
@@ -290,6 +280,37 @@ export const getczattendlistRequest = async (accessToken) => {
         return error.response.data;
     }
 };
+
+// 13. 등록된 특정 수업 삭제 API
+export const deleteClass = async (classNum, token) => {
+    try {
+        const response = await axios.delete(`${DOMAIN}/api/admin/delete-class/${classNum}`, {
+            headers: { Authorization: `Bearer ${token}` }
+        });
+        if (response.data.code === "SU") {
+            return true;
+        }
+    } catch (error) {
+        if (error.response) {
+            switch (error.response.data.code) {
+                case "AF":
+                    console.log("권한이 없습니다.");
+                    break;
+                case "NU":
+                    alert("로그인이 필요합니다.");
+                    break;
+                case "DBE":
+                    console.log("데이터베이스에 문제가 발생했습니다.");
+                    break;
+                default:
+                    console.log("예상치 못한 문제가 발생하였습니다.");
+                    break;
+            }
+        }  
+        return false;
+    }
+};
+
 
 // 14.특정 날짜에 1학년/2학년 코딩존 수업 예약한 학생들 리스트로 반환 API
 export const getczreservedlistRequest =  async (accessToken, classDate) => {

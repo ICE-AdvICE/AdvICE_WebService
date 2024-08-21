@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 
 const czCard = ({ 
-    onReserveClick , onClick,classDate, children, assistantName, classTime, className, weekDay ,currentNumber,maximumNumber,isReserved
+    onDeleteClick,isAdmin,onReserveClick , onClick,classDate, children, assistantName, classTime, className, weekDay ,currentNumber,maximumNumber,isReserved
 }) => {
     function getShortWeekDay(weekDay) {
         const days = {
@@ -35,17 +35,32 @@ const czCard = ({
                 <p className="card-assistantName">{assistantName}</p>
                 <p className='card-currentNumber'>{`${currentNumber}/${maximumNumber}`}</p>
                 {children}
-                {isReserved !== undefined && (
+                {isAdmin ? (
                     <button
                         onClick={(e) => {
-                            e.stopPropagation();  
-                            onReserveClick(); 
+                            e.stopPropagation();
+                            
+                            onDeleteClick(); 
                         }}
-                        className="card-reservation"  
+                        className="card-delete"
                     >
-                        {isReserved ? '예약 완료' : '예약'}
+                        삭제
                     </button>
+                ) : (
+                    isReserved !== undefined && (
+                        <button
+                            onClick={(e) => {
+                                e.stopPropagation();  
+                                onReserveClick(); 
+                            }}
+                            className="card-reservation"  
+                        >
+                            {isReserved ? '예약 완료' : '예약'}
+                        </button>
+                    )
                 )}
+
+
             </div>
          
     );
@@ -62,7 +77,10 @@ czCard.propTypes = {
     weekDay: PropTypes.string,
     currentNumber: PropTypes.number,
     maximumNumber: PropTypes.number,
-    onReserveClick: PropTypes.func
+    onReserveClick: PropTypes.func,
+    isAdmin: PropTypes.bool,         // 추가된 부분
+    onDeleteClick: PropTypes.func    // 추가된 부분
+
 };
 
 czCard.defaultProps = {
@@ -76,7 +94,9 @@ czCard.defaultProps = {
     weekDay: '',
     currentNumber: 0,
     maximumNumber: 0,
-    onReserveClick: () => {} 
+    onReserveClick: () => {},
+    isAdmin: false,                   // 추가된 부분
+    onDeleteClick: () => {}   
 };
 
 export default czCard;
