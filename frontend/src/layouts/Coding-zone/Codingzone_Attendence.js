@@ -34,12 +34,19 @@ const Codingzone_Attendence = () => {
     };
 
     const handleClassRegistration = () => {
-        navigate(`/coding-zone/Class_Registration`);
+        navigate(`/coding-zone/coding-class-regist`);
     };
 
     const formatTime = (timeString) => {
         const [hours, minutes] = timeString.split(':');
         return `${hours}:${minutes}`;
+    };
+
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        const month = date.getMonth() + 1;  // getMonth()는 0부터 시작하므로 1을 더해줍니다.
+        const day = date.getDate();
+        return `${month.toString().padStart(2, '0')}/${day.toString().padStart(2, '0')}`;  // 두 자리 숫자로 유지
     };
 
     const isFutureDate = (classDate, classTime) => {
@@ -118,12 +125,15 @@ const Codingzone_Attendence = () => {
                     출결 확인
                 </button>
                 {showRegisterClassButton && (
+                    <>
+                    <div className="divider"></div>
                     <button
-                        className={`btn-attend ${activeButton === 'register' ? 'active' : ''}`}
+                        className={`btn-attend ${activeButton === 'manage_class' ? 'active' : ''}`}
                         onClick={handleClassRegistration}
                     >
                         수업 등록
                     </button>
+                    </>
                 )}
                 {showAdminButton && (
                     <>
@@ -137,12 +147,15 @@ const Codingzone_Attendence = () => {
                     </>
                 )}
                 {showManageAllButton && (
+                    <>
+                    <div className="divider"></div>
                     <button
-                        className={`btn-attend ${activeButton === 'manage-all' ? 'active' : ''}`}
+                        className={`btn-attend ${activeButton === 'manage_all' ? 'active' : ''}`}
                         onClick={handleFullManagement}
                     >
                         전체 관리
                     </button>
+                    </>
                 )}
             </div>
 
@@ -165,19 +178,26 @@ const Codingzone_Attendence = () => {
             </div>
 
             <div className="info_data_container">
-                {attendList.map((item, index) => (
-                    <div key={index} className="info_data_inner">
-                        <div className="info_data_date">{item.classDate}</div>
-                        <div className="info_data_time">{formatTime(item.classTime)}</div>
-                        <div className="info_data_bar"></div>
-                        <div className="info_data_classname">{item.className}</div>
-                        <div className="info_data_assistant">{item.assistantName}</div>
-                        <div className="info_data_status">
-                            {isFutureDate(item.classDate, item.classTime) ? '진행중' : (item.attendance === '1' ? 'Y' : 'N')}
-                        </div>
+    {attendList.length > 0 ? (
+        attendList.map((item, index) => (
+            <div key={index}>
+                <div className="info_data_inner">
+                    <div className="info_data_date">{formatDate(item.classDate)}</div>
+                    <div className="info_data_time">{formatTime(item.classTime)}</div>
+                    <div className="info_data_bar"></div>
+                    <div className="info_data_classname">{item.className}</div>
+                    <div className="info_data_assistant">{item.assistantName}</div>
+                    <div className="info_data_status">
+                        {isFutureDate(item.classDate, item.classTime) ? '진행중' : (item.attendance === '1' ? 'Y' : 'N')}
                     </div>
-                ))}
+                </div>
+                <div className="hr-line"></div> {/* Horizontal line after each item */}
             </div>
+        ))
+    ) : (
+        <div className="empty-list-message">신청한 수업 리스트가 없습니다.</div>
+    )}
+</div>
         </div>
     );
 };

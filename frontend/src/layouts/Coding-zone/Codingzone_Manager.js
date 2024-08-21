@@ -9,7 +9,6 @@ import '../css/codingzone/codingzone_manager.css';
 import { getczauthtypetRequest, getczattendlistRequest, getczreservedlistRequest, putczattendc1Request, putczattendc2Request } from '../../apis/Codingzone-api.js';
 
 const Codingzone_Manager = () => {
-    const [authMessage, setAuthMessage] = useState('');
     const [attendList, setAttendList] = useState([]);
     const [reservedList, setReservedList] = useState([]);
     const [showAdminButton, setShowAdminButton] = useState(false);
@@ -27,6 +26,10 @@ const Codingzone_Manager = () => {
         fetchAuthType();
         fetchAttendList();
     }, [token]);
+
+    useEffect(() => {
+        fetchReservedList();
+    }, [token, selectedDate]);
 
     const fetchAuthType = async () => {
         const response = await getczauthtypetRequest(token);
@@ -60,16 +63,14 @@ const Codingzone_Manager = () => {
         const formattedDate = selectedDate.toISOString().split('T')[0];
         const response = await getczreservedlistRequest(token, formattedDate);
         if (response && response.code === "SU") {
-            setReservedList(response.studentList);
+            setReservedList(response.studentList.sort((a, b) => a.classTime.localeCompare(b.classTime)));
         } else {
             console.error(response.message);
             setReservedList([]);
         }
     };
 
-    useEffect(() => {
-        fetchReservedList();
-    }, [token, selectedDate]);
+
 
     const handleAttendanceUpdate = async (student, newState) => {
         const method = student.grade === 1 ? putczattendc1Request : putczattendc2Request;
@@ -80,6 +81,11 @@ const Codingzone_Manager = () => {
         } else {
             alert(`오류: ${response.message}`);
         }
+    };
+
+    const formatTime = (timeString) => {
+        const [hours, minutes] = timeString.split(':');
+        return `${hours}:${minutes}`;
     };
 
     return (
@@ -117,36 +123,76 @@ const Codingzone_Manager = () => {
                     </>
                 )}
             </div>
-            <div className="czm_container">
-                <DatePicker
-                    selected={selectedDate}
-                    onChange={(date) => setSelectedDate(date)}
-                    dateFormat="yyyy/MM/dd"
-                />
-            </div>
-            <div className="reserved-list-container">
-                <h3>{selectedDate.toISOString().split('T')[0]} 예약 리스트</h3>
-                {reservedList.length > 0 ? (
-                    <ul>
-                        {reservedList.map((student, index) => (
-                            <li key={index}>
-                                이름: {student.userName}, 이메일: {student.userEmail}, 수업명: {student.className}, 수업시간: {student.classTime},
-                                {student.attendance === "1" ? (
-                                    <button className="btn-attendance" onClick={() => { }} disabled>출석</button>
-                                ) : (
-                                    <button className="btn-attendance-disabled" onClick={() => handleAttendanceUpdate(student, "1")}>출석</button>
-                                )}
-                                {student.attendance === "0" ? (
-                                    <button className="btn-absence" onClick={() => { }} disabled>결석</button>
-                                ) : (
-                                    <button className="btn-absencebtn-absence-disabled" onClick={() => handleAttendanceUpdate(student, "0")}>결석</button>
-                                )}
-                            </li>
-                        ))}
-                    </ul>
-                ) : (
-                    <p>예약된 리스트가 없습니다.</p>
-                )}
+
+
+
+            <div className="reserved_manager-list-container">
+                <div className="czm_manager_container">
+                    <DatePicker
+                        selected={selectedDate}
+                        onChange={(date) => {
+                            const adjustedDate = new Date(date.setHours(12));
+                            setSelectedDate(adjustedDate);
+                        }}
+                        dateFormat="yyyy/MM/dd" 
+                        className="custom_manager_datepicker"
+                    />
+                </div>
+                <h3 className="date_manager_title">{selectedDate.toISOString().split('T')[0]} 예약 리스트</h3>
+
+
+                <div className="line-manager-container1">
+                    {/* 실선 영역 */}
+                </div>
+
+                <div className="info-manager-container">
+                    <div className="info_manager_inner">
+                        <div className="info_manager_name">이름</div>
+                        <div className="info_manager_studentnum ">학번</div>
+                        <div className="info_manager_bar"></div>
+                        <div className="info_manager_time ">시간</div>
+                        <div className="info_manager_status">출결</div>
+                    </div>
+                </div>
+                <div className="line-manager-container2">
+                    {/* 실선 영역 */}
+                </div>
+
+                <div className="info_manager_container">
+                    {reservedList.length > 0 ? (
+                        reservedList.map((student, index, array) => {
+                            const isNextTimeBlockDifferent = index === array.length - 1 || student.classTime !== array[index + 1].classTime;
+                            return (
+                                <div key={index}>
+                                    <div className="info_manager_data_inner">
+                                        <div className="info_manager_data_name">{student.userName}</div>
+                                        <div className="info_manager_data_studentnum">{student.userStudentNum}</div>
+                                        <div className="info_manager_data_bar"></div>
+                                        <div className="info_manager_data_time">{formatTime(student.classTime)}</div>
+                                        <div className="info_manager_data_status">
+                                            {student.attendance === "1" ? (
+                                                <button className="btn_manager_attendance" disabled>출석</button>
+                                            ) : (
+                                                <button className="btn_manager_attendance-disabled" onClick={() => handleAttendanceUpdate(student, "1")}>출석</button>
+                                            )}
+                                            {student.attendance === "0" ? (
+                                                <button className="btn_manager_absence" disabled>결석</button>
+                                            ) : (
+                                                <button className="btn_manager_absence-disabled" onClick={() => handleAttendanceUpdate(student, "0")}>결석</button>
+                                            )}
+                                        </div>
+                                    </div>
+                                    <div className={isNextTimeBlockDifferent ? "hr_manager_line_thick" : "hr_manager_line"}></div>
+                                </div>
+                            );
+                        })
+                    ) : (
+                        <p className="no-reservations">예약된 리스트가 없습니다.</p>
+                    )}
+
+                </div>
+
+
             </div>
         </div>
     );
