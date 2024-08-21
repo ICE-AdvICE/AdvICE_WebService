@@ -127,6 +127,10 @@ const BlogForm = ({ editing }) => {
             }
         }
     };
+    const qlContainerElement = document.querySelector('.ql-container');
+    if (qlContainerElement) {
+      qlContainerElement.style.setProperty('height', '25vw', 'important');
+    }
     useEffect(() => {
         const verifyAccess = async () => {
             const banStatus = await checkUserBanStatus(token);
@@ -140,61 +144,71 @@ const BlogForm = ({ editing }) => {
     }, [token, navigate]);
     
     return (
-        <div className='blog-container'>
+        <div className="BlogForm-container">
+             <div className='blog-container'>
             <div className = "img-container">
                 <img src="/main-image.png" className="header2-image"/>
                 <img src="/mainword-image.png"   className="words-image"/>
 
             </div>
             {error && <div className="alert alert-danger">{error}</div>}
-            <div className="title-container">
-                <div className={`dropdown ${dropdownOpen ? 'active' : ''}`} onClick={() => setDropdownOpen(!dropdownOpen)}>
-                    <div className="select">
-                        <span>{categoryMap[category]}</span>
-                        <i className="fa fa-chevron-left"></i>
-                    </div>
-                    <input type="hidden" name="category" value={categoryString} />
-                
-                    <ul className="dropdown-menu">
-                        <li onClick={() => handleCategoryChange('카테고리 선택', '카테고리 선택')}>카테고리 선택</li>
-                        <li onClick={() => handleCategoryChange('REQUEST', '요청')}>요청</li>
-                        <li onClick={() => handleCategoryChange('GENERAL', '일반')}>일반</li>
-                        {isAdmin && (<li onClick={() => handleCategoryChange('NOTIFICATION', '공지')}>공지</li>)}
+            <div className ='createpage-container'>
+                <div className="title-container">
+                    <div className={`dropdown ${dropdownOpen ? 'active' : ''}`} onClick={() => setDropdownOpen(!dropdownOpen)}>
+                        <div className="select">
+                            <span>{categoryMap[category]}</span>
+                            <i className="fa fa-chevron-left"></i>
+                        </div>
+                        <input type="hidden" name="category" value={categoryString} />
+                    
+                        <ul className="dropdown-menu">
+                            <li onClick={() => handleCategoryChange('카테고리 선택', '카테고리 선택')}>카테고리 선택</li>
+                            <li onClick={() => handleCategoryChange('REQUEST', '요청')}>요청</li>
+                            <li onClick={() => handleCategoryChange('GENERAL', '일반')}>일반</li>
+                            {isAdmin && (<li onClick={() => handleCategoryChange('NOTIFICATION', '공지')}>공지</li>)}
 
-                      
-                    </ul>
+                        
+                        </ul>
+                    </div>
                 </div>
-            </div>
-            <form className="form-container"  onSubmit={handleSubmit}>
-                <div className="mb-3">
-                    <input
-                        className="form-control"
-                        value={articleTitle}
-                        onChange={(e) => setArticleTitle(e.target.value)}
-                        placeholder="제목을 입력하세요"
-                        required
+                <form className="form-container"  onSubmit={handleSubmit}>
+                    <div className="mb-3">
+                        <input
+                            className="form-control"
+                            value={articleTitle}
+                            onChange={(e) => setArticleTitle(e.target.value)}
+                            placeholder="제목을 입력하세요"
+                            required
+                        />
+                    </div>
+                    <ReactQuill
+                        theme="snow"
+                        value={articleContent}
+                        onChange={setArticleContent}
                     />
-                </div>
-                <ReactQuill
-                    theme="snow"
-                    value={articleContent}
-                    onChange={setArticleContent}
-                />
-                <div className = "button-container">
-                    <button className="esbutton" type="submit" disabled={loading}>
-                        {editing ? '수정' : '등록'}
-                    </button>
-                    <button className="cancel" onClick={() => navigate(-1)} type="button">
-                        취소
-                    </button>
-                </div>
-            </form>
+                    <div className = "create-button-container">
+                        <button className="esbutton" type="submit" disabled={loading}>
+                            {editing ? '수정' : '등록'}
+                        </button>
+                        <button className="cancel" onClick={() => navigate(-1)} type="button">
+                            취소
+                        </button>
+                    </div>
+                </form>
+
+            </div>
+           
         </div>
+
+        </div>
+       
     );
 };
 
 BlogForm.propTypes = {
     editing: PropTypes.bool,
 };
+ 
+
 
 export default BlogForm;

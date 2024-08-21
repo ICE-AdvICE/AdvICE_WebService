@@ -15,6 +15,9 @@ const MainPage = () => {
   const handlereservationClick = () => {
     window.location.href = 'https://open.kakao.com/o/giOS427b';  
   };
+  const handlefeedbackClick = () => {
+    window.location.href = 'https://open.kakao.com/o/swnIYgKg';  
+  };
   useEffect(() => {
     const fetchData = async () => {
         const data = await getMypageRequest(cookies.accessToken);
@@ -30,14 +33,11 @@ const MainPage = () => {
 
     fetchData();
 }, [cookies.accessToken, navigate]);
+
   const handlecodingzone = () => {
-    const token = cookies.accessToken; 
-    
-    if (!token) {
-      alert('로그인이 필요합니다.');
-    } else {
+ 
       navigate(`/coding-zone`);
-    }
+    
   };
 
   return (
@@ -62,6 +62,9 @@ const MainPage = () => {
           <p>정보통신공학과 스터디룸<br /> 예약 오픈채팅방 입니다.</p>
           <button onClick={handlereservationClick} className="btn study">Study Room</button>
         </div>
+      </div>
+      <div className='feedback-container'>
+        <button onClick={handlefeedbackClick} className="feedback-btn">서비스 이용하시는데 불편한 점이나 요청사항이 있으신가요?</button>
       </div>
     </div>
   );

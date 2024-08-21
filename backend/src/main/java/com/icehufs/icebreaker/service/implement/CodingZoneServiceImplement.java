@@ -3,8 +3,13 @@ package com.icehufs.icebreaker.service.implement;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 
+import com.icehufs.icebreaker.dto.object.CodingZoneAssitantListItem;
 import com.icehufs.icebreaker.dto.object.CodingZoneStudentListItem;
 import com.icehufs.icebreaker.dto.object.PersAttendManagListItem;
 import com.icehufs.icebreaker.dto.object.ReservedClassListItem;
@@ -12,6 +17,7 @@ import com.icehufs.icebreaker.dto.request.codingzone.*;
 import com.icehufs.icebreaker.dto.response.ResponseDto;
 import com.icehufs.icebreaker.dto.response.article.CheckOwnOfArticleResponseDto;
 import com.icehufs.icebreaker.dto.response.codingzone.*;
+import com.icehufs.icebreaker.dto.response.user.AuthorityResponseDto;
 import com.icehufs.icebreaker.entity.AuthorityEntity;
 import com.icehufs.icebreaker.entity.CodingZoneClass;
 import com.icehufs.icebreaker.entity.CodingZoneRegisterEntity;
@@ -153,23 +159,23 @@ public class CodingZoneServiceImplement implements CodingZoneService {
     }
 
     @Override
-    public ResponseEntity<? super DeleteClassOfGroupResponseDto> deleteClass(Integer classNum, String email) {
+    public ResponseEntity<? super DeleteClassResponseDto> deleteClass(Integer classNum, String email) {
         try{
             // 사용자 계정이 존재하는지(로그인 시간이 초과됐는지) 확인하는 코드
             boolean existedUser = userRepository.existsByEmail(email);
-            if (!existedUser) return GroupInfUpdateResponseDto.notExistUser();
+            if (!existedUser) return DeleteClassResponseDto.notExistUser();
 
-            GroupInfEntity groupInfEntity = groupInfRepository.findByClassNum(classNum);
-            if (groupInfEntity == null) return DeleteClassOfGroupResponseDto.noExistArticle();
+            CodingZoneClass codingZoneClass = codingZoneClassRepository.findByClassNum(classNum);
+            if (codingZoneClass == null) return DeleteClassResponseDto.noExistArticle();
 
-            groupInfRepository.delete(groupInfEntity);
+            codingZoneClassRepository.delete(codingZoneClass);
 
         }catch(Exception exception){
             exception.printStackTrace();
             return ResponseDto.databaseError();
         }
 
-        return DeleteClassOfGroupResponseDto.success();
+        return DeleteClassResponseDto.success();
     }
 
 
@@ -190,7 +196,7 @@ public class CodingZoneServiceImplement implements CodingZoneService {
     
             CodingZoneRegisterEntity codingZoneRegisterEntity = codingZoneRegisterRepository.findByClassNumAndUserEmail(classNum, email);
             if (codingZoneRegisterEntity != null) {
-                return CodingZoneRegisterResponseDto.alreadyReserve();
+                return CodingZoneRegisterResponseDto.alreadyReserve(); //해당 수업을 이미 예약했을 때
             }
     
             // 인원 초과 처리
@@ -278,23 +284,82 @@ public class CodingZoneServiceImplement implements CodingZoneService {
     @Override
     public ResponseEntity<? super GetListOfCodingZoneClassResponseDto> getClassList(Integer grade, String email) {
         List<CodingZoneClass> classEntities = new ArrayList<>();
-        try{
+        int registedClassNum = 0;
+        try {
             // 사용자 계정이 존재하는지(로그인 시간이 초과됐는지) 확인하는 코드
             boolean existedUser = userRepository.existsByEmail(email);
             if (!existedUser) return GetListOfCodingZoneClassResponseDto.notExistUser();
 
-            if(grade != 1 && grade != 2) return GetListOfCodingZoneClassResponseDto.validationFailed();
+            if (grade != 1 && grade != 2) return GetListOfCodingZoneClassResponseDto.validationFailed();
 
-            classEntities = codingZoneClassRepository.findByGrade(grade);
-            if(classEntities.isEmpty()) return  GetListOfCodingZoneClassResponseDto.noExistArticle();
+            // 현재 날짜가 수요일에서 일요일 사이인지 확인
+            LocalDate today = LocalDate.now();
+            DayOfWeek dayOfWeek = today.getDayOfWeek();
+            //if (dayOfWeek.getValue() < DayOfWeek.THURSDAY.getValue()) {
+            //    return GetListOfCodingZoneClassResponseDto.noExistArticle();
+            //}
 
-        }catch(Exception exception) {
+
+            // 다음 주 월요일과 일요일 계산
+            LocalDate nextMonday = today.with(TemporalAdjusters.next(DayOfWeek.MONDAY));
+            LocalDate nextSunday = nextMonday.plusDays(6);
+
+            // 다음 주 월요일부터 일요일까지의 수업만 조회
+            classEntities = codingZoneClassRepository.findByGradeAndClassDateBetween(
+                grade, 
+                nextMonday.format(DateTimeFormatter.ISO_LOCAL_DATE), 
+                nextSunday.format(DateTimeFormatter.ISO_LOCAL_DATE)
+            );
+            if (classEntities.isEmpty()) return GetListOfCodingZoneClassResponseDto.noExistArticle();
+            
+            for (CodingZoneClass classEntitie : classEntities) {
+                CodingZoneRegisterEntity codingZoneRegisterEntity = codingZoneRegisterRepository.findByClassNumAndUserEmail(classEntitie.getClassNum(), email);
+                if (codingZoneRegisterEntity != null) {
+                    registedClassNum = classEntitie.getClassNum();
+                    break;
+                }
+            }
+
+        } catch (Exception exception) {
             exception.printStackTrace();
             return ResponseDto.databaseError();
         }
-        return GetListOfCodingZoneClassResponseDto.success(classEntities);
+        return GetListOfCodingZoneClassResponseDto.success(registedClassNum,classEntities);
+    }
 
+    @Override
+    public ResponseEntity<? super GetListOfCodingZoneClassForNotLogInResponseDto> getClassList2(Integer grade) {
+        List<CodingZoneClass> classEntities = new ArrayList<>();
+        try {
+            // 사용자 계정이 존재하는지(로그인 시간이 초과됐는지) 확인하는 코드
+            if (grade != 1 && grade != 2) return GetListOfCodingZoneClassForNotLogInResponseDto.validationFailed();
+
+            // 현재 날짜가 수요일에서 일요일 사이인지 확인
+            LocalDate today = LocalDate.now();
+            DayOfWeek dayOfWeek = today.getDayOfWeek();
+            //if (dayOfWeek.getValue() < DayOfWeek.THURSDAY.getValue()) {
+                //return GetListOfCodingZoneClassResponseDto.noExistArticle();
+            //}
+
+
+            // 다음 주 월요일과 일요일 계산
+            LocalDate nextMonday = today.with(TemporalAdjusters.next(DayOfWeek.MONDAY));
+            LocalDate nextSunday = nextMonday.plusDays(6);
+
+            // 다음 주 월요일부터 일요일까지의 수업만 조회
+            classEntities = codingZoneClassRepository.findByGradeAndClassDateBetween(
+                grade, 
+                nextMonday.format(DateTimeFormatter.ISO_LOCAL_DATE), 
+                nextSunday.format(DateTimeFormatter.ISO_LOCAL_DATE)
+            );
         
+            if (classEntities.isEmpty()) return GetListOfCodingZoneClassForNotLogInResponseDto.noExistArticle();
+
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            return ResponseDto.databaseError();
+        }
+        return GetListOfCodingZoneClassForNotLogInResponseDto.success(classEntities);
     }
 
     @Override
@@ -460,5 +525,94 @@ public class CodingZoneServiceImplement implements CodingZoneService {
             authorityRepository.save(authorityEntity);
         });
     }
- 
+
+    @Override
+    public ResponseEntity<? super GiveAuthResponseDto> giveAuth(String email, HandleAuthRequestDto dto) {
+        try{
+            //로그인된 사용자 토큰 시간 만료시 발생
+            boolean existedUser = userRepository.existsByEmail(email);
+            if (!existedUser) return GiveAuthResponseDto.notExistUser();
+
+            //권한을 주려하는 사용자가 회원가입이 안되어있을 때
+            AuthorityEntity authorityEntity = authorityRepository.findByEmail(dto.getEmail());
+            if (authorityEntity == null) return GiveAuthResponseDto.notSingUpUser();
+
+            if("ROLE_ADMIN1".equals(dto.getRole())){
+                if(authorityEntity.getRoleAdmin1().equals(dto.getRole())) return GiveAuthResponseDto.alreadyPerm(); //특정 권한이 이미 있을 떄
+                authorityEntity.giveAdmin1Auth();
+            }else if("ROLE_ADMINC1".equals(dto.getRole())){
+                if(authorityEntity.getRoleAdminC1().equals("ROLE_ADMINC1") || authorityEntity.getRoleAdminC2().equals("ROLE_ADMINC2")) return GiveAuthResponseDto.alreadyPerm(); //특정 권한이 이미 있을 떄
+                authorityEntity.giveAdminC1Auth();
+            }else if("ROLE_ADMINC2".equals(dto.getRole())){
+                if(authorityEntity.getRoleAdminC1().equals("ROLE_ADMINC1") || authorityEntity.getRoleAdminC2().equals("ROLE_ADMINC2")) return GiveAuthResponseDto.alreadyPerm(); //특정 권한이 이미 있을 떄
+                authorityEntity.giveAdminC2Auth();
+            }
+            authorityRepository.save(authorityEntity);
+
+        } catch (Exception exception){
+            exception.printStackTrace();
+            return GiveAuthResponseDto.databaseError();
+    }
+    return GiveAuthResponseDto.success();
+    }
+
+    @Override
+    public ResponseEntity<? super DepriveAuthResponseDto> depriveAuth(String email, HandleAuthRequestDto dto){
+        try{
+            //로그인된 사용자 토큰 시간 만료시 발생
+            boolean existedUser = userRepository.existsByEmail(email);
+            if (!existedUser) return DepriveAuthResponseDto.notExistUser();
+
+            //권한을 주려하는 사용자가 회원가입이 안되있을 때
+            AuthorityEntity authorityEntity = authorityRepository.findByEmail(dto.getEmail());
+            if (authorityEntity == null) return DepriveAuthResponseDto.notSingUpUser();
+
+            if("ROLE_ADMIN1".equals(dto.getRole())){
+                if(authorityEntity.getRoleAdmin1().equals("NULL")) return GiveAuthResponseDto.alreadyPerm(); // 박탈하려히는 특정 권한이 없을 때
+                authorityEntity.setRoleAdmin1("NULL");
+                authorityEntity.setGivenDateAdmin1(null);
+            }else if("ROLE_ADMINC1".equals(dto.getRole())){
+                if(authorityEntity.getRoleAdminC1().equals("NULL")) return GiveAuthResponseDto.alreadyPerm(); // 박탈하려히는 특정 권한이 없을 때
+                authorityEntity.setRoleAdminC1("NULL");
+                authorityEntity.setGivenDateAdminC(null);
+            }else if("ROLE_ADMINC2".equals(dto.getRole())){
+                if(authorityEntity.getRoleAdminC2().equals("NULL")) return GiveAuthResponseDto.alreadyPerm(); // 박탈하려히는 특정 권한이 없을 때
+                authorityEntity.setRoleAdminC2("NULL");
+                authorityEntity.setGivenDateAdminC(null);
+            }
+            authorityRepository.save(authorityEntity);
+
+        } catch (Exception exception){
+            exception.printStackTrace();
+            return DepriveAuthResponseDto.databaseError();
+    }
+    return DepriveAuthResponseDto.success();
+    }
+
+    @Override
+    public ResponseEntity<? super GetCodingZoneAssitantListResponseDto> getAssistantList() {
+        List<User> ListOfCodingZone1 = new ArrayList<>();
+        List<User> ListOfCodingZone2 = new ArrayList<>();
+        try {
+            String C1 = "ROLE_ADMINC1";
+            String C2 = "ROLE_ADMINC2";
+            List<AuthorityEntity> users = authorityRepository.findByRoleAdminC1(C1);
+            List<AuthorityEntity> users2 = authorityRepository.findByRoleAdminC2(C2);
+            if(users.isEmpty() || users2.isEmpty()) return GetCodingZoneAssitantListResponseDto.notExistUser();
+    
+            users.forEach(authorityEntity -> {
+                User user = userRepository.findByEmail(authorityEntity.getEmail());
+                ListOfCodingZone1.add(user);
+            });
+            users2.forEach(authorityEntity -> {
+                User user = userRepository.findByEmail(authorityEntity.getEmail());
+                ListOfCodingZone2.add(user);
+            });
+
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            return ResponseDto.databaseError();
+        }
+        return GetCodingZoneAssitantListResponseDto.success(ListOfCodingZone1, ListOfCodingZone2);
+    }
 }

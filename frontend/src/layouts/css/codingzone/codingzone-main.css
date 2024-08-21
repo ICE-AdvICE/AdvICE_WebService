@@ -1,41 +1,67 @@
 .select-container{
   display: flex;
-  width: 60%;
+  margin: 0 auto;
   position: relative;
-  left: 20%;
-  justify-content: space-around;
   margin-bottom: 1%;
+  max-width: 1000px;
 }
 .select-container button{
   background-color: white;
   border: none !important;
+  font-size: 13px;
+  width: 200px;
+  
+   
+}
+.cz-count-container{
+  font-size: 12px;
 }
 .select-container span{
-  padding: 1%;
+  font-size: 13px;
+  width: 100px;
+  justify-content: center;
+  display: flex;
+  flex: 1 4;
+  min-width: 35px;
 }
 
-.img-container{
+.codingzone-top-container{
   width: 100%;
   display: flex;
   position: relative;
+  height: auto;
+  background-color: #f3f3f3;
+  padding: 20px 10px;
+  justify-content: center;
+}
+.codingzonetop2-image{
+  width: 1000px;
+  max-height: 330px;
+  margin-left: 20px;
+  margin-right: 20px;
 }
 .select-container button:hover{
   color: #164694f4;
   cursor: pointer;
 }
-.codingzonetop-image{
-  width:100%;
-  position: absolute;
+.codingzone-main-top-image{
+  max-width: 1000px;
+  position: relative;
   height: 26vw;
   background-size: cover;
 }
+.codingzone-container{
+  height: auto;
+  flex:1;
+  min-width: 360px;
+}
 .codingzone-body-container{
-  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 10px;
   flex-direction: column;
   position: relative;
   display: flex;
-  height: auto;
-  margin-bottom: 5%;
 }
 .cz-category-top{
   margin-top: 1%;
@@ -43,126 +69,222 @@
   align-items: center;
   position: relative;
   justify-content: space-between; 
-  height: 3vw;
-  font-size: 0.8vw;
-  width: 46%;
-  margin-left: 43%
+  font-size: 8px;
+  margin-left: 39.5%;
 }
 .cz-category-date{
-  height: 100%;
+  height: 40px;
+  display: flex;
 }
 .cz-category-date button{
   height: 100%;
+  width: 100px;
+  align-items: center;
+  justify-content: center;
+  display: flex;
   border-color: #D0D5DD;
   background-color: white;
+}
+.cz-1{
+  margin-right: 10px;
 }
 .cz-category-date button:hover{
   color: white;
   background-color: #002D56;
+}
+.cz-category-date button.selected {
+  color: white;
+  background-color: #002D56;
+}
+.codingzone-date button.selected {
+  color: white;
+  background-color: #002D56;
+}
+.select-container button.selected {
+  color:purple;
 }
 .codingzone-date{
   display: flex;
   align-items: center;
   position: relative;
   justify-content: space-between; 
-  height: 4vw;
-  width: 80%;
-  margin-left: 10%;
+  margin-top: 1%;
+  max-width: 1000px;
   margin-bottom: 1%;
 
 }
+ 
 .codingzone-date button{
-  width: 15%;
-  font-size: 1vw;
-  height: 80%;
+  width: 160px;
+  font-size: 13px;
+  height: 40px;
   font-weight: 700;
   background-color: white;
-  border-color: #D0D5DD;
+  border:none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.codingzone-date span{
+  font-size: 13px;
+  width: 50px;
+  justify-content: center;
+  display: flex;
+  flex: 1 4;
+  min-width: 10px;
+  
 }
 .cz-count-container{
   position: relative;
 }
 .category-name-container{
- 
-  width: 80%;
-  position: relative;
+  border-bottom: 1px solid #333;
+  border-top: 1px solid #333;
   display: flex;
-  margin-left: 10%;
+  height: 30px;
+  max-width: 1000px;
   flex-direction: column;
- 
+  justify-content: center;
 }
-
 .codingzone-title{
   display: flex;
-  width: 100%;
+
   flex-direction: row;
   text-align: center;
   justify-content: space-between;
-}
- 
- 
+} 
 .codingzone-title .d-flex p {
   margin-top: 1%;
-  flex: 1;
+  flex-grow: 1;
   margin-bottom: 1%;
   font-size: 1.2vw;
 }
  
 .codingzone-list{
-  display: flex;
   margin-top: 1%;
   position: relative;
-  width: 80%;
-  margin-left: 10%;
-
-}
-.cz-card{
-  width: 100%;
-}
-.czcard{
-  margin-bottom: 2%;
-  background-color: #F6F6F6;
-  width: 100%;
-  height: 5vw;
-  align-items: center;
-  display: flex;
+  max-width: 1000px;
+  min-height: 100px;
 }
  
-.czcard .d-flex p{
-  margin-top: 1%;
-  margin-bottom: 1%;
-  font-size: 1.1vw;
-  font-family: Arial, Helvetica, sans-serif;
+.czcard {
+  margin-bottom: 3%;
+  background-color: #F6F6F6;
+  justify-content: space-between;
+  height: 80px;
+  align-items: center;
+  display: flex;
+ 
 }
-.d-flex p.card-weekDay {
+ 
+.czcard p, .codingzone-title p{
+  margin: 0;
+  font-size: 14px;
+}
+
+.weekDay,.weekTime,  .weekcount ,.registerbutton,.card-hidden-space {
+  text-align: center;  
+  width: 100px;  
+}
+.weekDate {
+  text-align: center;
+  width: 50px;  
+}
+.weeksubject{
+  text-align: center;
+  width: 300px;  
+}
+ .weekperson {
+  text-align: center;
+  width: 150px; 
+ }
+
+.card-weekDay {
   font-weight: 900;
-  flex: 1;  
   text-align: center;  
   color: #002D56;
+  width: 100px;  
+ 
 }
-.d-flex p , .d-flex button{
-  font-weight: 400;
-  flex: 1;  
-  text-align: center;  
-  flex-basis: 0;
-  box-sizing: border-box;
+ .card-weekDate {
+  text-align: center;
+  width: 50px;  
+ 
+}
+ .card-classTime {
+  text-align: center;
+  width: 100px;  
+  
+}
+ .card-className {
+  text-align: center;
+  width: 300px;  
+
+}
+ .card-assistantName {
+  text-align: center;
+  width: 150px; 
+}
+ .card-currentNumber {
+  color: #002D56;
+  font-weight: 600;
+  text-align: center;
+  width: 100px; 
+ 
+}
+.card-reservation,.card-delete {
+  background-color: rgba(128, 128, 128, 0.189);
+  border: none !important;
+  font-size: 12px;
+  border-radius: 0.5vw;
+  width: 100px; 
   padding: 0;
 }
 .card-hidden-space {
-  flex: 2;  
-  visibility: hidden;  
-}
+  width: 100px;
+  
  
- 
-p.card-currentNumber {
-  color: #002D56;
-  font-weight: 600;
- 
-}
-.card-reservation{
-  background-color: rgba(128, 128, 128, 0.189);
-  border: none !important;
-  font-size: 1.2vw;
-  border-radius: 0.5vw;
   
 }
+
+@media (max-width: 1000px) {
+  .card-hidden-space {
+    flex: 1 4 0;
+    min-width: 0;
+  }
+  .cz-category-date button{
+    width: 10vw;
+  }
+  .codingzonetop2-image{
+    max-width: calc(100% - 40px);
+  }
+ 
+}
+
+@media (max-width: 860px) {
+  .cz-category-top {
+    font-size: 8px;
+  }
+  .cz-category-date button{
+    height: 100%;
+ 
+    border-color: #D0D5DD;
+    background-color: white;
+  }
+}
+
+@media (max-width: 465px) {
+  .czcard p, .codingzone-title p,.codingzone-date button{
+    font-size: 12px;
+  }
+
+}
+ 
+
+@media (max-width: 395px) {
+  .czcard p, .codingzone-title p,.codingzone-date button{
+    font-size: 10px;
+  }
+
+}
+ 

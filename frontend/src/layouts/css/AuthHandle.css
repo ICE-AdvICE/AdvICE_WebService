@@ -1,0 +1,87 @@
+/* 주요 컨테이너 스타일 */
+.main-container-AHpage {
+    background: linear-gradient(rgb(255, 255, 255) 70%, rgb(210, 210, 210), rgb(206, 206, 206));
+    min-height: 90vh;
+}
+
+.container-AHpage {
+    width: 350px;
+    margin: 50px auto 1% auto; /* 상단 마진과 !important를 합쳤습니다 */
+    margin-top: 5px;
+    border: 1px solid #021A5C;
+    padding: 35px;
+}
+
+/* 특정 컨테이너 내의 인풋과 셀렉트 스타일 */
+.container-AHpage input, 
+.container-AHpage select {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 8%;
+    border-color: #868686;
+}
+
+/* 범용 버튼 스타일 */
+.button-right-AHpage{
+    height: 80%;
+    padding: 5px 16px;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    color: white;
+    background-color: #002D56;
+    border: 1px solid #D0D5DD;
+}
+
+/* 카테고리 바와 관련된 스타일 */
+.category-bar-AHpage {
+    display: flex;
+    align-items: center;
+    justify-content: center; /* 중앙 정렬 */
+    margin-top: 10%;
+    margin-bottom: 1%;
+}
+
+.category-bar-AHpage button {
+    height: 100%;
+    padding: 10px 20px;
+    border: 1px solid #D0D5DD;
+    background-color: white;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    color: #BFBFBF;
+    white-space: nowrap;
+    border-radius: 1px;
+}
+
+/* 활성 상태 및 호버 상태의 버튼 스타일 */
+.category-bar-AHpage button.active, 
+.category-bar-AHpage button:hover {
+    color: white;
+    background-color: #002D56;
+    border-color: #002D56;
+}
+
+/* 마진 조정과 레이블 스타일 */
+.main-span2-AHpage {
+    margin-left: 3px;
+    margin-right: 3px;
+}
+
+.mail-label{
+    display: block;
+    margin-bottom: 5px;
+    margin-left: 10px;
+    font-family: 'Inter', sans-serif;
+}
+.categori-label{
+    display: block;
+    margin-bottom: 5px;
+    margin-left: 10px;
+    font-family: 'Inter', sans-serif;
+}
+/* 오른쪽 정렬 버튼 스타일 */
+.button-right-AHpage {
+    display: block;
+    width: auto;
+    margin-left: auto; /* 왼쪽 여백을 자동으로 설정하여 오른쪽 정렬 */
+}

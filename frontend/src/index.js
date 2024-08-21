@@ -14,6 +14,7 @@ import NavBar from './components/NavBar';
 import Footer from './components/Footer';
 import CreatePage from './layouts/CreatePage';
 import ShowPage from './layouts/ShowPage';
+import AuthHandle from './layouts/AuthHandle';
 import './layouts/css/NavBar.css';
 
 const App = () => {
@@ -24,6 +25,7 @@ const App = () => {
       <NavBar />
       <Routes>
         <Route path="/" element={<Main />} />
+        <Route path="/auth-handle" element={<AuthHandle />} /> 
         <Route path="/article-main" element={<ArticleMain />} />
         <Route path="/article-main/create" element={<CreatePage />} />
         <Route path="/article-main/:articleNum/edit" element={<EditPage />} />

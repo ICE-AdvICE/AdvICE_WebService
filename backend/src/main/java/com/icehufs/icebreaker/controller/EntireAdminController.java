@@ -63,13 +63,13 @@ public class EntireAdminController {
         return response;
     }
 
-    @DeleteMapping("/delete-class/{classNum}") //(A/B)조의 특정 수업 삭제 API
-    public ResponseEntity<? super DeleteClassOfGroupResponseDto> deleteClass(
+    @DeleteMapping("/delete-class/{classNum}") //등록된 특정 수업 삭제 API
+    public ResponseEntity<? super DeleteClassResponseDto> deleteClass(
         @PathVariable Integer classNum,
         @AuthenticationPrincipal String email
 
     ){
-        ResponseEntity<? super DeleteClassOfGroupResponseDto> response = codingzoneService.deleteClass(classNum, email);
+        ResponseEntity<? super DeleteClassResponseDto> response = codingzoneService.deleteClass(classNum, email);
         return response;
     }
 
@@ -89,7 +89,23 @@ public class EntireAdminController {
         ResponseEntity<? super DeleteAllInfResponseDto> response = codingzoneService.deleteAll(email);
         return response;
     }
-   
-    
-    
+
+
+    @PatchMapping("/give-auth") //사용자 특정 권한 부여
+    public ResponseEntity<? super GiveAuthResponseDto> giveAuth(
+        @RequestBody @Valid HandleAuthRequestDto requestBody,
+        @AuthenticationPrincipal String email
+    ) {
+        ResponseEntity<? super GiveAuthResponseDto> response = codingzoneService.giveAuth(email, requestBody);
+        return response;
+    }
+
+    @PatchMapping("/deprive-auth") //사용자 특정 권한 박탈
+    public ResponseEntity<? super DepriveAuthResponseDto> depriveAuth(
+        @RequestBody @Valid HandleAuthRequestDto requestBody,
+        @AuthenticationPrincipal String email
+    ) {
+        ResponseEntity<? super DepriveAuthResponseDto> response = codingzoneService.depriveAuth(email, requestBody);
+        return response;
+    }
 }

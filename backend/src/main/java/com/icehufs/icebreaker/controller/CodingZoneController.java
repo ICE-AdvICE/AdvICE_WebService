@@ -49,12 +49,20 @@ public class CodingZoneController {
             return response;
         }
 
-    @GetMapping("/class-list/{grade}")
+    @GetMapping("/class-list/{grade}") //코딩존 메인 페이지에서 로그인 된 사용자를 위한 수업들 나열 API
     public ResponseEntity<? super GetListOfCodingZoneClassResponseDto> getClassList(
         @PathVariable Integer grade,
         @AuthenticationPrincipal String email
     ){
         ResponseEntity<? super GetListOfCodingZoneClassResponseDto> response = codingzoneService.getClassList(grade, email);
+        return response;
+    }
+
+    @GetMapping("/class-list/for-not-login/{grade}") //코딩존 메인 페이지에서 로그인 안된 사용자를 위한 수업들 나열 API
+    public ResponseEntity<? super GetListOfCodingZoneClassForNotLogInResponseDto> getClassList2(
+        @PathVariable Integer grade
+    ){
+        ResponseEntity<? super GetListOfCodingZoneClassForNotLogInResponseDto> response = codingzoneService.getClassList2(grade);
         return response;
     } 
     
@@ -81,6 +89,13 @@ public class CodingZoneController {
         @AuthenticationPrincipal String email
     ){
         ResponseEntity<? super GetReservedClassListItemResponseDto> response = codingzoneService.getReservedClass(classDate, email);
+        return response;
+    } 
+
+    @GetMapping("/assistant-list")
+    public ResponseEntity<? super GetCodingZoneAssitantListResponseDto> getAssistantList(
+    ){
+        ResponseEntity<? super GetCodingZoneAssitantListResponseDto> response = codingzoneService.getAssistantList();
         return response;
     } 
 

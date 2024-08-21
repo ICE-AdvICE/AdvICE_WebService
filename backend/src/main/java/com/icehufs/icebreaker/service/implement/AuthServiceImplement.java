@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.icehufs.icebreaker.common.CertificationNumber;
 import com.icehufs.icebreaker.dto.request.auth.*;
 import com.icehufs.icebreaker.dto.response.ResponseDto;
+import com.icehufs.icebreaker.dto.response.article.DeleteArticleResponseDto;
 import com.icehufs.icebreaker.dto.response.auth.*;
 import com.icehufs.icebreaker.entity.Article;
 import com.icehufs.icebreaker.entity.AuthorityEntity;
@@ -28,6 +29,7 @@ import com.icehufs.icebreaker.repository.CertificationRepository;
 import com.icehufs.icebreaker.repository.UserBanRepository;
 import com.icehufs.icebreaker.repository.UserRepository;
 import com.icehufs.icebreaker.service.AuthService;
+import com.icehufs.icebreaker.util.EncryptionUtil;
 
 import lombok.RequiredArgsConstructor;
 
@@ -183,7 +185,7 @@ public class AuthServiceImplement implements AuthService {
         Article articleEntity = null;
         try {
 
-            //정지하려는 운영자 로그인 시간 초과 -> 무슨 의미인가요?
+            // 정지하려는 운영자 로그인 시간 초과
             boolean existedUser1 = userRepository.existsByEmail(email);
             if (!existedUser1) return GiveUserBanResponseDto.notExistUser();
 
@@ -192,13 +194,14 @@ public class AuthServiceImplement implements AuthService {
             // 만일 게시글이 존재하지 않을 경우.
             if (articleEntity == null) return GiveUserBanResponseDto.noExistArticle();
 
-            String writen_email = articleEntity.getUserEmail();
+            // 게시글의 이메일을 복호화하는 과정
+            String decryptedWriterEmail = EncryptionUtil.decrypt(articleEntity.getUserEmail());
 
             // 정지하려는 유저가 이전에 탈퇴했기에 User테이블에 엔티티가 없을 경우.
-            boolean existedUser = userRepository.existsByEmail(writen_email);
+            boolean existedUser = userRepository.existsByEmail(decryptedWriterEmail);
             if (!existedUser) return GiveUserBanResponseDto.withdrawnId();
 
-            boolean ban_email = userBanRepository.existsByEmail(writen_email);
+            boolean ban_email = userBanRepository.existsByEmail(decryptedWriterEmail);
             // 이미 정지된 계정일 경우.(운영자가 한 번에 단일 작성자의 문제가 있는 여러 게시글에 정지를 부여할 경우.)
             if (ban_email) {
                 return GiveUserBanResponseDto.duplicateId();
@@ -209,7 +212,7 @@ public class AuthServiceImplement implements AuthService {
             UserBan userBan = new UserBan();
             LocalDateTime currentDateTime = LocalDateTime.now();
             LocalDateTime banEndTime = currentDateTime.plus(getPeriod(banDuration));
-            userBan.setEmail(writen_email);
+            userBan.setEmail(decryptedWriterEmail);
             userBan.setBanDuration(banDuration);
             userBan.setBanReason(banReason);
             userBan.setBanStartTime(currentDateTime);

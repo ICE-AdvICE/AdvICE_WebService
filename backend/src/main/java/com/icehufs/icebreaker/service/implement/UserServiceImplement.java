@@ -153,5 +153,4 @@ public class UserServiceImplement implements UserService {
     }
     return Authority1ExistResponseDto.success();
     }
-
 }

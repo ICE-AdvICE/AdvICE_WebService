@@ -11,9 +11,12 @@ public interface ResponseMessage {
         String DUPLICATE_EMAIL = "Duplicate email.";
         String NOT_EXISTED_USER = "This user does not exist.";
         String NOT_EXISTED_ARTICLE = "This article does not exist.";
+        String NOT_EXISTED_COMMET = "Thie comment does not exist.";
         String FULL_CLASS = "This class already full.";
         String ALREADY_RESERVE = "Alredy reserve class.";
         String NOT_RESERVE_CLASS = "Not reserve class.";
+        String NOT_SIGNUP_USER = "Not signUp user.";
+        String PERMITTED_ERROR = "Permission error.";
 
         //HTTP Status 401
         String SIGN_IN_FAIL = "Login information mismatch.";

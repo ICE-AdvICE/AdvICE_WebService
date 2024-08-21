@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 
 const czCard = ({ 
-    onReserveClick , onClick,classDate, children, assistantName, classTime, className, weekDay ,currentNumber,maximumNumber,isReserved
+    onDeleteClick,isAdmin,onReserveClick , onClick,classDate, children, assistantName, classTime, className, weekDay ,currentNumber,maximumNumber,isReserved
 }) => {
     function getShortWeekDay(weekDay) {
         const days = {
@@ -27,27 +27,42 @@ const czCard = ({
     
     return (
         <div className="czcard" onClick={onClick}>
-            <div className="d-flex justify-content-between">
                 <p className='card-weekDay'>{getShortWeekDay(weekDay)}</p>
-                <p className="card-cateDate">{formatDate(classDate)}</p>
+                <p className="card-weekDate">{formatDate(classDate)}</p>
                 <p className='card-classTime'>{formatTime(classTime)}</p>
-                <p className='card-hidden-space '>''</p>
+                <p className='card-hidden-space '></p>
                 <p className='card-className'>{className}</p>
                 <p className="card-assistantName">{assistantName}</p>
                 <p className='card-currentNumber'>{`${currentNumber}/${maximumNumber}`}</p>
                 {children}
-                <button
-                    onClick={(e) => {
-                        e.stopPropagation();  
-                        onReserveClick(); 
-                    }}
-                    className="card-reservation"  
-                >
-                    {isReserved ? '예약 완료' : '예약'}
-                </button>
+                {isAdmin ? (
+                    <button
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            
+                            onDeleteClick(); 
+                        }}
+                        className="card-delete"
+                    >
+                        삭제
+                    </button>
+                ) : (
+                    isReserved !== undefined && (
+                        <button
+                            onClick={(e) => {
+                                e.stopPropagation();  
+                                onReserveClick(); 
+                            }}
+                            className="card-reservation"  
+                        >
+                            {isReserved ? '예약 완료' : '예약'}
+                        </button>
+                    )
+                )}
+
 
             </div>
-        </div>
+         
     );
 };
 
@@ -62,7 +77,10 @@ czCard.propTypes = {
     weekDay: PropTypes.string,
     currentNumber: PropTypes.number,
     maximumNumber: PropTypes.number,
-    onReserveClick: PropTypes.func
+    onReserveClick: PropTypes.func,
+    isAdmin: PropTypes.bool,         // 추가된 부분
+    onDeleteClick: PropTypes.func    // 추가된 부분
+
 };
 
 czCard.defaultProps = {
@@ -76,7 +94,9 @@ czCard.defaultProps = {
     weekDay: '',
     currentNumber: 0,
     maximumNumber: 0,
-    onReserveClick: () => {} 
+    onReserveClick: () => {},
+    isAdmin: false,                   // 추가된 부분
+    onDeleteClick: () => {}   
 };
 
 export default czCard;

@@ -1,28 +1,26 @@
 
 .header-container {
     align-items: center; 
-    width: 90%; 
-    height: 4.5vw;   
+    width: 1200px; 
+    height: 50px;
+    min-width: 350px;
+    margin: 0 auto;
+    padding-left: 20px;
     position: relative;
-    left: 5%;
-
     display: flex;
+    justify-content: space-between;
 }
 .header-container img{
     display: flex;
     margin-top:0.5vw;
-    width: 12vw;
-    height: 3vw;
+    width: 150px;
+    height: 40px;
 }
 .navbar-nav{
     display: flex;
     align-items: flex-end;
-    font-size: 1vw;
-    width: 100%;
- 
-    left: 85%;
- 
- 
+    font-size: 13px;
+    margin-right: 3%;
  
 }
 
