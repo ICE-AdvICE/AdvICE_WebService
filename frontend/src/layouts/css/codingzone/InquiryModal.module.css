@@ -1,0 +1,62 @@
+.root {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1050;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(202, 202, 202, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    overflow-y: auto;
+}
+
+.rootDisable {
+    display: none;
+}
+
+.modalContainer {
+    background-color: white;
+    border-radius: 5px;
+    transition: all 0.3s ease-in-out;
+    width: 80%;
+    max-width: 500px;
+    padding: 20px;
+    box-sizing: border-box;
+    position: relative;
+    pointer-events: auto;
+    z-index: 1051;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.close {
+    position: absolute;
+    top: 3px;
+    right: 15px;
+    font-size: 26px;
+    cursor: pointer;
+}
+
+.close:hover {
+    cursor: pointer;
+}
+
+.modalBody {
+    padding: 10px 20px;
+    margin-bottom: 20px; /* 여백 추가 */
+}
+
+.title {
+    width: 95%;
+    height: 50px;
+    line-height: 50px;
+    vertical-align: middle;
+    padding: 0 10px;
+    border-bottom: 2px solid #b9b9b9;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 5px; /* 여백 추가 */
+}

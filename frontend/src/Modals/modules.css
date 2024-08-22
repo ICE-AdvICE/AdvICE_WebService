@@ -56,10 +56,9 @@
   /* 입력 필드 내부 패딩 */
 }
 
-.loginFormContainer input::placeholder,
-.login_passwordCss input::placeholder {
+.loginFormContainer input::placeholder, .login_passwordCss input::placeholder {
+  font-size: 16px;
   color: #ccc;
-  /* 플레이스홀더 텍스트 색상을 빨간색으로 변경 */
 }
 
 .loginButton {
@@ -88,6 +87,10 @@
   /* 호버 시 배경 색상 변경 */
 }
 
+.responsiveLogo {
+  width: 220px; /* 기본 너비 설정 */
+  height: auto; /* 높이는 자동으로 조절 */
+}
 
 .auth-sign-in-error-message {
   text-align: center;
@@ -629,4 +632,17 @@
   margin-bottom: 10px;
   /* 컨테이너 아래쪽 여백 */
   width: 95%;
+}
+/* 화면 크기가 768px 이하일 때 */
+@media (max-width: 768px) {
+  .responsiveLogo {
+      width: 180px; /* 너비를 180px로 조절 */
+  }
+}
+
+/* 화면 크기가 480px 이하일 때 */
+@media (max-width: 480px) {
+  .responsiveLogo {
+      width: 140px; /* 너비를 140px로 조절 */
+  }
 }

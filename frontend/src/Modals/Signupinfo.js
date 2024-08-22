@@ -189,20 +189,20 @@ const SignUpinfoForm = ({ closeModal }) => {
       <div className="signUpContainer">
         <label htmlFor="user_email" ></label>
         <input
-          type="text"
+          
           value={userEmail}
           onChange={e => setUserEmail(e.target.value)}
           placeholder="학교 이메일"
         />
         <span className="emailDomain">@hufs.ac.kr</span>
-        <button type="button" className="SignupFormpost" onClick={onEmailCertificationHandler}>인증요청</button>
+        <button type="button" className="SignupFormpost" onClick={onEmailCertificationHandler}>요청</button>
       </div>
       {buttonDisabled && <span className="countdown-timer">{countdown}초 후에 다시 시도 가능합니다.</span>}
 
       <div className="emailpost" >
         <label htmlFor="password"></label>
         <input
-          type="text"
+          
           value={userCertificationNumber}
           onChange={e => setUsercertificationNumber(e.target.value)}
           placeholder="인증번호를 입력해주세요."

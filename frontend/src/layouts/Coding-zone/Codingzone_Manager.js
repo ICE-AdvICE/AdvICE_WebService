@@ -7,6 +7,7 @@ import '../css/codingzone/codingzone-main.css';
 import '../css/codingzone/codingzone_attend.css';
 import '../css/codingzone/codingzone_manager.css';
 import { getczauthtypetRequest, getczattendlistRequest, getczreservedlistRequest, putczattendc1Request, putczattendc2Request } from '../../apis/Codingzone-api.js';
+import InquiryModal from './InquiryModal';
 
 const Codingzone_Manager = () => {
     const [attendList, setAttendList] = useState([]);
@@ -17,9 +18,18 @@ const Codingzone_Manager = () => {
     const token = cookies.accessToken;
     const navigate = useNavigate();
     const [selectedDate, setSelectedDate] = useState(new Date());
+    const [showModal, setShowModal] = useState(false);
+
+const handleOpenModal = () => {
+    setShowModal(true);
+};
+
+const handleCloseModal = () => {
+    setShowModal(false);
+};
 
     const handlecodingzoneattendence = () => {
-        navigate(`/coding-zone/Codingzone_Attendence`);
+        navigate(`/coding-zone/Codingzone_Attendance`);
     };
 
     useEffect(() => {
@@ -97,7 +107,8 @@ const Codingzone_Manager = () => {
                     <span> | </span>
                     <button>출결 관리</button>
                     <span> | </span>
-                    <button>문의 하기</button>
+                    <button onClick={handleOpenModal}>문의하기</button>
+{showModal && <InquiryModal isOpen={showModal} onClose={handleCloseModal} />}
                     <span> | </span>
                 </div>
                 <div className="banner_img_container">

@@ -188,7 +188,7 @@ const CodingMain = () => {
 
   const handlecodingzoneattendence = () => {
     setSelectedButton('attendence');   
-    navigate(`/coding-zone/Codingzone_Attendence`);
+    navigate(`/coding-zone/Codingzone_Attendance`);
   };
 
   const handleInquiry = () => {

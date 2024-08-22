@@ -6,7 +6,7 @@ const API_DOMAIN_ADMIN = `${DOMAIN}/api/admin`;
 const GET_CZ_AUTH_TYPE = () => `${API_DOMAIN}/coding-zone/auth-type`;
 const GET_CZ_ATTEND_LIST = () => `${API_DOMAIN}/coding-zone/attend-list`;
 const GET_CZ_ALL_ATTEND = () => `${DOMAIN}/api/admin/student-list`;
-
+const GET_CZ_ASSITANT = () => `${DOMAIN}/api/v1/coding-zone/assistant-list`;
 
 
 const authorization = (accessToken) => {
@@ -410,3 +410,14 @@ export const deprivePermission = async (email, role, token) => {
         return error.response.data;
     }
 }
+
+
+export const getczassitantRequest =  async () => {
+    try {
+        const response = await axios.get(GET_CZ_ASSITANT());
+        return response.data;
+    } catch (error) {
+        if (!error.response || !error.response.data) return null;
+        return error.response.data;
+    }
+};
