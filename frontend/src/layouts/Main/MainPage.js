@@ -44,10 +44,11 @@ const MainPage = () => {
     <div className="main-container">
       <div className="header">
         <h1>ICE</h1>
-        <p>This is an integrated service for students in the Department of Information and Communication Engineering.<br />
-          Try the coding zone reservation, anonymous bulletin board, and study room reservation service for the Department of Information and Communication Engineering.
-          <br />Try your best rather than be the best.
-        </p>
+        <p className="department-info">
+  This is an integrated service for students in the Department of Information and Communication Engineering.<br />
+  Try the coding zone reservation, anonymous bulletin board, and study room reservation service for the Department of Information and Communication Engineering.
+  <br />Try your best rather than be the best.
+</p>
       </div>
       <div className="buttons-container">
         <div className="service-box coding-box">

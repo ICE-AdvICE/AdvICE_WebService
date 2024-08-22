@@ -58,6 +58,7 @@ const LoginForm = ({ onLogin})=> {
       console.error('서버로부터 응답을 받지 못했습니다.');
       alert('네트워크 이상입니다.');
       setError(false);
+      onLogin(false);
       return;
     }
   
@@ -69,11 +70,12 @@ const LoginForm = ({ onLogin})=> {
         const now = new Date().getTime();
         const expires = new Date(now + expirationTime * 1000);
         setCookie('accessToken', token, { expires, path: '/' });
-        onLogin(true);
-        window.location.reload();  // 로그인 성공 후 페이지 새로고침
+        onLogin(true); // Notify parent component about the login status
+        window.location.reload(); // Refresh the page to reflect login changes
       } else {
         console.error('토큰 또는 만료 시간이 제공되지 않았습니다.');
         setError(false);
+        onLogin(false);
       }
     } else {
       if (code === 'DBE') {
@@ -106,8 +108,8 @@ const LoginForm = ({ onLogin})=> {
   
     <form onSubmit={(e) => e.preventDefault()}>
       <div className="loginHeaderContainer">
-        <img src="header-name.png" alt="로그인 로고" style={{ width: '220px', height: 'auto' }} />
-      </div>
+    <img src="header-name.png" alt="로그인 로고" className="responsiveLogo" />
+</div>
       <div className="loginFormContainer">
         <input
           type="text"

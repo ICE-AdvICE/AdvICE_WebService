@@ -33,7 +33,7 @@
     width: 100%;
     flex-wrap: wrap;
     margin-top: 30px;
-   
+
 }
 
 .service-box {
@@ -53,11 +53,13 @@
 .coding-box {
     margin: 20px;
     border: 1.5px solid #052940;
-    transition: transform 0.3s ease-in-out; /* 부드러운 변환 효과 */
+    transition: transform 0.3s ease-in-out;
+    /* 부드러운 변환 효과 */
 }
 
 .coding-box:hover {
-    transform: scale(1.1); /* 호버시 요소 크기를 10% 증가 */
+    transform: scale(1.1);
+    /* 호버시 요소 크기를 10% 증가 */
 }
 
 .icebreaker-box {
@@ -67,7 +69,8 @@
 }
 
 .icebreaker-box:hover {
-    transform: scale(1.1); /* 호버시 요소 크기를 10% 증가 */
+    transform: scale(1.1);
+    /* 호버시 요소 크기를 10% 증가 */
 }
 
 
@@ -78,7 +81,8 @@
 }
 
 .study-box:hover {
-    transform: scale(1.1); /* 호버시 요소 크기를 10% 증가 */
+    transform: scale(1.1);
+    /* 호버시 요소 크기를 10% 증가 */
 }
 
 .service-box p {
@@ -123,33 +127,49 @@
     opacity: 0.8;
 }
 
-.feedback-container{
+.feedback-container {
     margin-top: 60px;
-    
+
 }
 
 .feedback-btn {
-    background: none;          
-    border: none;             
-    text-decoration: underline; 
-    cursor: pointer;         
-    color: black;           
-    padding: 10px;               
-    font-size: 16px;          
+    background: none;
+    border: none;
+    text-decoration: underline;
+    cursor: pointer;
+    color: black;
+    padding: 10px;
+    font-size: 16px;
 }
 
 @media (max-width: 400px) {
-    .feedback-container{
+    .feedback-container {
         margin-top: 30px;
     }
-    
+
     .feedback-btn {
-        background: none;         
-        border: none;            
-        text-decoration: underline; 
-        cursor: pointer;        
-        color: black;            
-        padding: 10px;                  
-        font-size: 14px;           
+        background: none;
+        border: none;
+        text-decoration: underline;
+        cursor: pointer;
+        color: black;
+        padding: 10px;
+        font-size: 14px;
     }
-  }
+}
+
+@media (max-width: 720px) {
+    .department-info {
+        display: none;
+        /* 화면 너비가 720px 이하일 때 문구 숨김 */
+    }
+
+    .buttons-container {
+        margin-top: -50px;
+        /* 상단 여백을 줄여서 위로 이동 */
+    }
+
+    .feedback-container {
+        margin-top: -5px;
+    }
+}

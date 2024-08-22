@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import {useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import '../css/codingzone/CodingClassRegist.css';
 import { useCookies } from "react-cookie";
-import { uploadGroupData, fetchGroupClasses, uploadClassForWeek, resetCodingZoneData } from '../../apis/Codingzone-api';
+import { uploadGroupData, fetchGroupClasses, uploadClassForWeek, resetCodingZoneData, getczauthtypetRequest } from '../../apis/Codingzone-api';
+
 
 
 const ClassRegist = () => {
@@ -11,11 +12,56 @@ const ClassRegist = () => {
     const [groupId, setGroupId] = useState('A');
     const [cookies] = useCookies(['accessToken']);
     const [activeCategory, setActiveCategory] = useState('registerClass');
+    const [authMessage, setAuthMessage] = useState('');
+    const [showAdminButton, setShowAdminButton] = useState(false);
+    const [showManageAllButton, setShowManageAllButton] = useState(false);
+    const [showRegisterClassButton, setShowRegisterClassButton] = useState(false);
+    const token = cookies.accessToken;
+    const [activeButton, setActiveButton] = useState('manage_class');
     const navigate = useNavigate();
 
+    const handlecodingzoneattendence = () => {
+        navigate(`/coding-zone/Codingzone_Attendance`);
+    };
+    const handlecodingzonemanager = () => {
+        navigate(`/coding-zone/Codingzone_Manager`);
+    };
+
+    const handleFullManagement = () => {
+        navigate(`/coding-zone/Codingzone_All_Attend`);
+    };
+
+    const handleClassRegistration = () => {
+        navigate(`/coding-zone/Class_Registration`);
+    };
     useEffect(() => {
         loadGroupClasses();
     }, [groupId]);
+
+    useEffect(() => {
+        const fetchAuthType = async () => {
+            const response = await getczauthtypetRequest(token);
+            if (response) {
+                switch (response.code) {
+                    case "CA":
+                        setShowAdminButton(true);
+
+                        break;
+                    case "EA":
+                        setShowRegisterClassButton(true);
+                        setShowManageAllButton(true); // Also show '전체 관리' for EA
+                        break;
+                    default:
+                        setShowAdminButton(false);
+                        setShowManageAllButton(false);
+                        setShowRegisterClassButton(false);
+                        break;
+                }
+            }
+        };
+
+        fetchAuthType();
+    }, [token, authMessage]);
 
     //조 정보 등록 API 응답 함수
     const handleGroupUploadResponse = (response) => {
@@ -27,7 +73,7 @@ const ClassRegist = () => {
         switch (code) {
             case 'SU':
                 alert('성공적으로 등록되었습니다.');
-                 break;
+                break;
             case 'AF':
                 alert('권한이 없습니다.');
                 break;
@@ -110,7 +156,7 @@ const ClassRegist = () => {
                 break;
         }
     };
-    
+
     //학기 초기화 API 응답 함수
     const handleResetResponse = (response) => {
         if (!response) {
@@ -142,8 +188,8 @@ const ClassRegist = () => {
     //새로고침 함수
     const refreshPage = () => {
         window.location.reload();
-        };
-        
+    };
+
     //조 정보 등록 버튼 함수(모든 필드 채워져있는지 확인 -> 열린 박스들을 닫기 위해 새로 고침)  
     const handleButtonClick = () => {
         // 모든 필드가 채워져 있는지 검사
@@ -156,9 +202,9 @@ const ClassRegist = () => {
 
         //정상적으로 등록 됐다는 alert를 닫을 시간 제공위해 100밀리초 후에 새로고침
         setTimeout(() => {
-                refreshPage();
-            }, 100);
-    }; 
+            refreshPage();
+        }, 100);
+    };
 
     //조 정보 등록을 위한 functions
     const addBox = () => {
@@ -187,7 +233,7 @@ const ClassRegist = () => {
 
     const removeBox = (index) => {
         setBoxes(currentBoxes => currentBoxes.filter((_, i) => i !== index));
-    };    
+    };
 
     //수업 등록을 위한 functions
     const addBox2 = () => {
@@ -211,7 +257,7 @@ const ClassRegist = () => {
             const dateParts = box.date ? box.date.split('-') : ['01', '01'];
             const [month, day] = dateParts;
             const formattedDate = `${currentYear}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
-    
+
             return {
                 assistantName: box.assistant,
                 classDate: formattedDate,
@@ -228,8 +274,8 @@ const ClassRegist = () => {
 
     const removeBox2 = (index) => {
         setBoxes2(currentBoxes => currentBoxes.filter((_, i) => i !== index));
-    };    
-    
+    };
+
     //학기 초가화 버튼을 위한 function
     const handleResetSemester = async () => {
         // 사용자에게 확인 받기
@@ -252,7 +298,7 @@ const ClassRegist = () => {
         if (!regex.test(date)) {
             return false;
         }
-    
+
         const [month, day] = date.split('-').map(Number); // 문자열을 숫자로 변환
         if (month < 1 || month > 12 || day < 1 || day > 31) {
             return false;
@@ -286,42 +332,42 @@ const ClassRegist = () => {
                     <div className="class-input-container">
                         {boxes.map((box, index) => (
                             <div key={index} className="class-input-box">
-                            <select className="Day-input" value={box.day} onChange={(e) => handleChange(index, 'day', e.target.value)}>
-                                <option value="">Day</option>
-                                <option value="월요일">MON</option>
-                                <option value="화요일">TUE</option>
-                                <option value="수요일">WED</option>
-                                <option value="목요일">THU</option>
-                                <option value="금요일">FRI</option>
-                            </select>
-                            <select className="Time-input" value={box.time} onChange={(e) => handleChange(index, 'time', e.target.value)}>
-                                <option value="">Time</option>
-                                <option value="09:00:00">09:00</option>
-                                <option value="10:00:00">10:00</option>
-                                <option value="11:00:00">11:00</option>
-                                <option value="12:00:00">12:00</option>
-                                <option value="13:00:00">13:00</option>
-                                <option value="14:00:00">14:00</option>
-                                <option value="15:00:00">15:00</option>
-                                <option value="16:00:00">16:00</option>
-                                <option value="17:00:00">17:00</option>
-                                <option value="18:00:00">18:00</option>
-                                <option value="19:00:00">19:00</option>
-                                 <option value="20:00:00">20:00</option>
-                             </select>
-                            <input className="Assistant-input" placeholder="Assistant" value={box.assistant} onChange={(e) => handleChange(index, 'assistant', e.target.value)} />
-                            <input className="ClassName-input" placeholder="Class Name" value={box.className} onChange={(e) => handleChange(index, 'className', e.target.value)} />
-                            <select className="Grade-input" value={box.grade} onChange={(e) => handleChange(index, 'grade', e.target.value)}>
-                                <option value="">Grade</option>
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                            </select>
-                            <input className="MaxPers-input" type="number" placeholder="MaxPer" min="1" step="1" value={box.maxPers} onChange={(e) => handleChange(index, 'maxPers', e.target.value)} />
-                            <button onClick={() => removeBox(index)} class="custom-btn btn-6">
-                                X
-                            </button>
-                         </div>
-                    ))}
+                                <select className="Day-input" value={box.day} onChange={(e) => handleChange(index, 'day', e.target.value)}>
+                                    <option value="">Day</option>
+                                    <option value="월요일">MON</option>
+                                    <option value="화요일">TUE</option>
+                                    <option value="수요일">WED</option>
+                                    <option value="목요일">THU</option>
+                                    <option value="금요일">FRI</option>
+                                </select>
+                                <select className="Time-input" value={box.time} onChange={(e) => handleChange(index, 'time', e.target.value)}>
+                                    <option value="">Time</option>
+                                    <option value="09:00:00">09:00</option>
+                                    <option value="10:00:00">10:00</option>
+                                    <option value="11:00:00">11:00</option>
+                                    <option value="12:00:00">12:00</option>
+                                    <option value="13:00:00">13:00</option>
+                                    <option value="14:00:00">14:00</option>
+                                    <option value="15:00:00">15:00</option>
+                                    <option value="16:00:00">16:00</option>
+                                    <option value="17:00:00">17:00</option>
+                                    <option value="18:00:00">18:00</option>
+                                    <option value="19:00:00">19:00</option>
+                                    <option value="20:00:00">20:00</option>
+                                </select>
+                                <input className="Assistant-input" placeholder="Assistant" value={box.assistant} onChange={(e) => handleChange(index, 'assistant', e.target.value)} />
+                                <input className="ClassName-input" placeholder="Class Name" value={box.className} onChange={(e) => handleChange(index, 'className', e.target.value)} />
+                                <select className="Grade-input" value={box.grade} onChange={(e) => handleChange(index, 'grade', e.target.value)}>
+                                    <option value="">Grade</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                </select>
+                                <input className="MaxPers-input" type="number" placeholder="MaxPer" min="1" step="1" value={box.maxPers} onChange={(e) => handleChange(index, 'maxPers', e.target.value)} />
+                                <button onClick={() => removeBox(index)} class="custom-btn btn-6">
+                                    X
+                                </button>
+                            </div>
+                        ))}
                     </div>
                     <div className='button-area'>
                         <div>
@@ -331,12 +377,12 @@ const ClassRegist = () => {
                         </div>
                         <div className='class-submit-button'>
                             <button onClick={handleButtonClick}>등록</button>
-                            
+
                         </div>
                     </div>
                 </>
             );
-        }else if(activeCategory === 'registerClass') {
+        } else if (activeCategory === 'registerClass') {
             return (
                 <>
                     <div className="main-category-name-container2">
@@ -427,15 +473,49 @@ const ClassRegist = () => {
                 <span> | </span>
             </div>
             <div className="img-container">
-                <img src="/coding-zone-main.png" alt="Coding Zone" className="codingzonetop-image"/>
+                <img src="/coding-zone-main.png" alt="Coding Zone" className="codingzonetop-image" />
             </div>
             <div className="main-body-container">
-                <div className="main-category-bar">
-                    <button>출결 확인</button>
-                    <span className="main-span"> | </span>
-                    <button>출결 관리</button>
-                    <span className="main-span"> | </span>
-                    <button>수업 등록</button>
+                <div className="cza_button_container" style={{ textAlign: 'center' }}>
+                    <button
+                        className={`btn-attend ${activeButton === 'check' ? 'active' : ''}`}
+                        onClick={() => { setActiveButton('check'); handlecodingzoneattendence(); }}
+                    >
+                        출결 확인
+                    </button>
+                    {showRegisterClassButton && (
+                        <>
+                            <div className="divider"></div>
+                            <button
+                                className={`btn-attend ${activeButton === 'manage_class' ? 'active' : ''}`}
+                                onClick={handleClassRegistration}
+                            >
+                                수업 등록
+                            </button>
+                        </>
+                    )}
+                    {showAdminButton && (
+                        <>
+                            <div className="divider"></div>
+                            <button
+                                className={`btn-attend ${activeButton === 'manage' ? 'active' : ''}`}
+                                onClick={handlecodingzonemanager}
+                            >
+                                출결 관리
+                            </button>
+                        </>
+                    )}
+                    {showManageAllButton && (
+                        <>
+                            <div className="divider"></div>
+                            <button
+                                className={`btn-attend ${activeButton === 'manage_all' ? 'active' : ''}`}
+                                onClick={handleFullManagement}
+                            >
+                                전체 관리
+                            </button>
+                        </>
+                    )}
                 </div>
                 <div className="category-bar">
                     <div className="inner-category-bar">
@@ -454,9 +534,9 @@ const ClassRegist = () => {
                         </button>
                     </div>
                     <div className="inner-category-bar2">
-                    <button className={`Agroup-button ${groupId === 'A' ? 'active' : ''}`} onClick={() => setGroupId('A')}>A 조</button>
-                    <span className="main-span2"> | </span>
-                    <button className={`Bgroup-button ${groupId === 'B' ? 'active' : ''}`} onClick={() => setGroupId('B')}>B 조</button>
+                        <button className={`Agroup-button ${groupId === 'A' ? 'active' : ''}`} onClick={() => setGroupId('A')}>A 조</button>
+                        <span className="main-span2"> | </span>
+                        <button className={`Bgroup-button ${groupId === 'B' ? 'active' : ''}`} onClick={() => setGroupId('B')}>B 조</button>
                     </div>
                 </div>
                 {renderActiveSection()}

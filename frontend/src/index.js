@@ -33,7 +33,7 @@ const App = () => {
         <Route path="/coding-zone" element={<CodingMain />} />
         <Route path="/coding-zone/coding-class-regist" element={<CodingClassRegist />} />
         <Route path="/coding-zone/Codingzone_Manager" element={<Codingzone_Manager />} />
-        <Route path="/coding-zone/Codingzone_Attendence" element={<Codingzone_Attendence />} />
+        <Route path="/coding-zone/Codingzone_Attendance" element={<Codingzone_Attendence />} />
         <Route path="/coding-zone/Codingzone_All_Attend" element={<Codingzone_All_Attend />} />
       </Routes>
       {location.pathname !== '/' && <Footer />}

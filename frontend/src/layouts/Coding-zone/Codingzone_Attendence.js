@@ -4,6 +4,7 @@ import { useCookies } from 'react-cookie';
 import '../css/codingzone/codingzone-main.css';
 import '../css/codingzone/codingzone_attend.css';
 import { useNavigate,useLocation } from 'react-router-dom';
+import InquiryModal from './InquiryModal';
 
 const Codingzone_Attendence = () => {
     const [authMessage, setAuthMessage] = useState('');
@@ -17,13 +18,23 @@ const Codingzone_Attendence = () => {
     const [selectedButton, setSelectedButton] = useState('attendance'); 
     const navigate = useNavigate();
     const location = useLocation();  
+    const [showModal, setShowModal] = useState(false);
+
+    const handleOpenModal = () => {
+        setShowModal(true);
+    };
+
+    const handleCloseModal = () => {
+        setShowModal(false);
+    };
+    
     useEffect(() => {
         if (location.pathname.includes('Codingzone_Attendence')) {
           setSelectedButton('attendence');
         }
       }, [location]);
     const handlecodingzoneattendence =  () => {
-        navigate(`/coding-zone/Codingzone_Attendence`);
+        navigate(`/coding-zone/Codingzone_Attendance`);
      };
     const handlecodingzonemanager = () => {
         navigate(`/coding-zone/Codingzone_Manager`);
@@ -110,11 +121,12 @@ const Codingzone_Attendence = () => {
                     출결 관리
                     </button>
                     <span> | </span>
-                    <button>문의 하기</button>
+                    <button onClick={handleOpenModal}>문의하기</button>
+{showModal && <InquiryModal isOpen={showModal} onClose={handleCloseModal} />}
                     <span> | </span>
                 </div>
                 <div className="banner_img_container">
-                    <img src="/codingzone_Attendence.png" className="banner" />
+                    <img src="/codingzone_attendance2.png" className="banner" />
                 </div>
             </div>
             <div className="cza_button_container" style={{ textAlign: 'center' }}>

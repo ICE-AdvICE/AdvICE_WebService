@@ -19,7 +19,7 @@ const Codingzone_All_Attend = () => {
     const navigate = useNavigate();
 
     const handlecodingzoneattendence = () => {
-        navigate(`/Codingzone_Attendence`);
+        navigate(`/coding-zone/Codingzone_Attendance`);
     };
     const handlecodingzonemanager = () => {
         navigate(`/coding-zone/Codingzone_Manager`);
@@ -30,7 +30,7 @@ const Codingzone_All_Attend = () => {
     };
 
     const handleClassRegistration = () => {
-        navigate(`/coding-zone/Class_Registration`);
+        navigate(`/coding-zone/coding-class-regist`);
     };
    
 

@@ -1,10 +1,12 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useCookies } from 'react-cookie';
-import { getMypageRequest,updateMypageUserRequest,deleteUserRequest} from '../apis/index.js';
-import { checkuserbanRequest} from '../apis/index2.js';
-import MyModal from '../MyModal'; // 모달 컴포넌트 추가
+import { getMypageRequest, updateMypageUserRequest, deleteUserRequest, } from '../apis';
+import { checkuserbanRequest } from '../apis/index2.js';
+import MyModal from '../MyModal';
 import FindpasswordForm from '../Modals/findpassword';
 import './modules.css';
+import { useNavigate } from 'react-router-dom'; 
+import { getczauthtypetRequest } from '../apis/Codingzone-api.js';
 
 
 
@@ -14,10 +16,12 @@ const MypageForm = ({ handleLogout }) => {
         studentNum: '',
         name: ''
     }); // 사용자 정보를 저장할 상태
-    const [editMode, setEditMode] = useState(false); // 수정 모드 상태
-    const [cookies, setCookie] = useCookies(['accessToken']); // 쿠키에서 accessToken 읽기
-    const token = cookies.accessToken; // 토큰을 변수에 저장
+    const [editMode, setEditMode] = useState(false);
+    const [authType, setAuthType] = useState('');
+    const [cookies, setCookie] = useCookies(['accessToken']);
+    const token = cookies.accessToken;
     const [modalOpenfind, setModalOpenfind] = useState(false);
+    const navigate = useNavigate();
     
     //사용자 정보 가져오는 함수
     useEffect(() => {
@@ -37,14 +41,31 @@ const MypageForm = ({ handleLogout }) => {
                 alert("데이터베이스 오류가 발생했습니다.");
             }
         };
+
+        const fetchAuthType = async () => {
+            const data = await getczauthtypetRequest(token);
+            if (data && data.code === "EA") {
+                setAuthType(data.code);
+            }
+        };
     
         if (token) {
             fetchUserDetails();
+            fetchAuthType();
         } else {
             console.error("No token available.");
         }
     }, [token]);
 
+    const handleGrantPermissions = () => {
+        
+        setEditMode(false);
+        
+        
+        setTimeout(() => {
+            navigate('/auth-handle');
+        }, 10); // 10 밀리초 후에 이동
+    };
     //회원탈퇴 함수(정지 당했을 시 탈퇴 불가)
     const handleDeleteAccount = async () => {
         if (window.confirm("정말로 계정을 삭제하시겠습니까?")) {
@@ -114,6 +135,9 @@ const MypageForm = ({ handleLogout }) => {
             </div>
             <button className="findPasswordButton" onClick={handleFindpassword}>비밀번호 재설정</button>
             <div className="mypage_buttons">
+            {authType === "EA" && (
+                    <button type="button" onClick={handleGrantPermissions}>권한 부여</button>
+                )}
             <button type="button" onClick={() => setEditMode(true)}>정보 수정</button>
                 <button type="button" onClick={handleLogout}>로그아웃</button>
             </div>
