@@ -5,7 +5,7 @@ import CzCard from '../../components/czCard';
 import { deleteClass,checkAdminType, getAvailableClassesForNotLogin, getAttendanceCount, deleteCodingZoneClass, reserveCodingZoneClass, getcodingzoneListRequest } from '../../apis/Codingzone-api.js'; 
 import { useNavigate, useLocation } from 'react-router-dom';
 
-const ClassList = ({ onDeleteClick,classList, handleCardClick, handleToggleReservation, isAdmin }) => {
+const ClassList = ({ userReservedClass,onDeleteClick,classList, handleCardClick, handleToggleReservation, isAdmin }) => {
   return (
     <div className='cz-card'>
       {classList.map((classItem) => (
@@ -20,11 +20,17 @@ const ClassList = ({ onDeleteClick,classList, handleCardClick, handleToggleReser
           classDate={classItem.classDate}
           currentNumber={classItem.currentNumber}
           maximumNumber={classItem.maximumNumber}
-          category={`[${classItem.grade}학년]`}
+          category={`[${classItem.grade}학년]`}  
           onClick={() => handleCardClick(classItem)}
           onReserveClick={() => handleToggleReservation(classItem)}
           isReserved={classItem.isReserved}
+          disableReserveButton={
+            userReservedClass && 
+            (userReservedClass.classNum !== classItem.classNum && userReservedClass.grade === classItem.grade)
+          }
+         
         />
+        
       ))}
     </div>
   );
@@ -42,6 +48,8 @@ const CodingMain = () => {
   const location = useLocation();  
   const [selectedZone, setSelectedZone] = useState(1);
   const [selectedButton, setSelectedButton] = useState(''); 
+  const [noClassesMessage, setNoClassesMessage] = useState('');
+  const [userReservedClass, setUserReservedClass] = useState(null);
 
   useEffect(() => {
     const fetchUserRole = async () => {
@@ -55,6 +63,7 @@ const CodingMain = () => {
     };
     fetchUserRole();
   }, [cookies.accessToken]);
+
   useEffect(() => {
     if (window.location.pathname.includes("coding-zone")) {
       const dFlexPElements = document.querySelectorAll('.d-flex p');
@@ -81,11 +90,18 @@ const CodingMain = () => {
     const result = await deleteClass(classNum, token);
     if (result) {
         alert("수업이 삭제되었습니다.");
-        setClassList(prevClassList => prevClassList.filter(item => item.classNum !== classNum));
+        setClassList(prevClassList => {
+            const updatedList = prevClassList.filter(item => item.classNum !== classNum);
+            if (updatedList.length === 0) {
+                setNoClassesMessage('등록된 코딩존 수업이 없습니다.');
+            }
+            return updatedList;
+        });
     } else {
         alert("수업 삭제에 실패했습니다.");
     }
 };
+
   const timeToNumber = (timeStr) => {
     const [hours, minutes] = timeStr.split(':').map(Number);
     return hours * 60 + minutes;   
@@ -108,20 +124,36 @@ const CodingMain = () => {
     setClassList(filteredData);
     return filteredData;   
   };
-
   useEffect(() => {
     const fetchData = async () => {
         try {
             let classes = [];
+
             if (cookies.accessToken) {
-                classes = await getcodingzoneListRequest(cookies.accessToken, grade, weekDay);
-                classes = classes.map(classItem => ({
-                    ...classItem,
-                    isReserved: classItem.isReserved !== undefined ? classItem.isReserved : false 
-                }));
-            } else {
+                const response = await getcodingzoneListRequest(cookies.accessToken, grade, weekDay);
+                if (response) {
+                    if (response.registedClassNum !== 0) {
+                        classes = response.classList.map(classItem => ({
+                            ...classItem,
+                            isReserved: classItem.classNum === response.registedClassNum   
+                        }));
+                        // 예약된 수업이 있는 경우, userReservedClass를 설정
+                        const reservedClass = classes.find(classItem => classItem.isReserved);
+                        if (reservedClass) {
+                            setUserReservedClass(reservedClass);
+                        }
+                    } else {
+                        classes = response.classList.map(classItem => ({
+                            ...classItem,
+                            isReserved: false   
+                        }));
+                    }
+                }
+            } 
+            else {
                 const response = await getAvailableClassesForNotLogin(grade);
                 if (response && response.length > 0) {
+                  console.log('hi')
                     classes = response.map(classItem => ({
                         ...classItem,
                         isReserved: undefined 
@@ -133,17 +165,21 @@ const CodingMain = () => {
                 const sortedClasses = sortClassList(classes);
                 setOriginalClassList(sortedClasses);
                 setClassList(sortedClasses);
+                setNoClassesMessage('');  
             } else {
                 setOriginalClassList([]);
                 setClassList([]);
+                setNoClassesMessage('등록된 코딩존 수업이 없습니다.');
             }
         } catch (error) {
             setOriginalClassList([]);
             setClassList([]);
+            setNoClassesMessage('등록된 코딩존 수업이 없습니다.');
         }
     };
     fetchData();
-  }, [cookies.accessToken, grade, weekDay]);
+}, [cookies.accessToken, grade, weekDay]);
+
 
   useEffect(() => {
     const fetchAttendance = async () => {
@@ -163,27 +199,36 @@ const CodingMain = () => {
   const handleToggleReservation = async (classItem) => {
     const token = cookies.accessToken;
     if (!token) {
-      alert("You are not logged in.");
-      return;
+        alert("로그인이 필요합니다.");
+        return;
     }
-    if (classItem.isReserved) {
-      const result = await deleteCodingZoneClass(token, classItem.classNum);
-      if (result) {
-        alert("예약 취소가 완료되었습니다.");
-        updateClassItem(classItem.classNum, false);  
-      }
-    } else {
-      const result = await reserveCodingZoneClass(token, classItem.classNum);
-      if (result) {
-        alert("예약이 완료되었습니다.");
-        updateClassItem(classItem.classNum, true);  
-      }
+    try {
+        let result;
+        if (classItem.isReserved) {
+            result = await deleteCodingZoneClass(token, classItem.classNum);
+            if (result) {
+                alert("예약 취소가 완료되었습니다.");
+                updateClassItem(classItem.classNum, false, classItem.currentNumber - 1);
+                setUserReservedClass(null);  // 예약 취소 시 userReservedClass를 null로 설정
+            }
+        } else {
+            result = await reserveCodingZoneClass(token, classItem.classNum);
+            if (result) {
+                alert("예약이 완료되었습니다.");
+                updateClassItem(classItem.classNum, true, classItem.currentNumber + 1); 
+                setUserReservedClass(classItem);  // 예약 시 userReservedClass를 해당 수업으로 설정
+            }
+        }
+    } catch (error) {
+        console.log("예약 처리 중 오류 발생:", error);
+        alert("예약 처리 중 오류가 발생했습니다.");
     }
-  };
+};
+
 
   const handlecodingzone = () => {
     setSelectedButton('codingzone');   
-    navigate(`/coding-zone`);
+    navigate('/coding-zone');
   };
 
   const handlecodingzoneattendence = () => {
@@ -195,12 +240,12 @@ const CodingMain = () => {
     setSelectedButton('inquiry');   
   };
 
-  const updateClassItem = (classNum, isReserved) => {
+  const updateClassItem = (classNum, isReserved, newCurrentNumber) => {
     const updatedList = classList.map(item =>
-      item.classNum === classNum ? { ...item, isReserved } : item
+      item.classNum === classNum ? { ...item, isReserved, currentNumber: newCurrentNumber } : item
     );
     setClassList(updatedList);
-  };
+};
 
   return (
     <div className="codingzone-container">
@@ -287,14 +332,22 @@ const CodingMain = () => {
         </div>
         
         <div className="codingzone-list">
-          <ClassList 
-            classList={classList} 
-            handleCardClick={handleCardClick} 
-            handleToggleReservation={handleToggleReservation} 
-            isAdmin={isAdmin}  
-            onDeleteClick={handleDelete} 
-          />
+          {noClassesMessage ? (
+             <div className="no-classes-message" style={{ textAlign: 'center', marginTop: '20px' }}>
+             {noClassesMessage}
+           </div> 
+          ) : (
+            <ClassList 
+              classList={classList} 
+              handleCardClick={handleCardClick} 
+              handleToggleReservation={handleToggleReservation} 
+              isAdmin={isAdmin}  
+              onDeleteClick={handleDelete} 
+              userReservedClass={userReservedClass} 
+            />
+          )}
         </div>
+       
       </div>
     </div>
   );
