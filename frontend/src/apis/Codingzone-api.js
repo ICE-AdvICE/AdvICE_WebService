@@ -37,7 +37,7 @@ export const fetchGroupClasses = async (groupId, token) => {
                 Authorization: `Bearer ${token}`
             }
         });
-        return response.data; // API 응답 반환
+        return response.data; 
     } catch (error) {
         if (!error.response) {
             return { code: 'NETWORK_ERROR', message: '네트워크 상태를 확인해주세요.' };

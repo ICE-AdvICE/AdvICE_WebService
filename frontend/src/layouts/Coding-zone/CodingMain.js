@@ -27,7 +27,7 @@ const ClassList = ({ userReservedClass,onDeleteClick,classList, handleCardClick,
           disableReserveButton={
             userReservedClass && 
             (userReservedClass.classNum !== classItem.classNum && userReservedClass.grade === classItem.grade)
-          } // 예약된 클래스가 있을 경우 버튼 비활성화
+          }
          
         />
         
