@@ -50,6 +50,8 @@ const CodingMain = () => {
   const [selectedButton, setSelectedButton] = useState(''); 
   const [noClassesMessage, setNoClassesMessage] = useState('');
   const [userReservedClass, setUserReservedClass] = useState(null);
+  const [selectedDay, setSelectedDay] = useState('');  // 현재 선택된 요일을 저장하는 상태
+
 
   useEffect(() => {
     const fetchUserRole = async () => {
@@ -137,7 +139,6 @@ const CodingMain = () => {
                             ...classItem,
                             isReserved: classItem.classNum === response.registedClassNum   
                         }));
-                        // 예약된 수업이 있는 경우, userReservedClass를 설정
                         const reservedClass = classes.find(classItem => classItem.isReserved);
                         if (reservedClass) {
                             setUserReservedClass(reservedClass);
@@ -153,14 +154,12 @@ const CodingMain = () => {
             else {
                 const response = await getAvailableClassesForNotLogin(grade);
                 if (response && response.length > 0) {
-                  console.log('hi')
                     classes = response.map(classItem => ({
                         ...classItem,
                         isReserved: undefined 
                     }));
                 }
             }
-
             if (classes && classes.length > 0) {
                 const sortedClasses = sortClassList(classes);
                 setOriginalClassList(sortedClasses);
@@ -224,7 +223,6 @@ const CodingMain = () => {
         alert("예약 처리 중 오류가 발생했습니다.");
     }
 };
-
 
   const handlecodingzone = () => {
     setSelectedButton('codingzone');   
@@ -304,15 +302,55 @@ const CodingMain = () => {
         </div>
         
         <div className="codingzone-date">
-          <button onClick={() => filterByDay('Monday')}>Mon</button>
+        <button 
+          onClick={() => {
+            filterByDay('월요일');
+            setSelectedDay('월요일');  
+          }}
+          className={selectedDay === '월요일' ? 'selected' : ''}
+        >
+        <p>Mon</p>  
+        </button>
+        <span> | </span>
+        <button 
+          onClick={() => {
+          filterByDay('화요일');
+            setSelectedDay('화요일');  
+          }}
+          className={selectedDay === '화요일' ? 'selected' : ''}
+        >
+        <p>Tue</p>  
+        </button>
           <span> | </span>
-          <button onClick={() => filterByDay('tuesday')}>Tue</button>
+          <button 
+          onClick={() => {
+          filterByDay('수요일');
+          setSelectedDay('수요일');  
+          }}
+          className={selectedDay === '수요일' ? 'selected' : ''}
+        >
+        <p>Wed</p>  
+        </button>
           <span> | </span>
-          <button onClick={() => filterByDay('wednesday')}>Wed</button>
+          <button 
+          onClick={() => {
+          filterByDay('목요일');
+          setSelectedDay('목요일');  
+          }}
+          className={selectedDay === '목요일' ? 'selected' : ''}
+        >
+        <p>Thu</p>  
+        </button>
           <span> | </span>
-          <button onClick={() => filterByDay('thursday')}>Thu</button>
-          <span> | </span>
-          <button onClick={() => filterByDay('friday')}>Fri</button>
+          <button 
+          onClick={() => {
+          filterByDay('금요일');
+          setSelectedDay('금요일');   
+          }}
+          className={selectedDay === '금요일' ? 'selected' : ''}
+        >
+        <p>Fri</p>  
+        </button>
         </div>
         
         <div className='category-name-container'>

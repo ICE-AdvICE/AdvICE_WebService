@@ -15,6 +15,7 @@
 }
 .cz-count-container{
   font-size: 12px;
+  margin-top: 25px;
 }
 .select-container span{
   font-size: 13px;
@@ -30,7 +31,7 @@
   display: flex;
   position: relative;
   height: auto;
-  background-color: #f3f3f3;
+ 
   padding: 20px 10px;
   justify-content: center;
 }
@@ -59,9 +60,7 @@
   max-width: 1000px;
   margin: 0 auto;
   padding: 10px;
-  flex-direction: column;
-  position: relative;
-  display: flex;
+  margin-bottom: 100px;
 }
 .cz-category-top{
   margin-top: 1%;
@@ -96,9 +95,12 @@
   color: white;
   background-color: #002D56;
 }
-.codingzone-date button.selected {
-  color: white;
-  background-color: #002D56;
+ 
+.codingzone-date button.selected p {
+  color: black;
+  margin: 0;
+  border-bottom: 2px solid #000;
+  
 }
 .select-container button.selected {
   color:purple;
@@ -134,9 +136,7 @@
   min-width: 10px;
   
 }
-.cz-count-container{
-  position: relative;
-}
+
 .category-name-container{
   border-bottom: 1px solid #333;
   border-top: 1px solid #333;
@@ -176,25 +176,24 @@
   display: flex;
  
 }
- 
+
+.card-delete{
+  background-color: yellow;
+}
 .czcard p, .codingzone-title p{
   margin: 0;
   font-size: 14px;
 }
 
-.weekDay,.weekTime,  .weekcount ,.registerbutton,.card-hidden-space {
+.weekDay,.weekTime,  .weekcount ,.registerbutton,.card-hidden-space, .card-classTime {
   text-align: center;  
   width: 100px;  
 }
-.weekDate {
-  text-align: center;
-  width: 50px;  
-}
-.weeksubject{
+.weeksubject,.card-className {
   text-align: center;
   width: 300px;  
 }
- .weekperson {
+ .weekperson ,  .card-assistantName {
   text-align: center;
   width: 150px; 
  }
@@ -206,25 +205,11 @@
   width: 100px;  
  
 }
- .card-weekDate {
+ .card-weekDate,.weekDate {
   text-align: center;
   width: 50px;  
+}
  
-}
- .card-classTime {
-  text-align: center;
-  width: 100px;  
-  
-}
- .card-className {
-  text-align: center;
-  width: 300px;  
-
-}
- .card-assistantName {
-  text-align: center;
-  width: 150px; 
-}
  .card-currentNumber {
   color: #002D56;
   font-weight: 600;
@@ -232,25 +217,19 @@
   width: 100px; 
  
 }
-.card-button-container{
+.card-button-container, .card-hidden-space {
   width: 100px;
+  display: flex;
+  justify-content: center;
 }
 .card-reservation,.card-delete {
- 
   border: none !important;
   font-size: 12px;
-  border-radius: 0.5vw;
-  width: 80%;
-  padding: 0;
+  border-radius: 3px;
+  width: 70%;
   height: 30px;
 }
-.card-hidden-space {
-  width: 100px;
-  
  
-  
-}
-
 @media (max-width: 1000px) {
   .card-hidden-space {
     flex: 1 4 0;
