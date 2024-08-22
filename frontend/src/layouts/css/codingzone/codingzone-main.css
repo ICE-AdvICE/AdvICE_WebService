@@ -232,13 +232,17 @@
   width: 100px; 
  
 }
+.card-button-container{
+  width: 100px;
+}
 .card-reservation,.card-delete {
-  background-color: rgba(128, 128, 128, 0.189);
+ 
   border: none !important;
   font-size: 12px;
   border-radius: 0.5vw;
-  width: 100px; 
+  width: 80%;
   padding: 0;
+  height: 30px;
 }
 .card-hidden-space {
   width: 100px;

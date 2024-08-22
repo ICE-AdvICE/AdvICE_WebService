@@ -13,41 +13,6 @@ const authorization = (accessToken) => {
     return { headers: { Authorization: `Bearer ${accessToken}` } }
 };
 
-export const getcodingzoneListRequest  = async (token, grade, weekDay) => {
-    try {
-        const response = await axios.get(`${API_DOMAIN}/coding-zone/class-list/${grade}`, {
-            headers: { Authorization: `Bearer ${token}` },
-            params: { weekDay }
-        });
-        if (response.data.code === "SU") {
-            console.log("성공: 수업 리스트를 성공적으로 가져왔습니다.");
-            return response.data.classList;
-        } else {
-            console.log("알림: 해당 학년에 대한 수업 리스트가 없습니다.");
-            return [];
-        }
-    } catch (error) {
-        if (error.response) {
-            switch (error.response.data.code) {
-                case "NU":
-                    console.log("사용자가 존재하지 않습니다.");
-                    break;
-                case "NA":
-                    console.log("등록된 수업이 없습니다.");
-                    break;
-                case "DBE":
-                    console.log("데이터베이스에 문제가 발생했습니다.");
-                    break;
-                default:
-                    console.log("예상치 못한 문제가 발생하였습니다.");
-                    break;
-            }
-        } else {
-            console.log("네트워크 오류가 발생하였습니다.");
-        }
-        return false;
-    }
-};
 
 export const uploadGroupData = async (groupData, token) => {
     try {
@@ -119,7 +84,7 @@ export const checkAdminType = async (token) => {
         const response = await axios.get(`${API_DOMAIN}/coding-zone/auth-type`, {
             headers: { Authorization: `Bearer ${token}` }
         });
-        console.log('API Response:', response.data);  // 응답 값 출력
+        
         if (response.data.code === "SU") 
             return "SU"
         else if (response.data.code === "EA") {
@@ -146,26 +111,27 @@ export const checkAdminType = async (token) => {
         return false;  // 오류 발생시 false 반환
     }
 };
-
-
-// 8. 선택된 학년의 예약 가능한 수업 리스트로 반환 API
-export const reserveCodingZoneClass = async (token, classNum) => {
+//8.선택된 학년의 예약 가능한 수업 리스트로 반환 API
+export const getcodingzoneListRequest  = async (token, grade, weekDay) => {
     try {
-        const response = await axios.post(`${API_DOMAIN}/coding-zone/reserve-class/${classNum}`, {
-            headers: { Authorization: `Bearer ${token}` }
+        const response = await axios.get(`${API_DOMAIN}/coding-zone/class-list/${grade}`, {
+            headers: { Authorization: `Bearer ${token}` },
+            params: { weekDay }
         });
         if (response.data.code === "SU") {
-            return true;
+            return {
+                classList: response.data.classList,
+                registedClassNum: response.data.registedClassNum
+            };
         }
-        return false;
     } catch (error) {
         if (error.response) {
             switch (error.response.data.code) {
-                case "FC":
-                    alert("예약가능한 인원이 꽉 찼습니다.");
-                    break;
                 case "NU":
                     console.log("사용자가 존재하지 않습니다.");
+                    break;
+                case "NA":
+                    console.log("등록된 수업이 없습니다.");
                     break;
                 case "DBE":
                     console.log("데이터베이스에 문제가 발생했습니다.");
@@ -175,11 +141,13 @@ export const reserveCodingZoneClass = async (token, classNum) => {
                     break;
             }
         } else {
-            console.log("네트워크 오류가 발생하였습니다.");
+            console.log("네트워크 오류 또는 서버 오류가 발생했습니다.");
         }
         return false;
     }
 }
+
+
 // 9. 선택 학년의 예약 가능한 수업 리스트로 반환 API (ForNotLogIn)
 export const getAvailableClassesForNotLogin = async (grade) => {
     try {
@@ -210,10 +178,10 @@ export const getAvailableClassesForNotLogin = async (grade) => {
         return [];
     }
 };
-
+// 12.  코딩존 수업 예약 취소 API
 export const deleteCodingZoneClass = async (token, classNum) => {
     try {
-        const response = await axios.delete(`${API_DOMAIN}/coding-zone/cancel-class/${classNum}`, {
+        const response = await axios.delete(`${API_DOMAIN}/coding-zone/cence-class/${classNum}`, {
             headers: { Authorization: `Bearer ${token}` }
         });
         if (response.data.code === "SU") {
@@ -269,6 +237,41 @@ export const getAttendanceCount = async (token, grade) => {
         return null;  
     }
 };
+// 11. 코딩존 수업 예약 API
+export const reserveCodingZoneClass = async (token, classNum) => {
+    try {
+        const response = await axios.post(`${API_DOMAIN}/coding-zone/reserve-class/${classNum}`, {}, {
+            headers: { Authorization: `Bearer ${token}` }
+        });
+        if (response.data.code === "SU") {
+            return true;
+        }
+        return false;
+    } catch (error) {
+        if (error.response) {
+            switch (error.response.data.code) {
+                case "FC":
+                    alert("예약가능한 인원이 꽉 찼습니다.");
+                    break;
+                case "NU":
+                    console.log("사용자가 존재하지 않습니다.");
+                    break;
+                case "DBE":
+                    console.log("데이터베이스에 문제가 발생했습니다.");
+                    break;
+                case "AR":
+                    console.log("이미 예약한 학생입니다.");
+                    break; 
+                default:
+                    console.log("예상치 못한 문제가 발생하였습니다.");
+                    break;
+            }
+        } else {
+            console.log("네트워크 오류가 발생하였습니다.");
+        }
+        return false;
+    }
+}
 
 // 12.특정 사용자의 출/결석된 수업 리스트로 반환 API 
 export const getczattendlistRequest = async (accessToken) => {
