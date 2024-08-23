@@ -8,7 +8,10 @@ const GET_CZ_ATTEND_LIST = () => `${API_DOMAIN}/coding-zone/attend-list`;
 const GET_CZ_ALL_ATTEND = () => `${DOMAIN}/api/admin/student-list`;
 const GET_CZ_ASSITANT = () => `${DOMAIN}/api/v1/coding-zone/assistant-list`;
 
-
+//새로고침 함수
+const refreshPage = () => {
+    window.location.reload();
+  };
 const authorization = (accessToken) => {
     return { headers: { Authorization: `Bearer ${accessToken}` } }
 };
@@ -252,6 +255,7 @@ export const reserveCodingZoneClass = async (token, classNum) => {
             switch (error.response.data.code) {
                 case "FC":
                     alert("예약가능한 인원이 꽉 찼습니다.");
+                    refreshPage(); //마감된것을 확인 후 페이지 새로고침
                     break;
                 case "NU":
                     console.log("사용자가 존재하지 않습니다.");

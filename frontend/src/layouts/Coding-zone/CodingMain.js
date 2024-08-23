@@ -90,6 +90,11 @@ const CodingMain = () => {
     } 
   }, [location]);
 
+  //새로고침 함수
+  const refreshPage = () => {
+    window.location.reload();
+  };
+
   const daysOfWeek = ['월요일', '화요일', '수요일', '목요일', '금요일'];
 
   const handleDelete = async (classNum) => {
@@ -305,7 +310,7 @@ const CodingMain = () => {
           </div>
           {cookies.accessToken && (
             <div className='cz-count-container'>
-              출석횟수 : {attendanceCount}/6
+              출석횟수 : {attendanceCount}/4
             </div>
           )}
         </div>

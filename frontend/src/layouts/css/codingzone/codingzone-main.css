@@ -90,11 +90,7 @@
   color: white;
   background-color: #002D56;
 }
-.cz-category-date button.selected {
-  color: white;
-  background-color: #002D56;
-}
- 
+
 .codingzone-date button.selected p {
   color: black;
   margin: 0;

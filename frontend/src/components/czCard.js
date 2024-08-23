@@ -2,6 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { useCookies } from 'react-cookie';
 
+//새로고침 함수
+const refreshPage = () => {
+    window.location.reload();
+};
+
 const CzCard = ({ 
     disableReserveButton, 
     onDeleteClick, 
@@ -50,7 +55,8 @@ const CzCard = ({
                             <button
                                 onClick={(e) => {
                                     e.stopPropagation();
-                                    onDeleteClick(); 
+                                    onDeleteClick();
+                                    refreshPage();
                                 }}
                                 className="card-delete"
                             >
