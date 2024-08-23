@@ -75,13 +75,12 @@
   display: flex;
 }
 .cz-category-date button{
-  padding: 7px;
+  padding: 10px 7px;
   width: 100px;
   align-items: center;
   justify-content: center;
- 
   display: flex;
-  border-color: #D0D5DD;
+  border: 1px solid #D0D5DD;
   background-color: white;
 }
 .cz-1{

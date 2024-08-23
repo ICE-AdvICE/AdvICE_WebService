@@ -1,10 +1,5 @@
 .img-container{
-  width: 100%;
   height: 26vw;
-  display: flex;
-  position: relative;
-  
-  vertical-align: bottom;
 }
 .header2-image{
   width:100%;
@@ -26,7 +21,6 @@
 }
 .posts-overlay-container {
   position: relative;
-  display: flex;
   flex: 1;
 }
 .header3-image{
@@ -40,7 +34,6 @@
   height: 45vw;
   left: 23%;
   top:13%;
-  z-index: 2;
 }
 .bar-container{
   position: relative;
@@ -52,6 +45,7 @@
   position: relative;
   margin-top: 10%;
   margin-bottom: 1%;
+  z-index: 111;
 }
  
 .dropdown-menu {
@@ -164,7 +158,8 @@ input[type="text"]::placeholder {
   height: 35px;
   display: flex;
   position: relative;
- 
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
 }
 .title {
   font-weight: 600;
@@ -214,13 +209,10 @@ input[type="text"]::placeholder {
   height: 1.5vw;
 }
 .posts-content {
-  position: relative;
   height: 70%;
   margin-top: 1%;
- 
   cursor: pointer;
   display: flex;
-  z-index: 155;
   flex-Direction: column;
 }
 .Notification-container{
@@ -329,6 +321,8 @@ input::placeholder {
   max-width: 800px;
   min-height: 52vw;
   padding: 10px;
+  margin: 0 auto;
+
 }
  
 .select-dropdown {
@@ -342,16 +336,8 @@ input::placeholder {
 .page-item{
   height: 10px;
 }
-.pagination{
-  height: 100%;
-}
- 
-
-.separator {
-  height: 0.1vw;              
-  width: 100%;              
-  background-color: black;  
-
+.no-articles-message{
+  z-index: 1111;
 }
 .select:active {
   background-color: #f8f8f8;
