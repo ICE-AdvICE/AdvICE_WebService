@@ -66,7 +66,7 @@ const CzCard = ({
                                             onReserveClick(); 
                                         }}
                                         className="card-reservation"
-                                        style={{ backgroundColor: '#FF0000' }}  
+                                        style={{ backgroundColor: '#FFFF00' }}  
                                     >
                                         취소
                                     </button>
@@ -87,9 +87,9 @@ const CzCard = ({
                                             onReserveClick(); 
                                         }}
                                         className="card-reservation"
-                                        disabled={disableReserveButton && !isReserved}  //  
+                                        disabled={disableReserveButton && !isReserved}  
                                         style={{
-                                            backgroundColor: isReserved ? '#FF0000' : '#15FF00'
+                                            backgroundColor: isReserved ? '#FFFF00' : '#15FF00'
                                         }}
                                     >
                                         {isReserved ? '취소' : '예약'}

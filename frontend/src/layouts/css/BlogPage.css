@@ -27,13 +27,7 @@
 .posts-overlay-container {
   position: relative;
   display: flex;
-  height: auto;
-  flex-direction: column;
   flex: 1;
-  overflow: auto;
-  box-sizing: border-box;
- 
-
 }
 .header3-image{
   width:100%;
@@ -333,9 +327,8 @@ input::placeholder {
 }
 .blog-skin-body{
   max-width: 800px;
-  
+  min-height: 52vw;
   padding: 10px;
- 
 }
  
 .select-dropdown {
@@ -376,14 +369,7 @@ input::placeholder {
 .pagination .page-link,input[type="text"],.category-label,.title p {
   font-size: 13px;
 }
-@media (min-width: 800px) {
-  .blog-skin-body{
-    width: 800px;
-    padding: 10px;
-    margin: 0 auto;
-  }
-
-}
+ 
 @media (max-width: 610px) {
   .card-created, .title-day {
       display: none  !important;

@@ -51,6 +51,15 @@ const CodingMain = () => {
   const [noClassesMessage, setNoClassesMessage] = useState('');
   const [userReservedClass, setUserReservedClass] = useState(null);
   const [selectedDay, setSelectedDay] = useState('');  // 현재 선택된 요일을 저장하는 상태
+  const [isRendered, setIsRendered] = useState(false);
+
+  useEffect(() => {
+    if (cookies.accessToken  ) {
+      setIsRendered(true);  
+    } else {
+      setIsRendered(false);  
+    }
+  }, [cookies.accessToken]);
 
 
   useEffect(() => {
@@ -208,14 +217,14 @@ const CodingMain = () => {
             if (result) {
                 alert("예약 취소가 완료되었습니다.");
                 updateClassItem(classItem.classNum, false, classItem.currentNumber - 1);
-                setUserReservedClass(null);  // 예약 취소 시 userReservedClass를 null로 설정
+                setUserReservedClass(null);   
             }
         } else {
             result = await reserveCodingZoneClass(token, classItem.classNum);
             if (result) {
                 alert("예약이 완료되었습니다.");
                 updateClassItem(classItem.classNum, true, classItem.currentNumber + 1); 
-                setUserReservedClass(classItem);  // 예약 시 userReservedClass를 해당 수업으로 설정
+                setUserReservedClass(classItem);  
             }
         }
     } catch (error) {
@@ -283,7 +292,7 @@ const CodingMain = () => {
                 setGrade(1);
                 setSelectedZone(1);
               }}>
-              Coding Zone1
+              코딩존 1
             </button>
             <button 
               className={`cz-2 ${selectedZone === 2 ? 'selected' : ''}`} 
@@ -291,7 +300,7 @@ const CodingMain = () => {
                 setGrade(2);
                 setSelectedZone(2);
               }}>
-              Coding Zone2
+              코딩존 2
             </button>
           </div>
           {cookies.accessToken && (
@@ -363,9 +372,9 @@ const CodingMain = () => {
             <p className='weekperson'>조교</p>
             <p className='weekcount'>인원</p>
 
-            {(cookies.accessToken || isAdmin) && (
-              <p className='registerbutton'></p>
-            )}
+            {(cookies.accessToken || isAdmin) && isRendered && (
+            <p className='registerbutton'></p>
+          )}
           </div>
         </div>
         

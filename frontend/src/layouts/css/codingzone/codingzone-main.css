@@ -72,14 +72,14 @@
   margin-left: 39.5%;
 }
 .cz-category-date{
-  height: 40px;
   display: flex;
 }
 .cz-category-date button{
-  height: 100%;
+  padding: 7px;
   width: 100px;
   align-items: center;
   justify-content: center;
+ 
   display: flex;
   border-color: #D0D5DD;
   background-color: white;
@@ -178,7 +178,7 @@
 }
 
 .card-delete{
-  background-color: yellow;
+  background-color: red;
 }
 .czcard p, .codingzone-title p{
   margin: 0;
@@ -227,7 +227,7 @@
   font-size: 12px;
   border-radius: 3px;
   width: 70%;
-  height: 30px;
+  padding: 5px;
 }
  
 @media (max-width: 1000px) {
@@ -260,7 +260,12 @@
   .czcard p, .codingzone-title p,.codingzone-date button{
     font-size: 12px;
   }
-
+  .card-reservation, .card-delete{
+    font-size: 2vw;
+  }
+  .cz-category-date button{
+    font-size: 6px;
+  }
 }
  
 
