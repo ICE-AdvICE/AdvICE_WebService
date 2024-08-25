@@ -1,33 +1,32 @@
 .img-container{
   height: 26vw;
 }
-.header2-image{
+.header-image{
   width:100%;
-  position: absolute;
-  height: 26vw;
-  vertical-align: bottom;
-  background-size: cover;
 }
-.header2-img img{
-  width: 100%;
-}
-.words-image{
+.header-word-image{
   position: absolute;
   width: 50%;
   height: 20vw;
-  z-index: 111;
   margin-top: 2.3vw;
   left: 30%;
 }
-.posts-overlay-container {
+.ArticleMain-container {
   position: relative;
   flex: 1;
 }
-.header3-image{
+.ArticleMain-body-image{
   width:100%;
   height: 100%;
   position: absolute;
 }   
+.ArticleMain-body{
+  max-width: 800px;
+  min-height: 52vw;
+  padding: 10px;
+  margin: 0 auto;
+}
+ 
 .article-icon-image{
   position: absolute;
   width: 55vw;
@@ -35,18 +34,17 @@
   left: 23%;
   top:13%;
 }
-.bar-container{
-  position: relative;
-  justify-content: space-between;
-  display: flex;
- 
-}
-.Layout_bar{
+.CateGory_bar-container{
   position: relative;
   margin-top: 10%;
   margin-bottom: 1%;
   z-index: 111;
 }
+.CateGory-container{
+  justify-content: space-between;
+  display: flex;
+}
+
  
 .dropdown-menu {
   position: absolute;
@@ -74,14 +72,12 @@
   font-size: 1vw;
   border-color: #D0D5DD;
 }
-.search-bar, .search2-bar {
+.Search-bar, .ListCategory_bar {
   display: flex;
   align-items: center;
   border-radius: 5px;
 }
-.search2-bar{
-  padding-right: 20px;
-}
+ 
 .Category-dropdown {
   position: relative;
   display: flex;
@@ -154,30 +150,24 @@ input[type="text"]::placeholder {
   text-align: left;
 }
 
-.title_vector-container{
+.Article_title-container{
   height: 35px;
-  display: flex;
   position: relative;
   border-top: 1px solid black;
   border-bottom: 1px solid black;
+  font-size: 12px;
 }
-.title {
+.Article_title {
   font-weight: 600;
-  width: 100%;
   height: 100%;
   text-align: center;
   display: flex;    
-  flex-wrap: nowrap;
   align-items: center;    
 }
- 
- 
- 
 .main-top,.main-top2{
   width: 100%;
   height: 100%;
   position: absolute;
- 
 }
 .main-top2 {
   display: flex;
@@ -208,12 +198,15 @@ input[type="text"]::placeholder {
   width: 1.5vw;  
   height: 1.5vw;
 }
-.posts-content {
+.Article-container {
   height: 70%;
   margin-top: 1%;
   cursor: pointer;
   display: flex;
   flex-Direction: column;
+}
+.no-articles-message{
+  z-index: 10;
 }
 .Notification-container{
   position: relative;
@@ -270,7 +263,6 @@ input[type="text"]::placeholder {
 }
  
 .writing-container{
-  position: relative;
   height: 30px;
   display: flex;
   margin-bottom: 4%;
@@ -288,7 +280,7 @@ input[type="text"]::placeholder {
   font-size: 1.3vw; 
 }
 
-.btn1 {
+.writing-btn {
   position: relative;
   width: 100px;  
   background-color: white;  
@@ -297,7 +289,6 @@ input[type="text"]::placeholder {
   align-items: center;  
   text-decoration: none;  
   z-index: 15;
- 
   border: 0.05vw solid #ACACAC;
   height: 100%;
   }
@@ -305,40 +296,24 @@ input[type="text"]::placeholder {
   width: 15%;
   height: 40%;
 }
-input::placeholder {
-  padding-left: 5%;  
- 
-}
 
-.btn1 p{
-  margin-left: 1vw;
+.writing-btn p{
   font-size: 13px;
-  margin-top: 1vw;
-  margin-bottom: 1vw;
-  
+  margin: 1vw 0 1vw 1vw;
 }
-.blog-skin-body{
-  max-width: 800px;
-  min-height: 52vw;
-  padding: 10px;
-  margin: 0 auto;
 
-}
- 
 .select-dropdown {
   background-color: white;  
   color: black;  
   border: 1px solid #ccc;  
-  padding: 5px 10px; /* 패딩 설정 (선택적) */
-  border-radius: 5px; /* 경계선 둥글기 (선택적) */
+  padding: 5px 10px;  
+  border-radius: 5px;  
 }
 
 .page-item{
   height: 10px;
 }
-.no-articles-message{
-  z-index: 1111;
-}
+
 .select:active {
   background-color: #f8f8f8;
 }
@@ -355,7 +330,10 @@ input::placeholder {
 .pagination .page-link,input[type="text"],.category-label,.title p {
   font-size: 13px;
 }
+input::placeholder {
+  padding-left: 5%;  
  
+}
 @media (max-width: 610px) {
   .card-created, .title-day {
       display: none  !important;

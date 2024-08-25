@@ -39,7 +39,6 @@ const ClassList = ({ userReservedClass,onDeleteClick,classList, handleCardClick,
 const CodingMain = () => {
   const [classList, setClassList] = useState([]);
   const [grade, setGrade] = useState(1);  
-  const [weekDay, setWeekDay] = useState('');  
   const [cookies] = useCookies(['accessToken']);
   const [originalClassList, setOriginalClassList] = useState([]); 
   const [attendanceCount, setAttendanceCount] = useState(0); 
@@ -50,7 +49,7 @@ const CodingMain = () => {
   const [selectedButton, setSelectedButton] = useState(''); 
   const [noClassesMessage, setNoClassesMessage] = useState('');
   const [userReservedClass, setUserReservedClass] = useState(null);
-  const [selectedDay, setSelectedDay] = useState('');  // 현재 선택된 요일을 저장하는 상태
+  const [selectedDay, setSelectedDay] = useState('');  
   const [isRendered, setIsRendered] = useState(false);
 
   useEffect(() => {
@@ -61,7 +60,7 @@ const CodingMain = () => {
     }
   }, [cookies.accessToken]);
 
-
+// 7. 운영자 권한 종류 확인 API
   useEffect(() => {
     const fetchUserRole = async () => {
       const token = cookies.accessToken;
@@ -75,28 +74,9 @@ const CodingMain = () => {
     fetchUserRole();
   }, [cookies.accessToken]);
 
-  useEffect(() => {
-    if (window.location.pathname.includes("coding-zone")) {
-      const dFlexPElements = document.querySelectorAll('.d-flex p');
-      dFlexPElements.forEach(element => {
-        element.style.flexBasis = '150px'; 
-      });
-    }
-  }, []);
-
-  useEffect(() => {
-    if (location.pathname.includes('coding-zone')) {
-      setSelectedButton('codingzone');
-    } 
-  }, [location]);
-
-  //새로고침 함수
-  const refreshPage = () => {
-    window.location.reload();
-  };
-
   const daysOfWeek = ['월요일', '화요일', '수요일', '목요일', '금요일'];
 
+  // [과사 권한이 있는 계정] 삭제 버튼
   const handleDelete = async (classNum) => {
     const token = cookies.accessToken;
     if (!token) {
@@ -118,6 +98,7 @@ const CodingMain = () => {
     }
 };
 
+// 게시글 정렬하는 부분
   const timeToNumber = (timeStr) => {
     const [hours, minutes] = timeStr.split(':').map(Number);
     return hours * 60 + minutes;   
@@ -133,20 +114,27 @@ const CodingMain = () => {
     });
   };
 
+  //요일 선택시 그 요일에 해당하는 게시글들만 보이도록
   const filterByDay = (day) => {
-    const filteredData = originalClassList.filter(classItem => {
-      return classItem.weekDay.toLowerCase() === day.toLowerCase();
-    });
-    setClassList(filteredData);
-    return filteredData;   
+    if (selectedDay === day) {
+      setClassList(originalClassList);
+      setSelectedDay('');
+    } else {
+      const filteredData = originalClassList.filter(classItem => {
+        return classItem.weekDay.toLowerCase() === day.toLowerCase();
+      });
+      setClassList(filteredData);
+      setSelectedDay(day);  
+    }
   };
+  
+  // 8. 선택된 학년의 예약 가능한 수업 리스트로 반환 API, 9.선택된 학년의 예약 가능한 수업 리스트로 반환 API(fornotlogin)
   useEffect(() => {
     const fetchData = async () => {
         try {
             let classes = [];
-
             if (cookies.accessToken) {
-                const response = await getcodingzoneListRequest(cookies.accessToken, grade, weekDay);
+                const response = await getcodingzoneListRequest(cookies.accessToken, grade);
                 if (response) {
                     if (response.registedClassNum !== 0) {
                         classes = response.classList.map(classItem => ({
@@ -191,9 +179,9 @@ const CodingMain = () => {
         }
     };
     fetchData();
-}, [cookies.accessToken, grade, weekDay]);
+}, [cookies.accessToken, grade]);
 
-
+//10,출석 횟수 반환 API
   useEffect(() => {
     const fetchAttendance = async () => {
       const token = cookies.accessToken;
@@ -205,9 +193,6 @@ const CodingMain = () => {
     fetchAttendance();
   }, [cookies.accessToken, grade]);
 
-  const handleCardClick = (classItem) => {
-    console.log('');
-  };
 
   const handleToggleReservation = async (classItem) => {
     const token = cookies.accessToken;
@@ -233,7 +218,6 @@ const CodingMain = () => {
             }
         }
     } catch (error) {
-        console.log("예약 처리 중 오류 발생:", error);
         alert("예약 처리 중 오류가 발생했습니다.");
     }
 };
@@ -250,6 +234,9 @@ const CodingMain = () => {
 
   const handleInquiry = () => {
     setSelectedButton('inquiry');   
+  };
+
+  const handleCardClick = (classItem) => {
   };
 
   const updateClassItem = (classNum, isReserved, newCurrentNumber) => {
@@ -296,14 +283,16 @@ const CodingMain = () => {
               onClick={() => {
                 setGrade(1);
                 setSelectedZone(1);
+                setSelectedDay('');  
+                setClassList(originalClassList);   
               }}>
               코딩존 1
             </button>
             <button 
               className={`cz-2 ${selectedZone === 2 ? 'selected' : ''}`} 
               onClick={() => {
-                setGrade(2);
-                setSelectedZone(2);
+                setGrade(2); setSelectedZone(2);
+                setSelectedDay(''); setClassList(originalClassList);   
               }}>
               코딩존 2
             </button>
@@ -314,59 +303,43 @@ const CodingMain = () => {
             </div>
           )}
         </div>
-        
         <div className="codingzone-date">
-        <button 
-          onClick={() => {
-            filterByDay('월요일');
-            setSelectedDay('월요일');  
-          }}
-          className={selectedDay === '월요일' ? 'selected' : ''}
-        >
-        <p>Mon</p>  
-        </button>
-        <span> | </span>
-        <button 
-          onClick={() => {
-          filterByDay('화요일');
-            setSelectedDay('화요일');  
-          }}
-          className={selectedDay === '화요일' ? 'selected' : ''}
-        >
-        <p>Tue</p>  
-        </button>
+          <button 
+            onClick={() => filterByDay('월요일')}
+            className={selectedDay === '월요일' ? 'selected' : ''}
+          >
+            <p>Mon</p>
+          </button>
           <span> | </span>
           <button 
-          onClick={() => {
-          filterByDay('수요일');
-          setSelectedDay('수요일');  
-          }}
-          className={selectedDay === '수요일' ? 'selected' : ''}
-        >
-        <p>Wed</p>  
-        </button>
+            onClick={() => filterByDay('화요일')}
+            className={selectedDay === '화요일' ? 'selected' : ''}
+          >
+            <p>Tue</p>
+          </button>
           <span> | </span>
           <button 
-          onClick={() => {
-          filterByDay('목요일');
-          setSelectedDay('목요일');  
-          }}
-          className={selectedDay === '목요일' ? 'selected' : ''}
-        >
-        <p>Thu</p>  
-        </button>
+            onClick={() => filterByDay('수요일')}
+            className={selectedDay === '수요일' ? 'selected' : ''}
+          >
+            <p>Wed</p>
+          </button>
           <span> | </span>
           <button 
-          onClick={() => {
-          filterByDay('금요일');
-          setSelectedDay('금요일');   
-          }}
-          className={selectedDay === '금요일' ? 'selected' : ''}
-        >
-        <p>Fri</p>  
-        </button>
+            onClick={() => filterByDay('목요일')}
+            className={selectedDay === '목요일' ? 'selected' : ''}
+          >
+            <p>Thu</p>
+          </button>
+          <span> | </span>
+          <button 
+            onClick={() => filterByDay('금요일')}
+            className={selectedDay === '금요일' ? 'selected' : ''}
+          >
+            <p>Fri</p>
+          </button>
         </div>
-        
+
         <div className='category-name-container'>
           <div className="codingzone-title">
             <p className='weekDay'>요일</p> 
@@ -376,7 +349,6 @@ const CodingMain = () => {
             <p className='weeksubject'>과목명</p>
             <p className='weekperson'>조교</p>
             <p className='weekcount'>인원</p>
-
             {(cookies.accessToken || isAdmin) && isRendered && (
             <p className='registerbutton'></p>
           )}

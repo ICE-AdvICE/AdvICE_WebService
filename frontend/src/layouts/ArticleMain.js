@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useCookies } from "react-cookie";
 import Card from '../components/Card';
 import Pagination from '../components/Pagination';
-import './css/BlogPage.css';
+import './css/ArticlePage/ArticleMain.css';
 import { getArticleListRequest, fetchUserArticles, checkUserBanStatus } from '../apis/index.js';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
@@ -271,16 +271,16 @@ const ArticleMain = () => {
     return (
         <div className="blog-container">
             <div className="img-container">
-                <img src="/main-image.png" className="header2-image" />
-                <img src="/mainword-image.png" className="words-image" />
+                <img src="/main-image.png" className="header-image" />
+                <img src="/mainword-image.png" className="header-word-image" />
             </div>
-            <div className="posts-overlay-container">
-                <img src="/main2-image.png" className="header3-image" />
-                <div className='blog-skin-body'>
+            <div className="ArticleMain-container">
+                <img src="/main2-image.png" className="ArticleMain-body-image" />
+                <div className='ArticleMain-body'>
                     <img src="/main2-icon.png" className="article-icon-image" />
-                    <div className='Layout_bar'>
-                        <div className="bar-container">
-                            <div className="search2-bar" ref={categoryDropdownRef}>
+                    <div className='CateGory_bar-container'>
+                        <div className="CateGory-container">
+                            <div className="ListCategory_bar" ref={categoryDropdownRef}>
                                 <div className="Category-dropdown" onClick={() => setDropdownOpenCategory(!dropdownOpenCategory)}>
                                     <span className="category-label">
                                         {selectedCategory === 'all' ? '모두 보여주기' :
@@ -302,7 +302,7 @@ const ArticleMain = () => {
                                     </ul>
                                 </div>
                             </div>
-                            <div className="search-bar" ref={searchDropdownRef}>
+                            <div className="Search-bar" ref={searchDropdownRef}>
                                 <div className="category-dropdown" onClick={() => setDropdownOpenSearch(!dropdownOpenSearch)}>
                                     <span className="category-label">{searchCategory === 'all' ? '전체' : searchCategory === 'title' ? '제목' : '내용'}</span>
                                     <FontAwesomeIcon icon={faChevronDown} className="ico-common-menu-hide-big-default" />
@@ -336,8 +336,8 @@ const ArticleMain = () => {
                             </div>
                         </div>
                     </div>
-                    <div className="title_vector-container">
-                        <div className="title">
+                    <div className="Article_title-container">
+                        <div className="Article_title">
                             <p className='title-blank'></p>
                             <p className='title-category'>카테고리</p>
                             <p className='title-name'>제목</p>
@@ -347,7 +347,7 @@ const ArticleMain = () => {
                         </div>
  
                     </div>
-                    <div className="posts-content">
+                    <div className="Article-container">
                     {notificationArticles.length === 0 && currentArticles.filter(article => article.category !== 'NOTIFICATION').length === 0 ? (
                         <div className="no-articles-message"style={{ textAlign: 'center', marginTop: '20px' }}>
                             <p>등록된 게시글이 없습니다.</p>
@@ -403,7 +403,7 @@ const ArticleMain = () => {
                         </>
                     )}
                     <div className="writing-container">
-                        <div className="btn1" onClick={handleCreateArticleClick} style={{ cursor: 'pointer' }}>
+                        <div className="writing-btn" onClick={handleCreateArticleClick} style={{ cursor: 'pointer' }}>
                             <img src="/pencil.png" className="pencil" />
                             <p>글쓰기</p>
                         </div>

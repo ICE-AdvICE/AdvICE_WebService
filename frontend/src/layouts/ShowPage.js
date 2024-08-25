@@ -28,6 +28,7 @@ const ShowPage = () => {
         const banReason = prompt(
             "아래 목록에서 해당되는 정지 사유의 숫자를 입력하세요:\n1) 스팸\n2) 부적절한 내용\n3) 증오 발언\n4) 허위 정보\n5) 사칭\n6) 사기\n7) 규칙 위반\n8) 기타",
         );
+        if (banReason === null) return; 
         const banReasonMap = {
             "1": "SPAM",
             "2": "INAPPROPRIATE_CONTENT",
@@ -43,9 +44,11 @@ const ShowPage = () => {
             alert("올바른 숫자를 입력하여 정지 사유를 선택하세요.");
             return;
         }
+        
         const banDuration = prompt(
             "아래 목록에서 원하는 정지 기간의 숫자를 입력하세요:\n1) 1개월\n2) 6개월 \n3) 1년\n4) 영구 정지"
         );
+        if (banDuration === null) return; 
         const banDurationMap = {
             "1": "ONE_MONTH",
             "2": "SIX_MONTHS",
@@ -64,14 +67,9 @@ const ShowPage = () => {
             alert(`사용자 정지 실패하였습니다.: ${result.message}`);
         }
     };
-
-  
-
-    //16.(Admin) 해결이 필요한 게시글을 해결된 게시글로 변경을 위한 API
     const handleResolve = async () => {
-    await handleResolveArticle(articleNum, token, navigate, setCanEdit);
-};
-
+        await handleResolveArticle(articleNum, token, navigate, setCanEdit);    
+    };
 
     const handleComposition = (event) => {
         if (event.type === 'compositionend') {
@@ -80,19 +78,13 @@ const ShowPage = () => {
             setIsComposing(true);
         }
     };
-    //사용
+    
     const handleDeleteComment = async (articleNum, commentNumber, token) => {
-        try {
-            const success = await handleCommentDelete(articleNum,commentNumber, token);
-            if (success) {
-                fetchComments(articleNum, setComments);  
-            }
-        } catch (err) {
-            console.error("에러가 발생했습니다.", err);
-        }
+        const success = await handleCommentDelete(articleNum,commentNumber, token);
+        if (success) {
+            fetchComments(articleNum, setComments);  
+        }    
     };
-
-    /*삭제버튼*/
     const onDelete = () => {
         handleDelete(articleNum, token, navigate);
     };
@@ -101,15 +93,12 @@ const ShowPage = () => {
     };
 
     useEffect(() => {
-        // ShowPage에서는 .quill의 height를 auto로 설정
         const quillElement = document.querySelector('.ql-container');
         if (quillElement) {
             quillElement.style.setProperty('height', 'auto', 'important');
         }
-
-      
     }, []);
-    //익명게시판권한 여부
+
     useEffect(() => {
         const checkAdmin = async () => {
             try {
@@ -124,7 +113,6 @@ const ShowPage = () => {
         checkAdmin();
     }, [token]);
 
-    //좋아요 여부 api
     useEffect(() => {
         const fetchData = async () => {
             if (articleNum && token) {
@@ -146,17 +134,13 @@ const ShowPage = () => {
         setCommentInput(event.target.value);
     };
     const handleSaveEdit = async (commentNumber) => {
-        try {
-            const response = await handleCommentEdit(commentNumber, editCommentInput, token);
-            if (response) {
-                const updatedComments = comments.map(comment =>
-                    comment.commentNumber === commentNumber ? { ...comment, content: editCommentInput } : comment
-                );
-                setComments(updatedComments);
-                setEditingCommentId(null);  
-            }
-        } catch (error) {
-            alert('댓글 수정에 실패했습니다.');
+        const response = await handleCommentEdit(commentNumber, editCommentInput, token);
+        if (response) {
+            const updatedComments = comments.map(comment =>
+                comment.commentNumber === commentNumber ? { ...comment, content: editCommentInput } : comment
+            );
+            setComments(updatedComments);
+            setEditingCommentId(null);  
         }
     };
 
@@ -168,18 +152,12 @@ const ShowPage = () => {
                 } else {
                     setCanEdit(false);  
                 }
-            }).catch(error => {
-                console.error('Failed to verify article ownership:', error);
-            });
+            })
         }
     }, [articleNum, token]);
 
     const handleSubmit = async () => {
-        try {
-            await handleCommentSubmit(null, commentInput, setComments, setCommentInput, userEmail, articleNum, token);
-        } catch (error) {
-            console.error('Error submitting comment:', error);
-        }
+        await handleCommentSubmit(null, commentInput, setComments, setCommentInput, userEmail, articleNum, token);
     };
     
     
@@ -229,9 +207,9 @@ const ShowPage = () => {
 
     return (
         <div className="blog-container">
-            <div className = "img-container">
-                <img src="/main-image.png" className="header2-image"/>
-                <img src="/mainword-image.png"   className="words-image"/>
+            <div className="img-container">
+                <img src="/main-image.png" className="header-image" />
+                <img src="/mainword-image.png" className="header-word-image" />
             </div>
             <div className = "ArticleContentbox-container">
                 <div className="ArticleContentbox">

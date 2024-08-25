@@ -8,6 +8,16 @@ const GET_CZ_ATTEND_LIST = () => `${API_DOMAIN}/coding-zone/attend-list`;
 const GET_CZ_ALL_ATTEND = () => `${DOMAIN}/api/admin/student-list`;
 const GET_CZ_ASSITANT = () => `${DOMAIN}/api/v1/coding-zone/assistant-list`;
 
+
+const CHECK_ADMIN_TYPE_URL = () => `${API_DOMAIN}/coding-zone/auth-type`;
+const GET_CODING_ZONE_LIST_URL = (grade) => `${API_DOMAIN}/coding-zone/class-list/${grade}`;
+const GET_AVAILABLE_CLASSES_FOR_NOT_LOGIN_URL = (grade) => `${API_DOMAIN}/coding-zone/class-list/for-not-login/${grade}`;
+const DELETE_CODING_ZONE_CLASS_URL = (classNum) => `${API_DOMAIN}/coding-zone/cence-class/${classNum}`;
+const GET_ATTENDANCE_COUNT_URL = (grade) => `${API_DOMAIN}/coding-zone/count-of-attend/${grade}`;
+const RESERVE_CODING_ZONE_CLASS_URL = (classNum) => `${API_DOMAIN}/coding-zone/reserve-class/${classNum}`;
+const DELETE_CLASS_URL = (classNum) => `${DOMAIN}/api/admin/delete-class/${classNum}`;
+
+
 //새로고침 함수
 const refreshPage = () => {
     window.location.reload();
@@ -45,7 +55,7 @@ export const fetchGroupClasses = async (groupId, token) => {
         if (!error.response) {
             return { code: 'NETWORK_ERROR', message: '네트워크 상태를 확인해주세요.' };
         }
-        return error.response.data; // 에러 응답 반환
+        return error.response.data;  
     }
 };
 
@@ -84,10 +94,7 @@ export const resetCodingZoneData = async (token) => {
 // 7. 운영자 권한 종류 확인 API
 export const checkAdminType = async (token) => {
     try {
-        const response = await axios.get(`${API_DOMAIN}/coding-zone/auth-type`, {
-            headers: { Authorization: `Bearer ${token}` }
-        });
-        
+        const response = await axios.get(CHECK_ADMIN_TYPE_URL(), authorization(token));
         if (response.data.code === "SU") 
             return "SU"
         else if (response.data.code === "EA") {
@@ -96,7 +103,6 @@ export const checkAdminType = async (token) => {
         else if (response.data.code === "CA") {
             return "CA";  
         }
-      
     } catch (error) {
         if (error.response) {
             switch (error.response.data.code) {
@@ -111,13 +117,13 @@ export const checkAdminType = async (token) => {
                     break;
             }
         }
-        return false;  // 오류 발생시 false 반환
+        return false;   
     }
 };
 //8.선택된 학년의 예약 가능한 수업 리스트로 반환 API
 export const getcodingzoneListRequest  = async (token, grade, weekDay) => {
     try {
-        const response = await axios.get(`${API_DOMAIN}/coding-zone/class-list/${grade}`, {
+        const response = await axios.get(GET_CODING_ZONE_LIST_URL(grade), {
             headers: { Authorization: `Bearer ${token}` },
             params: { weekDay }
         });
@@ -143,9 +149,7 @@ export const getcodingzoneListRequest  = async (token, grade, weekDay) => {
                     console.log("예상치 못한 문제가 발생하였습니다.");
                     break;
             }
-        } else {
-            console.log("네트워크 오류 또는 서버 오류가 발생했습니다.");
-        }
+        }  
         return false;
     }
 }
@@ -154,7 +158,7 @@ export const getcodingzoneListRequest  = async (token, grade, weekDay) => {
 // 9. 선택 학년의 예약 가능한 수업 리스트로 반환 API (ForNotLogIn)
 export const getAvailableClassesForNotLogin = async (grade) => {
     try {
-        const response = await axios.get(`${API_DOMAIN}/coding-zone/class-list/for-not-login/${grade}`);
+        const response = await axios.get(GET_AVAILABLE_CLASSES_FOR_NOT_LOGIN_URL(grade));
         if (response.data.code === "SU") {
             return response.data.classList; 
         } else {
@@ -181,45 +185,11 @@ export const getAvailableClassesForNotLogin = async (grade) => {
         return [];
     }
 };
-// 12.  코딩존 수업 예약 취소 API
-export const deleteCodingZoneClass = async (token, classNum) => {
-    try {
-        const response = await axios.delete(`${API_DOMAIN}/coding-zone/cence-class/${classNum}`, {
-            headers: { Authorization: `Bearer ${token}` }
-        });
-        if (response.data.code === "SU") {
-            return true;
-        }
-        return false;
-    } catch (error) {
-        if (error.response) {
-            switch (error.response.data.code) {
-                case "NR":
-                    console.log("Not reserve class.");
-                    break;
-                case "NU":
-                    console.log("사용자가 존재하지 않습니다.");
-                    break;
-                case "DBE":
-                    console.log("데이터베이스에 문제가 발생했습니다.");
-                    break;
-                default:
-                    console.log("예상치 못한 문제가 발생하였습니다.");
-                    break;
-            }
-        } 
-        return false;
-    }
-};
+
 //10.출석 횟수 반환 API
 export const getAttendanceCount = async (token, grade) => {
     try {
-        const response = await axios.get(
-            `${API_DOMAIN}/coding-zone/count-of-attend/${grade}`,
-            {
-                headers: { Authorization: `Bearer ${token}` }
-            }
-        );
+        const response = await axios.get(GET_ATTENDANCE_COUNT_URL(grade), authorization(token));
         if (response.data.code === "SU") {
             return response.data.numOfAttend;  
         } 
@@ -243,7 +213,7 @@ export const getAttendanceCount = async (token, grade) => {
 // 11. 코딩존 수업 예약 API
 export const reserveCodingZoneClass = async (token, classNum) => {
     try {
-        const response = await axios.post(`${API_DOMAIN}/coding-zone/reserve-class/${classNum}`, {}, {
+        const response = await axios.post(RESERVE_CODING_ZONE_CLASS_URL(classNum), {}, {
             headers: { Authorization: `Bearer ${token}` }
         });
         if (response.data.code === "SU") {
@@ -276,22 +246,38 @@ export const reserveCodingZoneClass = async (token, classNum) => {
         return false;
     }
 }
-
-// 12.특정 사용자의 출/결석된 수업 리스트로 반환 API 
-export const getczattendlistRequest = async (accessToken) => {
+// 12.  코딩존 수업 예약 취소 API
+export const deleteCodingZoneClass = async (token, classNum) => {
     try {
-        const response = await axios.get(GET_CZ_ATTEND_LIST(), authorization(accessToken));
-        return response.data;
+        const response = await axios.delete(DELETE_CODING_ZONE_CLASS_URL(classNum), authorization(token));
+        if (response.data.code === "SU") {
+            return true;
+        }
+        return false;
     } catch (error) {
-        if (!error.response || !error.response.data) return null;
-        return error.response.data;
+        if (error.response) {
+            switch (error.response.data.code) {
+                case "NR":
+                    console.log("Not reserve class.");
+                    break;
+                case "NU":
+                    console.log("사용자가 존재하지 않습니다.");
+                    break;
+                case "DBE":
+                    console.log("데이터베이스에 문제가 발생했습니다.");
+                    break;
+                default:
+                    console.log("예상치 못한 문제가 발생하였습니다.");
+                    break;
+            }
+        } 
+        return false;
     }
 };
-
 // 13. 등록된 특정 수업 삭제 API
 export const deleteClass = async (classNum, token) => {
     try {
-        const response = await axios.delete(`${DOMAIN}/api/admin/delete-class/${classNum}`, {
+        const response = await axios.delete(DELETE_CLASS_URL(classNum), {
             headers: { Authorization: `Bearer ${token}` }
         });
         if (response.data.code === "SU") {
@@ -317,6 +303,19 @@ export const deleteClass = async (classNum, token) => {
         return false;
     }
 };
+
+
+// 12.특정 사용자의 출/결석된 수업 리스트로 반환 API 
+export const getczattendlistRequest = async (accessToken) => {
+    try {
+        const response = await axios.get(GET_CZ_ATTEND_LIST(), authorization(accessToken));
+        return response.data;
+    } catch (error) {
+        if (!error.response || !error.response.data) return null;
+        return error.response.data;
+    }
+};
+
 
 
 // 14.특정 날짜에 1학년/2학년 코딩존 수업 예약한 학생들 리스트로 반환 API

@@ -94,9 +94,9 @@
 }
 
 .Edit-Delete-Options {
-  font-size: 10px;
+  font-size: 11px;
   display: flex;  
-  justify-content: flex-end;
+ 
 }
 .Edit-Delete-Options button {
   border: none !important;
@@ -108,7 +108,6 @@
   font-size: 12px;
 
 }
-
 .Commentbox-name{
   display: flex;
   align-items: center;
@@ -141,14 +140,9 @@
 }
 
 .Comment-Option{
-  position: relative;
   display: flex;   
   height: 40%;
-  z-index: 11;       
-  align-items: center; 
   margin-top: 1%; 
-  width: 25%;
-  flex-direction: row;
   margin-left:5px;
 }
 .Comment-Option p{
@@ -237,6 +231,7 @@
 .ed-comment{
   display: flex;       
   align-items: center; 
+  cursor: pointer;
   justify-content: flex-end;
   font-size: 12px;
 }
@@ -244,6 +239,7 @@
   margin-right: 2%;
 }
 .stop button{
+  color: red;
   border:none !important;
   cursor: pointer;
   background: transparent;
@@ -251,7 +247,7 @@
 .stop {
   display: flex;        
   justify-content: flex-end;
-  font-size: 10px;
+  font-size: 11px;
   align-items: center;   
 }
 .resolve {
@@ -278,6 +274,7 @@ html, body {
 
 .ql-editor {
   padding: 3%;
+  height: 25vw;
  
 }
 

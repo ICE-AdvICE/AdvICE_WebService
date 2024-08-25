@@ -24,12 +24,15 @@ const BlogForm = ({ editing }) => {
     const [categoryString, setCategoryString] = useState('카테고리 선택');  
     const [isAdmin, setIsAdmin] = useState(false); // 운영자 권한 여부
 
+    
+
     const categoryMap = {
         'REQUEST': '요청',
         'GENERAL': '일반',
         'NOTIFICATION': '공지',
         '카테고리 선택': '카테고리 선택'
     };
+    
     useEffect(() => {
         const loadArticleData = async () => {
             if (editing && articleNum) {
@@ -93,7 +96,13 @@ const BlogForm = ({ editing }) => {
         };    
         let response;
         if (editing) {
-            await handleEdit(articleNum, token, navigate, setCanEdit, postData);
+            response = await handleEdit(articleNum, token, navigate, setCanEdit, postData);
+            if (response) {
+                navigate(`/article-main/${articleNum}`); 
+                return;
+            } else {
+                setError('게시글 수정에 실패했습니다.');
+            }
         } 
         if (category === 'NOTIFICATION') {
             response = await createNotificationArticleRequest(postData, token);
@@ -146,10 +155,9 @@ const BlogForm = ({ editing }) => {
     return (
         <div className="BlogForm-container">
              <div className='blog-container'>
-            <div className = "img-container">
-                <img src="/main-image.png" className="header2-image"/>
-                <img src="/mainword-image.png"   className="words-image"/>
-
+             <div className="img-container">
+                <img src="/main-image.png" className="header-image" />
+                <img src="/mainword-image.png" className="header-word-image" />
             </div>
             {error && <div className="alert alert-danger">{error}</div>}
             <div className ='createpage-container'>
