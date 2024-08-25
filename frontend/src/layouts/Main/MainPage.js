@@ -43,7 +43,7 @@ const MainPage = () => {
   return (
     <div className="main-container">
       <div className="header">
-        <h1>ICE</h1>
+        <h1>AdvICE</h1>
         <p className="department-info">
   This is an integrated service for students in the Department of Information and Communication Engineering.<br />
   Try the coding zone reservation, anonymous bulletin board, and study room reservation service for the Department of Information and Communication Engineering.

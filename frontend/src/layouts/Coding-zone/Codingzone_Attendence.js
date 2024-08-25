@@ -85,13 +85,11 @@ const Codingzone_Attendence = () => {
                         setShowRegisterClassButton(true);
                         setShowManageAllButton(true); // Also show '전체 관리' for EA
                         break;
-                        case 'NU':
-                            alert('로그인 시간이 만료되었습니다. 다시 로그인 해주세요.');
-                            setShowAdminButton(false);
+                    case 'NU':
+                        setShowAdminButton(false);
                         setShowManageAllButton(false);
                         setShowRegisterClassButton(false);
-                            navigate('/');
-                            break;
+                        break;
                     default:
                         setShowAdminButton(false);
                         setShowManageAllButton(false);
@@ -109,10 +107,10 @@ const Codingzone_Attendence = () => {
             const response = await getczattendlistRequest(token);
             if (response && response.code === "SU") {
                 setAttendList(response.attendList);
-            }  else if(response && response.code === "NU"){
+            } else if (response && response.code === "NU") {
                 alert('로그인 시간이 만료되었습니다. 다시 로그인 해주세요.');
                 navigate('/');
-            }else {
+            } else {
                 console.error(response.message);
             }
         };
