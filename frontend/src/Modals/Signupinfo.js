@@ -1,11 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import './modules.css';
-import { useCookies } from 'react-cookie'; // 수정된 임포트
-import { useNavigate } from 'react-router-dom'; // 수정된 임포트
+import { useCookies } from 'react-cookie';
+import { useNavigate } from 'react-router-dom';
 import { signUpRequest, emailCertificationRequest, checkCertificationRequest } from '../apis/index.js';
-
-
-
 
 const SignUpinfoForm = ({ closeModal }) => {
   const [userCertificationNumber, setUsercertificationNumber] = useState('');
@@ -13,31 +10,48 @@ const SignUpinfoForm = ({ closeModal }) => {
   const [userStudentnum, setUserstudentnum] = useState('');
   const [userPassword, setUserpassword] = useState('');
   const [userEmail, setUserEmail] = useState('');
-  const [userReenteredPassword, setUserReenteredPassword] = useState(''); // 비밀번호 재입력을 위한 새로운 상태
-  const [isCertified, setIsCertified] = useState(false); // 이메일 인증 여부를 확인하는 상태 추가
+  const [userReenteredPassword, setUserReenteredPassword] = useState('');
+  const [isCertified, setIsCertified] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(true);
-  const [error, setError] = useState(false); // 에러 상태 추가
+  const [error, setError] = useState(false);
+  const [nameError, setNameError] = useState(false);
+  const [studentNumError, setStudentNumError] = useState(false);
+  const [passwordError, setPasswordError] = useState(false);
   const navigator = useNavigate();
-  const [cookies, setCookie] = useCookies(['accessToken']); //데베에 있는 데이터 호출 시 사용 예정
+  const [cookies, setCookie] = useCookies(['accessToken']);
   const [emailRegistered, setEmailRegistered] = useState(false);
-
-
-
   const [buttonDisabled, setButtonDisabled] = useState(false);
   const [countdown, setCountdown] = useState(60);
   const [agreeTerms, setAgreeTerms] = useState(false);
   const [agreePrivacy, setAgreePrivacy] = useState(false);
 
   useEffect(() => {
+    const savedCountdown = localStorage.getItem('countdown');
+    const savedTimestamp = localStorage.getItem('timestamp');
+
+    if (savedCountdown && savedTimestamp) {
+      const elapsedTime = Math.floor((Date.now() - parseInt(savedTimestamp)) / 1000);
+      const remainingTime = parseInt(savedCountdown) - elapsedTime;
+
+      if (remainingTime > 0) {
+        setCountdown(remainingTime);
+        setButtonDisabled(true);
+      }
+    }
+
     let timer;
     if (buttonDisabled) {
       timer = setInterval(() => {
         setCountdown((prevCountdown) => {
           if (prevCountdown > 0) {
-            return prevCountdown - 1;
+            const newCountdown = prevCountdown - 1;
+            localStorage.setItem('countdown', newCountdown);
+            return newCountdown;
           } else {
             clearInterval(timer);
             setButtonDisabled(false);
+            localStorage.removeItem('countdown');
+            localStorage.removeItem('timestamp');
             return 60;
           }
         });
@@ -47,38 +61,86 @@ const SignUpinfoForm = ({ closeModal }) => {
     return () => clearInterval(timer);
   }, [buttonDisabled]);
 
-
-
-
-
-  const handleSubmit = (e) => {
+  const onEmailCertificationHandler = (e) => {
     e.preventDefault();
-    if (!agreeTerms || !agreePrivacy) {
-      alert('이용약관 및 개인정보처리방침에 동의해주세요.');
-      return;
+    if (!buttonDisabled) {
+      const requestBody = { email: userEmail };
+      emailCertificationRequest(requestBody)
+        .then(response => {
+          const { code } = response;
+
+          if (code === 'DE') {
+            alert('이미 회원가입된 이메일입니다.');
+          } else if (code === 'SU') {
+            alert('인증번호가 전송되었습니다.');
+            setButtonDisabled(true);
+            localStorage.setItem('countdown', 60);
+            localStorage.setItem('timestamp', Date.now());
+          } else {
+            alert('이메일 전송 실패');
+          }
+        })
+        .catch(error => {
+          console.error('이메일 인증 요청 중 오류 발생:', error);
+          alert('네트워크 이상입니다.');
+          setButtonDisabled(false);
+          setCountdown(60);
+        });
     }
   };
 
-  const onSignUpButtonClickHandler = () => {
-    if (userPassword !== userReenteredPassword) {
-      alert('비밀번호가 일치하지 않습니다.');
-      return;
-    }
+  const handleSubmit = (e) => {
+    e.preventDefault();
 
     if (!isCertified) {
       alert('이메일 인증을 먼저 완료해주세요.');
       return;
     }
 
-    if (userStudentnum.length < 5) {
-      alert('학번을 다시 입력해주세요.');
+    if (!validateFields()) {
+      alert('개인정보를 정확하게 입력해주세요.');
       return;
     }
 
+    if (!agreeTerms || !agreePrivacy) {
+      alert('이용약관 및 개인정보처리방침에 동의해주세요.');
+      return;
+    }
 
+    onSignUpButtonClickHandler();
+  };
+
+  const validateFields = () => {
+    let valid = true;
+
+    if (!userName) {
+      setNameError(true);
+      valid = false;
+    } else {
+      setNameError(false);
+    }
+
+    if (!userStudentnum || userStudentnum.length < 7) {
+      setStudentNumError(true);
+      valid = false;
+    } else {
+      setStudentNumError(false);
+    }
+
+    if (!userPassword || userPassword !== userReenteredPassword || userPassword.length < 8) {
+      setPasswordError(true);
+      valid = false;
+    } else {
+      setPasswordError(false);
+    }
+
+    return valid;
+  };
+
+  const onSignUpButtonClickHandler = () => {
     const requestBody = { email: userEmail, name: userName, studentNum: userStudentnum, password: userPassword };
     signUpRequest(requestBody)
-      .then(response => signUpResponse(response))
+      .then(response => signUpResponse(response));
   };
 
   const onCheckCertificationHandler = (e) => {
@@ -92,22 +154,6 @@ const SignUpinfoForm = ({ closeModal }) => {
       });
   };
 
-  const onEmailCertificationHandler = (e) => {
-    e.preventDefault();
-    if (!buttonDisabled) {
-      setButtonDisabled(true);
-      const requestBody = { email: userEmail };
-      emailCertificationRequest(requestBody)
-        .then(response => emailCertificationResponse(response))
-        .catch(error => {
-          console.error('이메일 인증 요청 중 오류 발생:', error);
-          alert('네트워크 이상입니다.');
-          setButtonDisabled(false);
-          setCountdown(60);
-        });
-    }
-  };
-
   const signUpResponse = (responseBody) => {
     if (!responseBody) {
       alert('네트워크 이상입니다.');
@@ -118,18 +164,16 @@ const SignUpinfoForm = ({ closeModal }) => {
     switch (code) {
       case 'SU':
         alert('회원가입이 성공적으로 완료되었습니다.');
-        navigator('/');  // 로그인 후 리다이렉트
+        navigator('/');
         closeModal();
-        // 모달 창 닫기
-        // 성공적으로 회원가입을 완료했다는 상태 업데이트를 부모에 전달
-        break; // 함수 종료를 확실하게 함
+        break;
       case 'DBE':
         alert('데이터베이스 오류입니다.');
         break;
       case 'SF':
       case 'VF':
         setError(true);
-        alert('서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
+        alert('개인정보를 정확하게 다시 입력해주세요.');
         break;
       default:
         alert('회원가입에 실패했습니다. 다시 시도해주세요.');
@@ -137,59 +181,18 @@ const SignUpinfoForm = ({ closeModal }) => {
     }
   };
 
-
-  const emailCertificationResponse = (responseBody) => { //이메일 인증
-    if (!responseBody) { //예상하지못한 error를 처리 함수
-      alert('네트워크 이상입니다.');
-      return;
-    }
-    const { code } = responseBody; //정상 응답 또는 예상한 error 반환 함수
-    //alert(code);
-    if (code === 'DE') alert('이미 회원가입된 이메일 입니다');
-    else if (code === 'MF') alert('이메일 전송 실패');
-    else if (code === 'DBE') alert('데이터베이스 오류임');
-    else if (code === 'SF' || code === 'VF') setError(true);
-    else if (code !== 'SU');
-    else if (code === 'SU') alert('인증번호가 전송이 되었습니다.');
-    return;
-    navigator('/'); //리다이렉션 역할을 하며 로그인후 노출될 페이지의 경로를 지정해야함
-  }
-  // 폼 제출 핸들러
-
-  const checkCertificationResponse = (responseBody) => { //이메일 인증
-    if (!responseBody) { //예상하지못한 error를 처리 함수
-      alert('네트워크 이상입니다.');
-      return;
-    }
-    const { code } = responseBody; //정상 응답 또는 예상한 error 반환 함수
-    //alert(code);
-    if (code === 'DBE');
-    else if (code === 'VF') alert('인증번호가 잘못되었음요.');
-    else if (code !== 'SU');
-    else if (code === 'SU') {
-      setIsCertified(true);
-      alert('인증이 완료 되었습니다.');
-    }
-    return;
-    navigator('/'); //리다이렉션 역할을 하며 로그인후 노출될 페이지의 경로를 지정해야함
-  }
-
-
   return (
-
     <form onSubmit={handleSubmit}>
-      <div className="signupHeaderContainer">
-        <img src="header-name.png" alt="로그인 로고" style={{ width: '220px', height: 'auto' }} />
+      <div className="loginHeaderContainer">
+        <img src="header-name.png" alt="로그인 로고" className="responsiveLogo" />
       </div>
 
-
-      <label htmlFor="user_email" ></label>
+      <label htmlFor="user_email"></label>
       <p>이메일 인증</p>
 
       <div className="signUpContainer">
-        <label htmlFor="user_email" ></label>
+        <label htmlFor="user_email"></label>
         <input
-          
           value={userEmail}
           onChange={e => setUserEmail(e.target.value)}
           placeholder="학교 이메일"
@@ -199,10 +202,9 @@ const SignUpinfoForm = ({ closeModal }) => {
       </div>
       {buttonDisabled && <span className="countdown-timer">{countdown}초 후에 다시 시도 가능합니다.</span>}
 
-      <div className="emailpost" >
+      <div className="emailpost">
         <label htmlFor="password"></label>
         <input
-          
           value={userCertificationNumber}
           onChange={e => setUsercertificationNumber(e.target.value)}
           placeholder="인증번호를 입력해주세요."
@@ -210,52 +212,53 @@ const SignUpinfoForm = ({ closeModal }) => {
         <button type="button" className="SignupFormpost" onClick={onCheckCertificationHandler}>인증</button>
       </div>
 
-
-
-      <div className="signup_name" >
+      <div className="signup_name">
         <p>이름</p>
         <input
-
           value={userName}
           onChange={e => setUsername(e.target.value)}
           placeholder=" 이름을 입력해주세요."
+          style={{ borderColor: nameError ? 'red' : '' }}
         />
       </div>
 
-      <div className="signup_pw" >
+      <div className="signup_pw">
         <p>학번</p>
         <input
-
           value={userStudentnum}
           onChange={e => setUserstudentnum(e.target.value)}
           placeholder=" 학번을 입력해주세요. (ex.2020XXXXX)"
-          minLength={6}
+          minLength={7}
+          style={{ borderColor: studentNumError ? 'red' : '' }}
         />
       </div>
 
-      <div className="signup_pw" >
+      <div className="signup_pw">
         <p>비밀번호</p>
         <input
           type="password"
           value={userPassword}
           onChange={e => setUserpassword(e.target.value)}
-          placeholder=" 비밀번호는 8자 이상 20자 미만이어야합니다."
+          placeholder=" 비밀번호는 8자 이상 20자 미만이어야 합니다."
+          style={{ borderColor: passwordError ? 'red' : '' }}
         />
       </div>
 
-      <div className="signup_pw" >
+      <div className="signup_pw">
         <p>비밀번호 확인</p>
         <input
           type="password"
           value={userReenteredPassword}
           onChange={e => setUserReenteredPassword(e.target.value)}
           placeholder=" 비밀번호 재입력"
+          style={{ borderColor: passwordError ? 'red' : '' }}
         />
         {userPassword && userReenteredPassword && userPassword !== userReenteredPassword && (
           <div className="pw-mismatch-error" style={{ color: 'red' }}>비밀번호가 일치하지 않습니다.</div>
         )}
       </div>
-      <div className="signup_terms_checkbox_container ">
+
+      <div className="signup_terms_checkbox_container">
         <div className="signup_termsContainer">
           <h3>이용약관 (필수)</h3>
           <div className="signup_termsContent" style={{ height: '100px', overflowY: 'scroll', border: '1px solid #ccc', padding: '10px', marginBottom: '10px' }}>
@@ -286,19 +289,21 @@ const SignUpinfoForm = ({ closeModal }) => {
             </ul>
             <p><strong>제7조 (서비스의 이용 시간)</strong> 서비스의 이용은 관리자의 업무상 또는 기술적 필요에 따라 정해진 시간동안 제공됩니다. 관리자는 서비스 제공시간을 홈페이지에 적절한 방법으로 안내합니다.</p>
           </div>
+
+          <label className="signup_checkboxLabel">
+            <input
+              type="checkbox"
+              className="signup_styledCheckbox"
+              checked={agreeTerms}
+              onChange={e => setAgreeTerms(e.target.checked)}
+            />
+            <span className="signup_checkboxCustom" />
+            동의합니다
+          </label>
         </div>
-        <label className="signup_checkboxLabel">
-          <input
-            type="checkbox"
-            className="signup_styledCheckbox"
-            checked={agreeTerms}
-            onChange={e => setAgreeTerms(e.target.checked)}
-          />
-          <span className="signup_checkboxCustom" />
-          동의합니다
-        </label>
       </div>
-      <div className="signup_terms_checkbox_container ">
+
+      <div className="signup_terms_checkbox_container">
         <div className="signup_termsContainer">
           <h3>개인정보처리방침 (필수)</h3>
           <div className="signup_termsConten" style={{ height: '100px', overflowY: 'scroll', border: '1px solid #ccc', padding: '10px', marginBottom: '10px' }}>
@@ -348,6 +353,7 @@ const SignUpinfoForm = ({ closeModal }) => {
               <li>면책 조항: 기술적 보완조치에도 불구하고 발생할 수 있는 네트워크 기반의 위험성(해킹, 정보 훼손 등)에 대해서는 사이트 측에서 책임을 지지 않습니다.</li>
             </ul>
           </div>
+
           <label className="signup_checkboxLabel">
             <input
               type="checkbox"
@@ -360,11 +366,10 @@ const SignUpinfoForm = ({ closeModal }) => {
           </label>
         </div>
       </div>
-      <button type="submit" className="signupButton" onClick={onSignUpButtonClickHandler}>회원가입 완료</button>
-    </form>
 
+      <button type="submit" className="signupButton">회원가입</button>
+    </form>
   );
 };
-
 
 export default SignUpinfoForm;

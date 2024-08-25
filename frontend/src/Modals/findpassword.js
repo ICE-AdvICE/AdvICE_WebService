@@ -2,45 +2,76 @@ import React, { useState, useEffect } from 'react';
 import { pwRequest, checkCertificationRequest, pwUpdateRequest } from '../apis/index.js';
 import { useNavigate } from 'react-router-dom';
 
-const FindpasswordForm = ({ onFindm, onClose  }) => {
+const FindpasswordForm = ({ onClose }) => {
     const [userEmail, setUserEmail] = useState('');
     const [certificationNumber, setCertificationNumber] = useState('');
     const [newPassword, setNewPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [isCertified, setIsCertified] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(true);
-    const navigator = useNavigate();
-
+    const navigate = useNavigate();
     const [buttonDisabled, setButtonDisabled] = useState(false);
     const [countdown, setCountdown] = useState(60);
-    
 
+
+    useEffect(() => {
+        const storedTime = localStorage.getItem('timerStart');
+        if (storedTime) {
+            const now = new Date().getTime();
+            const timePassed = (now - parseInt(storedTime)) / 1000;
+            const remainingTime = Math.floor(Math.max(60 - timePassed, 0));
+            if (remainingTime > 0) {
+                setCountdown(remainingTime);
+                setButtonDisabled(true);
+            } else {
+                localStorage.removeItem('timerStart');
+                setButtonDisabled(false);
+            }
+        }
+    }, []);
+
+    // 타이머 카운트다운
     useEffect(() => {
         let intervalId;
         if (buttonDisabled) {
             intervalId = setInterval(() => {
                 setCountdown((c) => {
-                    if (c > 1) return c - 1;
-                    setButtonDisabled(false);
-                    return 60;
+                    const nextCount = c - 1;
+                    if (nextCount > 0) {
+                        return nextCount;
+                    } else {
+                        clearInterval(intervalId);
+                        setButtonDisabled(false);
+                        localStorage.removeItem('timerStart');
+                        return 60;
+                    }
                 });
             }, 1000);
         }
         return () => clearInterval(intervalId);
     }, [buttonDisabled]);
-    
     // 이메일로 인증번호 전송 요청
     const handleSendCertification = async () => {
         if (!buttonDisabled) {
             setButtonDisabled(true);
+            localStorage.setItem('timerStart', new Date().getTime().toString());
+            setCountdown(60); // 타이머 시작
             const requestBody = { email: userEmail };
             const response = await pwRequest(requestBody);
             if (response.code === 'SU') {
-                alert('인증번호가 전송되었습니다. 받은 인증번호를 입력해주세요.');
-            } else {
-                alert('인증번호 전송 실패: ' + response.message);
+                alert('인증번호가 전송되었습니다. \n받은 인증번호를 입력해주세요.');
+            } else if (response.code === 'NU') {
+                alert('회원가입 된 계정이 아닙니다.');
                 setButtonDisabled(false);
-                setCountdown(60); // reset the countdown
+                localStorage.removeItem('timerStart');
+            } else if (response.code === 'MF') {
+                alert('메일전송에 실패 했습니다. \n다시 시도 해 주세요.');
+                setButtonDisabled(false);
+                localStorage.removeItem('timerStart');
+            } else {
+                alert('메일전송에 실패 했습니다. \n다시 시도 해 주세요.');
+                setButtonDisabled(false);
+                localStorage.removeItem('timerStart');
             }
         }
     };
@@ -54,9 +85,9 @@ const FindpasswordForm = ({ onFindm, onClose  }) => {
         const response = await checkCertificationRequest(requestBody);
         if (response.code === 'SU') {
             setIsCertified(true);
-            alert('인증이 성공적으로 완료되었습니다. 이제 비밀번호를 변경할 수 있습니다.');
+            alert('인증이 성공적으로 완료되었습니다. \n이제 비밀번호를 변경할 수 있습니다.');
         } else {
-            alert('인증번호가 잘못되었습니다. 다시 시도해주세요.');
+            alert('인증번호가 잘못되었습니다. \n다시 시도해주세요.');
         }
     };
 
@@ -67,7 +98,7 @@ const FindpasswordForm = ({ onFindm, onClose  }) => {
             return;
         }
 
-        if (newPassword.length < 8 || newPassword.length > 20) { // 예를 들어 최소 길이를 8로 설정
+        if (newPassword.length < 8 || newPassword.length > 20) {
             alert('비밀번호 길이를 8자 이상 20자 이하로 해주세요.');
             return;
         }
@@ -79,14 +110,17 @@ const FindpasswordForm = ({ onFindm, onClose  }) => {
         const response = await pwUpdateRequest(requestBody);
         if (response.code === 'SU') {
             alert('비밀번호 변경이 성공적으로 완료되었습니다.');
-             // Optionally call a prop function to manage modal state
             onClose();
+        } else if (response.code === 'NU') {
+            alert('로그인 시간이 만료되었습니다. 다시 로그인 해주세요.');
+            navigate('/');
         } else {
-            alert('비밀번호 변경에 실패하였습니다: ' + response.message);
+            alert('오류가 발생했습니다. 다시 시도 해 주세요.');
+            navigate('/');
         }
     };
-   
- 
+
+
     return (
         <form onSubmit={(e) => e.preventDefault()}>
             <div className="loginHeaderContainer">
@@ -103,7 +137,7 @@ const FindpasswordForm = ({ onFindm, onClose  }) => {
                 />
                 <span className="pw_emailDomain">@hufs.ac.kr</span>
                 <button type="button" className="findpasswordpost" onClick={handleSendCertification} disabled={buttonDisabled}>
-                    인증요청
+                    요청
                 </button>
             </div>
             {buttonDisabled && <span className="pw_countdown-timer">{countdown}초 후에 다시 시도 가능합니다.</span>}
@@ -116,7 +150,7 @@ const FindpasswordForm = ({ onFindm, onClose  }) => {
                     onChange={e => setCertificationNumber(e.target.value)}
                     placeholder="인증번호를 입력해주세요."
                 />
-                <button type="button" className="findpasswordpost" onClick={handleCertification}>인증확인</button>
+                <button type="button" className="findpasswordpost" onClick={handleCertification}>인증</button>
             </div>
             {isCertified && (
                 <>

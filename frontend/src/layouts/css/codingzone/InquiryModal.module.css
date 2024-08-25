@@ -30,6 +30,7 @@
     z-index: 1051;
     max-height: 80vh;
     overflow-y: auto;
+    font-family: sans-serif;  
 }
 
 .close {
@@ -46,7 +47,7 @@
 
 .modalBody {
     padding: 10px 20px;
-    margin-bottom: 20px; /* 여백 추가 */
+    margin-bottom: 20px; 
 }
 
 .title {
@@ -58,5 +59,6 @@
     border-bottom: 2px solid #b9b9b9;
     margin-left: auto;
     margin-right: auto;
-    margin-bottom: 5px; /* 여백 추가 */
+    margin-bottom: 5px; 
+    font-family: sans-serif;  
 }

@@ -5,6 +5,7 @@ import '../css/codingzone/codingzone-main.css';
 import '../css/codingzone/codingzone_attend.css';
 import '../css/codingzone/codingzone_all_attendance.css';
 import { useNavigate } from 'react-router-dom';
+import InquiryModal from './InquiryModal';
 
 const Codingzone_All_Attend = () => {
     const [authMessage, setAuthMessage] = useState('');
@@ -17,10 +18,18 @@ const Codingzone_All_Attend = () => {
     const [selectedGrade, setSelectedGrade] = useState(1);
     const token = cookies.accessToken;
     const navigate = useNavigate();
+    const [showModal, setShowModal] = useState(false);
+    const [selectedButton, setSelectedButton] = useState('attendence');
 
-    const handlecodingzoneattendence = () => {
-        navigate(`/coding-zone/Codingzone_Attendance`);
+    const handleOpenModal = () => {
+        setShowModal(true);
     };
+
+    const handleCloseModal = () => {
+        setShowModal(false);
+    };
+
+
     const handlecodingzonemanager = () => {
         navigate(`/coding-zone/Codingzone_Manager`);
     };
@@ -32,7 +41,22 @@ const Codingzone_All_Attend = () => {
     const handleClassRegistration = () => {
         navigate(`/coding-zone/coding-class-regist`);
     };
-   
+
+
+    const handlecodingzone = () => {
+        setSelectedButton('codingzone');
+        navigate('/coding-zone');
+    };
+
+    const handlecodingzoneattendence = () => {
+        setSelectedButton('attendence');
+        navigate(`/coding-zone/Codingzone_Attendance`);
+    };
+
+    const handleInquiry = () => {
+        setSelectedButton('inquiry');
+    };
+
 
 
     useEffect(() => {
@@ -48,6 +72,14 @@ const Codingzone_All_Attend = () => {
                         setShowRegisterClassButton(true);
                         setShowManageAllButton(true); // Also show '전체 관리' for EA
                         break;
+                    case 'NU':
+                        alert('로그인 시간이 만료되었습니다. 다시 로그인 해주세요.');
+                        navigate('/');
+                        break;
+                    case 'DBE':
+                        alert('데이터베이스 오류입니다.');
+                        break;
+
                     default:
                         setShowAdminButton(false);
                         setShowManageAllButton(false);
@@ -67,7 +99,11 @@ const Codingzone_All_Attend = () => {
                 // Filter data based on selected grade
                 const filteredData = response.studentList.filter(student => student.grade === selectedGrade);
                 setAttendanceList(filteredData);
-            } else {
+            } else if (response && response.code === "NU") {
+                alert('로그인 시간이 만료되었습니다. 다시 로그인 해주세요.');
+                navigate('/');
+            }
+            else {
                 console.error(response?.message || "Failed to fetch attendance data.");
             }
         };
@@ -102,21 +138,37 @@ const Codingzone_All_Attend = () => {
 
         return Object.values(aggregatedData);
     };
-    const handlecodingzone = () => {
- 
-        navigate(`/coding-zone`);
-      };
+
 
     return (
         <div>
             <div className="codingzone-container">
                 <div className='select-container'>
                     <span> | </span>
-                    <button  onClick={handlecodingzone}  >코딩존 예약</button>
+                    <button
+                        onClick={handlecodingzone}
+                        className={selectedButton === 'codingzone' ? 'selected' : ''}
+                    >
+                        코딩존 예약
+                    </button>
                     <span> | </span>
-                    <button onClick={handlecodingzoneattendence}>출결 관리</button>
+                    <button
+                        onClick={handlecodingzoneattendence}
+                        className={selectedButton === 'attendence' ? 'selected' : ''}
+                    >
+                        출결 관리
+                    </button>
                     <span> | </span>
-                    <button>문의 하기</button>
+                    <button
+                        onClick={() => {
+                            handleInquiry();
+                            handleOpenModal();
+                        }}
+                        className={selectedButton === 'inquiry' ? 'selected' : ''}
+                    >
+                        문의 하기
+                    </button>
+                    {showModal && <InquiryModal isOpen={showModal} onClose={handleCloseModal} />}
                     <span> | </span>
                 </div>
                 <div className="banner_img_container">
@@ -132,13 +184,13 @@ const Codingzone_All_Attend = () => {
                 </button>
                 {showRegisterClassButton && (
                     <>
-                    <div className="divider"></div>
-                    <button
-                        className={`btn-attend ${activeButton === 'manage' ? 'active' : ''}`}
-                        onClick={handleClassRegistration}
-                    >
-                        수업 등록
-                    </button>
+                        <div className="divider"></div>
+                        <button
+                            className={`btn-attend ${activeButton === 'manage' ? 'active' : ''}`}
+                            onClick={handleClassRegistration}
+                        >
+                            수업 등록
+                        </button>
                     </>
                 )}
                 {showAdminButton && (
@@ -154,13 +206,13 @@ const Codingzone_All_Attend = () => {
                 )}
                 {showManageAllButton && (
                     <>
-                    <div className="divider"></div>
-                    <button
-                        className={`btn-attend ${activeButton === 'manage_all' ? 'active' : ''}`}
-                        onClick={() => setActiveButton('manage_all')}
-                    >
-                        전체 관리
-                    </button>
+                        <div className="divider"></div>
+                        <button
+                            className={`btn-attend ${activeButton === 'manage_all' ? 'active' : ''}`}
+                            onClick={() => setActiveButton('manage_all')}
+                        >
+                            전체 관리
+                        </button>
                     </>
                 )}
             </div>
@@ -176,7 +228,7 @@ const Codingzone_All_Attend = () => {
                         className={selectedGrade === 2 ? 'active' : ''}
                         onClick={() => handleGradeChange(2)}
                     >
-                       코딩존2
+                        코딩존2
                     </button>
                 </div>
                 <div className="line-container1">

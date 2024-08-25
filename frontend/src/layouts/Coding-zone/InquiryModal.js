@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { getczassitantRequest, getczauthtypetRequest} from '../../apis/Codingzone-api';
 import styles from '../css/codingzone/InquiryModal.module.css';
 import '../../Modals/modules.css';
@@ -6,6 +7,7 @@ import '../../Modals/modules.css';
 
 const InquiryModal = ({ isOpen, onClose }) => {
     const [assistants, setAssistants] = useState({ zone1: [], zone2: [] });
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (isOpen) {
@@ -20,6 +22,9 @@ const InquiryModal = ({ isOpen, onClose }) => {
                 zone1: response.listOfCodingZone1,
                 zone2: response.listOfCodingZone2
             });
+        }  else if(response && response.code === "NU"){
+            alert('로그인 시간이 만료되었습니다. 다시 로그인 해주세요.');
+            navigate('/');
         } else {
             console.error(response.message);
         }

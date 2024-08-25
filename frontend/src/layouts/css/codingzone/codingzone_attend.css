@@ -7,7 +7,6 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #f3f3f3;
 }
 
 
@@ -286,7 +285,6 @@
     width: 100%;    
     font-family: sans-serif;      
     padding: 20px;         
-    font-size: 1.2rem;     
 }
 
 @media (max-width: 920px) {

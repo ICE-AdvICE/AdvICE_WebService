@@ -19,18 +19,31 @@ const Codingzone_Manager = () => {
     const navigate = useNavigate();
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [showModal, setShowModal] = useState(false);
+    const [selectedButton, setSelectedButton] = useState('');
 
-const handleOpenModal = () => {
-    setShowModal(true);
-};
+    const handleOpenModal = () => {
+        setShowModal(true);
+    };
 
-const handleCloseModal = () => {
-    setShowModal(false);
-};
+    const handleCloseModal = () => {
+        setShowModal(false);
+    };
+
+    const handlecodingzone = () => {
+        setSelectedButton('codingzone');
+        navigate('/coding-zone');
+    };
 
     const handlecodingzoneattendence = () => {
+        setSelectedButton('attendence');
         navigate(`/coding-zone/Codingzone_Attendance`);
     };
+
+    const handleInquiry = () => {
+        setSelectedButton('inquiry');
+    };
+
+
 
     useEffect(() => {
         fetchAuthType();
@@ -48,6 +61,9 @@ const handleCloseModal = () => {
                 case "SU":
                 case "EA":
                 case "NU":
+                    alert('로그인 시간이 만료되었습니다. 다시 로그인 해주세요.');
+                    navigate('/');
+                            break;
                 case "DBE":
                     break;
                 case "CA":
@@ -64,7 +80,12 @@ const handleCloseModal = () => {
         const response = await getczattendlistRequest(token);
         if (response && response.code === "SU") {
             setAttendList(response.attendList);
-        } else {
+        } 
+        else if(response && response.code === "NU"){
+            alert('로그인 시간이 만료되었습니다. 다시 로그인 해주세요.');
+            navigate('/');
+        }
+        else {
             console.error(response.message);
         }
     };
@@ -74,7 +95,11 @@ const handleCloseModal = () => {
         const response = await getczreservedlistRequest(token, formattedDate);
         if (response && response.code === "SU") {
             setReservedList(response.studentList.sort((a, b) => a.classTime.localeCompare(b.classTime)));
-        } else {
+        }  else if(response && response.code === "NU"){
+            alert('로그인 시간이 만료되었습니다. 다시 로그인 해주세요.');
+            navigate('/');
+        }
+        else {
             console.error(response.message);
             setReservedList([]);
         }
@@ -88,8 +113,12 @@ const handleCloseModal = () => {
         if (response.code === "SU") {
             alert('처리가 완료되었습니다.');
             fetchReservedList(); // 새로고침 기능
-        } else {
-            alert(`오류: ${response.message}`);
+        } else if(response && response.code === "NU"){
+            alert('로그인 시간이 만료되었습니다. 다시 로그인 해주세요.');
+            navigate('/');
+        } 
+        else {
+            alert('오류가 발생했습니다. 다시 시도 해 주세요.');
         }
     };
 
@@ -103,12 +132,30 @@ const handleCloseModal = () => {
             <div className="codingzone-container">
                 <div className='select-container'>
                     <span> | </span>
-                    <button>코딩존 예약</button>
+                    <button
+                        onClick={handlecodingzone}
+                        className={selectedButton === 'codingzone' ? 'selected' : ''}
+                    >
+                        코딩존 예약
+                    </button>
                     <span> | </span>
-                    <button>출결 관리</button>
+                    <button
+                        onClick={handlecodingzoneattendence}
+                        className={selectedButton === 'attendence' ? 'selected' : ''}
+                    >
+                        출결 관리
+                    </button>
                     <span> | </span>
-                    <button onClick={handleOpenModal}>문의하기</button>
-{showModal && <InquiryModal isOpen={showModal} onClose={handleCloseModal} />}
+                    <button
+                        onClick={() => {
+                            handleInquiry();
+                            handleOpenModal();
+                        }}
+                        className={selectedButton === 'inquiry' ? 'selected' : ''}
+                    >
+                        문의 하기
+                    </button>
+                    {showModal && <InquiryModal isOpen={showModal} onClose={handleCloseModal} />}
                     <span> | </span>
                 </div>
                 <div className="banner_img_container">
@@ -145,7 +192,7 @@ const handleCloseModal = () => {
                             const adjustedDate = new Date(date.setHours(12));
                             setSelectedDate(adjustedDate);
                         }}
-                        dateFormat="yyyy/MM/dd" 
+                        dateFormat="yyyy/MM/dd"
                         className="custom_manager_datepicker"
                     />
                 </div>

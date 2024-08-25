@@ -5,12 +5,12 @@ import { checkuserbanRequest } from '../apis/index2.js';
 import MyModal from '../MyModal';
 import FindpasswordForm from '../Modals/findpassword';
 import './modules.css';
-import { useNavigate } from 'react-router-dom'; 
+import { useNavigate } from 'react-router-dom';
 import { getczauthtypetRequest } from '../apis/Codingzone-api.js';
 
 
 
-const MypageForm = ({ handleLogout }) => {
+const MypageForm = ({ handleLogout, closeModal }) => {
     const [userDetails, setUserDetails] = useState({
         email: '',
         studentNum: '',
@@ -22,13 +22,13 @@ const MypageForm = ({ handleLogout }) => {
     const token = cookies.accessToken;
     const [modalOpenfind, setModalOpenfind] = useState(false);
     const navigate = useNavigate();
-    
+
     //사용자 정보 가져오는 함수
     useEffect(() => {
         const fetchUserDetails = async () => {
-            
+
             const data = await getMypageRequest(token);
-            
+
             if (data && data.code === "SU") {
                 setUserDetails({
                     email: data.email,
@@ -48,7 +48,7 @@ const MypageForm = ({ handleLogout }) => {
                 setAuthType(data.code);
             }
         };
-    
+
         if (token) {
             fetchUserDetails();
             fetchAuthType();
@@ -58,13 +58,11 @@ const MypageForm = ({ handleLogout }) => {
     }, [token]);
 
     const handleGrantPermissions = () => {
-        
-        setEditMode(false);
-        
-        
+        closeModal(); // 모달 닫기
+
         setTimeout(() => {
             navigate('/auth-handle');
-        }, 10); // 10 밀리초 후에 이동
+        }, 100);
     };
     //회원탈퇴 함수(정지 당했을 시 탈퇴 불가)
     const handleDeleteAccount = async () => {
@@ -78,7 +76,7 @@ const MypageForm = ({ handleLogout }) => {
                 switch (result.code) {
                     case "SU":
                         alert("계정이 성공적으로 삭제되었습니다.");
-                        handleLogout(); 
+                        handleLogout();
                         break;
                     case "NU":
                         alert("해당 사용자가 존재하지 않습니다.");
@@ -102,7 +100,7 @@ const MypageForm = ({ handleLogout }) => {
         const result = await updateMypageUserRequest(userDetails, token);
         if (result.code === "SU") {
             alert("정보가 성공적으로 업데이트 되었습니다.");
-            setEditMode(false); 
+            setEditMode(false);
         } else {
             alert(`Error: ${result.message}`);
         }
@@ -110,24 +108,24 @@ const MypageForm = ({ handleLogout }) => {
 
     //비밀번호 수정 모달 부르는 함수 
     const handleFindpassword = (e) => {
-        e.preventDefault(); 
-        setModalOpenfind(true); 
+        e.preventDefault();
+        setModalOpenfind(true);
     };
 
     //숫자만 입력할 수 있도록 설정하는 함수
     const handleNumberInput = (e) => {
         const value = e.target.value;
-        setUserDetails({...userDetails, studentNum: value.replace(/[^0-9]/g, '')});
+        setUserDetails({ ...userDetails, studentNum: value.replace(/[^0-9]/g, '') });
     };
 
     return (
         <form onSubmit={(e) => e.preventDefault()}>
             <div className="loginHeaderContainer">
                 <img src="header-name.png" alt="로그인 로고" style={{ width: '220px', height: 'auto' }} />
-            </div>   
+            </div>
             <div className="mypage_icelogo">
                 <img src="favicon.png" alt="정보통신공학과 로고" style={{ width: '150px', height: 'auto' }} />
-            </div> 
+            </div>
             <div className="mypage_component">
                 <p>메일: {userDetails.email}</p>
                 <p>학번: {userDetails.studentNum}</p>
@@ -135,10 +133,10 @@ const MypageForm = ({ handleLogout }) => {
             </div>
             <button className="findPasswordButton" onClick={handleFindpassword}>비밀번호 재설정</button>
             <div className="mypage_buttons">
-            {authType === "EA" && (
+                {authType === "EA" && (
                     <button type="button" onClick={handleGrantPermissions}>권한 부여</button>
                 )}
-            <button type="button" onClick={() => setEditMode(true)}>정보 수정</button>
+                <button type="button" onClick={() => setEditMode(true)}>정보 수정</button>
                 <button type="button" onClick={handleLogout}>로그아웃</button>
             </div>
             <button className="mypage_delete_user" onClick={handleDeleteAccount}>회원탈퇴</button>
@@ -146,18 +144,18 @@ const MypageForm = ({ handleLogout }) => {
                 <MyModal open={editMode} onCancel={() => setEditMode(false)} footer={[]}>
                     <div className="loginHeaderContainer">
                         <img src="header-name.png" alt="로그인 로고" style={{ width: '220px', height: 'auto' }} />
-                    </div> 
+                    </div>
                     <div>
                         <label>이름:</label>
-                        <input 
-                            value={userDetails.name} 
-                            onChange={(e) => setUserDetails({...userDetails, name: e.target.value})} 
+                        <input
+                            value={userDetails.name}
+                            onChange={(e) => setUserDetails({ ...userDetails, name: e.target.value })}
                             className="mypage_update_name"
                         />
                         <label>학번:</label>
-                        <input 
-                            value={userDetails.studentNum} 
-                            onChange={handleNumberInput} 
+                        <input
+                            value={userDetails.studentNum}
+                            onChange={handleNumberInput}
                             className="mypage_update_studentNum"
                         />
                         <button type="button" className="mypage_update-button" onClick={handleUpdateUserDetails}>수정 완료</button>
@@ -166,15 +164,15 @@ const MypageForm = ({ handleLogout }) => {
             )}
 
             <MyModal //비밀번호 찾기
-                    open={modalOpenfind}
-                        width={500} //모달 넓이 이게 적당 한듯
-                        header={[]}
-                        onCancel={e => setModalOpenfind(false) } //x 버튼
-                        footer={[]}
-                    >
-                    <FindpasswordForm onLogin={handleFindpassword} onClose={() => setModalOpenfind(false)} />
-                    
-                </MyModal>
+                open={modalOpenfind}
+                width={500} //모달 넓이 이게 적당 한듯
+                header={[]}
+                onCancel={e => setModalOpenfind(false)} //x 버튼
+                footer={[]}
+            >
+                <FindpasswordForm onLogin={handleFindpassword} onClose={() => setModalOpenfind(false)} />
+
+            </MyModal>
         </form>
     );
 };

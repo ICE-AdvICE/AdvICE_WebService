@@ -4,6 +4,7 @@ import { useCookies } from "react-cookie";
 import CzCard from '../../components/czCard';  
 import { deleteClass,checkAdminType, getAvailableClassesForNotLogin, getAttendanceCount, deleteCodingZoneClass, reserveCodingZoneClass, getcodingzoneListRequest } from '../../apis/Codingzone-api.js'; 
 import { useNavigate, useLocation } from 'react-router-dom';
+import InquiryModal from './InquiryModal';
 
 const ClassList = ({ userReservedClass,onDeleteClick,classList, handleCardClick, handleToggleReservation, isAdmin }) => {
   return (
@@ -246,6 +247,16 @@ const CodingMain = () => {
     setClassList(updatedList);
 };
 
+const [showModal, setShowModal] = useState(false);
+
+const handleOpenModal = () => {
+    setShowModal(true);
+};
+
+const handleCloseModal = () => {
+    setShowModal(false);
+};
+
   return (
     <div className="codingzone-container">
       <div className='select-container'>
@@ -265,11 +276,15 @@ const CodingMain = () => {
         </button>
         <span> | </span>
         <button 
-          onClick={handleInquiry} 
-          className={selectedButton === 'inquiry' ? 'selected' : ''}
-        >
+  onClick={() => {
+    handleInquiry();
+    handleOpenModal();
+  }}
+  className={selectedButton === 'inquiry' ? 'selected' : ''}
+>
           문의 하기
         </button>
+        {showModal && <InquiryModal isOpen={showModal} onClose={handleCloseModal} />}
         <span> | </span>
       </div>
       <div className="codingzone-top-container">
