@@ -104,7 +104,16 @@
   
 }
 .select-container button.selected {
-  color:purple;
+  color:#002D56;
+
+}
+.select-container button.attendence {
+  color:#002D56;
+
+}
+.select-container button.inquiry {
+  color:#002D56;
+
 }
 .codingzone-date{
   display: flex;

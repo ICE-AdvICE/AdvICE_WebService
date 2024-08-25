@@ -17,9 +17,6 @@ const NavBar = () => {
     const [cookies, setCookie, removeCookie] = useCookies(['accessToken']);
     const navigate = useNavigate();
 
-    const [countdown, setCountdown] = useState(60);
-    const [buttonDisabled, setButtonDisabled] = useState(false);
-
     useEffect(() => {
         const token = cookies.accessToken;
         setIsLoggedIn(!!token);
@@ -112,7 +109,7 @@ const NavBar = () => {
                 onCancel={() => closeModal('mypage')}
                 footer={[]}
             >
-                <MypageForm handleLogout={handleLogout} />
+                <MypageForm handleLogout={handleLogout} closeModal={() => closeModal('mypage')} />
             </MyModal>
 
         </nav>
