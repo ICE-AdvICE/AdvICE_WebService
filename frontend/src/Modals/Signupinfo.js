@@ -143,6 +143,29 @@ const SignUpinfoForm = ({ closeModal }) => {
       .then(response => signUpResponse(response));
   };
 
+
+  const checkCertificationResponse = (response) => {
+    const { code, message } = response;
+  
+    switch (code) {
+      case 'SU':
+        alert('인증 완료');
+        setIsCertified(true);
+        break;
+      case 'VF':
+        alert('인증번호가 일치하지 않습니다. 다시 확인해 주세요.');
+        setIsCertified(false);
+        break;
+      case 'DBE':
+        alert('오류가 발생했습니다. 다시 시도 해 주세요.');
+        setIsCertified(false);
+        break;
+      default:
+        alert(`오류 발생: ${message}`);
+        setIsCertified(false);
+    }
+  };
+
   const onCheckCertificationHandler = (e) => {
     e.preventDefault();
     const requestBody = { email: userEmail, certificationNumber: userCertificationNumber };
