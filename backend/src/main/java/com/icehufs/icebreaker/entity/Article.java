@@ -91,6 +91,7 @@ public class Article {
     public void patchArticle(PatchArticleRequestDto dto) {
         this.articleTitle = dto.getArticleTitle();
         this.articleContent = dto.getArticleContent();
+        this.category = dto.getCategory();
     }
 
     public void putResolv() {

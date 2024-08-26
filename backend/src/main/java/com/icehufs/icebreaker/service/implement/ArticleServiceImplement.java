@@ -231,6 +231,11 @@ public class ArticleServiceImplement implements ArticleService {
             boolean isWriter = decryptedWriterEmail.equals(email);
             if (!isWriter) return PatchArticleResponseDto.noPermission();
 
+            ArticleCategoryEnum category;
+            category = dto.getCategory();
+            System.out.println(category);
+
+        
             articleEntity.patchArticle(dto);
             articleRepository.save(articleEntity);
 
