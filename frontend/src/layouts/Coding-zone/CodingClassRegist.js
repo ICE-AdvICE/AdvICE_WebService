@@ -22,7 +22,7 @@ const ClassRegist = () => {
     const [activeButton, setActiveButton] = useState('manage_class');
     const navigate = useNavigate();
     const [showModal, setShowModal] = useState(false);
-    const [selectedButton, setSelectedButton] = useState('');
+    const [selectedButton, setSelectedButton] = useState('attendence');
 
     const handleOpenModal = () => {
         setShowModal(true);
@@ -38,12 +38,18 @@ const ClassRegist = () => {
     };
 
     const handlecodingzoneattendence = () => {
+   
+        const token = cookies.accessToken;
+        if (!token) {
+          alert("로그인 후 이용 가능합니다.");
+          return; 
+        }
         setSelectedButton('attendence');
         navigate(`/coding-zone/Codingzone_Attendance`);
-    };
+      };
 
     const handleInquiry = () => {
-        setSelectedButton('inquiry');
+        setSelectedButton('attendence');
     };
 
     const handlecodingzonemanager = () => {
@@ -520,7 +526,7 @@ const ClassRegist = () => {
                     <span> | </span>
                 </div>
                 <div className="banner_img_container">
-                    <img src="/codingzone_attendance2.png" className="banner" />
+                    <img src="/codingzone_attendance4.png" className="banner" />
                 </div>
                 <div className="main-body-container">
                     <div className="cza_button_container" style={{ textAlign: 'center' }}>

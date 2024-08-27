@@ -1,7 +1,9 @@
 package com.icehufs.icebreaker.dto.request.article;
 
-import jakarta.validation.constraints.NotBlank;
+import com.icehufs.icebreaker.entity.ArticleCategoryEnum;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -16,4 +18,7 @@ public class PatchArticleRequestDto {
 
     @NotBlank
     private String articleContent;
+
+    @NotNull
+    private ArticleCategoryEnum category;
 }

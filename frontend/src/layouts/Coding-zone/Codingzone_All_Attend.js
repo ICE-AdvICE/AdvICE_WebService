@@ -19,7 +19,7 @@ const Codingzone_All_Attend = () => {
     const token = cookies.accessToken;
     const navigate = useNavigate();
     const [showModal, setShowModal] = useState(false);
-    const [selectedButton, setSelectedButton] = useState('attendence');
+    const [selectedButton, setSelectedButton] = useState('attendence'); 
 
     const handleOpenModal = () => {
         setShowModal(true);
@@ -49,12 +49,18 @@ const Codingzone_All_Attend = () => {
     };
 
     const handlecodingzoneattendence = () => {
+   
+        const token = cookies.accessToken;
+        if (!token) {
+          alert("로그인 후 이용 가능합니다.");
+          return; 
+        }
         setSelectedButton('attendence');
         navigate(`/coding-zone/Codingzone_Attendance`);
-    };
+      };
 
     const handleInquiry = () => {
-        setSelectedButton('inquiry');
+        setSelectedButton('attendence');
     };
 
 
@@ -172,7 +178,7 @@ const Codingzone_All_Attend = () => {
                     <span> | </span>
                 </div>
                 <div className="banner_img_container">
-                    <img src="/codingzone_Attendence.png" className="banner" />
+                    <img src="/codingzone_attendance5.png" className="banner" />
                 </div>
             </div>
             <div className="cza_button_container" style={{ textAlign: 'center' }}>

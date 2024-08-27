@@ -64,27 +64,63 @@ const SignUpinfoForm = ({ closeModal }) => {
   const onEmailCertificationHandler = (e) => {
     e.preventDefault();
     if (!buttonDisabled) {
+      // 요청 전에 카운트다운과 타이머를 시작합니다.
+      setButtonDisabled(true);
+      setCountdown(60); // 카운트다운을 60으로 설정
+      localStorage.setItem('countdown', 60);
+      localStorage.setItem('timestamp', Date.now());
+  
+      const timer = setInterval(() => {
+        setCountdown((prevCountdown) => {
+          if (prevCountdown > 1) {
+            const newCountdown = prevCountdown - 1;
+            localStorage.setItem('countdown', newCountdown);
+            return newCountdown;
+          } else {
+            clearInterval(timer);
+            setButtonDisabled(false);
+            localStorage.removeItem('countdown');
+            localStorage.removeItem('timestamp');
+            return 60;
+          }
+        });
+      }, 1000);
+  
+      // 이메일 요청을 서버에 보냅니다.
       const requestBody = { email: userEmail };
       emailCertificationRequest(requestBody)
         .then(response => {
           const { code } = response;
-
           if (code === 'DE') {
             alert('이미 회원가입된 이메일입니다.');
+            // 실패한 경우 타이머를 정지합니다.
+            clearInterval(timer);
+            setButtonDisabled(false);
+            setCountdown(60);
+            localStorage.removeItem('countdown');
+            localStorage.removeItem('timestamp');
           } else if (code === 'SU') {
             alert('인증번호가 전송되었습니다.');
-            setButtonDisabled(true);
-            localStorage.setItem('countdown', 60);
-            localStorage.setItem('timestamp', Date.now());
+            // 성공한 경우 타이머 계속 진행
           } else {
             alert('이메일 전송 실패');
+            // 실패한 경우 타이머를 정지합니다.
+            clearInterval(timer);
+            setButtonDisabled(false);
+            setCountdown(60);
+            localStorage.removeItem('countdown');
+            localStorage.removeItem('timestamp');
           }
         })
         .catch(error => {
           console.error('이메일 인증 요청 중 오류 발생:', error);
           alert('네트워크 이상입니다.');
+          // 예외 발생 시 타이머를 정지합니다.
+          clearInterval(timer);
           setButtonDisabled(false);
           setCountdown(60);
+          localStorage.removeItem('countdown');
+          localStorage.removeItem('timestamp');
         });
     }
   };

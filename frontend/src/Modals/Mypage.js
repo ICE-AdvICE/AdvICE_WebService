@@ -120,9 +120,9 @@ const MypageForm = ({ handleLogout, closeModal }) => {
 
     return (
         <form onSubmit={(e) => e.preventDefault()}>
-            <div className="loginHeaderContainer">
-                <img src="header-name.png" alt="로그인 로고" style={{ width: '220px', height: 'auto' }} />
-            </div>
+        <div className="loginHeaderContainer">
+        <img src="header-name.png" alt="로그인 로고" className="responsiveLogo" />
+      </div>
             <div className="mypage_icelogo">
                 <img src="favicon.png" alt="정보통신공학과 로고" style={{ width: '150px', height: 'auto' }} />
             </div>

@@ -19,7 +19,7 @@ const Codingzone_Manager = () => {
     const navigate = useNavigate();
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [showModal, setShowModal] = useState(false);
-    const [selectedButton, setSelectedButton] = useState('');
+    const [selectedButton, setSelectedButton] = useState('attendence'); 
 
     const handleOpenModal = () => {
         setShowModal(true);
@@ -46,6 +46,21 @@ const Codingzone_Manager = () => {
 
 
     useEffect(() => {
+        const timer = setInterval(() => {
+            const now = new Date();
+            const currentDate = new Date(selectedDate);
+            console.log("Checking date:", now, currentDate); // Debugging log
+
+            if (now.getDate() !== currentDate.getDate() || now.getMonth() !== currentDate.getMonth()) {
+                console.log("Date has changed, updating state."); // Debugging log
+                setSelectedDate(new Date(now.getFullYear(), now.getMonth(), now.getDate())); // Set to today's date without time
+            }
+        }, 10000); // Check every 10 seconds for debugging
+
+        return () => clearInterval(timer); // Clear the timer when the component unmounts
+    }, [selectedDate]);
+
+    useEffect(() => {
         fetchAuthType();
         fetchAttendList();
     }, [token]);
@@ -63,7 +78,7 @@ const Codingzone_Manager = () => {
                 case "NU":
                     alert('로그인 시간이 만료되었습니다. 다시 로그인 해주세요.');
                     navigate('/');
-                            break;
+                    break;
                 case "DBE":
                     break;
                 case "CA":
@@ -80,8 +95,8 @@ const Codingzone_Manager = () => {
         const response = await getczattendlistRequest(token);
         if (response && response.code === "SU") {
             setAttendList(response.attendList);
-        } 
-        else if(response && response.code === "NU"){
+        }
+        else if (response && response.code === "NU") {
             alert('로그인 시간이 만료되었습니다. 다시 로그인 해주세요.');
             navigate('/');
         }
@@ -95,7 +110,7 @@ const Codingzone_Manager = () => {
         const response = await getczreservedlistRequest(token, formattedDate);
         if (response && response.code === "SU") {
             setReservedList(response.studentList.sort((a, b) => a.classTime.localeCompare(b.classTime)));
-        }  else if(response && response.code === "NU"){
+        } else if (response && response.code === "NU") {
             alert('로그인 시간이 만료되었습니다. 다시 로그인 해주세요.');
             navigate('/');
         }
@@ -113,10 +128,10 @@ const Codingzone_Manager = () => {
         if (response.code === "SU") {
             alert('처리가 완료되었습니다.');
             fetchReservedList(); // 새로고침 기능
-        } else if(response && response.code === "NU"){
+        } else if (response && response.code === "NU") {
             alert('로그인 시간이 만료되었습니다. 다시 로그인 해주세요.');
             navigate('/');
-        } 
+        }
         else {
             alert('오류가 발생했습니다. 다시 시도 해 주세요.');
         }
@@ -159,7 +174,7 @@ const Codingzone_Manager = () => {
                     <span> | </span>
                 </div>
                 <div className="banner_img_container">
-                    <img src="/codingzone_Attendence.png" className="banner" />
+                    <img src="/codingzone_attendance3.png" className="banner" />
                 </div>
             </div>
             <div className="cza_button_container" style={{ textAlign: 'center' }}>
@@ -185,18 +200,21 @@ const Codingzone_Manager = () => {
 
 
             <div className="reserved_manager-list-container">
-                <div className="czm_manager_container">
-                    <DatePicker
-                        selected={selectedDate}
-                        onChange={(date) => {
-                            const adjustedDate = new Date(date.setHours(12));
-                            setSelectedDate(adjustedDate);
-                        }}
-                        dateFormat="yyyy/MM/dd"
-                        className="custom_manager_datepicker"
-                    />
-                </div>
-                <h3 className="date_manager_title">{selectedDate.toISOString().split('T')[0]} 예약 리스트</h3>
+            <div className="czm_manager_container">
+        <DatePicker
+            selected={selectedDate}
+            onChange={(date) => {
+                const utcDate = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+                const koreaDate = new Date(utcDate.getTime() + (9 * 60 * 60 * 1000)); // Correctly adjust for Korean timezone
+                setSelectedDate(koreaDate);
+            }}
+            dateFormat="yyyy/MM/dd"
+            className="custom_manager_datepicker"
+        />
+    </div>
+    <h3 className="date_manager_title">
+        {`${selectedDate.getFullYear()}/${selectedDate.getMonth() + 1}/${selectedDate.getDate()} 예약 리스트`}
+    </h3>
 
 
                 <div className="line-manager-container1">

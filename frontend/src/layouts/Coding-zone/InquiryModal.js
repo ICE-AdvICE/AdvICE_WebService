@@ -39,8 +39,8 @@ const InquiryModal = ({ isOpen, onClose }) => {
                 <div className={styles.close} onClick={onClose}>×</div>
                 <div className={styles.title}><strong>과 사무실</strong></div>
                 <div className={styles.modalBody}>
-                    <strong>이메일:</strong> hufs@hufs.ac.kr<br />
-                    <strong>연락처:</strong> 031-111-1111
+                    <strong>이메일:</strong> ice@hufs.ac.kr<br />
+                    <strong>연락처:</strong> 031-330-4255
                 </div>
                 <div className={styles.title}><strong>코딩존 조교</strong></div>
                 <div className={styles.modalBody}>

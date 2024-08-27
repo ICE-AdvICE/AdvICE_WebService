@@ -143,13 +143,13 @@ public class ArticleServiceImplement implements ArticleService {
 
     @Override
     public ResponseEntity<? super GetCommentListResponseDto> GetCommentList(Integer articleNum) {
-        List<GetCommentListReultSet> resultSets = new ArrayList<>();
+        List<CommentEntity> resultSets = new ArrayList<>();
 
         try{
             boolean existedArticle = articleRepository.existsByArticleNum(articleNum);
             if(!existedArticle) return GetCommentListResponseDto.noExistArticle();
 
-            resultSets = commentRepository.getCommentList(articleNum);
+            resultSets = commentRepository.findByArticleNumOrderByWriteDatetimeDesc(articleNum);
         } catch (Exception exception) {
             exception.printStackTrace();
             return ResponseDto.databaseError();

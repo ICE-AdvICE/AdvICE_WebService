@@ -124,7 +124,7 @@ const FindpasswordForm = ({ onClose }) => {
     return (
         <form onSubmit={(e) => e.preventDefault()}>
             <div className="loginHeaderContainer">
-                <img src="header-name.png" alt="로그인 로고" style={{ width: '220px', height: 'auto' }} />
+                <img src="header-name.png" alt="로그인 로고" className="responsiveLogo" />
             </div>
             <div className="pw_emailpost">
                 <label htmlFor="user_email"></label>
