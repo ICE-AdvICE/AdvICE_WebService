@@ -9,6 +9,7 @@ import com.icehufs.icebreaker.common.ResponseCode;
 import com.icehufs.icebreaker.common.ResponseMessage;
 import com.icehufs.icebreaker.dto.object.CommentListItem;
 import com.icehufs.icebreaker.dto.response.ResponseDto;
+import com.icehufs.icebreaker.entity.CommentEntity;
 import com.icehufs.icebreaker.repository.GetCommentListReultSet;
 
 import lombok.Getter;
@@ -18,12 +19,12 @@ public class GetCommentListResponseDto extends ResponseDto {
     
     private List<CommentListItem> commentList;
 
-    private GetCommentListResponseDto(List<GetCommentListReultSet> resultSets){
+    private GetCommentListResponseDto(List<CommentEntity> resultSets){
         super(ResponseCode.SUCCESS, ResponseCode.SUCCESS);
         this.commentList = CommentListItem.copyList(resultSets);
     }
     
-        public static ResponseEntity<GetCommentListResponseDto> success(List<GetCommentListReultSet> resulSets){
+        public static ResponseEntity<GetCommentListResponseDto> success(List<CommentEntity> resulSets){
         GetCommentListResponseDto result = new GetCommentListResponseDto(resulSets);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
