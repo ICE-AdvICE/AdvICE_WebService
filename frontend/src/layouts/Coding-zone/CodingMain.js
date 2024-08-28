@@ -52,7 +52,7 @@ const CodingMain = () => {
   const [userReservedClass, setUserReservedClass] = useState(null);
   const [selectedDay, setSelectedDay] = useState('');  
   const [isRendered, setIsRendered] = useState(false);
-
+  const [userRole, setUserRole] = useState('');
   useEffect(() => {
     if (cookies.accessToken  ) {
       setIsRendered(true);  
@@ -70,6 +70,12 @@ const CodingMain = () => {
         if (response === "EA") {
           setIsAdmin(true);
         } 
+        else if (response === "SU") {
+          setUserRole('SU');
+        }
+        else if (response === "CA") {
+          setUserRole('CA');
+        }
       }
     };
     fetchUserRole();
@@ -128,6 +134,15 @@ const CodingMain = () => {
       setSelectedDay(day);  
     }
   };
+    useEffect(() => {
+ 
+    if (location.pathname === '/coding-zone') {
+      setSelectedButton('codingzone');
+    } else if (location.pathname.includes('/coding-zone/Codingzone_Attendance')) {
+      setSelectedButton('attendence');
+    }
+  }, [location.pathname]);
+
   
   // 8. 선택된 학년의 예약 가능한 수업 리스트로 반환 API, 9.선택된 학년의 예약 가능한 수업 리스트로 반환 API(fornotlogin)
   useEffect(() => {
@@ -312,11 +327,11 @@ const handleCloseModal = () => {
               코딩존 2
             </button>
           </div>
-          {cookies.accessToken && (
-            <div className='cz-count-container'>
-              출석횟수 : {attendanceCount}/4
-            </div>
-          )}
+            {cookies.accessToken && (userRole === 'SU' || userRole === 'CA') && (
+              <div className='cz-count-container'>
+                출석횟수 : {attendanceCount}/4
+              </div>
+            )}
         </div>
         <div className="codingzone-date">
           <button 
