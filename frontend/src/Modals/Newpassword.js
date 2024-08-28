@@ -20,11 +20,9 @@ const Newpassword = ({ onLogin }) => {
   
   return (
     <form onSubmit={handleSubmit}>
-      <div className="loginFormContainer">
-      <img
-                    className="signinIcon"
-                    src="./HufsLogo.png"
-                  />       
+        <div className="loginHeaderContainer">
+        <img src="header-name.png" alt="로그인 로고" className="responsiveLogo" />
+      </div>    
       <p>새로운 비밀번호</p>
         <label htmlFor="Newpassword" ></label>
         <input
@@ -34,7 +32,7 @@ const Newpassword = ({ onLogin }) => {
           onChange={e => setNewpassword(e.target.value)}
           placeholder="새로운 비밀번호를 입력하세요."
         />
-      </div>
+
 
       <div className="passwordCss" >
       <p>새로 바꾼 비밀번호_추후수정예정</p>
