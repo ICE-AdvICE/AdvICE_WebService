@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useEffect, useRef  } from 'react';
+import React, { useMemo, useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCookies } from "react-cookie";
 import Card from '../components/Card';
@@ -41,14 +41,14 @@ const ArticleMain = () => {
         "VIOLATION_OF_RULES": "규칙 위반",
         "OTHER": "기타"
     };
-    
+
     const banDurationKoreanMap = {
         "ONE_MONTH": "1개월",
         "SIX_MONTHS": "6개월",
         "ONE_YEAR": "1년",
         "PERMANENT": "영구 정지"
     };
-    
+
     const currentArticles = useMemo(() => {
         const indexOfLastArticle = currentPage * articlesPerPage;
         const indexOfFirstArticle = indexOfLastArticle - articlesPerPage;
@@ -247,12 +247,12 @@ const ArticleMain = () => {
         const handleResize = () => {
             const inputElement = document.querySelector('.input-container input[type="text"]');
             const windowWidth = window.innerWidth;
-            if (inputElement) {  
+            if (inputElement) {
                 if (windowWidth <= 440) {
                     const newWidth = 150 - (440 - windowWidth);
-                    inputElement.style.width = `${Math.max(newWidth, 80)}px`;  
+                    inputElement.style.width = `${Math.max(newWidth, 80)}px`;
                 } else {
-                    inputElement.style.width = '150px';  
+                    inputElement.style.width = '150px';
                 }
             }
         };
@@ -260,14 +260,13 @@ const ArticleMain = () => {
         handleResize();
         return () => window.removeEventListener('resize', handleResize);
     }, []);
-    
-    
+
+
 
     return (
         <div className="blog-container">
-            <div className="img-container">
-                <img src="/main-image.png" className="header-image" />
-                <img src="/mainword-image.png" className="header-word-image" />
+            <div className="banner_img_container_icebreaker">
+                <img src="/icebreaker_main.png" className="banner" />
             </div>
             <div className="ArticleMain-container">
                 <img src="/main2-image.png" className="ArticleMain-body-image" />
@@ -336,26 +335,49 @@ const ArticleMain = () => {
                             <p className='title-blank'></p>
                             <p className='title-category'>카테고리</p>
                             <p className='title-name'>제목</p>
-                            <p className= 'title-day'>작성일</p>
+                            <p className='title-day'>작성일</p>
                             <p className='title-view'>조회</p>
                             <p className='title-like'>좋아요</p>
                         </div>
- 
+
                     </div>
                     <div className="Article-container">
-                    {notificationArticles.length === 0 && currentArticles.filter(article => article.category !== 'NOTIFICATION').length === 0 ? (
-                        <div className="no-articles-message"style={{ textAlign: 'center', marginTop: '20px' }}>
-                            <p>등록된 게시글이 없습니다.</p>
-                        </div>
-                    ) : (
-                        <>
-                            <div className="Notification-container">
-                                {notificationArticles.length > 0 &&
-                                    notificationArticles
-                                        .sort((a, b) => new Date(b.articleDate) - new Date(a.articleDate))
-                                        .slice(0, 3)
-                                        .map((article) => {
-                                            const categoryLabel = categoryLabels[article.category];
+                        {notificationArticles.length === 0 && currentArticles.filter(article => article.category !== 'NOTIFICATION').length === 0 ? (
+                            <div className="no-articles-message" style={{ textAlign: 'center', marginTop: '20px' }}>
+                                <p>등록된 게시글이 없습니다.</p>
+                            </div>
+                        ) : (
+                            <>
+                                <div className="Notification-container">
+                                    {notificationArticles.length > 0 &&
+                                        notificationArticles
+                                            .sort((a, b) => new Date(b.articleDate) - new Date(a.articleDate))
+                                            .slice(0, 3)
+                                            .map((article) => {
+                                                const categoryLabel = categoryLabels[article.category];
+                                                return (
+                                                    <Card
+                                                        key={article.articleNum}
+                                                        title={article.articleTitle}
+                                                        createdAt={article.articleDate}
+                                                        views={article.viewCount}
+                                                        likes={article.likeCount}
+                                                        order="공지"
+                                                        category={`[${categoryLabel}]`}
+                                                        onClick={() => handleCardClick(article)}
+                                                        email={article.userEmail}
+                                                    />
+                                                );
+                                            })
+                                    }
+                                </div>
+                                <div className="non-Notification-container">
+                                    {currentArticles.filter(article => article.category !== 'NOTIFICATION').length > 0 &&
+                                        currentArticles.filter(article => article.category !== 'NOTIFICATION').map((article, index) => {
+                                            let categoryLabel = categoryLabels[article.category];
+                                            if (article.category === "REQUEST" && article.authCheck === 1) {
+                                                categoryLabel = "해결";
+                                            }
                                             return (
                                                 <Card
                                                     key={article.articleNum}
@@ -363,54 +385,31 @@ const ArticleMain = () => {
                                                     createdAt={article.articleDate}
                                                     views={article.viewCount}
                                                     likes={article.likeCount}
-                                                    order="공지"
+                                                    order={article.articleNum}
                                                     category={`[${categoryLabel}]`}
                                                     onClick={() => handleCardClick(article)}
                                                     email={article.userEmail}
                                                 />
                                             );
                                         })
-                                }
+                                    }
+                                </div>
+                            </>
+                        )}
+                        <div className="writing-container">
+                            <div className="writing-btn" onClick={handleCreateArticleClick} style={{ cursor: 'pointer' }}>
+                                <img src="/pencil.png" className="pencil" />
+                                <p>글쓰기</p>
                             </div>
-                            <div className="non-Notification-container">
-                                {currentArticles.filter(article => article.category !== 'NOTIFICATION').length > 0 &&
-                                    currentArticles.filter(article => article.category !== 'NOTIFICATION').map((article, index) => {
-                                        let categoryLabel = categoryLabels[article.category];
-                                        if (article.category === "REQUEST" && article.authCheck === 1) {
-                                            categoryLabel = "해결";
-                                        }
-                                        return (
-                                            <Card
-                                                key={article.articleNum}
-                                                title={article.articleTitle}
-                                                createdAt={article.articleDate}
-                                                views={article.viewCount}
-                                                likes={article.likeCount}
-                                                order={article.articleNum}
-                                                category={`[${categoryLabel}]`}
-                                                onClick={() => handleCardClick(article)}
-                                                email={article.userEmail}
-                                            />
-                                        );
-                                    })
-                                }
-                            </div>
-                        </>
-                    )}
-                    <div className="writing-container">
-                        <div className="writing-btn" onClick={handleCreateArticleClick} style={{ cursor: 'pointer' }}>
-                            <img src="/pencil.png" className="pencil" />
-                            <p>글쓰기</p>
+                        </div>
+                        <div className="pagination-container">
+                            <Pagination paginate={paginate} currentPage={currentPage} totalPages={totalPages} className="pagination-bar" />
                         </div>
                     </div>
-                    <div className="pagination-container">
-                        <Pagination paginate={paginate} currentPage={currentPage} totalPages={totalPages} className="pagination-bar" />
-                    </div>
-                </div>
 
 
                 </div>
-                
+
             </div>
         </div>
     );

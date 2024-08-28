@@ -15,7 +15,7 @@ const Codingzone_Attendence = () => {
     const [cookies, setCookie] = useCookies(['accessToken']);
     const [activeButton, setActiveButton] = useState('check');
     const token = cookies.accessToken;
-    const [selectedButton, setSelectedButton] = useState('attendance');
+    const [selectedButton, setSelectedButton] = useState('attendence'); 
     const navigate = useNavigate();
     const [showModal, setShowModal] = useState(false);
 
@@ -32,12 +32,18 @@ const Codingzone_Attendence = () => {
     };
 
     const handlecodingzoneattendence = () => {
+   
+        const token = cookies.accessToken;
+        if (!token) {
+          alert("로그인 후 이용 가능합니다.");
+          return; 
+        }
         setSelectedButton('attendence');
         navigate(`/coding-zone/Codingzone_Attendance`);
-    };
+      };
 
     const handleInquiry = () => {
-        setSelectedButton('inquiry');
+        setSelectedButton('attendence');
     };
 
 

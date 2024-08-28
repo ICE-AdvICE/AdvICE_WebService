@@ -5,6 +5,9 @@ import CzCard from '../../components/czCard';
 import { deleteClass,checkAdminType, getAvailableClassesForNotLogin, getAttendanceCount, deleteCodingZoneClass, reserveCodingZoneClass, getcodingzoneListRequest } from '../../apis/Codingzone-api.js'; 
 import { useNavigate, useLocation } from 'react-router-dom';
 import InquiryModal from './InquiryModal';
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import Slider from 'react-slick';
 
 const ClassList = ({ userReservedClass,onDeleteClick,classList, handleCardClick, handleToggleReservation, isAdmin }) => {
   return (
@@ -47,7 +50,7 @@ const CodingMain = () => {
   const navigate = useNavigate();
   const location = useLocation();  
   const [selectedZone, setSelectedZone] = useState(1);
-  const [selectedButton, setSelectedButton] = useState(''); 
+  const [selectedButton, setSelectedButton] = useState('codingzone'); 
   const [noClassesMessage, setNoClassesMessage] = useState('');
   const [userReservedClass, setUserReservedClass] = useState(null);
   const [selectedDay, setSelectedDay] = useState('');  
@@ -244,12 +247,18 @@ const CodingMain = () => {
   };
 
   const handlecodingzoneattendence = () => {
-    setSelectedButton('attendence');   
+   
+    const token = cookies.accessToken;
+    if (!token) {
+      alert("로그인 후 이용 가능합니다.");
+      return; 
+    }
+    setSelectedButton('attendence');
     navigate(`/coding-zone/Codingzone_Attendance`);
   };
 
   const handleInquiry = () => {
-    setSelectedButton('inquiry');   
+    setSelectedButton('codingzone');   
   };
 
   const handleCardClick = (classItem) => {
@@ -270,6 +279,17 @@ const handleOpenModal = () => {
 
 const handleCloseModal = () => {
     setShowModal(false);
+};
+
+const sliderSettings = {
+  dots: false,
+  infinite: true,
+  speed: 500,
+  slidesToShow: 1,
+  slidesToScroll: 1,
+  autoplay: true,         
+  autoplaySpeed: 4000,   
+  pauseOnHover: true      
 };
 
   return (
@@ -302,9 +322,17 @@ const handleCloseModal = () => {
         {showModal && <InquiryModal isOpen={showModal} onClose={handleCloseModal} />}
         <span> | </span>
       </div>
-      <div className="codingzone-top-container">
-        <img src="/coding-zone-main.png" className="codingzonetop2-image"/>
-      </div>
+      <Slider {...sliderSettings}> 
+         <div className="codingzone-top-container">
+         <img src="/coding-zone-main.png" className="codingzonetop2-image"/>
+        </div>
+        <div className="codingzone-top-container">
+        <img src="/coding-zone-main2.png" className="codingzonetop2-image"/>
+        </div>
+        <div className="codingzone-top-container">
+        <img src="/coding-zone-main3.png" className="codingzonetop2-image"/>
+        </div>
+      </Slider>
       <div className='codingzone-body-container'>
         <div className="cz-category-top">
           <div className="cz-category-date">
