@@ -9,7 +9,6 @@
 }  
 .body-container{
   max-width: 1000px;
-  min-height: 50vw;
   margin: 0 auto;
   padding: 10px;
 }
@@ -40,28 +39,27 @@
   cursor: pointer;
    
 }
-.ArticleCategory {
-  background-color: black;  
-  color: white;                
-  border-radius: 5px;       
+.ArticleCategory {       
+       
   position: relative;
   margin-top: 4vw;
-  width: 6.7vw;
   display: flex;            
-  justify-content: center;  
+  justify-content: space-between;  
 }
 .ArticleCategory p {
-  font-family: 'Inter', sans-serif;  
   font-weight: 700;  
-  font-size: 2vw;  
-  margin-top: 0.3vw;    
+  color: white;
+  background-color: black;
+  font-size: 30px;  
+  border-radius: 5px;  
+  padding: 0.1vw 1.5vw;
   margin-bottom: 0;  
 }
 .ArticleTitle{
   margin-top: 1vw;
   position: relative;
   font-family: 'Inter', sans-serif;  
-  font-size: 2.5vw;  
+  font-size: 30px;  
   font-weight: 700;
 }
 .ArticleTitle p{
@@ -73,14 +71,13 @@
   position: relative;      
   justify-content: space-between;   
   font-family: 'Inter', sans-serif; 
-  font-size: 1.3vw; 
+ 
   color: #00000093;
 }
+ 
 .ql-container {
   height: auto;
 }
-
-
 .Article-Main{
   position: relative;
   margin-bottom: 30px;
@@ -94,7 +91,7 @@
 }
 
 .Edit-Delete-Options {
-  font-size: 11px;
+  font-size: 12px;
   display: flex;  
  
 }
@@ -247,7 +244,7 @@
 .stop {
   display: flex;        
   justify-content: flex-end;
-  font-size: 11px;
+  font-size: 12px;
   align-items: center;   
 }
 .resolve {
@@ -256,11 +253,11 @@
   margin-top: 1%;
 }
 .resolve button{
-  border:0.05vw,solid;
   color:black;
-  background: white;
+  background: none;
   cursor: pointer;
-  font-size: 10px;
+  font-size: 15px;
+  border: 1px solid black;
 }
 
 .stop button:hover{
@@ -274,16 +271,18 @@ html, body {
 
 .ql-editor {
   padding: 3%;
-  height: 25vw;
- 
+  min-height: 15vw;
+  margin-bottom: 5%;
 }
 
 .quill{
   height: auto; /* 글의 길이에 따라 자동으로 높이 조절 */
-  margin-bottom: 0.5%; /* 마지막 문장에서 아래 여백을 10px로 설정 */
+  margin-bottom: 3%; /* 마지막 문장에서 아래 여백을 10px로 설정 */
   position: relative;
   
 }
+
+
 .quill-container{
   border-top: 1px solid #333;
   border-bottom: 1px solid #333;
@@ -295,13 +294,42 @@ html, body {
 }
 
 .ql-container.ql-disabled .ql-tooltip{
-  height: auto;
+  display: none;
 }
 
 @media (max-width: 1000px) {
+  .ArticleDate,.resolve button{
+    font-size: 2vw;
+  }
+  .ArticleCategory p {
+    font-size: 3vw;
+  }
+  .ArticleTitle{
+    font-size: 3vw;
+  }
+ 
+  .ArticleDate{
+    font-size: 16px;
+  }
+  .quill p{
+    font-size: 15px;
+    
+  }
+   
+}
+ 
+@media (max-width: 600px) {
+  .Edit-Delete-Options, .stop{
+    font-size: 10px;
+  }
+  .heart svg{
+    font-size: 15px;
+  }
+  .ArticleDate{
+    font-size: 2.5vw;
+  }
   .quill p{
     font-size: 13px;
-
-  
+    
   }
 }

@@ -55,7 +55,7 @@ const ArticleMain = () => {
         return filteredArticles.slice(indexOfFirstArticle, indexOfLastArticle);
     }, [currentPage, filteredArticles, articlesPerPage]);
 
-
+//게시글작성버튼 눌렀을때 정지된 게정인지 아닌지 확인하는 코드
     const handleCreateArticleClick = async () => {
         const token = cookies.accessToken;
         if (!token) {
@@ -71,7 +71,7 @@ const ArticleMain = () => {
                 if (banStatus.banEndTime) {
                     const banEndDate = new Date(banStatus.banEndTime);
                     const year = banEndDate.getFullYear();
-                    const month = String(banEndDate.getMonth() + 1).padStart(2, '0'); // 월은 0부터 시작하므로 +1
+                    const month = String(banEndDate.getMonth() + 1).padStart(2, '0');
                     const day = String(banEndDate.getDate()).padStart(2, '0');
                     banEndTimeText = `${year}년 ${month}월 ${day}일`;
                 }
@@ -86,7 +86,6 @@ const ArticleMain = () => {
                 navigate("/article-main/create");
             }
         } catch (error) {
-            console.error("Error checking ban status:", error);
             alert("계정 상태를 확인하는 중 오류가 발생했습니다. 다시 시도해주세요.");
         }
     };
@@ -97,19 +96,30 @@ const ArticleMain = () => {
         setNotificationArticles(notifications);
         setGeneralArticles(general);
     };
-
     const searchArticles = () => {
         if (!searchTerm.trim()) {
             setFilteredArticles(articlesState);
             return;
         }
-        const newFilteredArticles = articlesState.filter(article =>
-            searchCategory === 'title' ?
-                article.articleTitle.toLowerCase().includes(searchTerm.toLowerCase()) :
-                article.articleContent.toLowerCase().includes(searchTerm.toLowerCase())
-        );
+    
+        const newFilteredArticles = articlesState.filter(article => {
+            const lowerCaseSearchTerm = searchTerm.toLowerCase();
+            const matchesTitle = article.articleTitle.toLowerCase().includes(lowerCaseSearchTerm);
+            const matchesContent = article.articleContent.toLowerCase().includes(lowerCaseSearchTerm);
+    
+            if (searchCategory === 'title') {
+                return matchesTitle;
+            } else if (searchCategory === 'content') {
+                return matchesContent;
+            } else {
+                // 전체 검색일 경우, 제목이나 내용 중 하나라도 일치하면 반환
+                return matchesTitle || matchesContent;
+            }
+        });
+    
         setFilteredArticles(newFilteredArticles);
     };
+    
 
     useEffect(() => {
         if (searchTerm === '') {
@@ -118,13 +128,13 @@ const ArticleMain = () => {
             searchArticles();
         }
     }, [searchCategory]);
+
+    //카테고리 버튼누를때 바깥부분 누르면 카테고리 닫히도록
     useEffect(() => {
         const handleClickOutside = (event) => {
-            // 카테고리 드롭다운 외부 클릭 감지
             if (categoryDropdownRef.current && !categoryDropdownRef.current.contains(event.target)) {
                 setDropdownOpenCategory(false);
             }
-            // 검색 드롭다운 외부 클릭 감지
             if (searchDropdownRef.current && !searchDropdownRef.current.contains(event.target)) {
                 setDropdownOpenSearch(false);
             }
@@ -136,6 +146,7 @@ const ArticleMain = () => {
             document.removeEventListener('mousedown', handleClickOutside);
         };
     }, []);
+    
     const categoryLabels = {
         NOTIFICATION: "공지",
         GENERAL: "일반",
@@ -179,23 +190,7 @@ const ArticleMain = () => {
         setFilteredArticles(results);
     };
 
-    const handleCategoryChange = async (categoryValue) => {
-        setSelectedCategory(categoryValue);
-        setCurrentPage(1);
-        if (categoryValue === 'my') {
-            const articles = await fetchUserArticles(token);
-            if (articles && articles.length > 0) {
-                setUserArticles(articles);
-                setFilteredArticles(articles);
-            } else {
-                console.log("작성하신 게시글이 없습니다.");
-                setUserArticles([]);
-                setFilteredArticles([]);
-            }
-        } else {
-            filterArticles();
-        }
-    };
+
 
     const handleKeyDown = (event) => {
         if (event.key === 'Enter') {
@@ -222,7 +217,7 @@ const ArticleMain = () => {
     useEffect(() => {
         if (selectedCategory === 'my') {
             const fetchArticles = async () => {
-                const articles = await fetchUserArticles(token);
+                const articles = await fetchUserArticles(navigate,token);
                 setUserArticles(articles || []);
                 setFilteredArticles(articles || []);
             };

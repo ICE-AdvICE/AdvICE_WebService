@@ -27,7 +27,6 @@
   padding: 10px;
   margin: 0 auto;
 }
- 
 .article-icon-image{
   position: absolute;
   width: 55vw;
@@ -45,26 +44,12 @@
   justify-content: space-between;
   display: flex;
 }
-
- 
-.dropdown-menu {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  background-color: #fff;
-  width: 100%; /* 동일한 넓이 설정 */
-  margin-top: 0.5vw;
-  display: none;
-  max-height: 200px;
-  overflow-y: auto;
-  z-index: 111111;
-  min-width: 100%; /* 부모 요소의 넓이에 맞춤 */
-  max-width: 100%;
-  overflow: hidden;
-  
+.Search-bar, .ListCategory_bar {
+  display: flex;
+  align-items: center;
+  border-radius: 5px;
 }
 
- 
 .Category-dropdown select{
   width: 20%;
   text-align: center;
@@ -73,11 +58,7 @@
   font-size: 1vw;
   border-color: #D0D5DD;
 }
-.Search-bar, .ListCategory_bar {
-  display: flex;
-  align-items: center;
-  border-radius: 5px;
-}
+
  
 .Category-dropdown {
   position: relative;
@@ -90,6 +71,30 @@
   cursor: pointer;
   width: 150px;
 }
+.category-label {
+  width: 100%;  
+}
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin-top: 0.5vw;
+  max-height: 200px;
+  min-width: 100%;  
+  max-width: 100%;
+}
+.dropdown-menu.show {
+  padding: 5%;
+}
+.dropdown-menu li {
+  display: flex;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all .2s ease-in-out;
+}
+.dropdown-menu li:hover {
+  background-color: #E3F1FF;
+}
 .category-dropdown {
   position: relative;
   display: flex;
@@ -101,56 +106,26 @@
   cursor: pointer;
   width: 100px;  
 }
-
-.category-label {
-  font-size: 11px;
-  width: 100%;  
-}
-.dropdown-menu.show {
-  display: block;
-  width: 100%;
-  padding: 5%;
-}
-.dropdown-menu li {
-  display: flex;
-  font-size: 11px;
-  cursor: pointer;
-  list-style-type: none;
- 
-}
-
-.dropdown-menu li:hover {
-  background-color: #E3F1FF;
-}
-
- 
-
-.input-container input {
-  width: 100%;
-  padding: 4.5%;
-  border: 1px solid #ccc;
+input[type="text"] {
+  padding: 6px;
+  border: 1px solid #D0D5DD;
   border-radius: 5px;
 }
 .input-container img {
   cursor: pointer;
 }
-.ico-common-menu-hide-big-default {
-  margin-left: 8px; /* 아이콘과 텍스트 사이의 간격 */
-  font-size: 1vw; /* 아이콘 크기 */
-}
-input[type="text"] {
-  width: 150px;
-  font-size: 11px;
-  background-color: white;
-  padding: 6px;
-  border: 1px solid #D0D5DD;
-}
-
 input[type="text"]::placeholder {
   color: rgba(128, 128, 128, 0.467);
   text-align: left;
 }
-
+.search-icon {
+  position: absolute;
+  top: 50%;  
+  right: 1vw;
+  transform: translateY(-50%);  
+  width: 1.5vw;  
+  height: 1.5vw;
+}
 .Article_title-container{
   height: 35px;
   position: relative;
@@ -165,53 +140,26 @@ input[type="text"]::placeholder {
   display: flex;    
   align-items: center;    
 }
-.main-top,.main-top2{
-  width: 100%;
-  height: 100%;
-  position: absolute;
-}
-.main-top2 {
-  display: flex;
-  align-items: flex-end;
-}
 
 .dropdown-menu .separator {
   border-top: 0.1vw solid #ccc;
   margin: 4px 0;
 
 }
- 
 .title-blank,.title-category,.title-day, .title-view,.title-like{
   width: 100px;
   margin: 0;
 }
-
 .title-name {
   width: 300px;
   margin: 0;
 }
- 
-.search-icon {
-  position: absolute;
-  top: 50%;  
-  right: 1vw;
-  transform: translateY(-50%);  
-  width: 1.5vw;  
-  height: 1.5vw;
-}
 .Article-container {
-  height: 70%;
   margin-top: 1%;
   cursor: pointer;
-  display: flex;
-  flex-Direction: column;
 }
 .no-articles-message{
   z-index: 10;
-}
-.Notification-container{
-  position: relative;
-  height: auto;
 }
 .Notification-container .card .card-order{
   color: red;
@@ -222,11 +170,6 @@ input[type="text"]::placeholder {
 }
 .Notification-container .card .card-category{
   color: red;
-}
-.non-Notification-container{
-  position: relative;
-  height: auto;
-  
 }
 
 .card {
@@ -270,17 +213,10 @@ input[type="text"]::placeholder {
   justify-content: flex-end;
 }
 .pagination-container{
-  position: relative;
-  width: 100%;
   justify-content: center;
   height: 20vw;
-  z-index: 11;
   display: flex;
 }
-.pagination .page-link {
-  font-size: 1.3vw; 
-}
-
 .writing-btn {
   position: relative;
   width: 100px;  
@@ -288,16 +224,12 @@ input[type="text"]::placeholder {
   display: flex;  
   justify-content: center;  
   align-items: center;  
-  text-decoration: none;  
-  z-index: 15;
   border: 0.05vw solid #ACACAC;
-  height: 100%;
-  }
+}
 .pencil{
   width: 15%;
   height: 40%;
 }
-
 .writing-btn p{
   font-size: 13px;
   margin: 1vw 0 1vw 1vw;
@@ -310,24 +242,16 @@ input[type="text"]::placeholder {
   padding: 5px 10px;  
   border-radius: 5px;  
 }
-
 .page-item{
   height: 10px;
 }
-
 .select:active {
   background-color: #f8f8f8;
 }
-.Comment-Edit{
-  width: 100%;
-}
-.comment-edit-input{
-  position: relative;
-}
+
 .writing-button{
   position: relative;
 }
-
 .pagination .page-link,input[type="text"],.category-label,.title p {
   font-size: 13px;
 }

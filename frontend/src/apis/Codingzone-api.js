@@ -258,7 +258,7 @@ export const deleteCodingZoneClass = async (token, classNum) => {
         if (error.response) {
             switch (error.response.data.code) {
                 case "NR":
-                    console.log("Not reserve class.");
+                    console.log("이미 취소된 수업입니다.");
                     break;
                 case "NU":
                     console.log("사용자가 존재하지 않습니다.");

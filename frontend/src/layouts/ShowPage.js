@@ -60,15 +60,13 @@ const ShowPage = () => {
             alert("올바른 숫자를 입력하여 정지 기간을 선택하세요.");
             return;
         }
-        const result = await giveBanToUser(articleNum, token, selectedBanDuration, selectedBanReason);
+        const result = await giveBanToUser(navigate,articleNum, token, selectedBanDuration, selectedBanReason);
         if (result.code === 'SU') {
             alert('사용자가 성공적으로 정지되었습니다.');
-        } else {
-            alert(`사용자 정지 실패하였습니다.: ${result.message}`);
-        }
+        }  
     };
     const handleResolve = async () => {
-        await handleResolveArticle(articleNum, token, navigate, setCanEdit);    
+        await handleResolveArticle(navigate,articleNum, token, navigate, setCanEdit);    
     };
 
     const handleComposition = (event) => {
@@ -80,9 +78,9 @@ const ShowPage = () => {
     };
     
     const handleDeleteComment = async (articleNum, commentNumber, token) => {
-        const success = await handleCommentDelete(articleNum,commentNumber, token);
+        const success = await handleCommentDelete(navigate,articleNum,commentNumber, token);
         if (success) {
-            fetchComments(articleNum, setComments);  
+            fetchComments(navigate,articleNum, setComments);  
         }    
     };
     const onDelete = () => {
@@ -134,7 +132,7 @@ const ShowPage = () => {
         setCommentInput(event.target.value);
     };
     const handleSaveEdit = async (commentNumber) => {
-        const response = await handleCommentEdit(commentNumber, editCommentInput, token);
+        const response = await handleCommentEdit(navigate,commentNumber, editCommentInput, token);
         if (response) {
             const updatedComments = comments.map(comment =>
                 comment.commentNumber === commentNumber ? { ...comment, content: editCommentInput } : comment
@@ -146,7 +144,7 @@ const ShowPage = () => {
 
     useEffect(() => {
         if (articleNum && token) {
-            checkArticleOwnership(articleNum, token).then(data => {
+            checkArticleOwnership(navigate,articleNum, token).then(data => {
                 if (data.code === "SU") {
                     setCanEdit(true);  
                 } else {
@@ -157,7 +155,8 @@ const ShowPage = () => {
     }, [articleNum, token]);
 
     const handleSubmit = async () => {
-        await handleCommentSubmit(null, commentInput, setComments, setCommentInput, userEmail, articleNum, token);
+
+        await handleCommentSubmit(navigate,null, commentInput, setComments, setCommentInput, userEmail, articleNum, token);
     };
     
     
@@ -165,7 +164,7 @@ const ShowPage = () => {
         if (event.key === 'Enter' && !event.shiftKey && !isComposing) {
             event.preventDefault();
             try {
-                await handleCommentSubmit(event,commentInput, setComments, setCommentInput, userEmail, articleNum, token);
+                await handleCommentSubmit(navigate,event,commentInput, setComments, setCommentInput, userEmail, articleNum, token);
             } catch (error) {
                 console.error('Error submitting comment:', error);
             }
@@ -188,7 +187,7 @@ const ShowPage = () => {
   
     useEffect(() => {
         if (articleNum) {
-            fetchComments(articleNum, setComments);
+            fetchComments(navigate,articleNum, setComments);
         }
     }, [articleNum, token]);
     
@@ -198,7 +197,7 @@ const ShowPage = () => {
     };
 
     const toggleLike = () => {
-        handleLike(articleNum, liked, token, setLiked, setLikes);
+        handleLike(navigate,articleNum, liked, token, setLiked, setLikes);
     };
 
     if (!article) {
@@ -228,12 +227,20 @@ const ShowPage = () => {
                                 ? "해결"
                                 : "알 수 없는 카테고리"}
                         </p>
+                        {isAdmin && (
+                             <div className='resolve'>
+                                {article.category === "REQUEST" && article.authCheck === 0 && (
+                                    <button onClick={handleResolve}>해결완료</button>
+                                )}
+                            </div>
+                        )}    
                     </div>
                     <div className="ArticleTitle">
                         <p>{article.articleTitle}</p>
+
                     </div>
                     <div className="ArticleDate">
-                        <p>{(article.articleDate)}</p>
+                    <p>{new Date(article.articleDate).toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
                         <p>조회수 {article.views}</p>
                     </div>
                     <div className="Article-Main">
@@ -264,13 +271,7 @@ const ShowPage = () => {
                                 <button onClick={handleBanUser}>정지</button>
                             </div>
                         )}
-                        {isAdmin && (
-                             <div className='resolve'>
-                                {article.category === "REQUEST" && article.authCheck === 0 && (
-                                    <button onClick={handleResolve}>해결완료</button>
-                                )}
-                            </div>
-                        )}    
+                       
                         <div className='CommentBox-container'>  
                             {comments.map((comment, index) => (
                                 <div key={index} className="Comment">

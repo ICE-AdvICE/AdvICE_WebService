@@ -91,7 +91,7 @@ const CzCard = ({
                                         className="card-reservation"
                                         disabled={disableReserveButton && !isReserved}  
                                         style={{
-                                            backgroundColor: isReserved ? '#FFFF00' : '#15FF00'
+                                            backgroundColor: disableReserveButton && !isReserved ? '#CCCCCC' : isReserved ? '#FFFF00' : '#15FF00'
                                         }}
                                     >
                                         {isReserved ? '취소' : '예약'}

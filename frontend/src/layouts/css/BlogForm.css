@@ -57,14 +57,11 @@
 .dropdown.active .dropdown-menu {
     display: block;
     width: 100%;
+    padding: 5px;
 }
-.dropdown .dropdown-menu li {
-    padding: 10px 10px 10px 5px;
-    transition: all .2s ease-in-out;
-    cursor: pointer;
-}
+ 
 .dropdown .dropdown-menu {
-    padding: 0;
+ 
     list-style: none;
 }
 .dropdown .dropdown-menu li:hover {
@@ -73,26 +70,16 @@
 .dropdown .dropdown-menu li:active {
     background-color: #e2e2e2;
 }
-.quill{
  
-    margin-bottom: 0 !important;
-    position: relative;
-    
-}
 .ql-container {
     max-height: 25vw;   
     overflow-y: auto;   
     font-family: 'Noto Sans', sans-serif;
 }
-
-.ql-container.ql-disabled .ql-tooltip{
-    height: 25vw
-}
-
-  
-.ql-container {
+.ql-container ql-snow{
     height: 25vw;
 }
+ 
 .posts-overlay-container .d-flex p, 
 .posts-overlay-container .d-flex button {
     flex-basis: 0;

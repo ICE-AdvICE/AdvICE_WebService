@@ -75,7 +75,7 @@
   display: flex;
 }
 .cz-category-date button{
-  padding: 10px 7px;
+  padding: 10px 1px;
   width: 100px;
   align-items: center;
   justify-content: center;
@@ -185,7 +185,7 @@
 }
 
 .card-delete{
-  background-color: red;
+  background-color: #ff0000bf;
 }
 .czcard p, .codingzone-title p{
   margin: 0;
@@ -235,7 +235,7 @@
   font-size: 12px;
   border-radius: 3px;
   width: 70%;
-  padding: 5px;
+  padding: 7px 1px;
 }
  
 @media (max-width: 1000px) {
@@ -267,10 +267,10 @@
     font-size: 12px;
   }
   .card-reservation, .card-delete{
-    font-size: 2vw;
+    font-size: 10px;
   }
   .cz-category-date button{
-    font-size: 6px;
+    font-size: 8px;
   }
 }
  
