@@ -56,6 +56,7 @@ const CodingMain = () => {
   const [selectedDay, setSelectedDay] = useState('');  
   const [isRendered, setIsRendered] = useState(false);
   const [userRole, setUserRole] = useState('');
+
   useEffect(() => {
     if (cookies.accessToken  ) {
       setIsRendered(true);  
@@ -83,7 +84,7 @@ const CodingMain = () => {
     };
     fetchUserRole();
   }, [cookies.accessToken]);
-
+  // 요일과 슬라이더 설정을 상수로 정의
   const daysOfWeek = ['월요일', '화요일', '수요일', '목요일', '금요일'];
 
   // [과사 권한이 있는 계정] 삭제 버튼
@@ -108,12 +109,12 @@ const CodingMain = () => {
     }
 };
 
-// 게시글 정렬하는 부분
+  // 시간 문자열을 분 단위 숫자로 변환하여 정렬
   const timeToNumber = (timeStr) => {
     const [hours, minutes] = timeStr.split(':').map(Number);
     return hours * 60 + minutes;   
   };
-
+  // 수업 목록을 요일과 시간 순으로 정렬
   const sortClassList = (classList) => {
     return classList.sort((a, b) => {
       const dayComparison = daysOfWeek.indexOf(a.weekDay) - daysOfWeek.indexOf(b.weekDay);
@@ -124,7 +125,7 @@ const CodingMain = () => {
     });
   };
 
-  //요일 선택시 그 요일에 해당하는 게시글들만 보이도록
+  // 요일 필터링 기능
   const filterByDay = (day) => {
     if (selectedDay === day) {
       setClassList(originalClassList);
@@ -137,8 +138,8 @@ const CodingMain = () => {
       setSelectedDay(day);  
     }
   };
+
     useEffect(() => {
- 
     if (location.pathname === '/coding-zone') {
       setSelectedButton('codingzone');
     } else if (location.pathname.includes('/coding-zone/Codingzone_Attendance')) {
@@ -200,7 +201,7 @@ const CodingMain = () => {
     fetchData();
 }, [cookies.accessToken, grade]);
 
-//10,출석 횟수 반환 API
+  // 출석 횟수 가져오기
   useEffect(() => {
     const fetchAttendance = async () => {
       const token = cookies.accessToken;
@@ -212,7 +213,7 @@ const CodingMain = () => {
     fetchAttendance();
   }, [cookies.accessToken, grade]);
 
-
+// 예약 기능 토글
   const handleToggleReservation = async (classItem) => {
     const token = cookies.accessToken;
     if (!token) {
@@ -247,7 +248,6 @@ const CodingMain = () => {
   };
 
   const handlecodingzoneattendence = () => {
-   
     const token = cookies.accessToken;
     if (!token) {
       alert("로그인 후 이용 가능합니다.");
@@ -263,7 +263,7 @@ const CodingMain = () => {
 
   const handleCardClick = (classItem) => {
   };
-
+  // 수업 목록 업데이트
   const updateClassItem = (classNum, isReserved, newCurrentNumber) => {
     const updatedList = classList.map(item =>
       item.classNum === classNum ? { ...item, isReserved, currentNumber: newCurrentNumber } : item

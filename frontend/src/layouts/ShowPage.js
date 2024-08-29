@@ -2,33 +2,44 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import ToastViewer from './ToastViewer.js';  
-import './css/ShowPage.css';
+import './css/ArticlePage/ShowPage.css';
 import {fetchArticle,fetchLikeStatus, handleLike ,handleResolveArticle,giveBanToUser,adminhandleDelete,checkAnonymousBoardAdmin,handleCommentEdit,handleCommentDelete,fetchComments,handleDelete,handleCommentSubmit ,checkArticleOwnership} from '../apis/index.js';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart as solidHeart } from '@fortawesome/free-solid-svg-icons';
 import { faHeart as regularHeart } from '@fortawesome/free-regular-svg-icons';
 
 const ShowPage = () => {
+    // 댓글 작성 중인지 여부를 관리하는 상태
     const [isComposing, setIsComposing] = useState(false);
+    // 현재 편집 중인 댓글의 ID와 편집할 댓글의 내용을 관리하는 상태
     const [editingCommentId, setEditingCommentId] = useState(null);
     const [editCommentInput, setEditCommentInput] = useState("");
+    // 관리자인지 여부를 확인하는 상태
     const [isAdmin, setIsAdmin] = useState(false);
+    // URL에서 받아온 게시글 번호
     const { articleNum } = useParams();
+    // 게시글, 좋아요 수, 댓글 등을 관리하는 상태
     const [article, setArticle] = useState(null);
     const [likes, setLikes] = useState(0);
     const [liked, setLiked] = useState(false);
     const [comments, setComments] = useState([]);
     const [commentInput, setCommentInput] = useState("");
+    // 쿠키를 이용해 사용자 정보와 토큰을 가져옴
     const [cookies] = useCookies(['accessToken', 'userEmail']);
     const token = cookies.accessToken;
     const userEmail = cookies.userEmail;
+    // 페이지 이동을 위한 네비게이트 훅
     const navigate = useNavigate();
+    // 게시글 편집 가능 여부를 관리하는 상태
     const [canEdit, setCanEdit] = useState(false);
+
+    // 사용자 정지 처리 함수: 사유와 기간을 입력받아 사용자 정지
     const handleBanUser = async () => {
         const banReason = prompt(
             "아래 목록에서 해당되는 정지 사유의 숫자를 입력하세요:\n1) 스팸\n2) 부적절한 내용\n3) 증오 발언\n4) 허위 정보\n5) 사칭\n6) 사기\n7) 규칙 위반\n8) 기타",
         );
-        if (banReason === null) return; 
+        if (banReason === null) return;  //취소 시 함수 종료
+        // 정지 사유 매핑
         const banReasonMap = {
             "1": "SPAM",
             "2": "INAPPROPRIATE_CONTENT",
@@ -44,11 +55,11 @@ const ShowPage = () => {
             alert("올바른 숫자를 입력하여 정지 사유를 선택하세요.");
             return;
         }
-        
         const banDuration = prompt(
             "아래 목록에서 원하는 정지 기간의 숫자를 입력하세요:\n1) 1개월\n2) 6개월 \n3) 1년\n4) 영구 정지"
         );
         if (banDuration === null) return; 
+        // 정지 기간 매핑
         const banDurationMap = {
             "1": "ONE_MONTH",
             "2": "SIX_MONTHS",
@@ -60,15 +71,17 @@ const ShowPage = () => {
             alert("올바른 숫자를 입력하여 정지 기간을 선택하세요.");
             return;
         }
+        // 사용자를 정지하는 API 호출
         const result = await giveBanToUser(navigate,articleNum, token, selectedBanDuration, selectedBanReason);
         if (result.code === 'SU') {
             alert('사용자가 성공적으로 정지되었습니다.');
         }  
     };
+    // 게시글을 해결 상태로 변경하는 함수
     const handleResolve = async () => {
         await handleResolveArticle(navigate,articleNum, token, navigate, setCanEdit);    
     };
-
+    // 한글 입력 조합 상태를 관리하기 위한 함수
     const handleComposition = (event) => {
         if (event.type === 'compositionend') {
             setIsComposing(false);
@@ -76,27 +89,22 @@ const ShowPage = () => {
             setIsComposing(true);
         }
     };
-    
+    // 댓글 삭제를 처리하는 함수
     const handleDeleteComment = async (articleNum, commentNumber, token) => {
         const success = await handleCommentDelete(navigate,articleNum,commentNumber, token);
         if (success) {
             fetchComments(navigate,articleNum, setComments);  
         }    
     };
+    // 게시글 삭제 처리
     const onDelete = () => {
         handleDelete(articleNum, token, navigate);
     };
+    // 관리자 권한으로 게시글 삭제 처리
     const adonDelete = () => {
         adminhandleDelete(articleNum, token, navigate);
     };
-
-    useEffect(() => {
-        const quillElement = document.querySelector('.ql-container');
-        if (quillElement) {
-            quillElement.style.setProperty('height', 'auto', 'important');
-        }
-    }, []);
-
+    // 사용자가 관리자 권한을 가지고 있는지 확인하는 함수
     useEffect(() => {
         const checkAdmin = async () => {
             try {
@@ -110,7 +118,7 @@ const ShowPage = () => {
         };
         checkAdmin();
     }, [token]);
-
+    // 게시글의 좋아요 상태를 가져오는 함수
     useEffect(() => {
         const fetchData = async () => {
             if (articleNum && token) {
@@ -120,17 +128,18 @@ const ShowPage = () => {
         fetchData();
     }, [articleNum, token]);
     
-    
+    // 초기 데이터와 좋아요 상태를 가져오는 함수
     useEffect(() => {
         const fetchInitialData = async () => {
             await fetchLikeStatus(articleNum, token, setLiked);
         };
         fetchInitialData();
     }, [articleNum, token]);
-    
+    // 댓글 입력 변경 핸들러
     const handleCommentChange = (event) => {
         setCommentInput(event.target.value);
     };
+    // 댓글 수정 저장 핸들러
     const handleSaveEdit = async (commentNumber) => {
         const response = await handleCommentEdit(navigate,commentNumber, editCommentInput, token);
         if (response) {
@@ -141,7 +150,7 @@ const ShowPage = () => {
             setEditingCommentId(null);  
         }
     };
-
+    // 게시글의 소유권을 확인하는 함수
     useEffect(() => {
         if (articleNum && token) {
             checkArticleOwnership(navigate,articleNum, token).then(data => {
@@ -154,23 +163,20 @@ const ShowPage = () => {
         }
     }, [articleNum, token]);
 
+    // 댓글 제출 핸들러
     const handleSubmit = async () => {
-
         await handleCommentSubmit(navigate,null, commentInput, setComments, setCommentInput, userEmail, articleNum, token);
     };
     
-    
+    // Enter 키 입력 시 댓글 제출 핸들러
     const handleKeyDown = async (event) => {
         if (event.key === 'Enter' && !event.shiftKey && !isComposing) {
             event.preventDefault();
-            try {
-                await handleCommentSubmit(navigate,event,commentInput, setComments, setCommentInput, userEmail, articleNum, token);
-            } catch (error) {
-                console.error('Error submitting comment:', error);
-            }
+            await handleCommentSubmit(navigate,event,commentInput, setComments, setCommentInput, userEmail, articleNum, token);
+            
         }
     };
-    
+    // 게시글 정보와 댓글 목록을 가져오는 함수
     useEffect(() => {
         if (articleNum) {
             fetchArticle(articleNum,navigate)
@@ -185,17 +191,18 @@ const ShowPage = () => {
                 }
     }, [articleNum]);
   
+    // 댓글 목록을 새로 가져오는 함수
     useEffect(() => {
         if (articleNum) {
             fetchComments(navigate,articleNum, setComments);
         }
     }, [articleNum, token]);
     
-
+    // 게시글 수정 페이지로 이동하는 함수
     const handleEditArticle = async () => {
         navigate(`/article-main/${articleNum}/edit`);
     };
-
+    // 좋아요 토글 처리
     const toggleLike = () => {
         handleLike(navigate,articleNum, liked, token, setLiked, setLikes);
     };
