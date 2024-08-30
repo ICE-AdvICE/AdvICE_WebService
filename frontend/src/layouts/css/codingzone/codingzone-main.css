@@ -1,21 +1,17 @@
+.codingzone-container{
+  min-width: 360px;
+}
 .select-container{
   display: flex;
   margin: 0 auto;
-  position: relative;
   margin-bottom: 1%;
   max-width: 1000px;
 }
 .select-container button {
   background-color: white;
-  border: none !important; /* 기존 테두리 제거 */
+  border: none !important;  
   font-size: 13px;
   width: 200px;
-  border: 1px solid #164694; /* 테두리 추가 */
-}
-
-.cz-count-container{
-  font-size: 12px;
-  margin-top: 25px;
 }
 .select-container span{
   font-size: 13px;
@@ -25,6 +21,20 @@
   flex: 1 4;
   min-width: 35px;
 }
+.select-container button:hover{
+  color: #164694f4;
+  cursor: pointer;
+}
+.select-container button.selected {
+  color: #002D56;
+  font-weight: bolder;
+}
+.select-container button.attendence {
+  color:#002D56;
+
+}
+
+
 .codingzone-top-container {
   width: 100%;
   display: flex;
@@ -41,21 +51,7 @@
   margin: auto; 
   width: auto; 
 }
-.select-container button:hover{
-  color: #164694f4;
-  cursor: pointer;
-}
-.codingzone-main-top-image{
-  max-width: 1000px;
-  position: relative;
-  height: 26vw;
-  background-size: cover;
-}
-.codingzone-container{
-  height: auto;
-  flex:1;
-  min-width: 360px;
-}
+
 .codingzone-body-container{
   max-width: 1000px;
   margin: 0 auto;
@@ -63,7 +59,6 @@
   margin-bottom: 100px;
 }
 .cz-category-top{
-  margin-top: 1%;
   display: flex;
   align-items: center;
   position: relative;
@@ -96,33 +91,22 @@
   background-color: #002D56;
   color: white; /* 텍스트 색상 변경 (선택사항) */
 }
-
 .codingzone-date button.selected p {
   color: black;
   margin: 0;
   border-bottom: 2px solid #000;
   
 }
-.select-container button.selected {
-  color: #002D56;
-  font-weight: bolder;
+.cz-count-container{
+  font-size: 12px;
+  margin-top: 25px;
 }
-.select-container button.attendence {
-  color:#002D56;
-
-}
-
 .codingzone-date{
   display: flex;
   align-items: center;
-  position: relative;
-  justify-content: space-between; 
   margin-top: 1%;
-  max-width: 1000px;
-  margin-bottom: 1%;
-
+  
 }
- 
 .codingzone-date button{
   width: 160px;
   font-size: 13px;
@@ -141,37 +125,21 @@
   display: flex;
   flex: 1 4;
   min-width: 10px;
-  
 }
-
 .category-name-container{
   border-bottom: 1px solid #333;
   border-top: 1px solid #333;
   display: flex;
   height: 30px;
-  max-width: 1000px;
   flex-direction: column;
   justify-content: center;
 }
 .codingzone-title{
   display: flex;
-
-  flex-direction: row;
-  text-align: center;
-  justify-content: space-between;
 } 
-.codingzone-title .d-flex p {
-  margin-top: 1%;
-  flex-grow: 1;
-  margin-bottom: 1%;
-  font-size: 1.2vw;
-}
- 
+
 .codingzone-list{
   margin-top: 1%;
-  position: relative;
-  max-width: 1000px;
-  min-height: 100px;
 }
  
 .czcard {
@@ -181,9 +149,7 @@
   height: 80px;
   align-items: center;
   display: flex;
- 
 }
-
 .card-delete{
   background-color: #ff0000bf;
 }
@@ -191,6 +157,7 @@
   margin: 0;
   font-size: 14px;
 }
+
 
 .weekDay,.weekTime,  .weekcount ,.registerbutton,.card-hidden-space, .card-classTime {
   text-align: center;  
@@ -200,7 +167,7 @@
   text-align: center;
   width: 300px;  
 }
- .weekperson ,  .card-assistantName {
+ .weekperson, .card-assistantName {
   text-align: center;
   width: 150px; 
  }
@@ -217,7 +184,7 @@
   width: 50px;  
 }
  
- .card-currentNumber {
+.card-currentNumber {
   color: #002D56;
   font-weight: 600;
   text-align: center;
@@ -246,22 +213,17 @@
   .cz-category-date button{
     width: 10vw;
   }
-  
- 
 }
-
 @media (max-width: 860px) {
   .cz-category-top {
     font-size: 8px;
   }
   .cz-category-date button{
     height: 100%;
- 
     border-color: #D0D5DD;
     background-color: white;
   }
 }
-
 @media (max-width: 465px) {
   .czcard p, .codingzone-title p,.codingzone-date button{
     font-size: 12px;
@@ -273,13 +235,10 @@
     font-size: 8px;
   }
 }
- 
-
 @media (max-width: 395px) {
   .czcard p, .codingzone-title p,.codingzone-date button{
     font-size: 10px;
   }
-
 }
 
 @media (max-width: 600px) {
@@ -291,4 +250,3 @@
     max-width: calc(100% ); /* 컨테이너 너비에서 20px(좌우 패딩)을 빼준 값 */
   }
 }
-

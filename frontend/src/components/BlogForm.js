@@ -172,10 +172,9 @@ const BlogForm = ({ editing }) => {
   return (
     <div className="BlogForm-container">
       <div className='blog-container'>
-        <div className="img-container">
-          <img src="/main-image.png" className="header-image" />
-          <img src="/mainword-image.png" className="header-word-image" />
-        </div>
+      <div className="banner_img_container_icebreaker_write">
+                    <img src="/icebreaker_main2.png" className="banner" />
+                </div>
         {error && <div className="alert alert-danger">{error}</div>}
         <div className='createpage-container'>
         <div className="title-container">
