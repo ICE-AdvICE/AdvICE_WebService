@@ -20,3 +20,6 @@ public interface CommentRepository extends JpaRepository<CommentEntity, Integer>
 
     CommentEntity findByCommentNumber(Integer commentNumber);
 }
+
+
+
