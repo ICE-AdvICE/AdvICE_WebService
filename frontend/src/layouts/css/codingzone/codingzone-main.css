@@ -33,8 +33,6 @@
   color:#002D56;
 
 }
-
-
 .codingzone-top-container {
   width: 100%;
   display: flex;
@@ -136,12 +134,11 @@
 }
 .codingzone-title{
   display: flex;
+  justify-content: space-between;
 } 
-
 .codingzone-list{
   margin-top: 1%;
 }
- 
 .czcard {
   margin-bottom: 3%;
   background-color: #F6F6F6;
@@ -157,8 +154,6 @@
   margin: 0;
   font-size: 14px;
 }
-
-
 .weekDay,.weekTime,  .weekcount ,.registerbutton,.card-hidden-space, .card-classTime {
   text-align: center;  
   width: 100px;  
@@ -204,6 +199,7 @@
   width: 70%;
   padding: 7px 1px;
 }
+
  
 @media (max-width: 1000px) {
   .card-hidden-space {

@@ -11,8 +11,9 @@ import {
   createNotificationArticleRequest,
 } from '../apis/index';
 import ReactQuill from 'react-quill';
-import '../layouts/css/BlogForm.css';
+import '../layouts/css/ArticlePage/BlogForm.css';
 import { useLocation } from 'react-router-dom';
+
 
 const BlogForm = ({ editing }) => {
   const navigate = useNavigate();

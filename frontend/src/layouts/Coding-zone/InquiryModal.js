@@ -33,9 +33,9 @@ const InquiryModal = ({ isOpen, onClose }) => {
     return (
         <div className={isOpen ? styles.root : styles.rootDisable}>
             <div className={styles.modalContainer} onClick={e => e.stopPropagation()}>
-                <div className="loginHeaderContainer">
-                    <img src="/header-name.png" alt="로그인 로고" style={{ width: '220px', height: 'auto' }} />
-                </div>
+            <div className="loginHeaderContainer">
+        <img src="/header-name.png" alt="로그인 로고" className="responsiveLogo" />
+      </div>
                 <div className={styles.close} onClick={onClose}>×</div>
                 <div className={styles.title}><strong>과 사무실</strong></div>
                 <div className={styles.modalBody}>

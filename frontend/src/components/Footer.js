@@ -1,5 +1,5 @@
 import React from 'react';
-import '../layouts/css/Footer.css';
+import '../layouts/css/Main.bar/Footer.css';
 
 const Footer = () => {
     return(
@@ -24,6 +24,12 @@ const Footer = () => {
                             <span>
                                 <strong> e-mail. </strong> 
                                 ice@hufs.ac.kr
+                            </span>
+                        </p>
+                        <p>
+                            <span>
+                                <strong>DEVELOPED BY. </strong> 
+                                LEE YUNBIN, DO SEONGHYUN, KIM JINWOO, PARK JUNSEO
                             </span>
                         </p>
                         <p>

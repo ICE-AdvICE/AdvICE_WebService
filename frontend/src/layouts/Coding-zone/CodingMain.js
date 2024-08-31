@@ -65,7 +65,7 @@ const CodingMain = () => {
     }
   }, [cookies.accessToken]);
 
-// 7. 운영자 권한 종류 확인 API
+// 로그인 여부와 관리자 유형을 확인하는 부분을 하나의 useEffect로 정리
   useEffect(() => {
     const fetchUserRole = async () => {
       const token = cookies.accessToken;
@@ -84,6 +84,7 @@ const CodingMain = () => {
     };
     fetchUserRole();
   }, [cookies.accessToken]);
+
   // 요일과 슬라이더 설정을 상수로 정의
   const daysOfWeek = ['월요일', '화요일', '수요일', '목요일', '금요일'];
 
@@ -148,7 +149,7 @@ const CodingMain = () => {
   }, [location.pathname]);
 
   
-  // 8. 선택된 학년의 예약 가능한 수업 리스트로 반환 API, 9.선택된 학년의 예약 가능한 수업 리스트로 반환 API(fornotlogin)
+  /// 코딩존 수업 데이터를 가져오는 useEffect
   useEffect(() => {
     const fetchData = async () => {
         try {
@@ -311,12 +312,12 @@ const sliderSettings = {
         </button>
         <span> | </span>
         <button 
-  onClick={() => {
-    handleInquiry();
-    handleOpenModal();
-  }}
-  className={selectedButton === 'inquiry' ? 'selected' : ''}
->
+        onClick={() => {
+          handleInquiry();
+          handleOpenModal();
+        }}
+          className={selectedButton === 'inquiry' ? 'selected' : ''}
+        >
           문의 하기
         </button>
         {showModal && <InquiryModal isOpen={showModal} onClose={handleCloseModal} />}
