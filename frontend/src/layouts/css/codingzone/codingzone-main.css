@@ -53,7 +53,7 @@
 .codingzone-body-container{
   max-width: 1000px;
   margin: 0 auto;
-  padding: 10px;
+  padding: 0 10px 10px 10px;
   margin-bottom: 100px;
 }
 .cz-category-top{

@@ -1,5 +1,6 @@
 .ArticleMain-container {
   position: relative;
+  flex: 1;
 }
 .ArticleMain-body-image{
   width:100%;
