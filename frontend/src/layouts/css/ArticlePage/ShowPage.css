@@ -24,16 +24,16 @@
   height: auto;
 }
 .CommentBox-bottom-container{
+  border: 0.05vw solid #ACACAC;
+  display: flex; 
+  flex-direction: column;  
+  position: relative;    
+  width: 100%;  
  
-  display: flex; /* Flexbox 사용 */
-  flex-direction: column; /* 수직 정렬 */
-  position: relative; /* 위치를 상대적으로 설정 */
-  width: 100%; /* 전체 너비 */
+  padding: 10px; 
  
-  padding: 10px; /* 전체 안쪽 여백 */
-  border: 1px solid #ddd; /* 테두리 */
  
-  box-sizing: border-box; /* 패딩 포함한 너비 계산 */
+  box-sizing: border-box; 
 }
 .Admin-de_Ca-bottom{
   display: flex;
@@ -48,7 +48,6 @@
 }
 .ArticleCategory {       
   position: relative;
-  margin-top: 4vw;
   display: flex;            
   justify-content: space-between;  
 }
@@ -111,7 +110,7 @@
   margin-top: 35px; 
   margin-bottom: 16px;  
   padding: 10px;  
-  border: 1px solid #ddd;  
+  border: 0.05vw solid #ACACAC;
   border-radius: 5px;  
   white-space: pre-wrap;  
   word-break: break-word;  
