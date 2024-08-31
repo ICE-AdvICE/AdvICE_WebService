@@ -51,10 +51,7 @@ const Codingzone_Manager = () => {
             const currentDate = new Date(selectedDate);
             console.log("Checking date:", now, currentDate); // Debugging log
 
-            if (now.getDate() !== currentDate.getDate() || now.getMonth() !== currentDate.getMonth()) {
-                console.log("Date has changed, updating state."); // Debugging log
-                setSelectedDate(new Date(now.getFullYear(), now.getMonth(), now.getDate())); // Set to today's date without time
-            }
+           
         }, 10000); // Check every 10 seconds for debugging
 
         return () => clearInterval(timer); // Clear the timer when the component unmounts
@@ -97,8 +94,8 @@ const Codingzone_Manager = () => {
             setAttendList(response.attendList);
         }
         else if (response && response.code === "NU") {
-            alert('로그인 시간이 만료되었습니다. 다시 로그인 해주세요.');
-            navigate('/');
+
+
         }
         else {
             console.error(response.message);
@@ -111,8 +108,6 @@ const Codingzone_Manager = () => {
         if (response && response.code === "SU") {
             setReservedList(response.studentList.sort((a, b) => a.classTime.localeCompare(b.classTime)));
         } else if (response && response.code === "NU") {
-            alert('로그인 시간이 만료되었습니다. 다시 로그인 해주세요.');
-            navigate('/');
         }
         else {
             console.error(response.message);
@@ -129,8 +124,7 @@ const Codingzone_Manager = () => {
             alert('처리가 완료되었습니다.');
             fetchReservedList(); // 새로고침 기능
         } else if (response && response.code === "NU") {
-            alert('로그인 시간이 만료되었습니다. 다시 로그인 해주세요.');
-            navigate('/');
+        
         }
         else {
             alert('오류가 발생했습니다. 다시 시도 해 주세요.');

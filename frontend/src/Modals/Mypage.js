@@ -139,7 +139,9 @@ const MypageForm = ({ handleLogout, closeModal }) => {
                 <button type="button" onClick={() => setEditMode(true)}>정보 수정</button>
                 <button type="button" onClick={handleLogout}>로그아웃</button>
             </div>
-            <button className="mypage_delete_user" onClick={handleDeleteAccount}>회원탈퇴</button>
+            <div class="mypage_delete_user_container">
+  <button class="mypage_delete_user">회원 탈퇴</button>
+</div>
             {editMode && (
                 <MyModal open={editMode} onCancel={() => setEditMode(false)} footer={[]}>
                     <div className="loginHeaderContainer">
