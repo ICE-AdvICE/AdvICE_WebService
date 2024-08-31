@@ -106,7 +106,6 @@ const Codingzone_All_Attend = () => {
                 const filteredData = response.studentList.filter(student => student.grade === selectedGrade);
                 setAttendanceList(filteredData);
             } else if (response && response.code === "NU") {
-                alert('로그인 시간이 만료되었습니다. 다시 로그인 해주세요.');
                 navigate('/');
             }
             else {
