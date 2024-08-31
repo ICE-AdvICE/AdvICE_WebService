@@ -14,6 +14,7 @@ import ReactQuill from 'react-quill';
 import '../layouts/css/ArticlePage/BlogForm.css';
 import { useLocation } from 'react-router-dom';
 
+
 const BlogForm = ({ editing }) => {
   const navigate = useNavigate();
   const [canEdit, setCanEdit] = useState(false);

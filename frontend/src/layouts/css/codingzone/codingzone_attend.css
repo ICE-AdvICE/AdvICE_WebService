@@ -55,6 +55,26 @@
     padding-top: 20px;
 }
 
+.banner_img_container_icebreaker_article {
+    width: 100%;
+    height: auto;
+    padding: 20px 10px;
+    box-sizing: border-box;
+    margin: 20px auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 0;
+    background-color: #eaecf5;
+}
+
+.banner_img_container_icebreaker_article .banner {
+    width: auto;
+    max-width: 960px;
+    max-height: 370px;
+    padding-top: 20px;
+}
+
 
 
 .button-container,
@@ -337,7 +357,7 @@
 }
 
 @media (max-width: 1920px) {
-    .banner_img_container .banner,.banner_img_container_icebreaker .banner ,.banner_img_container_icebreaker_write .banner {
+    .banner_img_container .banner,.banner_img_container_icebreaker .banner ,.banner_img_container_icebreaker_write .banner , .banner_img_container_icebreaker_article .banner{
         max-width: calc(100%);
         margin: -10px 10px;
     }
@@ -363,6 +383,12 @@
     }
 
     .banner_img_container_icebreaker_write .banner {
+        width: 95%; 
+        max-width: 100%; 
+        height: auto; 
+    }
+
+    .banner_img_container_icebreaker_article .banner{
         width: 95%; 
         max-width: 100%; 
         height: auto; 

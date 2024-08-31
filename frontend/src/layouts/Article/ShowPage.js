@@ -213,9 +213,8 @@ const ShowPage = () => {
 
     return (
         <div className="blog-container">
-            <div className="img-container">
-                <img src="/main-image.png" className="header-image" />
-                <img src="/mainword-image.png" className="header-word-image" />
+           <div className="banner_img_container_icebreaker_article">
+                <img src="/icebreaker_main.png" className="banner" />
             </div>
             <div className = "ArticleContentbox-container">
                 <div className="ArticleContentbox">

@@ -28,6 +28,12 @@ const Footer = () => {
                         </p>
                         <p>
                             <span>
+                                <strong>DEVELOPED BY. </strong> 
+                                LEE YUNBIN, DO SEONGHYUN, KIM JINWOO, PARK JUNSEO
+                            </span>
+                        </p>
+                        <p>
+                            <span>
                             Copyright ⓒ Hankuk University of Foreign Studies. 
                             </span>
 
