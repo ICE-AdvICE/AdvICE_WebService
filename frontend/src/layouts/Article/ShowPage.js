@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
-import ToastViewer from './ToastViewer.js';  
-import './css/ArticlePage/ShowPage.css';
-import {fetchArticle,fetchLikeStatus, handleLike ,handleResolveArticle,giveBanToUser,adminhandleDelete,checkAnonymousBoardAdmin,handleCommentEdit,handleCommentDelete,fetchComments,handleDelete,handleCommentSubmit ,checkArticleOwnership} from '../apis/index.js';
+import ToastViewer from '../ToastViewer.js';  
+import '../css/ArticlePage/ShowPage.css';
+import {fetchArticle,fetchLikeStatus, handleLike ,handleResolveArticle,giveBanToUser,adminhandleDelete,checkAnonymousBoardAdmin,handleCommentEdit,handleCommentDelete,fetchComments,handleDelete,handleCommentSubmit ,checkArticleOwnership} from '../../apis/index.js';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart as solidHeart } from '@fortawesome/free-solid-svg-icons';
 import { faHeart as regularHeart } from '@fortawesome/free-regular-svg-icons';
@@ -278,47 +278,57 @@ const ShowPage = () => {
                             </div>
                         )}
                        
-                        <div className='CommentBox-container'>  
-                            {comments.map((comment, index) => (
-                                <div key={index} className="Comment">
-                                    {editingCommentId === comment.commentNumber ? (
-                                        <div className="Comment-Edit">  
-                                            <textarea
-                                                value={editCommentInput}
-                                                onChange={(e) => setEditCommentInput(e.target.value)}
-                                                className="comment-edit-input"
-                                                rows="3"
-                                                style={{ width: '100%' }}
-                                            />
-                                            <div className='ed-comment'>
-                                                <div className='ed-bt' onClick={() => handleSaveEdit(comment.commentNumber)}>저장</div>
-                                                <div className='ed-can' onClick={() => setEditingCommentId(null)}>취소</div>
-                                            </div>
+                       <div className='CommentBox-container'>  
+                        {comments.map((comment, index) => (
+                            <div key={index} className="Comment">
+                                {editingCommentId === comment.commentNumber ? (
+                                    <div className="Comment-Edit">  
+                                        <textarea
+                                            value={editCommentInput}
+                                            onChange={(e) => setEditCommentInput(e.target.value)}
+                                            className="comment-edit-input"
+                                            rows="3"
+                                            style={{ width: '100%' }}
+                                        />
+                                        <div className='ed-comment'>
+                                            <div className='ed-bt' onClick={() => handleSaveEdit(comment.commentNumber)}>저장</div>
+                                            <div className='ed-can' onClick={() => setEditingCommentId(null)}>취소</div>
                                         </div>
-                                    ) : (
-                                        <div>
-                                            <div className="Comment-Header">
-                                                <p className="Comment-Author">운영자</p>
-                                                <p className="Comment-Date">{(comment.writeDatetime)}</p>
-                                                
-                                                {isAdmin && (
-                                                    <div className="Admin-de_Ca-bottom">
-                                                        <button onClick={() => handleDeleteComment(articleNum, comment.commentNumber, token)}>삭제</button>
-                                                        <button onClick={() => { setEditingCommentId(comment.commentNumber); setEditCommentInput(comment.content); }}>수정</button>
-                                                    </div>
-                                                )}
-                                            </div>
-                                            <p className="Comment-Content">{comment.content}</p>
-                                        </div>
-                                    )}
+                                    </div>
+                                ) : (
+                        <div>
+                        <div className="Comment-Header">
+                            <p className="Comment-Author">운영자</p>
+                            <p className="Comment-Date">{(comment.writeDatetime)}</p>
+                            
+                            {isAdmin && (
+                                <div className="Admin-de_Ca-bottom">
+                                    <button onClick={() => handleDeleteComment(articleNum, comment.commentNumber, token)}>삭제</button>
+                                    <button onClick={() => { setEditingCommentId(comment.commentNumber); setEditCommentInput(comment.content); }}>수정</button>
                                 </div>
-                            ))}
+                            )}
                         </div>
+                        {/* 댓글 내용 렌더링 부분 수정 */}
+                        <p className="Comment-Content">
+                            {comment.content.split('\n').map((line, index) => (
+                                <React.Fragment key={index}>
+                                    {line}
+                                    <br />
+                                </React.Fragment>
+                            ))}
+                        </p>
+                        </div>
+                    )}
+                </div>
+            ))}
+        </div>
+
                         {isAdmin && (   
                             <div className="CommentBox-bottom">
                                 <div className='CommentBox-bottom-container'>
-                                    
-                                    <p class="comment-label">운영자</p>
+                                    <div className='CommentBox-bottom-title'>
+                                        <p class="comment-label">운영자</p>
+                                    </div>
                                     <textarea
                                         className="comment-input-area"
                                         value={commentInput}
