@@ -3,19 +3,19 @@ import ReactDOM from 'react-dom';
 import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Main from './layouts/HomePage';
-import ArticleMain from './layouts/ArticleMain';
+import ArticleMain from './layouts/Article/ArticleMain';
 import CodingMain from './layouts/Coding-zone/CodingMain';
-import EditPage from './layouts/EditPage';
+import EditPage from './layouts/Article/EditPage';
 import CodingClassRegist from './layouts/Coding-zone/CodingClassRegist';
 import Codingzone_Manager from './layouts/Coding-zone/Codingzone_Manager';
 import Codingzone_Attendence from './layouts/Coding-zone/Codingzone_Attendence';
 import Codingzone_All_Attend from './layouts/Coding-zone/Codingzone_All_Attend';
 import NavBar from './components/NavBar';
 import Footer from './components/Footer';
-import CreatePage from './layouts/CreatePage';
-import ShowPage from './layouts/ShowPage';
+import CreatePage from './layouts/Article/CreatePage';
+import ShowPage from './layouts/Article/ShowPage';
 import AuthHandle from './layouts/AuthHandle';
-import './layouts/css/NavBar.css';
+ 
 
 const App = () => {
   const location = useLocation();

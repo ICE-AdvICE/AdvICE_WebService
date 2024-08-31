@@ -24,9 +24,16 @@
   height: auto;
 }
 .CommentBox-bottom-container{
-  height: 100%;
-  display: flex;
-  flex-direction: column;
+ 
+  display: flex; /* Flexbox 사용 */
+  flex-direction: column; /* 수직 정렬 */
+  position: relative; /* 위치를 상대적으로 설정 */
+  width: 100%; /* 전체 너비 */
+ 
+  padding: 10px; /* 전체 안쪽 여백 */
+  border: 1px solid #ddd; /* 테두리 */
+ 
+  box-sizing: border-box; /* 패딩 포함한 너비 계산 */
 }
 .Admin-de_Ca-bottom{
   display: flex;
@@ -40,7 +47,6 @@
    
 }
 .ArticleCategory {       
-       
   position: relative;
   margin-top: 4vw;
   display: flex;            
@@ -101,9 +107,19 @@
   cursor: pointer;
 }
 .comment-input-area{
-  padding: 30px 10px 10px 20px;
-  font-size: 12px;
-
+  flex-grow: 1;  
+  margin-top: 35px; 
+  margin-bottom: 16px;  
+  padding: 10px;  
+  border: 1px solid #ddd;  
+  border-radius: 5px;  
+  white-space: pre-wrap;  
+  word-break: break-word;  
+  background-color: transparent;  
+  overflow-y: auto;  
+  resize: none;  
+  width: 100%; 
+  box-sizing: border-box;  
 }
 .Commentbox-name{
   display: flex;
@@ -190,7 +206,10 @@
   font-size: 20px;  
   transition: color 0.3s ease;  
 }
-
+.resolve button:hover{
+    color: white;
+  background-color: #002D56;
+}
 .heart:hover svg {
   color: #ff4a4a;  
 }
@@ -214,6 +233,9 @@
   font-weight: bold;
   position: absolute;
   padding: 10px;
+  top: 10px; /* 상단 고정 */
+  left: 10px; /* 왼쪽 고정 */
+
   
 }
 .Comment-Edit p{

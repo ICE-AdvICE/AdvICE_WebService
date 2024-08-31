@@ -386,7 +386,7 @@ export const fetchComments = (navigate,articleNum, setComments) => {
         const formattedComments = comments.map(comment => {
             return {
                 commentNumber: comment.commentNumber,
-                writeDatetime: moment(comment.writeDatetime).format('YYYY.MM.DD hh:mm'),
+                writeDatetime: moment(comment.writeDatetime).format('YYYY.MM.DD HH:mm'),
                 content: comment.content,
                 user_email: comment.user_email,
             };

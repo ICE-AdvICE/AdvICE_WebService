@@ -4,7 +4,6 @@
     flex: 1;
 }
 .title-container{
- 
     margin-top: 2%;
 }
 .dropdown {
@@ -61,7 +60,6 @@
 }
  
 .dropdown .dropdown-menu {
- 
     list-style: none;
 }
 .dropdown .dropdown-menu li:hover {
