@@ -9,7 +9,6 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 
-import com.icehufs.icebreaker.dto.object.CodingZoneAssitantListItem;
 import com.icehufs.icebreaker.dto.object.CodingZoneStudentListItem;
 import com.icehufs.icebreaker.dto.object.PersAttendManagListItem;
 import com.icehufs.icebreaker.dto.object.ReservedClassListItem;
@@ -17,7 +16,6 @@ import com.icehufs.icebreaker.dto.request.codingzone.*;
 import com.icehufs.icebreaker.dto.response.ResponseDto;
 import com.icehufs.icebreaker.dto.response.article.CheckOwnOfArticleResponseDto;
 import com.icehufs.icebreaker.dto.response.codingzone.*;
-import com.icehufs.icebreaker.dto.response.user.AuthorityResponseDto;
 import com.icehufs.icebreaker.entity.AuthorityEntity;
 import com.icehufs.icebreaker.entity.CodingZoneClass;
 import com.icehufs.icebreaker.entity.CodingZoneRegisterEntity;
