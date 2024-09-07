@@ -7,3 +7,4 @@ backend/build/
 *.class
 *.bin
 .vscode
+.idea

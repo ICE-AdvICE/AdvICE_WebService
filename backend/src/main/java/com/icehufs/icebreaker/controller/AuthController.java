@@ -15,20 +15,21 @@ import lombok.RequiredArgsConstructor;
 
 
 @RestController
-@RequestMapping("/api/v1/auth")
+@RequestMapping("/api/v1/auth") //일반 사용자를 위한 URL 주소(회원가입/로그인/이메일 인증/정지 확인)
 @RequiredArgsConstructor
 public class AuthController {
 
     private final AuthService authService;
 
-    @PostMapping("/sign-up")
+    @PostMapping("/sign-up") // 회원가입 API
     public ResponseEntity<? super SignUpResponseDto> signUp(@RequestBody @Valid SignUpRequestDto requestBody){
         ResponseEntity<? super SignUpResponseDto> response = authService.signUp(requestBody);
     
         return response;
     }
 
-    @PostMapping("/sign-in") //메소드의 반환 타입과 값을 response로 선언
+    @PostMapping("/sign-in") // 로그인 API
+    //메소드의 반환 타입과 값을 response로 선언
     //ResponseEntity는 HTTP 응답의 본문(body), 상태 코드(status code), 헤더(headers) 등을 포함
     //요청에 대한 응답을 보낼때 SignInResponseDto으로 미리정한 다양한 타입의 응답을 처리가능
     public ResponseEntity<? super SignInResponseDto> signIn(@RequestBody @Valid SignInRequestDto requestBody){
@@ -38,7 +39,7 @@ public class AuthController {
         return response;
     }
 
-    @PostMapping("/email-certification")
+    @PostMapping("/email-certification") // 회원가입 시 인증 번호 전송 API
     public ResponseEntity<? super EmailCertificationResponseDto> emailCertification (
             @RequestBody @Valid EmailCertificationRequestDto requestBody
     ) {
@@ -46,7 +47,7 @@ public class AuthController {
         return response;
     }
 
-    @PostMapping("/password-change/email-certification")
+    @PostMapping("/password-change/email-certification") // 비밀 번호 변경 시 인증 번호 전송 API
     public ResponseEntity<? super PassChanEmailCertificationResponseDto> passChanEmailCertification (
         @RequestBody @Valid EmailCertificationRequestDto requestBody
 ) {
@@ -54,7 +55,7 @@ public class AuthController {
     return response;
 }
 
-    @PostMapping("/check-certification")
+    @PostMapping("/check-certification") // 인증번호 확인 API
     public ResponseEntity<? super CheckCertificationResponseDto> checkCertification (
             @RequestBody @Valid CheckCertificationRequestDto requestBody
     ) {
@@ -62,10 +63,8 @@ public class AuthController {
         return response;
     }
 
-    // 정지 여부 확인 api
-    @PostMapping("/check-user-ban")
+    @PostMapping("/check-user-ban") // 정지 여부 확인 api 
     public ResponseEntity<? super CheckUserBanResponseDto> checkUserBanStatus(@RequestHeader("Authorization") String token) {
-        // Assuming the token is prefixed with "Bearer "
         String jwtToken = token.substring(7);
         return authService.checkUserBanStatus(jwtToken);
     }

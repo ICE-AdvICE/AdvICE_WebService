@@ -18,12 +18,12 @@ import com.icehufs.icebreaker.dto.response.codingzone.*;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/api/v1/coding-zone")
+@RequestMapping("/api/v1/coding-zone") // 코딩존 일반 사용자 API 주소
 @RequiredArgsConstructor
 public class CodingZoneController {
     private final CodingZoneService codingzoneService;
  
-    @GetMapping("/auth-type")
+    @GetMapping("/auth-type") // 사용자의 권한 반환 API
     public ResponseEntity<? super AuthorityExistResponseDto> authExist(
     @AuthenticationPrincipal String email
     ){
@@ -31,7 +31,7 @@ public class CodingZoneController {
         return response;
     }
 
-    @PostMapping("/reserve-class/{classNum}")
+    @PostMapping("/reserve-class/{classNum}") // 수업 예약 API
     public ResponseEntity<? super CodingZoneRegisterResponseDto> classRegist(
         @PathVariable Integer classNum,
         @AuthenticationPrincipal String email
@@ -40,7 +40,7 @@ public class CodingZoneController {
             return response;
         }
     
-    @DeleteMapping("/cence-class/{classNum}")
+    @DeleteMapping("/cence-class/{classNum}") // 수업 예약 취소 API
     public ResponseEntity<? super CodingZoneCanceResponseDto> classCence(
         @PathVariable Integer classNum,
         @AuthenticationPrincipal String email
@@ -66,7 +66,7 @@ public class CodingZoneController {
         return response;
     } 
     
-    @GetMapping("/count-of-attend/{grade}")
+    @GetMapping("/count-of-attend/{grade}") // 출석한 횟수 반환 API
     public ResponseEntity<? super GetCountOfAttendResponseDto> getCountAttend(
         @PathVariable Integer grade,
         @AuthenticationPrincipal String email
@@ -75,7 +75,7 @@ public class CodingZoneController {
         return response;
     }   
 
-    @GetMapping("/attend-list")
+    @GetMapping("/attend-list") // 예약/출석/결석한 모든 수업을 반환 API
     public ResponseEntity<? super GetPersAttendListItemResponseDto> getPerAttendList(
         @AuthenticationPrincipal String email
     ){
@@ -83,7 +83,7 @@ public class CodingZoneController {
         return response;
     } 
 
-    @GetMapping("/reserved-list/{classDate}")
+    @GetMapping("/reserved-list/{classDate}") // 특정 날짜에 예약한 모든 학생 정보 반환 API
     public ResponseEntity<? super GetReservedClassListItemResponseDto> getReservedList(
         @PathVariable String classDate,
         @AuthenticationPrincipal String email
@@ -92,7 +92,7 @@ public class CodingZoneController {
         return response;
     } 
 
-    @GetMapping("/assistant-list")
+    @GetMapping("/assistant-list") // 모든 코딩존 조교 정보 반환 API
     public ResponseEntity<? super GetCodingZoneAssitantListResponseDto> getAssistantList(
     ){
         ResponseEntity<? super GetCodingZoneAssitantListResponseDto> response = codingzoneService.getAssistantList();

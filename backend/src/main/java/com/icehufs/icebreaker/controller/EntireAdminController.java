@@ -21,13 +21,13 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/api/admin") // 'ICEbreaker' 코딩존 수업 등록 및 권한 부여 가능한 권한 (과사조교)
+@RequestMapping("/api/admin") // 'ICEbreaker' 코딩존 수업 등록 및 권한 부여 가능한 권한(과사조교) API 주소
 @RequiredArgsConstructor
 public class EntireAdminController {
 
     private final CodingZoneService codingzoneService;
 
-    @PostMapping("/upload-codingzone")
+    @PostMapping("/upload-codingzone") // 수업 리스트 등록 API
     public ResponseEntity<? super CodingZoneClassAssignResponseDto> CodingZoneClassAssignResponse(
         @RequestBody @Valid List<CodingZoneClassAssignRequestDto> requestBody,
         @AuthenticationPrincipal String email
@@ -73,7 +73,7 @@ public class EntireAdminController {
         return response;
     }
 
-    @GetMapping("/student-list")
+    @GetMapping("/student-list") // 해당학기에 출/결한 모든 학생을 리스트로 반환 API
     public ResponseEntity<? super GetCodingZoneStudentListResponseDto> getStudentList(
         @AuthenticationPrincipal String email
     ){
@@ -81,7 +81,7 @@ public class EntireAdminController {
         return response;
     } 
 
-    @DeleteMapping("/delete-allinf") //모든 정보 초기화
+    @DeleteMapping("/delete-allinf") // 코딩존 관련 모든 정보 초기화(코딩존 조교 권한 박할까지) API
     public ResponseEntity<? super DeleteAllInfResponseDto> deleteAll(
         @AuthenticationPrincipal String email
 
@@ -91,7 +91,7 @@ public class EntireAdminController {
     }
 
 
-    @PatchMapping("/give-auth") //사용자 특정 권한 부여
+    @PatchMapping("/give-auth") //사용자 특정 권한 부여 API
     public ResponseEntity<? super GiveAuthResponseDto> giveAuth(
         @RequestBody @Valid HandleAuthRequestDto requestBody,
         @AuthenticationPrincipal String email
@@ -100,7 +100,7 @@ public class EntireAdminController {
         return response;
     }
 
-    @PatchMapping("/deprive-auth") //사용자 특정 권한 박탈
+    @PatchMapping("/deprive-auth") //사용자 특정 권한 박탈 API
     public ResponseEntity<? super DepriveAuthResponseDto> depriveAuth(
         @RequestBody @Valid HandleAuthRequestDto requestBody,
         @AuthenticationPrincipal String email
