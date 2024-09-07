@@ -24,13 +24,13 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/admin1") // 익명게시판 운영자 권한 
+@RequestMapping("/api/admin1") // 익명게시판 운영자 권한 API 주소
 public class ArticleAdminController {
 
     private final ArticleService articleService;
     private final AuthService authService;
 
-    @PostMapping("/{articleNum}/comment")
+    @PostMapping("/{articleNum}/comment") // 댓글 등록 API
     public ResponseEntity<? super PostCommentResponseDto> postComment(
         @RequestBody @Valid PostCommentRequestDto requestBody,
         @PathVariable Integer articleNum,
@@ -40,7 +40,7 @@ public class ArticleAdminController {
         return response;
     }
 
-    @PatchMapping("/comment/{commentNumber}")
+    @PatchMapping("/comment/{commentNumber}") // 댓글 수정 API
     public ResponseEntity<? super PatchCommentResponseDto> patchComment(
         @RequestBody @Valid PatchCommentRequestDto requestBody,
         @PathVariable Integer commentNumber,
@@ -50,7 +50,7 @@ public class ArticleAdminController {
         return response;
     }
 
-    @DeleteMapping("/comment/{commentNumber}")
+    @DeleteMapping("/comment/{commentNumber}") // 댓글 삭제 API
     public ResponseEntity<? super DeleteCommentResponseDto> deleteComment(
         @PathVariable Integer commentNumber,
         @AuthenticationPrincipal String email
@@ -59,7 +59,7 @@ public class ArticleAdminController {
         return response;
     }
 
-    @DeleteMapping("/{articleNum}")
+    @DeleteMapping("/{articleNum}") // 게시글 강제 삭제 API
     public ResponseEntity<? super DeleteArticleAdminResponseDto> deleteArticleAdmin(
         @PathVariable Integer articleNum,
         @AuthenticationPrincipal String email
@@ -68,7 +68,7 @@ public class ArticleAdminController {
         return response;
     }
 
-    @PutMapping("/{articleNum}/resolv")
+    @PutMapping("/{articleNum}/resolv") // "요청" 게시글을 "해결" 게시글로 변경 API
     public ResponseEntity<? super PutResolvedArticleResponseDto> putresolv(
         @PathVariable Integer articleNum,
         @AuthenticationPrincipal String email
@@ -77,7 +77,7 @@ public class ArticleAdminController {
         return response;
     }
     
-    @PostMapping("/give-ban/{articleNum}")
+    @PostMapping("/give-ban/{articleNum}") // 정지부여 API
     public ResponseEntity<? super GiveUserBanResponseDto> GiveUserBan (
             @PathVariable Integer articleNum,
             @RequestBody @Valid GiveUserBanRequestDto requestBody,
@@ -87,7 +87,7 @@ public class ArticleAdminController {
         return response;
     }
 
-    @PostMapping("/article")
+    @PostMapping("/article") // 공지 게시글 등록 API
     public ResponseEntity<? super PostArticleResponseDto> postArticleNotif(
         @RequestBody @Valid PostArticleRequestDto requestBody,
         @AuthenticationPrincipal String email

@@ -18,12 +18,12 @@ import com.icehufs.icebreaker.service.UserService;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/api/v1/user")
+@RequestMapping("/api/v1/user") //일반 사용자를 위한 URL 주소(회원가입/로그인/이메일 인증/정지 확인)
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
 
-    @GetMapping("")
+    @GetMapping("") // 특정 사용자의 정보 반환 API
     public ResponseEntity<? super GetSignInUserResponseDto> getSignInUser (
         @AuthenticationPrincipal String email //확인하고자하는 유저의 토큰 유효성 확인 후 유저의 메일 반환
     ){
@@ -31,7 +31,7 @@ public class UserController {
         return response;
     }
 
-    @PatchMapping("")
+    @PatchMapping("") // 개인 정보 수정 API
     public ResponseEntity<? super PatchUserResponseDto> patchUser(
         @RequestBody @Valid PatchUserRequestDto requestBody,
         @AuthenticationPrincipal String email
@@ -40,14 +40,14 @@ public class UserController {
         return response;
     }
 
-    @PatchMapping("/password")
+    @PatchMapping("/password") // 비밀 번호 수정 API
     public ResponseEntity<? super PatchUserPassResponseDto> patchUserPass(
         @RequestBody @Valid PatchUserPassRequestDto requestBody){
         ResponseEntity<? super PatchUserPassResponseDto> response = userService.patchUserPass(requestBody);
         return response;
     }
 
-    @DeleteMapping("")
+    @DeleteMapping("") // 회원탈퇴 API
     public ResponseEntity<? super DeleteUserResponseDto> deleteUser(
         @AuthenticationPrincipal String email
     ){
@@ -55,7 +55,7 @@ public class UserController {
         return response;
     }
 
-    @PatchMapping("/authority")
+    @PatchMapping("/authority") //자기한테 권한 부여 API(테스트용)
     public ResponseEntity<? super AuthorityResponseDto> giveAuthority(
         @RequestBody @Valid AuthorityRequestDto requestBody,
         @AuthenticationPrincipal String email
@@ -64,7 +64,7 @@ public class UserController {
         return response;
     }
 
-    @GetMapping("/auth1-exist")
+    @GetMapping("/auth1-exist") // "익명게시판" 운영자 판별 API
     public ResponseEntity<? super Authority1ExistResponseDto> auth1Exist(
         @AuthenticationPrincipal String email
     ){

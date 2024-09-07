@@ -22,12 +22,12 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/article")
+@RequestMapping("/api/v1/article") // 익명게시판 일반 사용자 API 주소
 public class ArticleController {
 
     private final ArticleService articleService;
 
-    @PostMapping("")
+    @PostMapping("")// 게시글 등록 API
     public ResponseEntity<? super PostArticleResponseDto> postArticle(
         @RequestBody @Valid PostArticleRequestDto requestBody,
         @AuthenticationPrincipal String email
@@ -36,7 +36,7 @@ public class ArticleController {
         return response;
     }
 
-    @GetMapping("/{articleNum}")
+    @GetMapping("/{articleNum}") // 특정 게시글 반환 API
     public ResponseEntity<? super GetArticleResponseDto> getArticle(
         @PathVariable Integer articleNum
     ){
@@ -44,7 +44,7 @@ public class ArticleController {
         return response;
     }
 
-    @PatchMapping("/{articleNum}")
+    @PatchMapping("/{articleNum}") // 게시글 수정 API
     public ResponseEntity<? super PatchArticleResponseDto> patchArticle(
         @RequestBody @Valid PatchArticleRequestDto requestBody,
         @PathVariable Integer articleNum,
@@ -54,7 +54,7 @@ public class ArticleController {
         return response;
     }
 
-    @GetMapping("/own/{articleNum}") //내가 쓴 게시글인지 확인
+    @GetMapping("/own/{articleNum}") // 내가 쓴 게시글인지 확인 API
     public ResponseEntity<? super CheckOwnOfArticleResponseDto> checkOwnArticle(
         @PathVariable Integer articleNum,
         @AuthenticationPrincipal String email
@@ -63,7 +63,7 @@ public class ArticleController {
         return response;
     }
 
-    @GetMapping("/{articleNum}/like")
+    @GetMapping("/{articleNum}/like") // 내가 좋아요 눌렀던 게시글인지 확인 API
     public ResponseEntity<? super CheckArticleFavoriteResponseDto> checkFavorite(
         @PathVariable Integer articleNum,
         @AuthenticationPrincipal String email
@@ -72,13 +72,13 @@ public class ArticleController {
         return response;
     }
 
-    @GetMapping("/list")
+    @GetMapping("/list") // 모든 게시글 반환 API
     public ResponseEntity<? super GetArticleListResponseDto> getArticleList(){
         ResponseEntity<? super GetArticleListResponseDto> response = articleService.getArticleList();
         return response;
     }
 
-    @GetMapping("/user-list")
+    @GetMapping("/user-list") // 내가 쓴 모든 게시글 반환 API
         public ResponseEntity<? super GetUserArticleListResponseDto> patchUserPass(
         @AuthenticationPrincipal String email
     ){
@@ -86,7 +86,7 @@ public class ArticleController {
         return response;
     }
 
-    @PutMapping("/{articleNum}/like")
+    @PutMapping("/{articleNum}/like") // 좋아요 누르기/취소하기 API
     public ResponseEntity<? super PutFavoriteResponseDto> putFavorite(
         @PathVariable Integer articleNum,
         @AuthenticationPrincipal String email
@@ -95,7 +95,7 @@ public class ArticleController {
         return response;
     }
 
-    @GetMapping("/{articleNum}/comment-list")
+    @GetMapping("/{articleNum}/comment-list") // 특정 게시글의 모든 댓글 반환 API
     public ResponseEntity<? super GetCommentListResponseDto> getCommentList(
         @PathVariable Integer articleNum
     ){
@@ -103,7 +103,7 @@ public class ArticleController {
         return response;
     }
 
-    @DeleteMapping("/{articleNum}")
+    @DeleteMapping("/{articleNum}") // 특정 (MY)게시글 삭제 API
     public ResponseEntity<? super DeleteArticleResponseDto> deleteArticle(
         @PathVariable Integer articleNum,
         @AuthenticationPrincipal String email
