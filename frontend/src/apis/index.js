@@ -86,6 +86,7 @@ export const giveBanToUser = async (navigate,articleNum, token, banDuration, ban
         return false;
     }
 };
+
 //1-11 사용자 정지확인 api
 export const checkUserBanStatus = async (token) => {
     try {
@@ -150,6 +151,7 @@ export const createArticleRequest = async (postData, accessToken) => {
         return false;  
     }
 };
+
 //2.(Admin) 공지글을 등록하는 API
 export const createNotificationArticleRequest = async (postData, token) => {
     try {
@@ -183,6 +185,7 @@ export const createNotificationArticleRequest = async (postData, token) => {
     }
 
 };
+
 // 3.특정 게시물을 불러오는 API
 export const fetchArticle = async (articleNum,navigate) => {
     try {
@@ -208,6 +211,7 @@ export const fetchArticle = async (articleNum,navigate) => {
         } 
     }
 };
+
 // 4.게시글 수정 API
 export const handleEdit = async (articleNum, token, navigate, setCanEdit, article) => {
     if (!article) {
@@ -254,6 +258,7 @@ export const handleEdit = async (articleNum, token, navigate, setCanEdit, articl
     
     }  
 };
+
 // 5.게시글 삭제 API
 export const handleDelete = async (articleNum, token, navigate) => {  
     if (window.confirm("정말로 게시글을 삭제하시겠습니까?")) {
@@ -293,6 +298,7 @@ export const handleDelete = async (articleNum, token, navigate) => {
         }
     }
 };
+
 // 6.게시글 좋아요 누르기/취소하기  API
 export const handleLike = async (navigate,articleNum, liked, token, setLiked, setLikes) => {
     try {
@@ -329,6 +335,7 @@ export const handleLike = async (navigate,articleNum, liked, token, setLiked, se
         } 
     }
 };
+
 // 7.(Admin)게시글 댓글 작성 API
 export const handleCommentSubmit = async (navigate,event,commentInput, setComments, setCommentInput, userEmail, articleNum, token) => {
     if (event && event.key === 'Enter' && !event.shiftKey) {
@@ -378,6 +385,7 @@ export const handleCommentSubmit = async (navigate,event,commentInput, setCommen
         return false;  
     }
 };
+
 // 8.게시글 댓글 리스트 불러오기 API
 export const fetchComments = (navigate,articleNum, setComments) => {
     axios.get(FETCH_COMMENTS_URL(articleNum))
@@ -410,6 +418,7 @@ export const fetchComments = (navigate,articleNum, setComments) => {
         } 
     });
 };
+
 // 9.(Admin)댓글 수정 API
 export const handleCommentEdit = async (navigate,commentNumber, newContent, token) => {
     const commentData = {
@@ -451,6 +460,7 @@ export const handleCommentEdit = async (navigate,commentNumber, newContent, toke
     
     }
 };
+
 // 10.(Admin)댓글 삭제 API
 export const handleCommentDelete = async (navigate,articleNum, commentNumber, token) => {
     if (window.confirm("정말로 댓글을 삭제하시겠습니까?")) {
@@ -491,6 +501,7 @@ export const handleCommentDelete = async (navigate,articleNum, commentNumber, to
     }
     return false;  
 };
+
 // 11.모든 게시글을 리스트 형태로 불러오는 API
 export const getArticleListRequest = async () => {
     const result = await axios.get(GET_ARTICLE_LIST_URL())
@@ -511,6 +522,7 @@ export const getArticleListRequest = async () => {
         })
     return result;
 };
+
 // 12.“내가 쓴” 모든 게시글 리스트 불러오기 API
 export const fetchUserArticles = async (navigate,token) => {
     try {
@@ -541,6 +553,7 @@ export const fetchUserArticles = async (navigate,token) => {
         return false;
     }
 };
+
 // 13.특정 게시글 좋아요 여부 API
 export const fetchLikeStatus = async (articleNum, token, setLiked) => {
     try {
@@ -563,6 +576,7 @@ export const fetchLikeStatus = async (articleNum, token, setLiked) => {
         return false;    
     }
 };
+
 // 14. 특정 게시글 소유 여부 API
 export const checkArticleOwnership = async (navigate,articleNum, token) => {
     try {
@@ -595,6 +609,7 @@ export const checkArticleOwnership = async (navigate,articleNum, token) => {
         
     }
 };
+
 //15. (Admin)게시글 삭제 API
 export const adminhandleDelete = async (articleNum, token, navigate) => {  
     if (window.confirm("정말로 게시글을 삭제하시겠습니까?")) {
@@ -635,7 +650,7 @@ export const adminhandleDelete = async (articleNum, token, navigate) => {
     }
 };
 
-//16.(Admin) 해결이 필요한 게시글을 해결된 게시글로 변경을 위한 API
+// 16.(Admin) 해결이 필요한 게시글을 해결된 게시글로 변경을 위한 API
 export const handleResolveArticle = async (navigate,articleNum, token) => {
     try {
         const response = await axios.put(RESOLVE_ARTICLE_URL(articleNum), {}, {
@@ -676,7 +691,7 @@ export const handleResolveArticle = async (navigate,articleNum, token) => {
     }
 };
 
-//17. "익명게시판" 운영자 판별 API
+// 17. "익명게시판" 운영자 판별 API
 export const checkAnonymousBoardAdmin = async (token) => {
     try {
         const response = await axios.get(CHECK_ANONYMOUS_BOARD_ADMIN_URL(), {
@@ -703,12 +718,7 @@ export const checkAnonymousBoardAdmin = async (token) => {
     }
 };
 
-
-
-
-
-
-
+// 5. 사용자 비밀번호 변경 API
 export const pwUpdateRequest = async (userData) => { //MyPage 정보수정
     try {
         const response = await axios.patch(PATCH_PW_URL(), userData, {
@@ -720,6 +730,8 @@ export const pwUpdateRequest = async (userData) => { //MyPage 정보수정
         return error.response.data;
     }
 };
+
+// 9. 비밀번호 변경을 위한 이메일 인증 API
 export const pwRequest = async (requestBody) => {
     
     const result = await axios.post(POST_PW_CHANGE_URL(), requestBody) //await은 요청의 응답이 돌아올 떄 까지 함수 실행을 멈추는 역할 한다(asyns함수 안에서만 사용가능)
@@ -735,8 +747,9 @@ export const pwRequest = async (requestBody) => {
         return responseBody;
     });
 return result;
-
 };
+
+// 3. 현재 로그인 된 사용자의 정보를 가져오는 API
 export const getSignInUserRequest = async (accessToken) => {
     try {
         const response = await axios.get(GET_SIGN_IN_USER_URL(), authorization(accessToken));
@@ -747,6 +760,7 @@ export const getSignInUserRequest = async (accessToken) => {
     }
 };
 
+// 1. 사용자 회원가입을 위한 API
 export const signUpRequest = async (requestBody) => {
     
     const result = await axios.post(SIGN_UP_URL(), requestBody) //await은 요청의 응답이 돌아올 떄 까지 함수 실행을 멈추는 역할 한다(asyns함수 안에서만 사용가능)
@@ -763,6 +777,8 @@ export const signUpRequest = async (requestBody) => {
     });
 return result;
 };
+
+//7. 이메일 인증 API
 export const emailCertificationRequest = async (requestBody) => {
     
     const result = await axios.post(Email_Certification_URL(), requestBody) //await은 요청의 응답이 돌아올 떄 까지 함수 실행을 멈추는 역할 한다(asyns함수 안에서만 사용가능)
@@ -780,6 +796,8 @@ export const emailCertificationRequest = async (requestBody) => {
 return result;
 
 };
+
+//8. 인증번호 확인 API
 export const checkCertificationRequest = async (requestBody) => {
     
     const result = await axios.post(Check_Certification_URL(), requestBody) //await은 요청의 응답이 돌아올 떄 까지 함수 실행을 멈추는 역할 한다(asyns함수 안에서만 사용가능)
@@ -797,6 +815,8 @@ export const checkCertificationRequest = async (requestBody) => {
 return result;
 
 };
+
+//2. 사용자 로그인을 위한 API
 export const signInRequest = async (requestBody) => { //asyns를 통해 비동기 함수 정의
     const result = await axios.post(SIGN_IN_URL(), requestBody) //await은 요청의 응답이 돌아올 떄 까지 함수 실행을 멈추는 역할 한다(asyns함수 안에서만 사용가능)
         .then(response => {
@@ -810,6 +830,8 @@ export const signInRequest = async (requestBody) => { //asyns를 통해 비동�
         });
     return result;
 };
+
+//4. 사용자 정보 수정 API
 export const updateMypageUserRequest = async (userData, accessToken) => { //MyPage 정보수정
     try {
         const response = await axios.patch(PATCH_MYPAGE_USER_URL(), userData, {
@@ -822,7 +844,7 @@ export const updateMypageUserRequest = async (userData, accessToken) => { //MyPa
     }
 };
 
-//USER API_(3)현재 로그인 된 사용자의 정보를 받아오는 API 
+//3. 현재 로그인 된 사용자의 정보를 받아오는 API 
 export const getMypageRequest = async (accessToken) => {
     if (!accessToken) {
         console.error("잘못된 접근입니다.");
@@ -840,9 +862,7 @@ export const getMypageRequest = async (accessToken) => {
     }
 };
 
-
-
-
+//6. 사용자 탈퇴 API
 export const deleteUserRequest = async (accessToken) => {
     try {
         const response = await axios.delete(DELETE_USER(), {
