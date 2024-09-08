@@ -26,7 +26,7 @@ const authorization = (accessToken) => {
     return { headers: { Authorization: `Bearer ${accessToken}` } }
 };
 
-
+//2. 특정 (A/B)조의 정보 등록 API
 export const uploadGroupData = async (groupData, token) => {
     try {
         const response = await axios.post(`${API_DOMAIN_ADMIN}/upload-group`, groupData, {
@@ -43,6 +43,7 @@ export const uploadGroupData = async (groupData, token) => {
     }
 };
 
+//3. 특정 (A/B)조의 정보 반환 API
 export const fetchGroupClasses = async (groupId, token) => {
     try {
         const response = await axios.get(`${API_DOMAIN_ADMIN}/get-group/${groupId}`, {
@@ -59,6 +60,7 @@ export const fetchGroupClasses = async (groupId, token) => {
     }
 };
 
+//1. 코딩존 수업 등록 API
 export const uploadClassForWeek = async (groupData, token) => {
     try {
         const response = await axios.post(`${API_DOMAIN_ADMIN}/upload-codingzone`, groupData, {
@@ -75,6 +77,7 @@ export const uploadClassForWeek = async (groupData, token) => {
     }
 };
 
+//6. 학기 초기화 API
 export const resetCodingZoneData = async (token) => {
     try {
         const response = await axios.delete(`${API_DOMAIN_ADMIN}/delete-allinf`, {
@@ -120,6 +123,7 @@ export const checkAdminType = async (token) => {
         return false;   
     }
 };
+
 //8.선택된 학년의 예약 가능한 수업 리스트로 반환 API
 export const getcodingzoneListRequest  = async (token, grade, weekDay) => {
     try {
@@ -210,6 +214,7 @@ export const getAttendanceCount = async (token, grade) => {
         return null;  
     }
 };
+
 // 11. 코딩존 수업 예약 API
 export const reserveCodingZoneClass = async (token, classNum) => {
     try {
@@ -246,6 +251,7 @@ export const reserveCodingZoneClass = async (token, classNum) => {
         return false;
     }
 }
+
 // 12.  코딩존 수업 예약 취소 API
 export const deleteCodingZoneClass = async (token, classNum) => {
     try {
@@ -274,6 +280,7 @@ export const deleteCodingZoneClass = async (token, classNum) => {
         return false;
     }
 };
+
 // 13. 등록된 특정 수업 삭제 API
 export const deleteClass = async (classNum, token) => {
     try {
@@ -341,7 +348,7 @@ export const getczauthtypetRequest = async (accessToken) => {
 };
 
 
-
+//17. 1학년 출/결석 처리 API 
 export const putczattendc1Request = async (registNum,accessToken) => {
     try {
         const response = await axios.put(`${DOMAIN}/api/admin-c1/attendance/${registNum}`, {}, {
@@ -354,6 +361,7 @@ export const putczattendc1Request = async (registNum,accessToken) => {
     }
 };
 
+//18. 2학년 출/결석 처리 API 
 export const putczattendc2Request = async (registNum,accessToken) => {
     try {
         const response = await axios.put(`${DOMAIN}/api/admin-c2/attendance/${registNum}`, {}, {
@@ -417,7 +425,7 @@ export const deprivePermission = async (email, role, token) => {
     }
 }
 
-
+//21. 코딩존 조교 정보 반환 API
 export const getczassitantRequest =  async () => {
     try {
         const response = await axios.get(GET_CZ_ASSITANT());
