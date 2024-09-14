@@ -8,3 +8,4 @@ backend/build/
 *.bin
 .vscode
 .idea
+backend/.env

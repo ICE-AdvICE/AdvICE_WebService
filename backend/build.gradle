@@ -38,6 +38,7 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
+    implementation 'io.github.cdimascio:java-dotenv:5.2.2'
 }
 
 
