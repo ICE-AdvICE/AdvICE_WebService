@@ -1,5 +1,5 @@
 import axios from 'axios';
-import moment from 'moment';
+
 
 const DOMAIN = 'http://localhost:4000';
 

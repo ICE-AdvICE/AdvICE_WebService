@@ -47,7 +47,7 @@ public class AuthServiceImplement implements AuthService {
 
     // 운영자의 게시글 삭제 관련 레포지토리
     private final ArticleRepository articleRepository;
-    private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    //private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     @Override
     public ResponseEntity<? super SignUpResponseDto> signUp(SignUpRequestDto dto) {
@@ -57,9 +57,9 @@ public class AuthServiceImplement implements AuthService {
             boolean existsByEmail = userRepository.existsByEmail(email);
             if (existsByEmail) return SignUpResponseDto.duplicateEmail();
 
-            String password = dto.getPassword(); //비밀번호를 암호화
-            String encodedPassword = passwordEncoder.encode(password);
-            dto.setPassword(encodedPassword);
+            //String password = dto.getPassword(); //비밀번호를 암호화
+            //String encodedPassword = passwordEncoder.encode(password);
+            //dto.setPassword(encodedPassword);
 
             User userEntity = new User(dto); //dto데이터를 entity에 삽입
             AuthorityEntity authorityEntity = new AuthorityEntity(dto.getEmail());//새 사용자한테 USER 기본 권한 부여
@@ -87,13 +87,15 @@ public class AuthServiceImplement implements AuthService {
             if (userEntity == null) return SignInResponseDto.signInFail();
 
             String password = dto.getPassword(); //요청 받은 비번과 해당 유저(이메일)의 비번 일치하는지 확인
-            String encodedPassword = userEntity.getPassword();
+            //String encodedPassword = userEntity.getPassword();
+            String DBPassword = userEntity.getPassword();
             // System.out.println("Encoded Password from DB: " + encodedPassword);
             // System.out.println("Input Password: " + password);
 
-            boolean isMatched = passwordEncoder.matches(password, encodedPassword); //입력 받은 비번과 db에 있는 암호화된 비번 확인;
+            boolean isMatched = password.equals(DBPassword); // 클라이언트에서 받은 암호화된 비번과 DB의 암호화된 비번 비교
+
             if(!isMatched) {
-                // System.out.println("비밀번호가 일치하지않습니다.");
+                // System.out.println("비밀번호가 일치하지 않습니다.");
                 return SignInResponseDto.signInFail();
             }
 
