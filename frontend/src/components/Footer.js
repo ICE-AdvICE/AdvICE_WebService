@@ -13,7 +13,7 @@ const Footer = () => {
                         <p>
                             <span>
                                 <strong>글로벌캠퍼스 </strong>
-                                  17035 경기도 용인시 처인구 모현읍 외대로 81 한국외국어대학교  공과대학 정보통신공학과
+                                17035 경기도 용인시 처인구 모현읍 외대로 81 한국외국어대학교  공과대학 정보통신공학과
                             </span>
                         </p>
                         <p>
@@ -29,22 +29,12 @@ const Footer = () => {
                         <p>
                             <span>
                                 <strong>DEVELOPED BY. </strong> 
-                                LEE YUNBIN, DO SEONGHYUN, KIM JINWOO, PARK JUNSEO
+                                YUNBEEN LEE, SUNGHYUN DO, JINWOO KIM, and JUNSEO PARK
                             </span>
-                        </p>
-                        <p>
-                            <span>
-                            Copyright ⓒ Hankuk University of Foreign Studies. 
-                            </span>
-
                         </p>
                     </div>
                 </div>
-                
-
-            
             </div>
-
         </nav>
     )
 }

@@ -40,6 +40,9 @@
     background-color: white;
     font-size: 12px;
     padding: 3px 15px;
+    border-color: black;
+    color:black;
+    font-weight: bold;
 }
 .esbutton{
     margin-right: 5px;

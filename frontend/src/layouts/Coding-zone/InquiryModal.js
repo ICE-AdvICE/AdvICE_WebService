@@ -22,10 +22,7 @@ const InquiryModal = ({ isOpen, onClose }) => {
                 zone1: response.listOfCodingZone1,
                 zone2: response.listOfCodingZone2
             });
-        }  else if(response && response.code === "NU"){
-            alert('로그인 시간이 만료되었습니다. 다시 로그인 해주세요.');
-            navigate('/');
-        } else {
+        }else {
             console.error(response.message);
         }
     };

@@ -1,3 +1,8 @@
+html,
+body{
+width:100%;
+overflow-x:hidden;
+}
 .codingzone-container{
   min-width: 360px;
 }
@@ -10,16 +15,17 @@
 .select-container button {
   background-color: white;
   border: none !important;  
-  font-size: 13px;
+  font-size: 12px;
+  color: black;
   width: 200px;
 }
 .select-container span{
-  font-size: 13px;
+  font-size: 12px;
   width: 100px;
   justify-content: center;
   display: flex;
   flex: 1 4;
-  min-width: 35px;
+  min-width: 25px;
 }
 .select-container button:hover{
   color: #164694f4;
@@ -70,6 +76,7 @@
 .cz-category-date button{
   padding: 10px 1px;
   width: 100px;
+  color: black;
   align-items: center;
   justify-content: center;
   display: flex;
@@ -114,6 +121,7 @@
   border:none;
   display: flex;
   justify-content: center;
+  color: black;
   align-items: center;
 }
 .codingzone-date span{

@@ -101,7 +101,7 @@ const CodingMain = () => {
         setClassList(prevClassList => {
             const updatedList = prevClassList.filter(item => item.classNum !== classNum);
             if (updatedList.length === 0) {
-                setNoClassesMessage('등록된 코딩존 수업이 없습니다.');
+                setNoClassesMessage('현재는 코딩존 예약 기간이 아니어서 수업이 표시되지 않습니다');
             }
             return updatedList;
         });
@@ -191,12 +191,12 @@ const CodingMain = () => {
             } else {
                 setOriginalClassList([]);
                 setClassList([]);
-                setNoClassesMessage('등록된 코딩존 수업이 없습니다.');
+                setNoClassesMessage('현재는 코딩존 예약 기간이 아니어서 수업이 표시되지 않습니다');
             }
         } catch (error) {
             setOriginalClassList([]);
             setClassList([]);
-            setNoClassesMessage('등록된 코딩존 수업이 없습니다.');
+            setNoClassesMessage('현재는 코딩존 예약 기간이 아니어서 수업이 표시되지 않습니다');
         }
     };
     fetchData();

@@ -74,7 +74,9 @@ const ShowPage = () => {
         // 사용자를 정지하는 API 호출
         const result = await giveBanToUser(navigate,articleNum, token, selectedBanDuration, selectedBanReason);
         if (result.code === 'SU') {
+            
             alert('사용자가 성공적으로 정지되었습니다.');
+            navigate('/article-main');
         }  
     };
     // 게시글을 해결 상태로 변경하는 함수
@@ -162,18 +164,15 @@ const ShowPage = () => {
             })
         }
     }, [articleNum, token]);
-
     // 댓글 제출 핸들러
     const handleSubmit = async () => {
         await handleCommentSubmit(navigate,null, commentInput, setComments, setCommentInput, userEmail, articleNum, token);
     };
-    
     // Enter 키 입력 시 댓글 제출 핸들러
     const handleKeyDown = async (event) => {
         if (event.key === 'Enter' && !event.shiftKey && !isComposing) {
             event.preventDefault();
             await handleCommentSubmit(navigate,event,commentInput, setComments, setCommentInput, userEmail, articleNum, token);
-            
         }
     };
     // 게시글 정보와 댓글 목록을 가져오는 함수
@@ -187,17 +186,15 @@ const ShowPage = () => {
                     setLiked(res.data.authCheck === 1);
                     setComments(loadedComments || []);
                 })
-                .catch(err => console.error("Error", err));
+                .catch(err => console.log("Error", err));
                 }
     }, [articleNum]);
-  
     // 댓글 목록을 새로 가져오는 함수
     useEffect(() => {
         if (articleNum) {
             fetchComments(navigate,articleNum, setComments);
         }
     }, [articleNum, token]);
-    
     // 게시글 수정 페이지로 이동하는 함수
     const handleEditArticle = async () => {
         navigate(`/article-main/${articleNum}/edit`);
@@ -206,11 +203,9 @@ const ShowPage = () => {
     const toggleLike = () => {
         handleLike(navigate,articleNum, liked, token, setLiked, setLikes);
     };
-
     if (!article) {
         return <div>게시글이 존재하지 않습니다.</div>;
     }
-
     return (
         <div className="blog-container">
            <div className="banner_img_container_icebreaker_article">
@@ -246,7 +241,17 @@ const ShowPage = () => {
 
                     </div>
                     <div className="ArticleDate">
-                    <p>{new Date(article.articleDate).toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+                    <p>
+                    {new Date(article.articleDate).toLocaleString('ko-KR', { 
+                        year: 'numeric', 
+                        month: '2-digit', 
+                        day: '2-digit', 
+                        hour: '2-digit', 
+                        minute: '2-digit', 
+                        hour12: false   
+                    })}
+                    </p>
+
                         <p>조회수 {article.views}</p>
                     </div>
                     <div className="Article-Main">

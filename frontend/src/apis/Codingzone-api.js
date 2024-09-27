@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const DOMAIN = 'http://localhost:4000';
+const DOMAIN = 'http://localhost:8080'; 
 const API_DOMAIN = `${DOMAIN}/api/v1`;
 const API_DOMAIN_ADMIN = `${DOMAIN}/api/admin`;
 const GET_CZ_AUTH_TYPE = () => `${API_DOMAIN}/coding-zone/auth-type`;
@@ -158,7 +158,6 @@ export const getcodingzoneListRequest  = async (token, grade, weekDay) => {
     }
 }
 
-
 // 9. 선택 학년의 예약 가능한 수업 리스트로 반환 API (ForNotLogIn)
 export const getAvailableClassesForNotLogin = async (grade) => {
     try {
@@ -214,7 +213,6 @@ export const getAttendanceCount = async (token, grade) => {
         return null;  
     }
 };
-
 // 11. 코딩존 수업 예약 API
 export const reserveCodingZoneClass = async (token, classNum) => {
     try {
@@ -251,7 +249,6 @@ export const reserveCodingZoneClass = async (token, classNum) => {
         return false;
     }
 }
-
 // 12.  코딩존 수업 예약 취소 API
 export const deleteCodingZoneClass = async (token, classNum) => {
     try {
@@ -347,7 +344,6 @@ export const getczauthtypetRequest = async (accessToken) => {
     }
 };
 
-
 //17. 1학년 출/결석 처리 API 
 export const putczattendc1Request = async (registNum,accessToken) => {
     try {
@@ -374,7 +370,7 @@ export const putczattendc2Request = async (registNum,accessToken) => {
     }
 };
 
-//13) 해당 학기에 출/결한 모든 학생들 리스트로 반환 API
+//13. 해당 학기에 출/결한 모든 학생들 리스트로 반환 API
 export const getczallattendRequest = async (accessToken) => {
     try {
         const response = await axios.get(GET_CZ_ALL_ATTEND(), authorization(accessToken));
