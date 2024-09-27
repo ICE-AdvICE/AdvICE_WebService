@@ -55,6 +55,7 @@ const CzCard = ({
  
                                 }}
                                 className="card-delete"
+                                style={{ color: 'black' }}
                             >
                                 삭제
                             </button>
@@ -68,7 +69,7 @@ const CzCard = ({
                                             onReserveClick(); 
                                         }}
                                         className="card-reservation"
-                                        style={{ backgroundColor: '#FFFF00' }}  
+                                        style={{ backgroundColor: '#FFFF00', color:'black' }}  
                                     >
                                         취소
                                     </button>
@@ -76,7 +77,7 @@ const CzCard = ({
                                     <button
                                         className="card-reservation"
                                         disabled
-                                        style={{ backgroundColor: '#CCCCCC' }}  
+                                        style={{ backgroundColor: '#CCCCCC', color:'black' }}  
                                     >
                                         마감
                                     </button>
@@ -91,7 +92,8 @@ const CzCard = ({
                                         className="card-reservation"
                                         disabled={disableReserveButton && !isReserved}  
                                         style={{
-                                            backgroundColor: disableReserveButton && !isReserved ? '#CCCCCC' : isReserved ? '#FFFF00' : '#15FF00'
+                                            backgroundColor: disableReserveButton && !isReserved ? '#CCCCCC' : isReserved ? '#FFFF00' : '#15FF00',
+                                            color:'black'
                                         }}
                                     >
                                         {isReserved ? '취소' : '예약'}

@@ -11,6 +11,7 @@
   max-width: 1000px;
   margin: 0 auto;
   padding: 10px;
+  min-height: 50vw;
 }
 .icon-image{
   position: absolute;
@@ -19,37 +20,11 @@
   top:5%;
   left: 25%;
 }
-.Comment{
-  border-bottom: 1px solid #333;
-  height: auto;
-}
-.CommentBox-bottom-container{
-  border: 0.05vw solid #ACACAC;
-  display: flex; 
-  flex-direction: column;  
-  position: relative;    
-  width: 100%;  
- 
-  padding: 10px; 
- 
- 
-  box-sizing: border-box; 
-}
-.Admin-de_Ca-bottom{
-  display: flex;
-  margin-left: 3px;
-}
-.Admin-de_Ca-bottom button{
-  border: none !important;
-  font-size: 10px;
-  background: transparent;
-  cursor: pointer;
-   
-}
 .ArticleCategory {       
   position: relative;
-  display: flex;            
-  justify-content: space-between;  
+  display: flex;     
+  justify-content: space-between;
+       
 }
 .ArticleCategory p {
   font-weight: 700;  
@@ -59,6 +34,22 @@
   border-radius: 5px;  
   padding: 0.1vw 1.5vw;
   margin-bottom: 0;  
+}
+.resolve {
+  display: flex;        
+  justify-content: flex-end;
+  margin-top: 1%;
+}
+.resolve button{
+  color:black;
+  background: none;
+  cursor: pointer;
+  font-size: 15px;
+  border: 1px solid black;
+}
+.resolve button:hover{
+  color: white;
+  background-color: #002D56;
 }
 .ArticleTitle{
   margin-top: 1vw;
@@ -76,12 +67,7 @@
   position: relative;      
   justify-content: space-between;   
   font-family: 'Inter', sans-serif; 
- 
   color: #00000093;
-}
- 
-.ql-container {
-  height: auto;
 }
 .Article-Main{
   position: relative;
@@ -94,17 +80,50 @@
   margin-top: 3px;
   justify-content: space-between;
 }
-
+.heart {
+  cursor: pointer;  
+  display: inline-flex;  
+  align-items: center;  
+  margin-right: 5px; 
+}
+.heart svg {
+  color: #ff6b6b;  
+  font-size: 20px;  
+  transition: color 0.3s ease;  
+}
+.heart:hover svg {
+  color: #ff4a4a;  
+}
 .Edit-Delete-Options {
   font-size: 12px;
   display: flex;  
- 
 }
 .Edit-Delete-Options button {
   border: none !important;
   background: transparent;
   cursor: pointer;
 }
+.Edit-Delete-Options span{
+  align-items: center;
+  display: flex;
+}
+.stop button{
+  color: red;
+  border:none !important;
+  cursor: pointer;
+  background: transparent;
+}
+.stop {
+  display: flex;        
+  justify-content: flex-end;
+  font-size: 12px;
+  align-items: center;   
+}
+.stop button:hover{
+  color: white;
+  background-color: #002D56;
+}
+
 .comment-input-area{
   flex-grow: 1;  
   margin-top: 35px; 
@@ -124,7 +143,6 @@
   display: flex;
   align-items: center;
 }
-
 .Commentbox-name h3 {
   height: 40px;
   color: blue;
@@ -132,23 +150,9 @@
   margin: 0;  
   padding: 0 10px;  
 }
-
 .Commentbox-name button {
   line-height: normal;  
   padding: 0 15px;  
-}
-
-.Comment-Content{
-  margin-left: 1.5%;
-  font-size: 13px;
-  padding: 1vw;
-  margin-bottom: 0;
-}
-.Comment-Header{
-  margin-top: 1vw;
-  margin-left: 5px;
-  align-items: center;
-  display: flex;
 }
 
 .Comment-Option{
@@ -160,21 +164,24 @@
 .Comment-Option p{
   margin: 0;
 }
-.CommentBox-container{
-  margin-top: 3px;
+.CommentBox-bottom{
+  margin-top: 10px;
 }
-.Edit-Delete-Options span{
-  height: 99%;
+.Comment{
+  border-bottom: 1px solid #333;
+  
+}
+.comment-edit-input{
+  cursor: pointer;
+}
+.Comment-Header{
+  margin-top: 1vw;
+  margin-left: 5px;
   align-items: center;
   display: flex;
 }
-
-.CommentBox-bottom{
-  position: relative;
-  margin-top: 10px;
-  border: 0.05 solid var(--skinCommentWriterBorder);
-  box-sizing: border-box;
-  background: var(--skinCommentWriterBg);
+.Comment-Header p{
+  margin-bottom: 0;
 }
 .Comment-Author {
   font-weight: bold;
@@ -182,40 +189,53 @@
   color: rgb(21, 21, 151);
   font-size: 14px;
 }
-
 .Comment-Date {
   color: rgba(90, 89, 89, 0.884);
   font-size: 13px;
   margin-left: 1%;
 }
-
-.Comment-Header p{
+.Admin-de_Ca-bottom{
+  display: flex;
+  margin-left: 3px;
+}
+.Admin-de_Ca-bottom button{
+  border: none !important;
+  font-size: 10px;
+  background: transparent;
+  cursor: pointer;
+}
+.Comment-Content{
+  margin-left: 1.5%;
+  font-size: 13px;
+  padding: 1vw;
   margin-bottom: 0;
 }
-/*하트 css 부분 */
-.heart {
-  cursor: pointer;  
-  display: inline-flex;  
-  align-items: center;  
-  margin-right: 5px; 
-}
 
-.heart svg {
-  color: #ff6b6b;  
-  font-size: 20px;  
-  transition: color 0.3s ease;  
+.CommentBox-bottom-container{
+  border: 0.05vw solid #ACACAC;
+  display: flex; 
+  flex-direction: column;  
+  position: relative;    
+  width: 100%;  
+  padding: 10px; 
 }
-.resolve button:hover{
-    color: white;
-  background-color: #002D56;
+.ed-comment{
+  display: flex;       
+  align-items: center; 
+  cursor: pointer;
+  justify-content: flex-end;
+  font-size: 12px;
 }
-.heart:hover svg {
-  color: #ff4a4a;  
+.ed-bt{
+  margin-right: 1%;
 }
-.quill p{
-  font-family: 'Inter', sans-serif;
-  font-weight: 400;
-  font-size: 20px;
+.CommentBox-bottom p{
+  font-size: 13px;
+  font-weight: bold;
+  position: absolute;
+  padding: 10px;
+  top: 10px; 
+  left: 10px; 
 }
 .submit-button {
   position: absolute;
@@ -227,83 +247,24 @@
   color: rgba(0, 0, 0, 0.559);
   border: none;
 }
-.CommentBox-bottom p{
-  font-size: 13px;
-  font-weight: bold;
-  position: absolute;
-  padding: 10px;
-  top: 10px; /* 상단 고정 */
-  left: 10px; /* 왼쪽 고정 */
 
-  
-}
-.Comment-Edit p{
-  font-size: 17px;
-  font-weight: bold;
-}
-.comment-edit-input{
-  margin-top: 10px;
-  font-size: 11px;
-  padding: 10px;
-}
-.ed-comment{
-  display: flex;       
-  align-items: center; 
-  cursor: pointer;
-  justify-content: flex-end;
-  font-size: 12px;
-}
-.ed-bt{
-  margin-right: 2%;
-}
-.stop button{
-  color: red;
-  border:none !important;
-  cursor: pointer;
-  background: transparent;
-}
-.stop {
-  display: flex;        
-  justify-content: flex-end;
-  font-size: 12px;
-  align-items: center;   
-}
-.resolve {
-  display: flex;        
-  justify-content: flex-end;
-  margin-top: 1%;
-}
-.resolve button{
-  color:black;
-  background: none;
-  cursor: pointer;
-  font-size: 15px;
-  border: 1px solid black;
-}
-
-.stop button:hover{
-  color: white;
-  background-color: #002D56;
-}
-html, body {
-  margin: 0px;
-  overflow-x: hidden;
-}
 
 .ql-editor {
   padding: 3%;
   min-height: 15vw;
   margin-bottom: 5%;
 }
-
+.quill p{
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  font-size: 20px;
+}
 .quill{
-  height: auto; /* 글의 길이에 따라 자동으로 높이 조절 */
-  margin-bottom: 3%; /* 마지막 문장에서 아래 여백을 10px로 설정 */
+  height: auto;  
+  margin-bottom: 3%;  
   position: relative;
   
 }
-
-
 .quill-container{
   border-top: 1px solid #333;
   border-bottom: 1px solid #333;
@@ -311,13 +272,13 @@ html, body {
 .ql-container {
   max-height: 500px;   
   overflow-y: auto;  
+  height: auto;
   font-family: 'Noto Sans', sans-serif;
 }
-
 .ql-container.ql-disabled .ql-tooltip{
   display: none;
 }
-
+ 
 @media (max-width: 1000px) {
   .ArticleDate,.resolve button{
     font-size: 2vw;

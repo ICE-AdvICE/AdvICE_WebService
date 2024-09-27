@@ -7,7 +7,8 @@ import '../css/ArticlePage/ArticleMain.css';
 import { getArticleListRequest, fetchUserArticles, checkUserBanStatus } from '../../apis/index.js';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
-
+ 
+  
 const ArticleMain = () => {
     // 상태 관리: 공지사항과 일반 게시글을 각각 관리
     const [notificationArticles, setNotificationArticles] = useState([]);
@@ -282,7 +283,7 @@ const ArticleMain = () => {
         handleResize();
         return () => window.removeEventListener('resize', handleResize);
     }, []);
-
+ 
 
 
     return (

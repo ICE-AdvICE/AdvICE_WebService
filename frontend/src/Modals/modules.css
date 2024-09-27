@@ -4,7 +4,7 @@
   padding: 20px;
   border-bottom: 2.5px solid #052940;
   /* 상단에 실선 추가 */
-  margin-bottom: 50px;
+  margin-bottom: 30px;
 }
 
 .loginFormContainer {
@@ -258,7 +258,7 @@
 }
 
 .findpasswordpost {
-  margin-left: 10px;
+  margin-left: -3px;
   width: 100px;
   height: 50px;
   border: none;
@@ -267,7 +267,7 @@
 
   font-weight: bold;
   color: white;
-  font-size: 20px;
+  font-size: 18px;
   text-align: center;
   font-family: "Noto Sans KR", sans-serif;
 }
@@ -297,6 +297,27 @@
 .findPasswordButton:hover {
   text-decoration: underline;
   /* 호버 시 밑줄 표시 */
+}
+
+.rememberMeCheckbox {
+  font-size: 15px;
+  margin-top: -10px;
+  margin-bottom: 20px;
+  background: none;
+  border: none;
+  color: black;
+  cursor: pointer;
+  float: left;
+  padding: 10px;
+  display: flex;
+  align-items: center; /* Ensure vertical alignment of checkbox and label */
+  gap: 10px; /* Adds space between checkbox and label */
+}
+
+.rememberMeCheckbox input[type="checkbox"] {
+  transform: scale(1.5); /* Increase checkbox size by 150% */
+  margin-right: 2px; /* Add some right margin if needed */
+  margin-left: 5px;
 }
 
 .signupPrompt {
@@ -377,7 +398,7 @@
   border-radius: 2px;
   cursor: pointer;
   font-size: 16px;
-  margin-top: 50px;
+  margin-top: 10px;
 }
 
 .mypage_buttons button:hover {
@@ -392,7 +413,7 @@
 
 .mypage_delete_user {
   font-size: 15px;
-  margin-top: 30px;
+  margin-top: 10px;
   margin-bottom: 10px;
   background: none;
   border: none;
@@ -447,17 +468,18 @@
 
 .pw_emailpost input {
   /* 입력 필드 간의 간격 */
-  width: 70%;
+  width: 60%;
   /* 입력 필드 너비 조정 */
   height: 40px;
   padding: 8px;
   /* 입력 필드 내부 패딩 */
+  margin-right: 2px;
 
 }
 
 .pw_emailDomain {
-  margin-left: 5px;
-  margin-right: 12px;
+  margin-left: 2px;
+  margin-right: 5px;
   /* Add some space between the input and the domain text */
   font-size: 16px;
   /* Adjust font size to match your design */
@@ -491,7 +513,7 @@
 .pw_emailcer input {
   margin-bottom: 30px;
   /* 입력 필드 간의 간격 */
-  width: 100%;
+  width: 90%;
   /* 입력 필드 너비 조정 */
   height: 40px;
   padding: 8px;
@@ -640,5 +662,40 @@
 @media (max-width: 365px) {
   .mypage_buttons button {
       font-size: 8px; 
+  }
+}
+
+@media (max-width: 400px) {
+  .findPasswordButton, .rememberMeCheckbox {
+    font-size: 12px;
+  }
+
+  .rememberMeCheckbox input[type="checkbox"] {
+    transform: scale(1); 
+    margin-right: -5px; 
+  }
+}
+
+@media (max-width: 345px) {
+  .findPasswordButton, .rememberMeCheckbox {
+    font-size: 10px;
+  }
+}
+
+@media (max-width: 460px) {
+  .pw_emailDomain {
+    margin-left: 1px;
+    margin-right: 1px;
+    font-size: 12px;
+    align-self: center;
+  }
+}
+
+@media (max-width: 300px) {
+  .pw_emailDomain {
+    margin-left: 1px;
+    margin-right: 1px;
+    font-size: 8px;
+    align-self: center;
   }
 }

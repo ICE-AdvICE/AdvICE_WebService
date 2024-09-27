@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useCookies } from 'react-cookie';
 import { useNavigate } from 'react-router-dom';
 import { signInRequest } from '../apis/index.js';
@@ -7,11 +7,10 @@ import SignUpinfoForm from '../Modals/Signupinfo';
 import MyModal from '../MyModal';
 import './modules.css';
 
-
 const LoginForm = ({ onLogin }) => {
-
   const [userEmail, setUserEmail] = useState('');
   const [userPassword, setUserpassword] = useState('');
+  const [rememberEmail, setRememberEmail] = useState(false); // 체크박스 상태
   const [error, setError] = useState(false);
   const [modalOpenfind, setModalOpenfind] = useState(false);
   const [modalOpeninfo, setModalOpeninfo] = useState(false);
@@ -19,12 +18,25 @@ const LoginForm = ({ onLogin }) => {
   const [modalOpenin, setModalOpenin] = useState(true);
   const navigator = useNavigate();
 
+  useEffect(() => {
+    const savedEmail = localStorage.getItem('userEmail');
+    if (savedEmail) {
+      setUserEmail(savedEmail);
+      setRememberEmail(true); // 체크박스 초기 상태 설정
+    }
+  }, []);
+
   const onSignInButtonClickHandler = (e) => {
     e.preventDefault();
     const requestBody = { email: userEmail, password: userPassword };
     signInRequest(requestBody)
       .then(response => {
         signInResponse(response);
+        if (rememberEmail) {
+          localStorage.setItem('userEmail', userEmail); // 체크박스가 선택된 경우에만 저장
+        } else {
+          localStorage.removeItem('userEmail'); // 체크박스가 선택되지 않은 경우 삭제
+        }
       })
       .catch(error => {
         alert('로그인 요청 중 오류가 발생했습니다.');
@@ -80,11 +92,12 @@ const LoginForm = ({ onLogin }) => {
       if (code === 'DBE') {
         alert('데이터베이스 오류입니다.');
       } else if (code === 'SF') {
-        alert('로그인 실패입니다.\n 이메일 또는 비밀번호를 확인해주세요.');
+        alert('로그인 실패입니다.\n이메일 또는 비밀번호를 확인해주세요.');
       } else if (code === 'VF') {
         alert('로그인 실패입니다.');
       } else {
         alert('네트워크 오류입니다.');
+        console.error(code);
       }
     }
   };
@@ -95,6 +108,7 @@ const LoginForm = ({ onLogin }) => {
     }
   };
 
+  
   return (
     <form onSubmit={(e) => e.preventDefault()}>
       <div className="loginHeaderContainer">
@@ -127,6 +141,14 @@ const LoginForm = ({ onLogin }) => {
         </div>
       }
       <button className="findPasswordButton" onClick={handleFindpassword}>비밀번호 재설정</button>
+      <div className="rememberMeCheckbox">
+          <input
+            type="checkbox"
+            checked={rememberEmail}
+            onChange={e => setRememberEmail(e.target.checked)}
+          />
+          <label>아이디 기억하기</label>
+        </div>
       <button type="submit" className="loginButton" onClick={onSignInButtonClickHandler}>로그인</button>
       <div className="signupPrompt">
         <p>아직 회원이 아니신가요?</p>

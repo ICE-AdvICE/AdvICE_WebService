@@ -173,3 +173,15 @@
         margin-top: -5px;
     }
 }
+
+@media (max-width: 500px) {
+    .feedback-btn  {
+       font-size: 12px;
+    }
+}
+
+@media (max-width: 400px) {
+    .feedback-btn  {
+       font-size: 10px;
+    }
+}

@@ -1,8 +1,9 @@
 package com.icehufs.icebreaker.entity;
 
-import java.text.SimpleDateFormat;
-import java.time.Instant;
-import java.util.Date;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -37,9 +38,9 @@ public class CommentEntity {
 
     public CommentEntity(PostCommentRequestDto dto, Integer articleNum, String email){
 
-        Date now = Date.from(Instant.now());
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String writeDatetime = simpleDateFormat.format(now);
+        ZonedDateTime now = ZonedDateTime.now(ZoneId.of("Asia/Seoul"));
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String writeDatetime = now.format(formatter);
 
         this.content = dto.getContent();
         this.writeDatetime = writeDatetime;

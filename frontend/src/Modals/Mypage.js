@@ -140,7 +140,7 @@ const MypageForm = ({ handleLogout, closeModal }) => {
                 <button type="button" onClick={handleLogout}>로그아웃</button>
             </div>
             <div class="mypage_delete_user_container">
-  <button class="mypage_delete_user">회원 탈퇴</button>
+  <button class="mypage_delete_user" onClick={handleDeleteAccount}>회원 탈퇴</button>
 </div>
             {editMode && (
                 <MyModal open={editMode} onCancel={() => setEditMode(false)} footer={[]}>

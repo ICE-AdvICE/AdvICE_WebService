@@ -1,9 +1,10 @@
 package com.icehufs.icebreaker.entity;
 
 
-import java.text.SimpleDateFormat;
-import java.time.Instant;
-import java.util.Date;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -62,9 +63,9 @@ public class Article {
     private ArticleCategoryEnum category;
 
     public Article(PostArticleRequestDto dto, String email){
-        Date now = Date.from(Instant.now());
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String writeDatetime = simpleDateFormat.format(now);
+        ZonedDateTime now = ZonedDateTime.now(ZoneId.of("Asia/Seoul"));
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String writeDatetime = now.format(formatter);
 
         this.userEmail = email;
         this.articleTitle = dto.getArticleTitle();

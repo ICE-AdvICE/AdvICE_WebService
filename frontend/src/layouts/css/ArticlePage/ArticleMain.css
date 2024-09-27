@@ -19,7 +19,6 @@
   width: 55vw;
   height: 45vw;
   left: 23%;
-  top:13%;
 }
 .CateGory_bar-container{
   position: relative;
@@ -170,14 +169,19 @@ input::placeholder {
 .card-title{
   margin: 0;
   display: flex;
-  align-items: center; 
   font-size: 13px; 
-  justify-content: space-around;
   overflow: hidden;
   white-space: nowrap;
   width: 300px;
+  max-width: 300px;
+  align-items: center;
+  justify-content: center; 
+  text-overflow: ellipsis;
 }
- 
+.card-title.overflow {
+  justify-content: flex-start;  
+  text-align: left;
+}
 .Writing-container{
   height: 30px;
   display: flex;

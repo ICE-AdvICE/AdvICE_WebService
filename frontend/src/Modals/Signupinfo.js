@@ -17,7 +17,7 @@ const SignUpinfoForm = ({ closeModal }) => {
   const [nameError, setNameError] = useState(false);
   const [studentNumError, setStudentNumError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
-  const navigator = useNavigate();
+  const navigate = useNavigate();
   const [cookies, setCookie] = useCookies(['accessToken']);
   const [emailRegistered, setEmailRegistered] = useState(false);
   const [buttonDisabled, setButtonDisabled] = useState(false);
@@ -222,8 +222,8 @@ const SignUpinfoForm = ({ closeModal }) => {
 
     switch (code) {
       case 'SU':
+        window.location.reload();
         alert('회원가입이 성공적으로 완료되었습니다.');
-        navigator('/');
         closeModal();
         break;
       case 'DBE':
@@ -384,29 +384,23 @@ const SignUpinfoForm = ({ closeModal }) => {
             <ul>
               <li>보안 대책: 모든 개인정보는 비밀번호로 보호되며, 중요 데이터에 대해서는 암호화 및 파일 잠금 기능을 통해 추가적인 보안을 제공합니다.</li>
             </ul>
-            <p><strong>5. 개인정보 최고관리책임자</strong></p>
+            <p><strong>5. 개인정보 침해 관련 상담 및 신고</strong></p>
             <ul>
-              <li>성명: 홍길동</li>
-              <li>전화번호: 02-1234-5678</li>
-              <li>이메일: privacy@example.com</li>
+              <li>ICEbreaker: hufsicebreaker@gmail.com</li>
             </ul>
-            <p><strong>6. 개인정보 침해 관련 상담 및 신고</strong></p>
-            <ul>
-              <li>ICEbreaker: privacy@example.com</li>
-            </ul>
-            <p><strong>7. 개인정보의 열람 및 정정</strong></p>
+            <p><strong>6. 개인정보의 열람 및 정정</strong></p>
             <ul>
               <li>접근 및 정정: 귀하는 언제든지 등록된 개인정보를 열람하거나 정정할 수 있습니다. 개인정보 열람 및 정정을 원할 경우 "회원정보수정"을 이용하거나, 개인정보 최고관리책임자에게 연락 가능합니다.</li>
             </ul>
-            <p><strong>8. 개인정보 수집, 이용, 제공에 대한 동의 철회</strong></p>
+            <p><strong>7. 개인정보 수집, 이용, 제공에 대한 동의 철회</strong></p>
             <ul>
               <li>철회 방법: 귀하는 동의를 철회할 권리가 있으며, "마이페이지"에서 "회원탈퇴"를 통해 언제든지 개인정보의 수집 및 이용 동의를 철회할 수 있습니다. 철회 요청 시 즉시 개인정보를 파기합니다.</li>
             </ul>
-            <p><strong>9. 쿠키의 사용</strong></p>
+            <p><strong>8. 쿠키의 사용</strong></p>
             <ul>
               <li>쿠키 운영: 본 사이트는 사용자의 서비스 이용 편의를 증진하기 위해 쿠키를 사용합니다. 쿠키는 사이트의 효율적 운영을 돕고, 개인화된 사용자 경험을 제공하기 위해 필요합니다. 쿠키를 통해 수집되는 정보에는 사용자의 접속 빈도, 방문 시간, 방문 페이지, 사용자 취향과 관심사 등이 포함됩니다.</li>
             </ul>
-            <p><strong>14. 의견수렴 및 불만처리</strong></p>
+            <p><strong>9. 의견수렴 및 불만처리</strong></p>
             <ul>
               <li>의견 접수: 본 사이트는 개인정보 보호와 관련하여 귀하의 의견과 불만을 적극적으로 수렴합니다. 의견이나 불만이 있을 경우 개인정보 최고관리책임자에게 연락 주시면 즉시 조치를 취하고 결과를 통보드립니다.</li>
               <li>면책 조항: 기술적 보완조치에도 불구하고 발생할 수 있는 네트워크 기반의 위험성(해킹, 정보 훼손 등)에 대해서는 사이트 측에서 책임을 지지 않습니다.</li>
@@ -426,7 +420,7 @@ const SignUpinfoForm = ({ closeModal }) => {
         </div>
       </div>
 
-      <button type="submit" className="signupButton">회원가입</button>
+      <button type="submit" className="signupButton"  onClick={handleSubmit}>회원가입</button>
     </form>
   );
 };
