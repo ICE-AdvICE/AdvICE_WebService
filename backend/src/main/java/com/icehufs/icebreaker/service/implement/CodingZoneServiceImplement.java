@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
@@ -281,7 +283,7 @@ public class CodingZoneServiceImplement implements CodingZoneService {
 
     @Override
     public ResponseEntity<? super GetListOfCodingZoneClassResponseDto> getClassList(Integer grade, String email) {
-        List<CodingZoneClass> classEntities = new ArrayList<>();
+    List<CodingZoneClass> classEntities = new ArrayList<>();
         int registedClassNum = 0;
         try {
             // 사용자 계정이 존재하는지(로그인 시간이 초과됐는지) 확인하는 코드
@@ -290,17 +292,16 @@ public class CodingZoneServiceImplement implements CodingZoneService {
 
             if (grade != 1 && grade != 2) return GetListOfCodingZoneClassResponseDto.validationFailed();
 
-            // 현재 날짜가 수요일에서 일요일 사이인지 확인
-            LocalDate today = LocalDate.now();
-            DayOfWeek dayOfWeek = today.getDayOfWeek();
+            // 현재 날짜가 수요일에서 일요일 사이인지 확인 (Asia/Seoul 시간대 적용)
+            ZonedDateTime now = ZonedDateTime.now(ZoneId.of("Asia/Seoul"));
+            DayOfWeek dayOfWeek = now.getDayOfWeek();
             if (dayOfWeek.getValue() < DayOfWeek.THURSDAY.getValue()) {
                 return GetListOfCodingZoneClassResponseDto.noExistArticle();
             }
 
-
-            // 다음 주 월요일과 일요일 계산
-            LocalDate nextMonday = today.with(TemporalAdjusters.next(DayOfWeek.MONDAY));
-            LocalDate nextSunday = nextMonday.plusDays(6);
+            // 다음 주 월요일과 일요일 계산 (Asia/Seoul 시간대 적용)
+            ZonedDateTime nextMonday = now.with(TemporalAdjusters.next(DayOfWeek.MONDAY));
+            ZonedDateTime nextSunday = nextMonday.plusDays(6);
 
             // 다음 주 월요일부터 일요일까지의 수업만 조회
             classEntities = codingZoneClassRepository.findByGradeAndClassDateBetween(
@@ -309,7 +310,7 @@ public class CodingZoneServiceImplement implements CodingZoneService {
                 nextSunday.format(DateTimeFormatter.ISO_LOCAL_DATE)
             );
             if (classEntities.isEmpty()) return GetListOfCodingZoneClassResponseDto.noExistArticle();
-            
+
             for (CodingZoneClass classEntitie : classEntities) {
                 CodingZoneRegisterEntity codingZoneRegisterEntity = codingZoneRegisterRepository.findByClassNumAndUserEmail(classEntitie.getClassNum(), email);
                 if (codingZoneRegisterEntity != null) {
@@ -322,8 +323,9 @@ public class CodingZoneServiceImplement implements CodingZoneService {
             exception.printStackTrace();
             return ResponseDto.databaseError();
         }
-        return GetListOfCodingZoneClassResponseDto.success(registedClassNum,classEntities);
+        return GetListOfCodingZoneClassResponseDto.success(registedClassNum, classEntities);
     }
+
 
     @Override
     public ResponseEntity<? super GetListOfCodingZoneClassForNotLogInResponseDto> getClassList2(Integer grade) {
@@ -332,17 +334,16 @@ public class CodingZoneServiceImplement implements CodingZoneService {
             // 사용자 계정이 존재하는지(로그인 시간이 초과됐는지) 확인하는 코드
             if (grade != 1 && grade != 2) return GetListOfCodingZoneClassForNotLogInResponseDto.validationFailed();
 
-            // 현재 날짜가 수요일에서 일요일 사이인지 확인
-            LocalDate today = LocalDate.now();
-            DayOfWeek dayOfWeek = today.getDayOfWeek();
+            // 현재 날짜가 수요일에서 일요일 사이인지 확인 (Asia/Seoul 시간대 적용)
+            ZonedDateTime now = ZonedDateTime.now(ZoneId.of("Asia/Seoul"));
+            DayOfWeek dayOfWeek = now.getDayOfWeek();
             if (dayOfWeek.getValue() < DayOfWeek.THURSDAY.getValue()) {
-                return GetListOfCodingZoneClassResponseDto.noExistArticle();
+                return GetListOfCodingZoneClassForNotLogInResponseDto.noExistArticle();
             }
 
-
-            // 다음 주 월요일과 일요일 계산
-            LocalDate nextMonday = today.with(TemporalAdjusters.next(DayOfWeek.MONDAY));
-            LocalDate nextSunday = nextMonday.plusDays(6);
+            // 다음 주 월요일과 일요일 계산 (Asia/Seoul 시간대 적용)
+            ZonedDateTime nextMonday = now.with(TemporalAdjusters.next(DayOfWeek.MONDAY));
+            ZonedDateTime nextSunday = nextMonday.plusDays(6);
 
             // 다음 주 월요일부터 일요일까지의 수업만 조회
             classEntities = codingZoneClassRepository.findByGradeAndClassDateBetween(
@@ -350,7 +351,7 @@ public class CodingZoneServiceImplement implements CodingZoneService {
                 nextMonday.format(DateTimeFormatter.ISO_LOCAL_DATE), 
                 nextSunday.format(DateTimeFormatter.ISO_LOCAL_DATE)
             );
-        
+    
             if (classEntities.isEmpty()) return GetListOfCodingZoneClassForNotLogInResponseDto.noExistArticle();
 
         } catch (Exception exception) {
