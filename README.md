@@ -19,7 +19,7 @@
 | 도성현 | 이바체슬라브 (이윤빈) | 박준서 | 김진우 |
 |:------:|:-------------------:|:------:|:------:|
 | <img src="https://avatars.githubusercontent.com/u/52828205?v=4" alt="도성현" width="150"> | <img src="https://avatars.githubusercontent.com/u/81556800?v=4" alt="이바체슬라브" width="150"> | <img src="https://avatars.githubusercontent.com/u/81576126?v=4" alt="박준서" width="150"> | <img src="https://github.com/user-attachments/assets/c72a1cf0-86c4-4028-a52c-aa4b27a96fa8" alt="김진우" width="150"> |
-| 백엔드/프론트엔드 개발 | 백엔드/프론트엔드 개발 | 기획/디자인 | AI 모델 학습/데이터 수집 및 전처리 |
+| 백엔드 개발 | 백엔드 개발(leader) | 프론트엔드 개발 | 프론트엔드 개발 |
 | [GitHub](https://github.com/glaxyt) | [GitHub](https://github.com/kanado5385-k) | [GitHub](https://github.com/Debuging-JunSeoPark) | [GitHub](https://github.com/JinWooKim85) |
 
 <br/>
