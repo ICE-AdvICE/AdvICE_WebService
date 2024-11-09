@@ -325,7 +325,7 @@ const sliderSettings = {
       </div>
       <Slider {...sliderSettings}> 
          <div className="codingzone-top-container">
-         <img src="/coding-zone-main.png" className="codingzonetop2-image"/>
+         <img src="/codingzone_main_v5" className="codingzonetop2-image"/>
         </div>
         <div className="codingzone-top-container">
         <img src="/coding-zone-main2.png" className="codingzonetop2-image"/>
