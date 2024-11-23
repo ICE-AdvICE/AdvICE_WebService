@@ -4,6 +4,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -363,22 +365,41 @@ public class CodingZoneServiceImplement implements CodingZoneService {
     @Override
     public ResponseEntity<? super GetCountOfAttendResponseDto> getAttend(Integer grade, String email) {
         Integer NumOfAttend = 0;
+        ZonedDateTime now = ZonedDateTime.now(ZoneId.of("Asia/Seoul"));
         List<CodingZoneRegisterEntity> classEntities = new ArrayList<>();
         try{
             // 사용자 계정이 존재하는지(로그인 시간이 초과됐는지) 확인하는 코드
             boolean existedUser = userRepository.existsByEmail(email);
             if (!existedUser) return GetCountOfAttendResponseDto.notExistUser();
 
+            // 학년 검증
             if(grade != 1 && grade != 2) return GetCountOfAttendResponseDto.validationFailed();
 
             classEntities = codingZoneRegisterRepository.findByGrade(grade);
             if(classEntities.isEmpty()) return GetCountOfAttendResponseDto.success(NumOfAttend);
 
             for (CodingZoneRegisterEntity entity : classEntities){
-                if(entity.getUserEmail().equals(email) && entity.getAttendance().equals("1")){
-                    NumOfAttend++;
+                if(entity.getUserEmail().equals(email)){
+                    String attend = entity.getAttendance();
+                    if (attend.equals("1")){
+                        NumOfAttend++;
+                    }
+                    if (attend.equals("0")){
+                        CodingZoneClass codingZoneClass = codingZoneClassRepository.findByClassNum(entity.getClassNum());
+
+                        LocalDate classDate = LocalDate.parse(codingZoneClass.getClassDate()); // 예: "2024-11-01"
+                        LocalTime classTime = LocalTime.parse(codingZoneClass.getClassTime()); // 예: "10:00:00"
+
+                        ZonedDateTime classDateTime = ZonedDateTime.of(classDate, classTime, ZoneId.of("Asia/Seoul"));
+
+                        // classDateTime이 now보다 과거일 경우 NumOfAttend 감소
+                        if (classDateTime.isBefore(now)) {
+                            NumOfAttend--;
+                        }
+                    }
                 }
             }
+
         }catch(Exception exception) {
             exception.printStackTrace();
             return ResponseDto.databaseError();
