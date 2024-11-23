@@ -10,7 +10,6 @@ import com.icehufs.icebreaker.common.ResponseMessage;
 import com.icehufs.icebreaker.dto.object.CommentListItem;
 import com.icehufs.icebreaker.dto.response.ResponseDto;
 import com.icehufs.icebreaker.entity.CommentEntity;
-import com.icehufs.icebreaker.repository.GetCommentListReultSet;
 
 import lombok.Getter;
 
