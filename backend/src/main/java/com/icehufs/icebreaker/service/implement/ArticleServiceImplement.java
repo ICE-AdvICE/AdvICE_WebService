@@ -17,7 +17,6 @@ import com.icehufs.icebreaker.repository.ArticleRepository;
 import com.icehufs.icebreaker.repository.ArtileListViewRepository;
 import com.icehufs.icebreaker.repository.CommentRepository;
 import com.icehufs.icebreaker.repository.FavoriteRepository;
-import com.icehufs.icebreaker.repository.GetCommentListReultSet;
 import com.icehufs.icebreaker.repository.UserRepository;
 import com.icehufs.icebreaker.service.ArticleService;
 import com.icehufs.icebreaker.util.EncryptionUtil;

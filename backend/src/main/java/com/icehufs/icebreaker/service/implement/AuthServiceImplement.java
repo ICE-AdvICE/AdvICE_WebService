@@ -12,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.icehufs.icebreaker.common.CertificationNumber;
 import com.icehufs.icebreaker.dto.request.auth.*;
 import com.icehufs.icebreaker.dto.response.ResponseDto;
-import com.icehufs.icebreaker.dto.response.article.DeleteArticleResponseDto;
 import com.icehufs.icebreaker.dto.response.auth.*;
 import com.icehufs.icebreaker.entity.Article;
 import com.icehufs.icebreaker.entity.AuthorityEntity;
