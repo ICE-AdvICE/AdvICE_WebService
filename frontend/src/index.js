@@ -2,19 +2,19 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Main from './layouts/HomePage';
-import ArticleMain from './layouts/Article/ArticleMain';
-import CodingMain from './layouts/Coding-zone/CodingMain';
-import EditPage from './layouts/Article/EditPage';
-import CodingClassRegist from './layouts/Coding-zone/CodingClassRegist';
-import Codingzone_Manager from './layouts/Coding-zone/Codingzone_Manager';
-import Codingzone_Attendence from './layouts/Coding-zone/Codingzone_Attendence';
-import Codingzone_All_Attend from './layouts/Coding-zone/Codingzone_All_Attend';
+import Main from './pages/HomePage';
+import ArticleMain from './pages/Article/ArticleMain';
+import CodingMain from './pages/Coding-zone/CodingMain';
+import EditPage from './pages/Article/EditPage';
+import CodingClassRegist from './pages/Coding-zone/CodingClassRegist';
+import Codingzone_Manager from './pages/Coding-zone/Codingzone_Manager';
+import Codingzone_Attendence from './pages/Coding-zone/Codingzone_Attendence';
+import Codingzone_All_Attend from './pages/Coding-zone/Codingzone_All_Attend';
 import NavBar from './components/NavBar';
 import Footer from './components/Footer';
-import CreatePage from './layouts/Article/CreatePage';
-import ShowPage from './layouts/Article/ShowPage';
-import AuthHandle from './layouts/AuthHandle';
+import CreatePage from './pages/Article/CreatePage';
+import ShowPage from './pages/Article/ShowPage';
+import AuthHandle from './pages/AuthHandle';
  
 
 const App = () => {
