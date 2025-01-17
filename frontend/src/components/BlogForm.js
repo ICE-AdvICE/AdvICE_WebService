@@ -11,7 +11,7 @@ import {
   createNotificationArticleRequest,
 } from '../apis/index';
 import ReactQuill from 'react-quill';
-import '../layouts/css/ArticlePage/BlogForm.css';
+import '../pages/css/ArticlePage/BlogForm.css';
 import { useLocation } from 'react-router-dom';
 
 

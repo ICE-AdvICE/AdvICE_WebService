@@ -8,7 +8,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableScheduling
 @SpringBootApplication
 public class IcebreakerApplication {	
-    public static void main(String[] args) {
+    public static void main( String[] args) {
         // .env 파일 로드
         Dotenv dotenv = Dotenv.configure()
                               .directory("backend/") // .env 파일의 경로를 지정
