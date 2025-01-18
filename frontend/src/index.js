@@ -3,17 +3,17 @@ import ReactDOM from 'react-dom';
 import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Main from './pages/HomePage';
-import ArticleMain from './pages/Article/ArticleMain';
+import ArticleMain from './pages/ArticlePage/ArticleMain';
 import CodingMain from './pages/Coding-zone/CodingZoneMain';
-import EditPage from './pages/Article/EditPage';
+import EditPage from './pages/ArticlePage/EditPage';
 import CodingClassRegist from './pages/Coding-zone/CodingZoneRegist';
 import CodingZoneAttendanceAssistant from './pages/Coding-zone/CodingZoneAttendanceAssistant';
 import CodingZoneMyAttendance from './pages/Coding-zone/CodingZoneMyAttendance';
 import CodingZoneAttendanceManager from './pages/Coding-zone/CodingZoneAttendanceManager';
 import NavBar from './components/NavBar';
 import Footer from './components/Footer';
-import CreatePage from './pages/Article/CreatePage';
-import ShowPage from './pages/Article/ShowPage';
+import CreatePage from './pages/ArticlePage/CreatePage';
+import ShowPage from './pages/ArticlePage/ShowPage';
 import AuthHandle from './pages/AuthHandle';
  
 

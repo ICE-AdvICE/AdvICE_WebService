@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useCookies } from "react-cookie";
 import Card from '../../components/Card';
 import Pagination from '../../components/Pagination';
-import '../css/ArticlePage/ArticleMain.css';
+import './ArticleMain.css';
 import { getArticleListRequest, fetchUserArticles, checkUserBanStatus } from '../../apis/index.js';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
