@@ -1,25 +1,23 @@
 import React, { useEffect, useState } from 'react';
-import { getczauthtypetRequest, getczallattendRequest } from '../../apis/Codingzone-api.js';
+import { getczauthtypetRequest, getczattendlistRequest } from '../../apis/Codingzone-api.js';
 import { useCookies } from 'react-cookie';
 import '../css/codingzone/codingzone-main.css';
 import '../css/codingzone/codingzone_attend.css';
-import '../css/codingzone/codingzone_all_attendance.css';
-import { useNavigate } from 'react-router-dom';
-import InquiryModal from './InquiryModal';
+import { useNavigate, useLocation } from 'react-router-dom';
+import InquiryModal from './InquiryModal.js';
 
-const Codingzone_All_Attend = () => {
+const CodingZoneMyAttendance = () => {
     const [authMessage, setAuthMessage] = useState('');
+    const [attendList, setAttendList] = useState([]);
     const [showAdminButton, setShowAdminButton] = useState(false);
     const [showManageAllButton, setShowManageAllButton] = useState(false);
     const [showRegisterClassButton, setShowRegisterClassButton] = useState(false);
     const [cookies, setCookie] = useCookies(['accessToken']);
-    const [activeButton, setActiveButton] = useState('manage_all');
-    const [attendanceList, setAttendanceList] = useState([]);
-    const [selectedGrade, setSelectedGrade] = useState(1);
+    const [activeButton, setActiveButton] = useState('check');
     const token = cookies.accessToken;
+    const [selectedButton, setSelectedButton] = useState('attendence'); 
     const navigate = useNavigate();
     const [showModal, setShowModal] = useState(false);
-    const [selectedButton, setSelectedButton] = useState('attendence'); 
 
     const handleOpenModal = () => {
         setShowModal(true);
@@ -28,21 +26,6 @@ const Codingzone_All_Attend = () => {
     const handleCloseModal = () => {
         setShowModal(false);
     };
-
-
-    const handlecodingzonemanager = () => {
-        navigate(`/coding-zone/Codingzone_Manager`);
-    };
-
-    const handleFullManagement = () => {
-        navigate(`/coding-zone/Codingzone_All_Attend`);
-    };
-
-    const handleClassRegistration = () => {
-        navigate(`/coding-zone/coding-class-regist`);
-    };
-
-
     const handlecodingzone = () => {
         setSelectedButton('codingzone');
         navigate('/coding-zone');
@@ -65,6 +48,36 @@ const Codingzone_All_Attend = () => {
 
 
 
+    const handlecodingzonemanager = () => {
+        navigate(`/coding-zone/Codingzone_Manager`);
+    };
+
+    const handleFullManagement = () => {
+        navigate(`/coding-zone/Codingzone_All_Attend`);
+    };
+
+    const handleClassRegistration = () => {
+        navigate(`/coding-zone/coding-class-regist`);
+    };
+
+    const formatTime = (timeString) => {
+        const [hours, minutes] = timeString.split(':');
+        return `${hours}:${minutes}`;
+    };
+
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        const month = date.getMonth() + 1;  // getMonth()는 0부터 시작하므로 1을 더해줍니다.
+        const day = date.getDate();
+        return `${month.toString().padStart(2, '0')}/${day.toString().padStart(2, '0')}`;  // 두 자리 숫자로 유지
+    };
+
+    const isFutureDate = (classDate, classTime) => {
+        const now = new Date();
+        const classDateTime = new Date(`${classDate}T${classTime}`);
+        return classDateTime > now;
+    };
+
     useEffect(() => {
         const fetchAuthType = async () => {
             const response = await getczauthtypetRequest(token);
@@ -79,13 +92,10 @@ const Codingzone_All_Attend = () => {
                         setShowManageAllButton(true); // Also show '전체 관리' for EA
                         break;
                     case 'NU':
-                        alert('로그인 시간이 만료되었습니다. 다시 로그인 해주세요.');
-                        navigate('/');
+                        setShowAdminButton(false);
+                        setShowManageAllButton(false);
+                        setShowRegisterClassButton(false);
                         break;
-                    case 'DBE':
-                        alert('데이터베이스 오류입니다.');
-                        break;
-
                     default:
                         setShowAdminButton(false);
                         setShowManageAllButton(false);
@@ -99,51 +109,20 @@ const Codingzone_All_Attend = () => {
     }, [token, authMessage]);
 
     useEffect(() => {
-        const fetchAttendanceData = async () => {
-            const response = await getczallattendRequest(token);
+        const fetchAttendList = async () => {
+            const response = await getczattendlistRequest(token);
             if (response && response.code === "SU") {
-                // Filter data based on selected grade
-                const filteredData = response.studentList.filter(student => student.grade === selectedGrade);
-                setAttendanceList(filteredData);
+                setAttendList(response.attendList);
             } else if (response && response.code === "NU") {
+                alert('로그인 시간이 만료되었습니다. 다시 로그인 해주세요.');
                 navigate('/');
-            }
-            else {
-                console.error(response?.message || "Failed to fetch attendance data.");
+            } else {
+                console.error(response.message);
             }
         };
 
-        fetchAttendanceData();
-    }, [token, selectedGrade]);  // Add selectedGrade to dependency array
-
-    const handleGradeChange = (grade) => {
-        setSelectedGrade(grade);
-    };
-
-    const aggregateAttendanceData = (attendanceList) => {
-        const aggregatedData = {};
-
-        attendanceList.forEach((record) => {
-            const key = record.userEmail; // 이메일 별로 집계
-            if (!aggregatedData[key]) {
-                aggregatedData[key] = {
-                    userStudentNum: record.userStudentNum,
-                    userName: record.userName,
-                    userEmail: record.userEmail,
-                    presentCount: 0,
-                    absentCount: 0
-                };
-            }
-            if (record.attendance === '0') {
-                aggregatedData[key].absentCount++;
-            } else {
-                aggregatedData[key].presentCount++;
-            }
-        });
-
-        return Object.values(aggregatedData);
-    };
-
+        fetchAttendList();
+    }, [token]);
 
     return (
         <div>
@@ -177,13 +156,13 @@ const Codingzone_All_Attend = () => {
                     <span> | </span>
                 </div>
                 <div className="banner_img_container">
-                    <img src="/codingzone_attendance5.png" className="banner" />
+                    <img src="/codingzone_attendance2.png" className="banner" />
                 </div>
             </div>
             <div className="cza_button_container" style={{ textAlign: 'center' }}>
                 <button
                     className={`btn-attend ${activeButton === 'check' ? 'active' : ''}`}
-                    onClick={() => { setActiveButton('check'); handlecodingzoneattendence(); }}
+                    onClick={() => setActiveButton('check')}
                 >
                     출결 확인
                 </button>
@@ -191,7 +170,7 @@ const Codingzone_All_Attend = () => {
                     <>
                         <div className="divider"></div>
                         <button
-                            className={`btn-attend ${activeButton === 'manage' ? 'active' : ''}`}
+                            className={`btn-attend ${activeButton === 'manage_class' ? 'active' : ''}`}
                             onClick={handleClassRegistration}
                         >
                             수업 등록
@@ -214,67 +193,55 @@ const Codingzone_All_Attend = () => {
                         <div className="divider"></div>
                         <button
                             className={`btn-attend ${activeButton === 'manage_all' ? 'active' : ''}`}
-                            onClick={() => setActiveButton('manage_all')}
+                            onClick={handleFullManagement}
                         >
                             전체 관리
                         </button>
                     </>
                 )}
             </div>
-            <div className="centered-content">
-                <div className="allattendance_buttons">
-                    <button
-                        className={selectedGrade === 1 ? 'active' : ''}
-                        onClick={() => handleGradeChange(1)}
-                    >
-                        코딩존1
-                    </button>
-                    <button
-                        className={selectedGrade === 2 ? 'active' : ''}
-                        onClick={() => handleGradeChange(2)}
-                    >
-                        코딩존2
-                    </button>
-                </div>
-                <div className="line-container1">
-                    {/* 실선 영역 */}
-                </div>
 
-                <div className="info-all_container">
-                    <div className="info_all_inner">
-                        <div className="info_all_studentnum">학번</div>
-                        <div className="info_all_name">이름</div>
-                        <div className="info_all_emali">이메일</div>
-                        <div className="info_all_bar"></div>
-                        <div className="info_all_presentcount">출석</div>
-                        <div className="info_all_absentcount">결석</div>
-                    </div>
-                </div>
-                <div className="line-container2">
-                    {/* 실선 영역 */}
-                </div>
+            <div className="line-container1">
+                {/* 실선 영역 */}
+            </div>
 
-                <div className="info_all_data_container">
-                    {aggregateAttendanceData(attendanceList).map((student, index) => (
+            <div className="info-container">
+                <div className="info_inner">
+                    <div className="info_date">날짜</div>
+                    <div className="info_time">시간</div>
+                    <div className="info_bar"></div>
+                    <div className="info_classname">과목명</div>
+                    <div className="info_assistant">조교</div>
+                    <div className="info_status">출결</div>
+                </div>
+            </div>
+            <div className="line-container2">
+                {/* 실선 영역 */}
+            </div>
+
+            <div className="info_data_container">
+                {attendList.length > 0 ? (
+                    attendList.map((item, index) => (
                         <div key={index}>
-                            <div className="info_all_data_inner">
-                                <div className="info_all_data_studentnum">{student.userStudentNum}</div>
-                                <div className="info_all_data_name">{student.userName}</div>
-                                <div className="info_all_data_email">
-                                    {student.userEmail.split('@')[0]}
+                            <div className="info_data_inner">
+                                <div className="info_data_date">{formatDate(item.classDate)}</div>
+                                <div className="info_data_time">{formatTime(item.classTime)}</div>
+                                <div className="info_data_bar"></div>
+                                <div className="info_data_classname">{item.className}</div>
+                                <div className="info_data_assistant">{item.assistantName}</div>
+                                <div className="info_data_status">
+                                    {isFutureDate(item.classDate, item.classTime) ? '진행중' : (item.attendance === '1' ? 'Y' : 'N')}
                                 </div>
-                                <div className="info_all_data_bar"></div>
-                                <div className="info_all_data_presentcount">{student.presentCount}</div>
-                                <div className="info_all_data_absentcount">{student.absentCount}</div>
                             </div>
                             <div className="hr-line"></div> {/* Horizontal line after each item */}
                         </div>
-                    ))}
-                </div>
-
+                    ))
+                ) : (
+                    <div className="empty-list-message">신청한 수업 리스트가 없습니다.</div>
+                )}
             </div>
         </div>
     );
 };
 
-export default Codingzone_All_Attend;
+export default CodingZoneMyAttendance;

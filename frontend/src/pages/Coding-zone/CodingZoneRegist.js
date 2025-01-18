@@ -8,7 +8,7 @@ import { uploadGroupData, fetchGroupClasses, uploadClassForWeek, resetCodingZone
 
 
 
-const ClassRegist = () => {
+const CodingZoneRegist = () => {
     const [boxes, setBoxes] = useState([{ day: '', time: '', assistant: '', className: '', grade: '', maxPers: '' }]);
     const [boxes2, setBoxes2] = useState([]);
     const [groupId, setGroupId] = useState('A');
@@ -599,6 +599,6 @@ const ClassRegist = () => {
     );
 };
 
-export default ClassRegist;
+export default CodingZoneRegist;
 
 

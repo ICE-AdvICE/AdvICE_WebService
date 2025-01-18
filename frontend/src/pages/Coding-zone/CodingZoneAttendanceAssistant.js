@@ -7,9 +7,9 @@ import '../css/codingzone/codingzone-main.css';
 import '../css/codingzone/codingzone_attend.css';
 import '../css/codingzone/codingzone_manager.css';
 import { getczauthtypetRequest, getczattendlistRequest, getczreservedlistRequest, putczattendc1Request, putczattendc2Request } from '../../apis/Codingzone-api.js';
-import InquiryModal from './InquiryModal';
+import InquiryModal from './InquiryModal.js';
 
-const Codingzone_Manager = () => {
+const CodingZoneAttendanceAssistant= () => {
     const [attendList, setAttendList] = useState([]);
     const [reservedList, setReservedList] = useState([]);
     const [showAdminButton, setShowAdminButton] = useState(false);
@@ -268,4 +268,4 @@ const Codingzone_Manager = () => {
     );
 };
 
-export default Codingzone_Manager;
+export default CodingZoneAttendanceAssistant;
