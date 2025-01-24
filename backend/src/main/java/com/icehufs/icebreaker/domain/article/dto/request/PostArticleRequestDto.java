@@ -5,7 +5,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-import com.icehufs.icebreaker.domain.article.domain.entity.ArticleCategoryEnum;
+import com.icehufs.icebreaker.domain.article.domain.type.ArticleCategoryEnum;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

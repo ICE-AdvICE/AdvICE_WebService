@@ -27,9 +27,9 @@ import com.icehufs.icebreaker.domain.article.dto.response.PutFavoriteResponseDto
 import com.icehufs.icebreaker.domain.article.dto.response.PutResolvedArticleResponseDto;
 import com.icehufs.icebreaker.dto.response.ResponseDto;
 import com.icehufs.icebreaker.domain.article.domain.entity.Article;
-import com.icehufs.icebreaker.domain.article.domain.entity.ArticleCategoryEnum;
-import com.icehufs.icebreaker.domain.article.domain.entity.CommentEntity;
-import com.icehufs.icebreaker.domain.article.domain.entity.FavoriteEntity;
+import com.icehufs.icebreaker.domain.article.domain.type.ArticleCategoryEnum;
+import com.icehufs.icebreaker.domain.article.domain.entity.Comment;
+import com.icehufs.icebreaker.domain.article.domain.entity.Favorite;
 import com.icehufs.icebreaker.domain.article.repository.ArticleRepository;
 import com.icehufs.icebreaker.domain.article.repository.ArtileListViewRepository;
 import com.icehufs.icebreaker.domain.article.repository.CommentRepository;
@@ -115,14 +115,14 @@ public class ArticleServiceImplement implements ArticleService {
             articleEntity = articleRepository.findByArticleNum(articleNum);
             if (articleEntity == null) return PutFavoriteResponseDto.noExistArticle();
 
-            FavoriteEntity favoriteEntity = favoriteRepository.findByArticleNumAndUserEmail(articleNum, email);
-            if (favoriteEntity == null){
-                favoriteEntity = new FavoriteEntity(email, articleNum);
-                favoriteRepository.save(favoriteEntity);
+            Favorite favorite = favoriteRepository.findByArticleNumAndUserEmail(articleNum, email);
+            if (favorite == null){
+                favorite = new Favorite(email, articleNum);
+                favoriteRepository.save(favorite);
                 articleEntity.IncreaseFavoriteCount();
             }
             else{
-                favoriteRepository.delete(favoriteEntity);
+                favoriteRepository.delete(favorite);
                 articleEntity.decreaseFavoriteCount();
             }
             articleRepository.save(articleEntity);
@@ -147,8 +147,8 @@ public class ArticleServiceImplement implements ArticleService {
 
             // 댓글 이메일 복호화 처리
             String encryptedEmail = EncryptionUtil.encrypt(email);
-            CommentEntity commentEntity = new CommentEntity(dto, articleNum, encryptedEmail);
-            commentRepository.save(commentEntity);
+            Comment comment = new Comment(dto, articleNum, encryptedEmail);
+            commentRepository.save(comment);
 
         } catch (Exception exception){
             exception.printStackTrace();
@@ -159,7 +159,7 @@ public class ArticleServiceImplement implements ArticleService {
 
     @Override
     public ResponseEntity<? super GetCommentListResponseDto> GetCommentList(Integer articleNum) {
-        List<CommentEntity> resultSets = new ArrayList<>();
+        List<Comment> resultSets = new ArrayList<>();
 
         try{
             boolean existedArticle = articleRepository.existsByArticleNum(articleNum);
@@ -213,15 +213,15 @@ public class ArticleServiceImplement implements ArticleService {
             if (!existedUser) return DeleteCommentResponseDto.notExistUser();
 
             // 댓글이 존재하지않는 경우
-            CommentEntity commentEntity = commentRepository.findByCommentNumber(commentNumber);
-            if (commentEntity == null) return DeleteCommentResponseDto.noExistComment();
+            Comment comment = commentRepository.findByCommentNumber(commentNumber);
+            if (comment == null) return DeleteCommentResponseDto.noExistComment();
 
             // 일치 여부를 확인하기 위한 댓글 이메일 복호화 처리
-            String decryptedWriterEmail = EncryptionUtil.decrypt(commentEntity.getUserEmail());
+            String decryptedWriterEmail = EncryptionUtil.decrypt(comment.getUserEmail());
             boolean isWriter = decryptedWriterEmail.equals(email);
             if (!isWriter) return DeleteArticleResponseDto.noPermission();
 
-            commentRepository.delete(commentEntity);
+            commentRepository.delete(comment);
 
 
         }catch(Exception exception){
@@ -266,15 +266,15 @@ public class ArticleServiceImplement implements ArticleService {
             boolean existedUser = userRepository.existsByEmail(email);
             if (!existedUser) return PatchCommentResponseDto.notExistUser();
 
-            CommentEntity commentEntity = commentRepository.findByCommentNumber(commentNumber);
+            Comment comment = commentRepository.findByCommentNumber(commentNumber);
 
             // 일치 여부를 확인하기 위한 댓글 이메일 복호화 처리
-            String decryptedWriterEmail = EncryptionUtil.decrypt(commentEntity.getUserEmail());
+            String decryptedWriterEmail = EncryptionUtil.decrypt(comment.getUserEmail());
             boolean isWriter = decryptedWriterEmail.equals(email);
             if (!isWriter) return PatchArticleResponseDto.noPermission();
 
-            commentEntity.patchComment(dto);
-            commentRepository.save(commentEntity);
+            comment.patchComment(dto);
+            commentRepository.save(comment);
 
         }catch(Exception exception){
             exception.printStackTrace();
@@ -330,8 +330,8 @@ public class ArticleServiceImplement implements ArticleService {
     @Override
     public ResponseEntity<? super CheckArticleFavoriteResponseDto> checkFavorite(Integer articleNum, String email) {
         try {
-            FavoriteEntity favoriteEntity = favoriteRepository.findByArticleNumAndUserEmail(articleNum, email);
-            if (favoriteEntity == null) return CheckArticleFavoriteResponseDto.notFavorite();
+            Favorite favorite = favoriteRepository.findByArticleNumAndUserEmail(articleNum, email);
+            if (favorite == null) return CheckArticleFavoriteResponseDto.notFavorite();
 
         }catch (Exception exception){
             exception.printStackTrace();

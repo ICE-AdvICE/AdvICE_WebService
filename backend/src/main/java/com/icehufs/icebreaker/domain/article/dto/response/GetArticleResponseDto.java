@@ -7,7 +7,7 @@ import com.icehufs.icebreaker.common.ResponseCode;
 import com.icehufs.icebreaker.common.ResponseMessage;
 import com.icehufs.icebreaker.dto.response.ResponseDto;
 import com.icehufs.icebreaker.domain.article.domain.entity.Article;
-import com.icehufs.icebreaker.domain.article.domain.entity.ArticleCategoryEnum;
+import com.icehufs.icebreaker.domain.article.domain.type.ArticleCategoryEnum;
 
 import lombok.Getter;
 
