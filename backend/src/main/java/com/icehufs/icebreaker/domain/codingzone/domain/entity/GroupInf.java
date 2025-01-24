@@ -1,6 +1,6 @@
-package com.icehufs.icebreaker.entity;
+package com.icehufs.icebreaker.domain.codingzone.domain.entity;
 
-import com.icehufs.icebreaker.dto.request.codingzone.GroupInfUpdateRequestDto;
+import com.icehufs.icebreaker.domain.codingzone.dto.request.GroupInfUpdateRequestDto;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -21,7 +21,7 @@ import lombok.ToString;
 @Setter
 @Entity(name = "groupinf")
 @Table(name = "groupinf")
-public class GroupInfEntity {
+public class GroupInf {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -49,7 +49,7 @@ public class GroupInfEntity {
     @Column(name = "grade")
     private int grade;
 
-    public GroupInfEntity(GroupInfUpdateRequestDto dto) {
+    public GroupInf(GroupInfUpdateRequestDto dto) {
         this.assistantName = dto.getAssistantName();
         this.classTime = dto.getClassTime();
         this.weekDay = dto.getWeekDay();

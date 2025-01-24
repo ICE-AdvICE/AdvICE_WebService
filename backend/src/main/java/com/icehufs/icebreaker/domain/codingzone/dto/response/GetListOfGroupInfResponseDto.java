@@ -1,7 +1,7 @@
 package com.icehufs.icebreaker.domain.codingzone.dto.response;
 
 import com.icehufs.icebreaker.dto.response.ResponseDto;
-import com.icehufs.icebreaker.domain.codingzone.domain.entity.GroupInfEntity;
+import com.icehufs.icebreaker.domain.codingzone.domain.entity.GroupInf;
 import com.icehufs.icebreaker.common.ResponseCode;
 import com.icehufs.icebreaker.common.ResponseMessage;
 import com.icehufs.icebreaker.domain.codingzone.domain.vo.GroupInfListItem;
@@ -17,12 +17,12 @@ public class GetListOfGroupInfResponseDto extends ResponseDto{
     
     private List<GroupInfListItem> groupList;
 
-    private GetListOfGroupInfResponseDto(List<GroupInfEntity> groupInfEntities){
+    private GetListOfGroupInfResponseDto(List<GroupInf> groupInfEntities){
     super(ResponseCode.SUCCESS, ResponseMessage.SUCCESS);
     this.groupList = GroupInfListItem.getList(groupInfEntities);
     }
 
-    public static ResponseEntity<GetListOfGroupInfResponseDto> success(List<GroupInfEntity> groupInfEntities){
+    public static ResponseEntity<GetListOfGroupInfResponseDto> success(List<GroupInf> groupInfEntities){
         GetListOfGroupInfResponseDto result = new GetListOfGroupInfResponseDto(groupInfEntities);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }

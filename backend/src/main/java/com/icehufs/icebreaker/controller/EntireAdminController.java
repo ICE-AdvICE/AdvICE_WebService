@@ -13,9 +13,19 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.icehufs.icebreaker.dto.request.codingzone.*;
-import com.icehufs.icebreaker.dto.response.codingzone.*;
-import com.icehufs.icebreaker.service.CodingZoneService;
+import com.icehufs.icebreaker.domain.codingzone.dto.request.CodingZoneClassAssignRequestDto;
+import com.icehufs.icebreaker.domain.codingzone.dto.request.GroupInfUpdateRequestDto;
+import com.icehufs.icebreaker.domain.codingzone.dto.request.HandleAuthRequestDto;
+import com.icehufs.icebreaker.domain.codingzone.dto.request.PatchGroupInfRequestDto;
+import com.icehufs.icebreaker.domain.codingzone.dto.response.CodingZoneClassAssignResponseDto;
+import com.icehufs.icebreaker.domain.codingzone.dto.response.DeleteAllInfResponseDto;
+import com.icehufs.icebreaker.domain.codingzone.dto.response.DeleteClassResponseDto;
+import com.icehufs.icebreaker.domain.codingzone.dto.response.DepriveAuthResponseDto;
+import com.icehufs.icebreaker.domain.codingzone.dto.response.GetCodingZoneStudentListResponseDto;
+import com.icehufs.icebreaker.domain.codingzone.dto.response.GetListOfGroupInfResponseDto;
+import com.icehufs.icebreaker.domain.codingzone.dto.response.GiveAuthResponseDto;
+import com.icehufs.icebreaker.domain.codingzone.dto.response.GroupInfUpdateResponseDto;
+import com.icehufs.icebreaker.domain.codingzone.service.CodingZoneService;
 import java.util.List;
 
 import lombok.RequiredArgsConstructor;
