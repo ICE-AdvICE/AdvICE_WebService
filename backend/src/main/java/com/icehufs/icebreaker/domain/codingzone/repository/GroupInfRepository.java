@@ -1,4 +1,4 @@
-package com.icehufs.icebreaker.domain.repository;
+package com.icehufs.icebreaker.domain.codingzone.repository;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

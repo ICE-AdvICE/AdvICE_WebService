@@ -45,9 +45,9 @@ import com.icehufs.icebreaker.domain.codingzone.domain.entity.CodingZoneRegister
 import com.icehufs.icebreaker.domain.codingzone.domain.entity.GroupInf;
 import com.icehufs.icebreaker.entity.User;
 import com.icehufs.icebreaker.repository.AuthorityRepository;
-import com.icehufs.icebreaker.domain.repository.CodingZoneClassRepository;
-import com.icehufs.icebreaker.domain.repository.CodingZoneRegisterRepository;
-import com.icehufs.icebreaker.domain.repository.GroupInfRepository;
+import com.icehufs.icebreaker.domain.codingzone.repository.CodingZoneClassRepository;
+import com.icehufs.icebreaker.domain.codingzone.repository.CodingZoneRegisterRepository;
+import com.icehufs.icebreaker.domain.codingzone.repository.GroupInfRepository;
 import com.icehufs.icebreaker.repository.UserRepository;
 import com.icehufs.icebreaker.domain.codingzone.service.CodingZoneService;
 
