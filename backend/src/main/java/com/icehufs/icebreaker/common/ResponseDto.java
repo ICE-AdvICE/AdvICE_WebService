@@ -1,10 +1,7 @@
-package com.icehufs.icebreaker.dto.response;
+package com.icehufs.icebreaker.common;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
-import com.icehufs.icebreaker.common.ResponseCode;
-import com.icehufs.icebreaker.common.ResponseMessage;
 
 //import org.springframework.http.HttpStatus;
 //import org.springframework.http.ResponseEntity;

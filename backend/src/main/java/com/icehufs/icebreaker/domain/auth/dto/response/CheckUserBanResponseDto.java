@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 
 import org.springframework.http.ResponseEntity;
 
-import com.icehufs.icebreaker.dto.response.ResponseDto;
+import com.icehufs.icebreaker.common.ResponseDto;
 import com.icehufs.icebreaker.domain.auth.domain.type.BanDurationEnum;
 import com.icehufs.icebreaker.domain.auth.domain.type.BanReasonEnum;
 

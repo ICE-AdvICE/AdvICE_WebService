@@ -37,7 +37,7 @@ import com.icehufs.icebreaker.domain.codingzone.dto.response.PutAttendanceRespon
 import com.icehufs.icebreaker.domain.codingzone.domain.vo.CodingZoneStudentListItem;
 import com.icehufs.icebreaker.domain.codingzone.domain.vo.PersAttendManagListItem;
 import com.icehufs.icebreaker.domain.codingzone.domain.vo.ReservedClassListItem;
-import com.icehufs.icebreaker.dto.response.ResponseDto;
+import com.icehufs.icebreaker.common.ResponseDto;
 import com.icehufs.icebreaker.domain.article.dto.response.CheckOwnOfArticleResponseDto;
 import com.icehufs.icebreaker.domain.auth.domain.entity.Authority;
 import com.icehufs.icebreaker.domain.codingzone.domain.entity.CodingZoneClass;

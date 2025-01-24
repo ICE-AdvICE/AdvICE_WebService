@@ -15,7 +15,7 @@ import com.icehufs.icebreaker.domain.membership.dto.response.DeleteUserResponseD
 import com.icehufs.icebreaker.domain.membership.dto.response.GetSignInUserResponseDto;
 import com.icehufs.icebreaker.domain.membership.dto.response.PatchUserPassResponseDto;
 import com.icehufs.icebreaker.domain.membership.dto.response.PatchUserResponseDto;
-import com.icehufs.icebreaker.dto.response.ResponseDto;
+import com.icehufs.icebreaker.common.ResponseDto;
 import com.icehufs.icebreaker.domain.auth.domain.entity.Authority;
 import com.icehufs.icebreaker.domain.membership.domain.entity.User;
 import com.icehufs.icebreaker.domain.auth.repostiory.AuthorityRepository;

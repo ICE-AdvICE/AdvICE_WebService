@@ -6,7 +6,7 @@ import org.springframework.http.ResponseEntity;
 
 import com.icehufs.icebreaker.common.ResponseCode;
 import com.icehufs.icebreaker.common.ResponseMessage;
-import com.icehufs.icebreaker.dto.response.ResponseDto;
+import com.icehufs.icebreaker.common.ResponseDto;
 
 public class DeleteArticleAdminResponseDto extends ResponseDto {
     private DeleteArticleAdminResponseDto(){

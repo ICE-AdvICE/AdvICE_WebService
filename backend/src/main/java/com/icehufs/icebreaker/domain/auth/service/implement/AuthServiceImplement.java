@@ -22,7 +22,7 @@ import com.icehufs.icebreaker.domain.auth.dto.response.GiveUserBanResponseDto;
 import com.icehufs.icebreaker.domain.auth.dto.response.PassChanEmailCertificationResponseDto;
 import com.icehufs.icebreaker.domain.auth.dto.response.SignInResponseDto;
 import com.icehufs.icebreaker.domain.auth.dto.response.SignUpResponseDto;
-import com.icehufs.icebreaker.dto.response.ResponseDto;
+import com.icehufs.icebreaker.common.ResponseDto;
 import com.icehufs.icebreaker.domain.article.domain.entity.Article;
 import com.icehufs.icebreaker.domain.auth.domain.entity.Authority;
 import com.icehufs.icebreaker.domain.auth.domain.type.BanDurationEnum;

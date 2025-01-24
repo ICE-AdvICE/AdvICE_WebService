@@ -25,7 +25,7 @@ import com.icehufs.icebreaker.domain.article.dto.response.PostArticleResponseDto
 import com.icehufs.icebreaker.domain.article.dto.response.PostCommentResponseDto;
 import com.icehufs.icebreaker.domain.article.dto.response.PutFavoriteResponseDto;
 import com.icehufs.icebreaker.domain.article.dto.response.PutResolvedArticleResponseDto;
-import com.icehufs.icebreaker.dto.response.ResponseDto;
+import com.icehufs.icebreaker.common.ResponseDto;
 import com.icehufs.icebreaker.domain.article.domain.entity.Article;
 import com.icehufs.icebreaker.domain.article.domain.type.ArticleCategoryEnum;
 import com.icehufs.icebreaker.domain.article.domain.entity.Comment;
