@@ -1,32 +1,28 @@
-package com.icehufs.icebreaker.dto.response.codingzone;
-
-import java.util.List;
+package com.icehufs.icebreaker.domain.codingzone.dto.response;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
+import java.util.List;
 import com.icehufs.icebreaker.common.ResponseCode;
 import com.icehufs.icebreaker.common.ResponseMessage;
-import com.icehufs.icebreaker.dto.object.CodingZoneClassListItem;
+
+import com.icehufs.icebreaker.domain.codingzone.domain.vo.ReservedClassListItem;
 import com.icehufs.icebreaker.dto.response.ResponseDto;
-import com.icehufs.icebreaker.entity.CodingZoneClass;
 
 import lombok.Getter;
 
 @Getter
-public class GetListOfCodingZoneClassResponseDto extends ResponseDto{
+public class GetReservedClassListItemResponseDto extends ResponseDto{
 
-    private List<CodingZoneClassListItem> classList;
-    private int registedClassNum;
+    private List<ReservedClassListItem> studentList;
 
-    private GetListOfCodingZoneClassResponseDto(int registedClassNum,List<CodingZoneClass> CodingZoneClassListEntities){
+    private GetReservedClassListItemResponseDto(List<ReservedClassListItem> reservedClassListItems){
     super(ResponseCode.SUCCESS, ResponseMessage.SUCCESS);
-    this.registedClassNum = registedClassNum;
-    this.classList = CodingZoneClassListItem.getList(CodingZoneClassListEntities);
+    this.studentList = ReservedClassListItem.getList(reservedClassListItems);
     }
 
-    public static ResponseEntity<GetListOfCodingZoneClassResponseDto> success(int registedClassNum,List<CodingZoneClass> CodingZoneClassListEntities){
-        GetListOfCodingZoneClassResponseDto result = new GetListOfCodingZoneClassResponseDto(registedClassNum, CodingZoneClassListEntities);
+    public static ResponseEntity<GetReservedClassListItemResponseDto> success(List<ReservedClassListItem> reservedClassListItems){
+        GetReservedClassListItemResponseDto result = new GetReservedClassListItemResponseDto(reservedClassListItems);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 

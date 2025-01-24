@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 
 import com.icehufs.icebreaker.common.ResponseCode;
 import com.icehufs.icebreaker.common.ResponseMessage;
-import com.icehufs.icebreaker.dto.object.CommentListItem;
+import com.icehufs.icebreaker.domain.article.domain.vo.CommentListItem;
 import com.icehufs.icebreaker.dto.response.ResponseDto;
 import com.icehufs.icebreaker.domain.article.domain.entity.Comment;
 

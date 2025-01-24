@@ -1,4 +1,4 @@
-package com.icehufs.icebreaker.dto.request.codingzone;
+package com.icehufs.icebreaker.domain.codingzone.dto.request;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;

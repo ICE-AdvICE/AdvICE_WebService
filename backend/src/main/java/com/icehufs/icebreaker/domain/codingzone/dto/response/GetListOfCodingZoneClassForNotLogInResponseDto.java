@@ -1,4 +1,4 @@
-package com.icehufs.icebreaker.dto.response.codingzone;
+package com.icehufs.icebreaker.domain.codingzone.dto.response;
 
 import java.util.List;
 
@@ -7,9 +7,9 @@ import org.springframework.http.ResponseEntity;
 
 import com.icehufs.icebreaker.common.ResponseCode;
 import com.icehufs.icebreaker.common.ResponseMessage;
-import com.icehufs.icebreaker.dto.object.CodingZoneClassListItem;
+import com.icehufs.icebreaker.domain.codingzone.domain.vo.CodingZoneClassListItem;
 import com.icehufs.icebreaker.dto.response.ResponseDto;
-import com.icehufs.icebreaker.entity.CodingZoneClass;
+import com.icehufs.icebreaker.domain.codingzone.domain.entity.CodingZoneClass;
 
 import lombok.Getter;
 

@@ -1,4 +1,4 @@
-package com.icehufs.icebreaker.dto.response.codingzone;
+package com.icehufs.icebreaker.domain.codingzone.dto.response;
 
 import java.util.List;
 
@@ -7,23 +7,26 @@ import org.springframework.http.ResponseEntity;
 
 import com.icehufs.icebreaker.common.ResponseCode;
 import com.icehufs.icebreaker.common.ResponseMessage;
-import com.icehufs.icebreaker.dto.object.PersAttendManagListItem;
+import com.icehufs.icebreaker.domain.codingzone.domain.vo.CodingZoneClassListItem;
 import com.icehufs.icebreaker.dto.response.ResponseDto;
+import com.icehufs.icebreaker.domain.codingzone.domain.entity.CodingZoneClass;
 
 import lombok.Getter;
 
-@Getter 
-public class GetPersAttendListItemResponseDto extends ResponseDto{
+@Getter
+public class GetListOfCodingZoneClassResponseDto extends ResponseDto{
 
-    private List<PersAttendManagListItem> attendList;
+    private List<CodingZoneClassListItem> classList;
+    private int registedClassNum;
 
-    private GetPersAttendListItemResponseDto(List<PersAttendManagListItem> persAttendManagListItems){
+    private GetListOfCodingZoneClassResponseDto(int registedClassNum,List<CodingZoneClass> CodingZoneClassListEntities){
     super(ResponseCode.SUCCESS, ResponseMessage.SUCCESS);
-    this.attendList = PersAttendManagListItem.getList(persAttendManagListItems);
+    this.registedClassNum = registedClassNum;
+    this.classList = CodingZoneClassListItem.getList(CodingZoneClassListEntities);
     }
 
-    public static ResponseEntity<GetPersAttendListItemResponseDto> success(List<PersAttendManagListItem> persAttendManagListItems){
-        GetPersAttendListItemResponseDto result = new GetPersAttendListItemResponseDto(persAttendManagListItems);
+    public static ResponseEntity<GetListOfCodingZoneClassResponseDto> success(int registedClassNum,List<CodingZoneClass> CodingZoneClassListEntities){
+        GetListOfCodingZoneClassResponseDto result = new GetListOfCodingZoneClassResponseDto(registedClassNum, CodingZoneClassListEntities);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
@@ -36,4 +39,5 @@ public class GetPersAttendListItemResponseDto extends ResponseDto{
         ResponseDto result = new ResponseDto(ResponseCode.NOT_EXISTED_ARTICLE, ResponseMessage.NOT_EXISTED_ARTICLE);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);
     }
+    
 }

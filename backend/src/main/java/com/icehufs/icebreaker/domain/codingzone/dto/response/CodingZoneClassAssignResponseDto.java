@@ -1,4 +1,4 @@
-package com.icehufs.icebreaker.dto.response.codingzone;
+package com.icehufs.icebreaker.domain.codingzone.dto.response;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,13 +10,14 @@ import com.icehufs.icebreaker.dto.response.ResponseDto;
 import lombok.Getter;
 
 @Getter
-public class GroupInfUpdateResponseDto extends ResponseDto{
-    private GroupInfUpdateResponseDto(){
+public class CodingZoneClassAssignResponseDto extends ResponseDto{
+    
+    private CodingZoneClassAssignResponseDto(){
         super(ResponseCode.SUCCESS, ResponseMessage.SUCCESS);
     }
 
-    public static ResponseEntity<GroupInfUpdateResponseDto> success(){
-        GroupInfUpdateResponseDto result = new GroupInfUpdateResponseDto();
+    public static ResponseEntity<CodingZoneClassAssignResponseDto> success(){
+        CodingZoneClassAssignResponseDto result = new CodingZoneClassAssignResponseDto();
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 

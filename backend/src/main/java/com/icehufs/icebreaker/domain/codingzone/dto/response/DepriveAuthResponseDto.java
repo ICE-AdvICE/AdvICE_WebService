@@ -1,4 +1,4 @@
-package com.icehufs.icebreaker.dto.response.codingzone;
+package com.icehufs.icebreaker.domain.codingzone.dto.response;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,14 +10,13 @@ import com.icehufs.icebreaker.dto.response.ResponseDto;
 import lombok.Getter;
 
 @Getter
-public class GiveAuthResponseDto extends ResponseDto
-{
-        private GiveAuthResponseDto(){
-        super(ResponseCode.SUCCESS, ResponseMessage.SUCCESS);
+public class DepriveAuthResponseDto extends ResponseDto{
+    private DepriveAuthResponseDto(){
+    super(ResponseCode.SUCCESS, ResponseMessage.SUCCESS);
     }
 
-    public static ResponseEntity<GiveAuthResponseDto> success(){
-        GiveAuthResponseDto result = new GiveAuthResponseDto();
+    public static ResponseEntity<DepriveAuthResponseDto> success(){
+        DepriveAuthResponseDto result = new DepriveAuthResponseDto();
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 

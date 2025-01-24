@@ -1,28 +1,29 @@
-package com.icehufs.icebreaker.dto.response.codingzone;
+package com.icehufs.icebreaker.domain.codingzone.dto.response;
+
+import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import java.util.List;
+
 import com.icehufs.icebreaker.common.ResponseCode;
 import com.icehufs.icebreaker.common.ResponseMessage;
-
-import com.icehufs.icebreaker.dto.object.ReservedClassListItem;
+import com.icehufs.icebreaker.domain.codingzone.domain.vo.PersAttendManagListItem;
 import com.icehufs.icebreaker.dto.response.ResponseDto;
 
 import lombok.Getter;
 
-@Getter
-public class GetReservedClassListItemResponseDto extends ResponseDto{
+@Getter 
+public class GetPersAttendListItemResponseDto extends ResponseDto{
 
-    private List<ReservedClassListItem> studentList;
+    private List<PersAttendManagListItem> attendList;
 
-    private GetReservedClassListItemResponseDto(List<ReservedClassListItem> reservedClassListItems){
+    private GetPersAttendListItemResponseDto(List<PersAttendManagListItem> persAttendManagListItems){
     super(ResponseCode.SUCCESS, ResponseMessage.SUCCESS);
-    this.studentList = ReservedClassListItem.getList(reservedClassListItems);
+    this.attendList = PersAttendManagListItem.getList(persAttendManagListItems);
     }
 
-    public static ResponseEntity<GetReservedClassListItemResponseDto> success(List<ReservedClassListItem> reservedClassListItems){
-        GetReservedClassListItemResponseDto result = new GetReservedClassListItemResponseDto(reservedClassListItems);
+    public static ResponseEntity<GetPersAttendListItemResponseDto> success(List<PersAttendManagListItem> persAttendManagListItems){
+        GetPersAttendListItemResponseDto result = new GetPersAttendListItemResponseDto(persAttendManagListItems);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
@@ -35,5 +36,4 @@ public class GetReservedClassListItemResponseDto extends ResponseDto{
         ResponseDto result = new ResponseDto(ResponseCode.NOT_EXISTED_ARTICLE, ResponseMessage.NOT_EXISTED_ARTICLE);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);
     }
-    
 }
