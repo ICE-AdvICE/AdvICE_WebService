@@ -5,7 +5,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.IdClass;
 import jakarta.persistence.Table;
 
-import com.icehufs.icebreaker.entity.primaryKey.FavoritePk;
+import com.icehufs.icebreaker.domain.article.domain.entity.primaryKey.FavoritePk;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

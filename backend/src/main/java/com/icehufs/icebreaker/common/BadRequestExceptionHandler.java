@@ -1,4 +1,4 @@
-package com.icehufs.icebreaker.exception;
+package com.icehufs.icebreaker.common;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;

@@ -1,4 +1,4 @@
-package com.icehufs.icebreaker.entity.primaryKey;
+package com.icehufs.icebreaker.domain.article.domain.entity.primaryKey;
 
 import java.io.Serializable;
 

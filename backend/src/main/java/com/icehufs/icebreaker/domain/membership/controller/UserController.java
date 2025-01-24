@@ -1,4 +1,4 @@
-package com.icehufs.icebreaker.controller;
+package com.icehufs.icebreaker.domain.membership.controller;
 
 import jakarta.validation.Valid;
 

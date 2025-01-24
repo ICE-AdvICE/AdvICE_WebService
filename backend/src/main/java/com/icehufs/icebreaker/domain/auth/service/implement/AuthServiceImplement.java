@@ -9,7 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.icehufs.icebreaker.common.CertificationNumber;
+import com.icehufs.icebreaker.provider.CertificationNumber;
 import com.icehufs.icebreaker.domain.auth.dto.request.CheckCertificationRequestDto;
 import com.icehufs.icebreaker.domain.auth.dto.request.EmailCertificationRequestDto;
 import com.icehufs.icebreaker.domain.auth.dto.request.GiveUserBanRequestDto;

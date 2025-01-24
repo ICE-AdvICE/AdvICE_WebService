@@ -1,4 +1,4 @@
-package com.icehufs.icebreaker.common;
+package com.icehufs.icebreaker.provider;
 
 public class CertificationNumber {
     public static String getCertificationNumber(){
