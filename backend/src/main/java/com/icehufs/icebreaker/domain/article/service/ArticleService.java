@@ -1,13 +1,26 @@
-package com.icehufs.icebreaker.service;
+package com.icehufs.icebreaker.domain.article.service;
 
 import org.springframework.http.ResponseEntity;
 
-import com.icehufs.icebreaker.dto.request.article.*;
-import com.icehufs.icebreaker.dto.response.article.*;
-
-
-
-
+import com.icehufs.icebreaker.domain.article.dto.request.PatchArticleRequestDto;
+import com.icehufs.icebreaker.domain.article.dto.request.PatchCommentRequestDto;
+import com.icehufs.icebreaker.domain.article.dto.request.PostArticleRequestDto;
+import com.icehufs.icebreaker.domain.article.dto.request.PostCommentRequestDto;
+import com.icehufs.icebreaker.domain.article.dto.response.CheckArticleFavoriteResponseDto;
+import com.icehufs.icebreaker.domain.article.dto.response.CheckOwnOfArticleResponseDto;
+import com.icehufs.icebreaker.domain.article.dto.response.DeleteArticleAdminResponseDto;
+import com.icehufs.icebreaker.domain.article.dto.response.DeleteArticleResponseDto;
+import com.icehufs.icebreaker.domain.article.dto.response.DeleteCommentResponseDto;
+import com.icehufs.icebreaker.domain.article.dto.response.GetArticleListResponseDto;
+import com.icehufs.icebreaker.domain.article.dto.response.GetArticleResponseDto;
+import com.icehufs.icebreaker.domain.article.dto.response.GetCommentListResponseDto;
+import com.icehufs.icebreaker.domain.article.dto.response.GetUserArticleListResponseDto;
+import com.icehufs.icebreaker.domain.article.dto.response.PatchArticleResponseDto;
+import com.icehufs.icebreaker.domain.article.dto.response.PatchCommentResponseDto;
+import com.icehufs.icebreaker.domain.article.dto.response.PostArticleResponseDto;
+import com.icehufs.icebreaker.domain.article.dto.response.PostCommentResponseDto;
+import com.icehufs.icebreaker.domain.article.dto.response.PutFavoriteResponseDto;
+import com.icehufs.icebreaker.domain.article.dto.response.PutResolvedArticleResponseDto;
 
 public interface ArticleService {
 

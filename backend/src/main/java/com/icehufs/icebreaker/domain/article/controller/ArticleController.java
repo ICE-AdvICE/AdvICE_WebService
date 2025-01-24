@@ -1,4 +1,4 @@
-package com.icehufs.icebreaker.controller;
+package com.icehufs.icebreaker.domain.article.controller;
 
 import jakarta.validation.Valid;
 
@@ -14,9 +14,19 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.icehufs.icebreaker.dto.request.article.*;
-import com.icehufs.icebreaker.dto.response.article.*;
-import com.icehufs.icebreaker.service.ArticleService;
+import com.icehufs.icebreaker.domain.article.dto.request.PatchArticleRequestDto;
+import com.icehufs.icebreaker.domain.article.dto.request.PostArticleRequestDto;
+import com.icehufs.icebreaker.domain.article.dto.response.CheckArticleFavoriteResponseDto;
+import com.icehufs.icebreaker.domain.article.dto.response.CheckOwnOfArticleResponseDto;
+import com.icehufs.icebreaker.domain.article.dto.response.DeleteArticleResponseDto;
+import com.icehufs.icebreaker.domain.article.dto.response.GetArticleListResponseDto;
+import com.icehufs.icebreaker.domain.article.dto.response.GetArticleResponseDto;
+import com.icehufs.icebreaker.domain.article.dto.response.GetCommentListResponseDto;
+import com.icehufs.icebreaker.domain.article.dto.response.GetUserArticleListResponseDto;
+import com.icehufs.icebreaker.domain.article.dto.response.PatchArticleResponseDto;
+import com.icehufs.icebreaker.domain.article.dto.response.PostArticleResponseDto;
+import com.icehufs.icebreaker.domain.article.dto.response.PutFavoriteResponseDto;
+import com.icehufs.icebreaker.domain.article.service.ArticleService;
 
 import lombok.RequiredArgsConstructor;
 
