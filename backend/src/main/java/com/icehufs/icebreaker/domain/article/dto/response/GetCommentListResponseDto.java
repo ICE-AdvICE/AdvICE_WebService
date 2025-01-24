@@ -9,7 +9,7 @@ import com.icehufs.icebreaker.common.ResponseCode;
 import com.icehufs.icebreaker.common.ResponseMessage;
 import com.icehufs.icebreaker.dto.object.CommentListItem;
 import com.icehufs.icebreaker.dto.response.ResponseDto;
-import com.icehufs.icebreaker.domain.article.domain.entity.CommentEntity;
+import com.icehufs.icebreaker.domain.article.domain.entity.Comment;
 
 import lombok.Getter;
 
@@ -18,12 +18,12 @@ public class GetCommentListResponseDto extends ResponseDto {
     
     private List<CommentListItem> commentList;
 
-    private GetCommentListResponseDto(List<CommentEntity> resultSets){
+    private GetCommentListResponseDto(List<Comment> resultSets){
         super(ResponseCode.SUCCESS, ResponseCode.SUCCESS);
         this.commentList = CommentListItem.copyList(resultSets);
     }
     
-        public static ResponseEntity<GetCommentListResponseDto> success(List<CommentEntity> resulSets){
+        public static ResponseEntity<GetCommentListResponseDto> success(List<Comment> resulSets){
         GetCommentListResponseDto result = new GetCommentListResponseDto(resulSets);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }

@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 @Entity(name = "favorite")
 @Table(name = "favorite")
 @IdClass(FavoritePk.class)
-public class FavoriteEntity {
+public class Favorite {
 
     @Id
     private String userEmail;

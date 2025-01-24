@@ -3,7 +3,7 @@ package com.icehufs.icebreaker.dto.object;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.icehufs.icebreaker.domain.article.domain.entity.CommentEntity;
+import com.icehufs.icebreaker.domain.article.domain.entity.Comment;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -18,15 +18,15 @@ public class CommentListItem {
     private String writeDatetime;
     private String content;
 
-    public CommentListItem(CommentEntity resultSet){
+    public CommentListItem(Comment resultSet){
         this.commentNumber = resultSet.getCommentNumber();
         this.writeDatetime = resultSet.getWriteDatetime();
         this.content = resultSet.getContent();
     }
 
-    public static List<CommentListItem> copyList( List<CommentEntity> resultSet){
+    public static List<CommentListItem> copyList( List<Comment> resultSet){
         List<CommentListItem> list = new ArrayList<>();
-        for(CommentEntity reultSet: resultSet){
+        for(Comment reultSet: resultSet){
             CommentListItem commentListItem = new CommentListItem(reultSet);
             list.add(commentListItem);
         }

@@ -23,7 +23,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Entity(name="comment")
 @Table(name="comment")
-public class CommentEntity {
+public class Comment {
     
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int commentNumber;
@@ -36,7 +36,7 @@ public class CommentEntity {
         this.content = dto.getContent();
     }
 
-    public CommentEntity(PostCommentRequestDto dto, Integer articleNum, String email){
+    public Comment(PostCommentRequestDto dto, Integer articleNum, String email){
 
         ZonedDateTime now = ZonedDateTime.now(ZoneId.of("Asia/Seoul"));
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");

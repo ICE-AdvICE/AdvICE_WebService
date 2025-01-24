@@ -1,6 +1,8 @@
 package com.icehufs.icebreaker.domain.article.domain.entity;
 
 
+import com.icehufs.icebreaker.domain.article.domain.type.ArticleCategoryEnum;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
@@ -14,7 +16,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Entity(name = "article_list_view")
 @Table(name = "article_list_view")
-public class ArticleListViewEntity {
+public class ArticleListView {
     @Id
     private int article_num;
     private String article_title;

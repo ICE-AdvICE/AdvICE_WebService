@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.icehufs.icebreaker.domain.article.domain.entity.Article;
-import com.icehufs.icebreaker.domain.article.domain.entity.ArticleCategoryEnum;
+import com.icehufs.icebreaker.domain.article.domain.type.ArticleCategoryEnum;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

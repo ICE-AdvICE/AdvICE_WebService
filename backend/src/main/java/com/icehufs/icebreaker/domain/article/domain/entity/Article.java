@@ -15,6 +15,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
+import com.icehufs.icebreaker.domain.article.domain.type.ArticleCategoryEnum;
 import com.icehufs.icebreaker.domain.article.dto.request.PatchArticleRequestDto;
 import com.icehufs.icebreaker.domain.article.dto.request.PostArticleRequestDto;
 

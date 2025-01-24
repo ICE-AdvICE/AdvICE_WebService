@@ -1,4 +1,4 @@
-package com.icehufs.icebreaker.domain.article.domain.entity;
+package com.icehufs.icebreaker.domain.article.domain.type;
 
 public enum ArticleCategoryEnum {
     GENERAL(0),
