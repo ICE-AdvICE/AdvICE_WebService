@@ -20,9 +20,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.icehufs.icebreaker.entity.AuthorityEntity;
+import com.icehufs.icebreaker.domain.auth.domain.entity.Authority;
 import com.icehufs.icebreaker.provider.JwtProvider;
-import com.icehufs.icebreaker.repository.AuthorityRepository;
+import com.icehufs.icebreaker.domain.auth.repostiory.AuthorityRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -53,23 +53,23 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
 
         List<GrantedAuthority> authorities = new ArrayList<>(); //권한을 저장할 리스트 선언
 
-        AuthorityEntity authorityEntity = authorityRepository.findByEmail(email);
+        Authority authority = authorityRepository.findByEmail(email);
 
         authorities.add(new SimpleGrantedAuthority("ROLE_USER")); //기본 사용자 권한 부여
 
-        if(!"NULL".equals(authorityEntity.getRoleAdmin1())){
+        if(!"NULL".equals(authority.getRoleAdmin1())){
             authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN1")); //익명게시판 운영자 권한 부여
         }
 
-        if(!"NULL".equals(authorityEntity.getRoleAdminC1())){
+        if(!"NULL".equals(authority.getRoleAdminC1())){
             authorities.add(new SimpleGrantedAuthority("ROLE_ADMINC1"));//코딩존 과목1 조교 권한 부여
         }
 
-        if(!"NULL".equals(authorityEntity.getRoleAdminC2())){
+        if(!"NULL".equals(authority.getRoleAdminC2())){
             authorities.add(new SimpleGrantedAuthority("ROLE_ADMINC2"));//코딩존 과목2 조교 권한 부여
         }
 
-        if(!"NULL".equals(authorityEntity.getRoleAdmin())){
+        if(!"NULL".equals(authority.getRoleAdmin())){
             authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));//'ICEbreaker' 코딩존 수업 등록 및 권한 부여 가능한 권한(과사조교) 부여
         }
 

@@ -39,12 +39,12 @@ import com.icehufs.icebreaker.domain.codingzone.domain.vo.PersAttendManagListIte
 import com.icehufs.icebreaker.domain.codingzone.domain.vo.ReservedClassListItem;
 import com.icehufs.icebreaker.dto.response.ResponseDto;
 import com.icehufs.icebreaker.domain.article.dto.response.CheckOwnOfArticleResponseDto;
-import com.icehufs.icebreaker.entity.AuthorityEntity;
+import com.icehufs.icebreaker.domain.auth.domain.entity.Authority;
 import com.icehufs.icebreaker.domain.codingzone.domain.entity.CodingZoneClass;
 import com.icehufs.icebreaker.domain.codingzone.domain.entity.CodingZoneRegister;
 import com.icehufs.icebreaker.domain.codingzone.domain.entity.GroupInf;
 import com.icehufs.icebreaker.entity.User;
-import com.icehufs.icebreaker.repository.AuthorityRepository;
+import com.icehufs.icebreaker.domain.auth.repostiory.AuthorityRepository;
 import com.icehufs.icebreaker.domain.codingzone.repository.CodingZoneClassRepository;
 import com.icehufs.icebreaker.domain.codingzone.repository.CodingZoneRegisterRepository;
 import com.icehufs.icebreaker.domain.codingzone.repository.GroupInfRepository;
@@ -88,12 +88,12 @@ public class CodingZoneServiceImplement implements CodingZoneService {
     public ResponseEntity<? super AuthorityExistResponseDto> authExist(String email) {
         try{
 
-            AuthorityEntity authorityEntity = authorityRepository.findByEmail(email);
-            if(authorityEntity == null) return AuthorityExistResponseDto.notExistUser();
+            Authority authority = authorityRepository.findByEmail(email);
+            if(authority == null) return AuthorityExistResponseDto.notExistUser();
  
-            String entireAdmin = authorityEntity.getRoleAdmin();
-            String codingC1Admin = authorityEntity.getRoleAdminC1();
-            String codingC2Admin = authorityEntity.getRoleAdminC2();
+            String entireAdmin = authority.getRoleAdmin();
+            String codingC1Admin = authority.getRoleAdminC1();
+            String codingC2Admin = authority.getRoleAdminC2();
 
             if(!"NULL".equals(entireAdmin)){
                 return AuthorityExistResponseDto.entireAdmin();
@@ -492,11 +492,11 @@ public class CodingZoneServiceImplement implements CodingZoneService {
                     User user = userRepository.findByEmail(email);
                     if (user == null) return GetReservedClassListItemResponseDto.notExistUser();
 
-                    AuthorityEntity authorityEntity = authorityRepository.findByEmail(email);
-                    if(!"NULL".equals(authorityEntity.getRoleAdminC1())){
+                    Authority authority = authorityRepository.findByEmail(email);
+                    if(!"NULL".equals(authority.getRoleAdminC1())){
                         kindOfClass = 1;
                     }
-                    if(!"NULL".equals(authorityEntity.getRoleAdminC2())){
+                    if(!"NULL".equals(authority.getRoleAdminC2())){
                         kindOfClass = 2;
                     }
 
@@ -553,8 +553,8 @@ public class CodingZoneServiceImplement implements CodingZoneService {
     private void updateAuthorities() {
         String C1 = "ROLE_ADMINC1";
         String C2 = "ROLE_ADMINC2";
-        List<AuthorityEntity> users = authorityRepository.findByRoleAdminC1(C1);
-        List<AuthorityEntity> users2 = authorityRepository.findByRoleAdminC2(C2);
+        List<Authority> users = authorityRepository.findByRoleAdminC1(C1);
+        List<Authority> users2 = authorityRepository.findByRoleAdminC2(C2);
 
         users.forEach(authorityEntity -> {
             authorityEntity.setRoleAdminC1("NULL");
@@ -576,20 +576,20 @@ public class CodingZoneServiceImplement implements CodingZoneService {
             if (!existedUser) return GiveAuthResponseDto.notExistUser();
 
             //권한을 주려하는 사용자가 회원가입이 안되어있을 때
-            AuthorityEntity authorityEntity = authorityRepository.findByEmail(dto.getEmail());
-            if (authorityEntity == null) return GiveAuthResponseDto.notSingUpUser();
+            Authority authority = authorityRepository.findByEmail(dto.getEmail());
+            if (authority == null) return GiveAuthResponseDto.notSingUpUser();
 
             if("ROLE_ADMIN1".equals(dto.getRole())){
-                if(authorityEntity.getRoleAdmin1().equals(dto.getRole())) return GiveAuthResponseDto.alreadyPerm(); //특정 권한이 이미 있을 떄
-                authorityEntity.giveAdmin1Auth();
+                if(authority.getRoleAdmin1().equals(dto.getRole())) return GiveAuthResponseDto.alreadyPerm(); //특정 권한이 이미 있을 떄
+                authority.giveAdmin1Auth();
             }else if("ROLE_ADMINC1".equals(dto.getRole())){
-                if(authorityEntity.getRoleAdminC1().equals("ROLE_ADMINC1") || authorityEntity.getRoleAdminC2().equals("ROLE_ADMINC2")) return GiveAuthResponseDto.alreadyPerm(); //특정 권한이 이미 있을 떄
-                authorityEntity.giveAdminC1Auth();
+                if(authority.getRoleAdminC1().equals("ROLE_ADMINC1") || authority.getRoleAdminC2().equals("ROLE_ADMINC2")) return GiveAuthResponseDto.alreadyPerm(); //특정 권한이 이미 있을 떄
+                authority.giveAdminC1Auth();
             }else if("ROLE_ADMINC2".equals(dto.getRole())){
-                if(authorityEntity.getRoleAdminC1().equals("ROLE_ADMINC1") || authorityEntity.getRoleAdminC2().equals("ROLE_ADMINC2")) return GiveAuthResponseDto.alreadyPerm(); //특정 권한이 이미 있을 떄
-                authorityEntity.giveAdminC2Auth();
+                if(authority.getRoleAdminC1().equals("ROLE_ADMINC1") || authority.getRoleAdminC2().equals("ROLE_ADMINC2")) return GiveAuthResponseDto.alreadyPerm(); //특정 권한이 이미 있을 떄
+                authority.giveAdminC2Auth();
             }
-            authorityRepository.save(authorityEntity);
+            authorityRepository.save(authority);
 
         } catch (Exception exception){
             exception.printStackTrace();
@@ -606,23 +606,23 @@ public class CodingZoneServiceImplement implements CodingZoneService {
             if (!existedUser) return DepriveAuthResponseDto.notExistUser();
 
             //권한을 주려하는 사용자가 회원가입이 안되있을 때
-            AuthorityEntity authorityEntity = authorityRepository.findByEmail(dto.getEmail());
-            if (authorityEntity == null) return DepriveAuthResponseDto.notSingUpUser();
+            Authority authority = authorityRepository.findByEmail(dto.getEmail());
+            if (authority == null) return DepriveAuthResponseDto.notSingUpUser();
 
             if("ROLE_ADMIN1".equals(dto.getRole())){
-                if(authorityEntity.getRoleAdmin1().equals("NULL")) return GiveAuthResponseDto.alreadyPerm(); // 박탈하려히는 특정 권한이 없을 때
-                authorityEntity.setRoleAdmin1("NULL");
-                authorityEntity.setGivenDateAdmin1(null);
+                if(authority.getRoleAdmin1().equals("NULL")) return GiveAuthResponseDto.alreadyPerm(); // 박탈하려히는 특정 권한이 없을 때
+                authority.setRoleAdmin1("NULL");
+                authority.setGivenDateAdmin1(null);
             }else if("ROLE_ADMINC1".equals(dto.getRole())){
-                if(authorityEntity.getRoleAdminC1().equals("NULL")) return GiveAuthResponseDto.alreadyPerm(); // 박탈하려히는 특정 권한이 없을 때
-                authorityEntity.setRoleAdminC1("NULL");
-                authorityEntity.setGivenDateAdminC(null);
+                if(authority.getRoleAdminC1().equals("NULL")) return GiveAuthResponseDto.alreadyPerm(); // 박탈하려히는 특정 권한이 없을 때
+                authority.setRoleAdminC1("NULL");
+                authority.setGivenDateAdminC(null);
             }else if("ROLE_ADMINC2".equals(dto.getRole())){
-                if(authorityEntity.getRoleAdminC2().equals("NULL")) return GiveAuthResponseDto.alreadyPerm(); // 박탈하려히는 특정 권한이 없을 때
-                authorityEntity.setRoleAdminC2("NULL");
-                authorityEntity.setGivenDateAdminC(null);
+                if(authority.getRoleAdminC2().equals("NULL")) return GiveAuthResponseDto.alreadyPerm(); // 박탈하려히는 특정 권한이 없을 때
+                authority.setRoleAdminC2("NULL");
+                authority.setGivenDateAdminC(null);
             }
-            authorityRepository.save(authorityEntity);
+            authorityRepository.save(authority);
 
         } catch (Exception exception){
             exception.printStackTrace();
@@ -638,8 +638,8 @@ public class CodingZoneServiceImplement implements CodingZoneService {
         try {
             String C1 = "ROLE_ADMINC1";
             String C2 = "ROLE_ADMINC2";
-            List<AuthorityEntity> users = authorityRepository.findByRoleAdminC1(C1);
-            List<AuthorityEntity> users2 = authorityRepository.findByRoleAdminC2(C2);
+            List<Authority> users = authorityRepository.findByRoleAdminC1(C1);
+            List<Authority> users2 = authorityRepository.findByRoleAdminC2(C2);
             if(users.isEmpty() || users2.isEmpty()) return GetCodingZoneAssitantListResponseDto.notExistUser();
     
             users.forEach(authorityEntity -> {
