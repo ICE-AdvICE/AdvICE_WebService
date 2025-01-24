@@ -1,10 +1,10 @@
-package com.icehufs.icebreaker.dto.object;
+package com.icehufs.icebreaker.domain.codingzone.domain.vo;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import java.util.List;
 
-import com.icehufs.icebreaker.entity.CodingZoneClass;
+import com.icehufs.icebreaker.domain.codingzone.domain.entity.CodingZoneClass;
 
 
 import java.util.ArrayList;

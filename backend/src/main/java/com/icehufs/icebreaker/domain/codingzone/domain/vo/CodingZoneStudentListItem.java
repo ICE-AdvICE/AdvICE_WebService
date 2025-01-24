@@ -1,7 +1,7 @@
-package com.icehufs.icebreaker.dto.object;
+package com.icehufs.icebreaker.domain.codingzone.domain.vo;
 
-import com.icehufs.icebreaker.entity.CodingZoneClass;
-import com.icehufs.icebreaker.entity.CodingZoneRegisterEntity;
+import com.icehufs.icebreaker.domain.codingzone.domain.entity.CodingZoneClass;
+import com.icehufs.icebreaker.domain.codingzone.domain.entity.CodingZoneRegister;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -37,16 +37,16 @@ public class CodingZoneStudentListItem {
         this.grade = other.grade;
     }
 
-    public CodingZoneStudentListItem(CodingZoneClass codingZoneClass, CodingZoneRegisterEntity codingZoneRegisterEntity){
+    public CodingZoneStudentListItem(CodingZoneClass codingZoneClass, CodingZoneRegister codingZoneRegister){
         this.className = codingZoneClass.getClassName();
-        this.registrationId = codingZoneRegisterEntity.getRegistrationId();
+        this.registrationId = codingZoneRegister.getRegistrationId();
         this.classDate = codingZoneClass.getClassDate();
         this.classTime = codingZoneClass.getClassTime();
         this.assistantName = codingZoneClass.getAssistantName();
-        this.attendance = codingZoneRegisterEntity.getAttendance();
-        this.userStudentNum = codingZoneRegisterEntity.getUserStudentNum();
-        this.userName = codingZoneRegisterEntity.getUserName();
-        this.userEmail = codingZoneRegisterEntity.getUserEmail();
+        this.attendance = codingZoneRegister.getAttendance();
+        this.userStudentNum = codingZoneRegister.getUserStudentNum();
+        this.userName = codingZoneRegister.getUserName();
+        this.userEmail = codingZoneRegister.getUserEmail();
         this.grade = codingZoneClass.getGrade();
     }
 
@@ -57,5 +57,4 @@ public class CodingZoneStudentListItem {
         }
         return list;
     }
-    
 }

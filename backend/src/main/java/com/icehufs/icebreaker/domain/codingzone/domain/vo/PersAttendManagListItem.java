@@ -1,9 +1,9 @@
-package com.icehufs.icebreaker.dto.object;
+package com.icehufs.icebreaker.domain.codingzone.domain.vo;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.icehufs.icebreaker.entity.CodingZoneClass;
-import com.icehufs.icebreaker.entity.CodingZoneRegisterEntity;
+import com.icehufs.icebreaker.domain.codingzone.domain.entity.CodingZoneClass;
+import com.icehufs.icebreaker.domain.codingzone.domain.entity.CodingZoneRegister;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -31,13 +31,13 @@ public class PersAttendManagListItem {
     }
 
     //CodingZoneClass와 CodingZoneRegisterEntity 인스턴스를 기반으로 새 PersAttendManagListItem 객체를 초기화
-    public PersAttendManagListItem(CodingZoneClass codingZoneClass, CodingZoneRegisterEntity codingZoneRegisterEntity) {
+    public PersAttendManagListItem(CodingZoneClass codingZoneClass, CodingZoneRegister codingZoneRegister) {
         this.className = codingZoneClass.getClassName();
         this.classDate = codingZoneClass.getClassDate();
         this.classTime = codingZoneClass.getClassTime();
         this.assistantName = codingZoneClass.getAssistantName();
-        this.registrationId = codingZoneRegisterEntity.getRegistrationId();
-        this.attendance = codingZoneRegisterEntity.getAttendance();
+        this.registrationId = codingZoneRegister.getRegistrationId();
+        this.attendance = codingZoneRegister.getAttendance();
     }
 
     // 객체 리스트에서 각 객체를 복사하여 새 리스트를 생성

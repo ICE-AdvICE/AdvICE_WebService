@@ -1,7 +1,7 @@
-package com.icehufs.icebreaker.dto.object;
+package com.icehufs.icebreaker.domain.codingzone.domain.vo;
 
-import com.icehufs.icebreaker.entity.CodingZoneClass;
-import com.icehufs.icebreaker.entity.CodingZoneRegisterEntity;
+import com.icehufs.icebreaker.domain.codingzone.domain.entity.CodingZoneClass;
+import com.icehufs.icebreaker.domain.codingzone.domain.entity.CodingZoneRegister;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -36,16 +36,16 @@ public class ReservedClassListItem {
         this.userEmail = other.userEmail;
     }
 
-    public ReservedClassListItem(CodingZoneClass codingZoneClass, CodingZoneRegisterEntity codingZoneRegisterEntity){
+    public ReservedClassListItem(CodingZoneClass codingZoneClass, CodingZoneRegister codingZoneRegister){
         this.className = codingZoneClass.getClassName();
-        this.registrationId = codingZoneRegisterEntity.getRegistrationId();
-        this.grade = codingZoneRegisterEntity.getGrade();
+        this.registrationId = codingZoneRegister.getRegistrationId();
+        this.grade = codingZoneRegister.getGrade();
         this.classTime = codingZoneClass.getClassTime();
         this.assistantName = codingZoneClass.getAssistantName();
-        this.attendance = codingZoneRegisterEntity.getAttendance();
-        this.userStudentNum = codingZoneRegisterEntity.getUserStudentNum();
-        this.userName = codingZoneRegisterEntity.getUserName();
-        this.userEmail = codingZoneRegisterEntity.getUserEmail();
+        this.attendance = codingZoneRegister.getAttendance();
+        this.userStudentNum = codingZoneRegister.getUserStudentNum();
+        this.userName = codingZoneRegister.getUserName();
+        this.userEmail = codingZoneRegister.getUserEmail();
     }
 
     public static List<ReservedClassListItem> getList(List<ReservedClassListItem> reservedClassListItems) {

@@ -1,6 +1,6 @@
-package com.icehufs.icebreaker.dto.object;
+package com.icehufs.icebreaker.domain.codingzone.domain.vo;
 
-import com.icehufs.icebreaker.entity.GroupInfEntity;
+import com.icehufs.icebreaker.domain.codingzone.domain.entity.GroupInf;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -21,7 +21,7 @@ public class GroupInfListItem {
     private String className; //과목명
     private int grade; //학년
 
-    public GroupInfListItem(GroupInfEntity groupInfListEntity) {
+    public GroupInfListItem(GroupInf groupInfListEntity) {
         this.classNum = groupInfListEntity.getClassNum();
         this.assistantName = groupInfListEntity.getAssistantName();
         this.groupId = groupInfListEntity.getGroupId();
@@ -32,9 +32,9 @@ public class GroupInfListItem {
         this.grade = groupInfListEntity.getGrade();
     }
 
-    public static List<GroupInfListItem> getList(List<GroupInfEntity> groupInfListEntities){
+    public static List<GroupInfListItem> getList(List<GroupInf> groupInfListEntities){
         List<GroupInfListItem> list = new ArrayList<>();
-        for (GroupInfEntity groupInfListEntity: groupInfListEntities){
+        for (GroupInf groupInfListEntity: groupInfListEntities){
             GroupInfListItem groupInfListItem = new GroupInfListItem(groupInfListEntity);
             list.add(groupInfListItem);
         }
