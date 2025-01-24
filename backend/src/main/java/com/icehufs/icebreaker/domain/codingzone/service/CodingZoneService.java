@@ -1,10 +1,29 @@
-package com.icehufs.icebreaker.service;
+package com.icehufs.icebreaker.domain.codingzone.service;
 
 import org.springframework.http.ResponseEntity;
 
-import com.icehufs.icebreaker.dto.request.codingzone.*;
-import com.icehufs.icebreaker.dto.response.codingzone.*;
-
+import com.icehufs.icebreaker.domain.codingzone.dto.request.CodingZoneClassAssignRequestDto;
+import com.icehufs.icebreaker.domain.codingzone.dto.request.GroupInfUpdateRequestDto;
+import com.icehufs.icebreaker.domain.codingzone.dto.request.HandleAuthRequestDto;
+import com.icehufs.icebreaker.domain.codingzone.dto.request.PatchGroupInfRequestDto;
+import com.icehufs.icebreaker.domain.codingzone.dto.response.AuthorityExistResponseDto;
+import com.icehufs.icebreaker.domain.codingzone.dto.response.CodingZoneCanceResponseDto;
+import com.icehufs.icebreaker.domain.codingzone.dto.response.CodingZoneClassAssignResponseDto;
+import com.icehufs.icebreaker.domain.codingzone.dto.response.CodingZoneRegisterResponseDto;
+import com.icehufs.icebreaker.domain.codingzone.dto.response.DeleteAllInfResponseDto;
+import com.icehufs.icebreaker.domain.codingzone.dto.response.DeleteClassResponseDto;
+import com.icehufs.icebreaker.domain.codingzone.dto.response.DepriveAuthResponseDto;
+import com.icehufs.icebreaker.domain.codingzone.dto.response.GetCodingZoneAssitantListResponseDto;
+import com.icehufs.icebreaker.domain.codingzone.dto.response.GetCodingZoneStudentListResponseDto;
+import com.icehufs.icebreaker.domain.codingzone.dto.response.GetCountOfAttendResponseDto;
+import com.icehufs.icebreaker.domain.codingzone.dto.response.GetListOfCodingZoneClassForNotLogInResponseDto;
+import com.icehufs.icebreaker.domain.codingzone.dto.response.GetListOfCodingZoneClassResponseDto;
+import com.icehufs.icebreaker.domain.codingzone.dto.response.GetListOfGroupInfResponseDto;
+import com.icehufs.icebreaker.domain.codingzone.dto.response.GetPersAttendListItemResponseDto;
+import com.icehufs.icebreaker.domain.codingzone.dto.response.GetReservedClassListItemResponseDto;
+import com.icehufs.icebreaker.domain.codingzone.dto.response.GiveAuthResponseDto;
+import com.icehufs.icebreaker.domain.codingzone.dto.response.GroupInfUpdateResponseDto;
+import com.icehufs.icebreaker.domain.codingzone.dto.response.PutAttendanceResponseDto;
 
 import java.util.List;
 

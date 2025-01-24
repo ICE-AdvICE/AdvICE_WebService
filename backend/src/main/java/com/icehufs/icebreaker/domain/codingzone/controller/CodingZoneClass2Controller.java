@@ -1,4 +1,4 @@
-package com.icehufs.icebreaker.controller;
+package com.icehufs.icebreaker.domain.codingzone.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -7,20 +7,18 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-
-import com.icehufs.icebreaker.dto.response.codingzone.PutAttendanceResponseDto;
-import com.icehufs.icebreaker.service.CodingZoneService;
+import com.icehufs.icebreaker.domain.codingzone.dto.response.PutAttendanceResponseDto;
+import com.icehufs.icebreaker.domain.codingzone.service.CodingZoneService;
 
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/api/admin-c1") //코딩존1 조교 권한 API 주소
+@RequestMapping("/api/admin-c2") //코딩존2 조교 권한 API 주소
 @RequiredArgsConstructor
-public class CodingZoneClass1Controller {
-
+public class CodingZoneClass2Controller {
     private final CodingZoneService codingzoneService;
 
-    @PutMapping("/attendance/{registNum}") // 코딩존1 수업을 예약한 학생을 출석/결석 처리 API
+    @PutMapping("/attendance/{registNum}") // 코딩존2 수업을 예약한 학생을 출석/결석 처리 API
     public ResponseEntity<? super PutAttendanceResponseDto> putAttend(
         @PathVariable Integer registNum,
         @AuthenticationPrincipal String email
@@ -28,4 +26,5 @@ public class CodingZoneClass1Controller {
         ResponseEntity<? super PutAttendanceResponseDto> response = codingzoneService.putAttend(registNum, email);
         return response;
     }
+    
 }

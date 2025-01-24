@@ -1,4 +1,4 @@
-package com.icehufs.icebreaker.controller;
+package com.icehufs.icebreaker.domain.codingzone.controller;
 
 
 
@@ -10,10 +10,17 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import com.icehufs.icebreaker.service.CodingZoneService;
 
-import com.icehufs.icebreaker.dto.response.codingzone.*;
-
+import com.icehufs.icebreaker.domain.codingzone.dto.response.AuthorityExistResponseDto;
+import com.icehufs.icebreaker.domain.codingzone.dto.response.CodingZoneCanceResponseDto;
+import com.icehufs.icebreaker.domain.codingzone.dto.response.CodingZoneRegisterResponseDto;
+import com.icehufs.icebreaker.domain.codingzone.dto.response.GetCodingZoneAssitantListResponseDto;
+import com.icehufs.icebreaker.domain.codingzone.dto.response.GetCountOfAttendResponseDto;
+import com.icehufs.icebreaker.domain.codingzone.dto.response.GetListOfCodingZoneClassForNotLogInResponseDto;
+import com.icehufs.icebreaker.domain.codingzone.dto.response.GetListOfCodingZoneClassResponseDto;
+import com.icehufs.icebreaker.domain.codingzone.dto.response.GetPersAttendListItemResponseDto;
+import com.icehufs.icebreaker.domain.codingzone.dto.response.GetReservedClassListItemResponseDto;
+import com.icehufs.icebreaker.domain.codingzone.service.CodingZoneService;
 
 import lombok.RequiredArgsConstructor;
 
