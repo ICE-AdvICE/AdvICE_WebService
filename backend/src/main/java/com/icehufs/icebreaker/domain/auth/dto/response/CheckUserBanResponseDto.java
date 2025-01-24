@@ -1,12 +1,12 @@
-package com.icehufs.icebreaker.dto.response.auth;
+package com.icehufs.icebreaker.domain.auth.dto.response;
 
 import java.time.LocalDateTime;
 
 import org.springframework.http.ResponseEntity;
 
 import com.icehufs.icebreaker.dto.response.ResponseDto;
-import com.icehufs.icebreaker.entity.BanDurationEnum;
-import com.icehufs.icebreaker.entity.BanReasonEnum;
+import com.icehufs.icebreaker.domain.auth.domain.type.BanDurationEnum;
+import com.icehufs.icebreaker.domain.auth.domain.type.BanReasonEnum;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

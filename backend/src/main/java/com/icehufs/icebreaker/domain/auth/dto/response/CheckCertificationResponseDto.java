@@ -1,4 +1,4 @@
-    package com.icehufs.icebreaker.dto.response.auth;
+    package com.icehufs.icebreaker.domain.auth.dto.response;
 
     import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

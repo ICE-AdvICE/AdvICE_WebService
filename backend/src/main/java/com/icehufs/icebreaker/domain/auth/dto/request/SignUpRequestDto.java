@@ -1,4 +1,4 @@
-package com.icehufs.icebreaker.dto.request.auth;
+package com.icehufs.icebreaker.domain.auth.dto.request;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
