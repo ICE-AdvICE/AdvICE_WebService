@@ -34,7 +34,7 @@ import com.icehufs.icebreaker.domain.article.repository.ArticleRepository;
 import com.icehufs.icebreaker.domain.article.repository.ArtileListViewRepository;
 import com.icehufs.icebreaker.domain.article.repository.CommentRepository;
 import com.icehufs.icebreaker.domain.article.repository.FavoriteRepository;
-import com.icehufs.icebreaker.repository.UserRepository;
+import com.icehufs.icebreaker.domain.membership.repository.UserRepository;
 import com.icehufs.icebreaker.domain.article.service.ArticleService;
 import com.icehufs.icebreaker.util.EncryptionUtil;
 

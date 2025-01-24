@@ -1,4 +1,4 @@
-package com.icehufs.icebreaker.service.implement;
+package com.icehufs.icebreaker.domain.membership.service.implement;
 
 
 import org.springframework.http.ResponseEntity;
@@ -6,14 +6,21 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.icehufs.icebreaker.dto.request.user.*;
+import com.icehufs.icebreaker.domain.membership.dto.request.AuthorityRequestDto;
+import com.icehufs.icebreaker.domain.membership.dto.request.PatchUserPassRequestDto;
+import com.icehufs.icebreaker.domain.membership.dto.request.PatchUserRequestDto;
+import com.icehufs.icebreaker.domain.membership.dto.response.Authority1ExistResponseDto;
+import com.icehufs.icebreaker.domain.membership.dto.response.AuthorityResponseDto;
+import com.icehufs.icebreaker.domain.membership.dto.response.DeleteUserResponseDto;
+import com.icehufs.icebreaker.domain.membership.dto.response.GetSignInUserResponseDto;
+import com.icehufs.icebreaker.domain.membership.dto.response.PatchUserPassResponseDto;
+import com.icehufs.icebreaker.domain.membership.dto.response.PatchUserResponseDto;
 import com.icehufs.icebreaker.dto.response.ResponseDto;
-import com.icehufs.icebreaker.dto.response.user.*;
 import com.icehufs.icebreaker.domain.auth.domain.entity.Authority;
-import com.icehufs.icebreaker.entity.User;
+import com.icehufs.icebreaker.domain.membership.domain.entity.User;
 import com.icehufs.icebreaker.domain.auth.repostiory.AuthorityRepository;
-import com.icehufs.icebreaker.repository.UserRepository;
-import com.icehufs.icebreaker.service.UserService;
+import com.icehufs.icebreaker.domain.membership.repository.UserRepository;
+import com.icehufs.icebreaker.domain.membership.service.UserService;
 
 import lombok.RequiredArgsConstructor;
 

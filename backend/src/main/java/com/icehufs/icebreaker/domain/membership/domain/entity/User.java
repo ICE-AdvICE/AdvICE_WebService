@@ -1,4 +1,4 @@
-package com.icehufs.icebreaker.entity;
+package com.icehufs.icebreaker.domain.membership.domain.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -6,8 +6,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 import com.icehufs.icebreaker.domain.auth.dto.request.SignUpRequestDto;
-import com.icehufs.icebreaker.dto.request.user.PatchUserPassRequestDto;
-import com.icehufs.icebreaker.dto.request.user.PatchUserRequestDto;
+import com.icehufs.icebreaker.domain.membership.dto.request.PatchUserPassRequestDto;
+import com.icehufs.icebreaker.domain.membership.dto.request.PatchUserRequestDto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

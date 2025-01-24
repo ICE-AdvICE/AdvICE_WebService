@@ -1,4 +1,4 @@
-package com.icehufs.icebreaker.dto.request.user;
+package com.icehufs.icebreaker.domain.membership.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 

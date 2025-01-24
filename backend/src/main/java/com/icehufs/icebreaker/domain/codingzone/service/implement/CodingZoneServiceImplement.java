@@ -43,12 +43,12 @@ import com.icehufs.icebreaker.domain.auth.domain.entity.Authority;
 import com.icehufs.icebreaker.domain.codingzone.domain.entity.CodingZoneClass;
 import com.icehufs.icebreaker.domain.codingzone.domain.entity.CodingZoneRegister;
 import com.icehufs.icebreaker.domain.codingzone.domain.entity.GroupInf;
-import com.icehufs.icebreaker.entity.User;
+import com.icehufs.icebreaker.domain.membership.domain.entity.User;
 import com.icehufs.icebreaker.domain.auth.repostiory.AuthorityRepository;
 import com.icehufs.icebreaker.domain.codingzone.repository.CodingZoneClassRepository;
 import com.icehufs.icebreaker.domain.codingzone.repository.CodingZoneRegisterRepository;
 import com.icehufs.icebreaker.domain.codingzone.repository.GroupInfRepository;
-import com.icehufs.icebreaker.repository.UserRepository;
+import com.icehufs.icebreaker.domain.membership.repository.UserRepository;
 import com.icehufs.icebreaker.domain.codingzone.service.CodingZoneService;
 
 import jakarta.transaction.Transactional;

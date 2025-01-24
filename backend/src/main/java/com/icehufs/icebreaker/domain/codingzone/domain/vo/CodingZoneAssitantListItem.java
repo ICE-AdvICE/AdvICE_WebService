@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import java.util.List;
 import java.util.ArrayList;
-import com.icehufs.icebreaker.entity.User;
+import com.icehufs.icebreaker.domain.membership.domain.entity.User;
 
 
 @Getter

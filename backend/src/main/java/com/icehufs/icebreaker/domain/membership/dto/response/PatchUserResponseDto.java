@@ -1,4 +1,4 @@
-package com.icehufs.icebreaker.dto.response.user;
+package com.icehufs.icebreaker.domain.membership.dto.response;
 
 
 import org.springframework.http.HttpStatus;

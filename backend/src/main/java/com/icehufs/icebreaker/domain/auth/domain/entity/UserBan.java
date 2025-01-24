@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 
 import com.icehufs.icebreaker.domain.auth.domain.type.BanDurationEnum;
 import com.icehufs.icebreaker.domain.auth.domain.type.BanReasonEnum;
-import com.icehufs.icebreaker.entity.User;
+import com.icehufs.icebreaker.domain.membership.domain.entity.User;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
