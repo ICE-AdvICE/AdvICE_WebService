@@ -1,4 +1,4 @@
-package com.icehufs.icebreaker.dto.request.article;
+package com.icehufs.icebreaker.domain.article.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 
@@ -9,9 +9,10 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class PatchCommentRequestDto {
+public class PostCommentRequestDto{
 
     @NotBlank
     private String content;
-    
+
+
 }

@@ -1,12 +1,9 @@
-package com.icehufs.icebreaker.dto.request.article;
+package com.icehufs.icebreaker.domain.article.dto.request;
 
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
+import com.icehufs.icebreaker.domain.article.domain.entity.ArticleCategoryEnum;
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-
-import com.icehufs.icebreaker.entity.ArticleCategoryEnum;
-
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -14,7 +11,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class PostArticleRequestDto {
+public class PatchArticleRequestDto {
 
     @NotBlank
     private String articleTitle;
@@ -23,7 +20,5 @@ public class PostArticleRequestDto {
     private String articleContent;
 
     @NotNull
-    @Enumerated(EnumType.ORDINAL)
     private ArticleCategoryEnum category;
-
 }

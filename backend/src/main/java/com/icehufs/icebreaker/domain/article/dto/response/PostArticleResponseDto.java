@@ -1,4 +1,4 @@
-package com.icehufs.icebreaker.dto.response.article;
+package com.icehufs.icebreaker.domain.article.dto.response;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,24 +10,19 @@ import com.icehufs.icebreaker.dto.response.ResponseDto;
 import lombok.Getter;
 
 @Getter
-public class PutResolvedArticleResponseDto extends ResponseDto {
-
-    private PutResolvedArticleResponseDto() {
+public class PostArticleResponseDto extends ResponseDto{
+    
+    private PostArticleResponseDto(){
         super(ResponseCode.SUCCESS, ResponseMessage.SUCCESS);
     }
-    
-    public static ResponseEntity<PutResolvedArticleResponseDto> success() {
-        PutResolvedArticleResponseDto result = new PutResolvedArticleResponseDto();
+
+    public static ResponseEntity<PostArticleResponseDto> success(){
+        PostArticleResponseDto result = new PostArticleResponseDto();
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
     public static ResponseEntity<ResponseDto> notExistUser (){
         ResponseDto result = new ResponseDto(ResponseCode.NOT_EXISTED_USER, ResponseMessage.NOT_EXISTED_USER);
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(result);
-    }
-
-    public static ResponseEntity<ResponseDto> noExistArticle(){
-        ResponseDto result = new ResponseDto(ResponseCode.NOT_EXISTED_ARTICLE, ResponseMessage.NOT_EXISTED_ARTICLE);
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);
     }
 }

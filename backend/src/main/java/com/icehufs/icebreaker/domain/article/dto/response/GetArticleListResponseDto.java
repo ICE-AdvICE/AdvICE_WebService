@@ -1,4 +1,4 @@
-package com.icehufs.icebreaker.dto.response.article;
+package com.icehufs.icebreaker.domain.article.dto.response;
 
 import java.util.List;
 
@@ -9,7 +9,7 @@ import com.icehufs.icebreaker.common.ResponseCode;
 import com.icehufs.icebreaker.common.ResponseMessage;
 import com.icehufs.icebreaker.dto.object.ArticleListItem;
 import com.icehufs.icebreaker.dto.response.ResponseDto;
-import com.icehufs.icebreaker.entity.Article;
+import com.icehufs.icebreaker.domain.article.domain.entity.Article;
 
 import lombok.Getter;
 

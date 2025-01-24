@@ -1,4 +1,4 @@
-package com.icehufs.icebreaker.dto.response.article;
+package com.icehufs.icebreaker.domain.article.dto.response;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -6,8 +6,8 @@ import org.springframework.http.ResponseEntity;
 import com.icehufs.icebreaker.common.ResponseCode;
 import com.icehufs.icebreaker.common.ResponseMessage;
 import com.icehufs.icebreaker.dto.response.ResponseDto;
-import com.icehufs.icebreaker.entity.Article;
-import com.icehufs.icebreaker.entity.ArticleCategoryEnum;
+import com.icehufs.icebreaker.domain.article.domain.entity.Article;
+import com.icehufs.icebreaker.domain.article.domain.entity.ArticleCategoryEnum;
 
 import lombok.Getter;
 

@@ -1,4 +1,4 @@
-package com.icehufs.icebreaker.dto.response.article;
+package com.icehufs.icebreaker.domain.article.dto.response;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,14 +10,14 @@ import com.icehufs.icebreaker.dto.response.ResponseDto;
 import lombok.Getter;
 
 @Getter
-public class PutFavoriteResponseDto extends ResponseDto {
+public class PutResolvedArticleResponseDto extends ResponseDto {
 
-    private PutFavoriteResponseDto() {
+    private PutResolvedArticleResponseDto() {
         super(ResponseCode.SUCCESS, ResponseMessage.SUCCESS);
     }
     
-    public static ResponseEntity<PutFavoriteResponseDto> success() {
-        PutFavoriteResponseDto result = new PutFavoriteResponseDto();
+    public static ResponseEntity<PutResolvedArticleResponseDto> success() {
+        PutResolvedArticleResponseDto result = new PutResolvedArticleResponseDto();
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
