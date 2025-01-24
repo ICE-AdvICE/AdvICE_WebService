@@ -1,4 +1,4 @@
-package com.icehufs.icebreaker.entity;
+package com.icehufs.icebreaker.domain.auth.domain.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,7 +14,7 @@ import jakarta.persistence.Table;
 @AllArgsConstructor
 @Entity(name="certification")
 @Table(name="certification")
-public class CertificationEntity {
+public class Certification {
 
     @Id
     @Column(name="user_email")

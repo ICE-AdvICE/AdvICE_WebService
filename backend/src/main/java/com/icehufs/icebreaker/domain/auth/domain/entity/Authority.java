@@ -1,4 +1,4 @@
-package com.icehufs.icebreaker.entity;
+package com.icehufs.icebreaker.domain.auth.domain.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 @Getter
 @Entity(name = "authority")
 @Table(name = "authority")
-public class AuthorityEntity {
+public class Authority {
 
     @Id
     @Column(name = "email")
@@ -49,7 +49,7 @@ public class AuthorityEntity {
     @Column(name = "given_date_admin_c")
     private LocalDateTime givenDateAdminC;
 
-    public AuthorityEntity(String email){
+    public Authority(String email){
         this.email = email;
         this.roleUser = "ROLE_USER";
         this.roleAdmin1 = "NULL";

@@ -1,6 +1,6 @@
-package com.icehufs.icebreaker.repository;
+package com.icehufs.icebreaker.domain.auth.repostiory;
 
-import com.icehufs.icebreaker.entity.UserBan;
+import com.icehufs.icebreaker.domain.auth.domain.entity.UserBan;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
