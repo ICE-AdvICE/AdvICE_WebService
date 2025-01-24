@@ -1,4 +1,4 @@
-package com.icehufs.icebreaker.entity;
+package com.icehufs.icebreaker.domain.auth.domain.type;
 
 public enum BanDurationEnum {
     ONE_MONTH,

@@ -1,4 +1,4 @@
-package com.icehufs.icebreaker.entity;
+package com.icehufs.icebreaker.domain.auth.domain.type;
 
 public enum BanReasonEnum {
     // 스팸성 게시물이나 댓글 작성
