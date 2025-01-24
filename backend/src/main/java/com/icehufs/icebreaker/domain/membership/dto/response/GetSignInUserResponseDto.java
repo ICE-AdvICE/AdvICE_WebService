@@ -1,4 +1,4 @@
-package com.icehufs.icebreaker.dto.response.user;
+package com.icehufs.icebreaker.domain.membership.dto.response;
 import com.icehufs.icebreaker.dto.response.ResponseDto;
 import com.icehufs.icebreaker.common.ResponseCode;
 import com.icehufs.icebreaker.common.ResponseMessage;
@@ -6,7 +6,7 @@ import com.icehufs.icebreaker.common.ResponseMessage;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import com.icehufs.icebreaker.entity.User;
+import com.icehufs.icebreaker.domain.membership.domain.entity.User;
 
 import lombok.Getter;
 

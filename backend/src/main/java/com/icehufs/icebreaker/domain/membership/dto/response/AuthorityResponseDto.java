@@ -1,4 +1,4 @@
-package com.icehufs.icebreaker.dto.response.user;
+package com.icehufs.icebreaker.domain.membership.dto.response;
 
 
 import org.springframework.http.HttpStatus;
@@ -8,14 +8,14 @@ import com.icehufs.icebreaker.common.ResponseCode;
 import com.icehufs.icebreaker.common.ResponseMessage;
 import com.icehufs.icebreaker.dto.response.ResponseDto;
 
-public class Authority1ExistResponseDto extends ResponseDto{
+public class AuthorityResponseDto extends ResponseDto{
     
-        private Authority1ExistResponseDto(){
+        private AuthorityResponseDto(){
         super(ResponseCode.SUCCESS, ResponseMessage.SUCCESS);
     }
 
-        public static ResponseEntity<Authority1ExistResponseDto> success(){
-            Authority1ExistResponseDto result = new Authority1ExistResponseDto();
+        public static ResponseEntity<AuthorityResponseDto> success(){
+            AuthorityResponseDto result = new AuthorityResponseDto();
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
         public static ResponseEntity<ResponseDto> notExistUser (){
@@ -23,10 +23,5 @@ public class Authority1ExistResponseDto extends ResponseDto{
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(result);
 
         
-    }
-
-    public static ResponseEntity<ResponseDto> notAdmin(){
-        ResponseDto result = new ResponseDto(ResponseCode.SUCCESS_BUT_NOT, ResponseMessage.SUCCESS_BUT_NOT);
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result);
     }
 }

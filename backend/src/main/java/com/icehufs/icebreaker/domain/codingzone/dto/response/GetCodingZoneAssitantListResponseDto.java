@@ -7,7 +7,7 @@ import com.icehufs.icebreaker.common.ResponseCode;
 import com.icehufs.icebreaker.common.ResponseMessage;
 import com.icehufs.icebreaker.domain.codingzone.domain.vo.CodingZoneAssitantListItem;
 import com.icehufs.icebreaker.dto.response.ResponseDto;
-import com.icehufs.icebreaker.entity.User;
+import com.icehufs.icebreaker.domain.membership.domain.entity.User;
 
 import java.util.List;
 import lombok.Getter;

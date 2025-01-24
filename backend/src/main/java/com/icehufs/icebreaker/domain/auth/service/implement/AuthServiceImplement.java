@@ -28,7 +28,7 @@ import com.icehufs.icebreaker.domain.auth.domain.entity.Authority;
 import com.icehufs.icebreaker.domain.auth.domain.type.BanDurationEnum;
 import com.icehufs.icebreaker.domain.auth.domain.type.BanReasonEnum;
 import com.icehufs.icebreaker.domain.auth.domain.entity.Certification;
-import com.icehufs.icebreaker.entity.User;
+import com.icehufs.icebreaker.domain.membership.domain.entity.User;
 import com.icehufs.icebreaker.domain.auth.domain.entity.UserBan;
 import com.icehufs.icebreaker.provider.EmailProvider;
 import com.icehufs.icebreaker.provider.JwtProvider;
@@ -36,7 +36,7 @@ import com.icehufs.icebreaker.domain.article.repository.ArticleRepository;
 import com.icehufs.icebreaker.domain.auth.repostiory.AuthorityRepository;
 import com.icehufs.icebreaker.domain.auth.repostiory.CertificationRepository;
 import com.icehufs.icebreaker.domain.auth.repostiory.UserBanRepository;
-import com.icehufs.icebreaker.repository.UserRepository;
+import com.icehufs.icebreaker.domain.membership.repository.UserRepository;
 import com.icehufs.icebreaker.domain.auth.service.AuthService;
 import com.icehufs.icebreaker.util.EncryptionUtil;
 
