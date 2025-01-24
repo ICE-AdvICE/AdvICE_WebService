@@ -1,10 +1,10 @@
-package com.icehufs.icebreaker.repository;
+package com.icehufs.icebreaker.domain.repository;
 
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import java.util.List;
-import com.icehufs.icebreaker.entity.CodingZoneClass;
+import com.icehufs.icebreaker.domain.codingzone.domain.entity.CodingZoneClass;
 
 
 

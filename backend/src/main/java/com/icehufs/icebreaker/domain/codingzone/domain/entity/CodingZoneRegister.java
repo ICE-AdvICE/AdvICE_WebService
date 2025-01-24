@@ -1,4 +1,4 @@
-package com.icehufs.icebreaker.entity;
+package com.icehufs.icebreaker.domain.codingzone.domain.entity;
 
 
 
@@ -20,7 +20,7 @@ import lombok.ToString;
 @Getter
 @Entity(name = "codingzoneregister")
 @Table(name = "codingzoneregister")
-public class CodingZoneRegisterEntity {
+public class CodingZoneRegister {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,7 +45,7 @@ public class CodingZoneRegisterEntity {
     @Column(name = "grade")
     private int grade;
 
-    public CodingZoneRegisterEntity(int grade,String email, String name, String user_student_num, Integer classNum) {
+    public CodingZoneRegister(int grade,String email, String name, String user_student_num, Integer classNum) {
         this.classNum = classNum;
         this.userEmail = email;
         this.userName = name;
