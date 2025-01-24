@@ -3,7 +3,7 @@ package com.icehufs.icebreaker.dto.object;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.icehufs.icebreaker.entity.CommentEntity;
+import com.icehufs.icebreaker.domain.article.domain.entity.CommentEntity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
