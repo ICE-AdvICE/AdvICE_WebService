@@ -13,11 +13,18 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.icehufs.icebreaker.dto.request.article.*;
+import com.icehufs.icebreaker.domain.article.dto.request.PatchCommentRequestDto;
+import com.icehufs.icebreaker.domain.article.dto.request.PostArticleRequestDto;
+import com.icehufs.icebreaker.domain.article.dto.request.PostCommentRequestDto;
+import com.icehufs.icebreaker.domain.article.dto.response.DeleteArticleAdminResponseDto;
+import com.icehufs.icebreaker.domain.article.dto.response.DeleteCommentResponseDto;
+import com.icehufs.icebreaker.domain.article.dto.response.PatchCommentResponseDto;
+import com.icehufs.icebreaker.domain.article.dto.response.PostArticleResponseDto;
+import com.icehufs.icebreaker.domain.article.dto.response.PostCommentResponseDto;
+import com.icehufs.icebreaker.domain.article.dto.response.PutResolvedArticleResponseDto;
 import com.icehufs.icebreaker.dto.request.auth.GiveUserBanRequestDto;
-import com.icehufs.icebreaker.dto.response.article.*;
 import com.icehufs.icebreaker.dto.response.auth.GiveUserBanResponseDto;
-import com.icehufs.icebreaker.service.ArticleService;
+import com.icehufs.icebreaker.domain.article.service.ArticleService;
 import com.icehufs.icebreaker.service.AuthService;
 
 import lombok.RequiredArgsConstructor;

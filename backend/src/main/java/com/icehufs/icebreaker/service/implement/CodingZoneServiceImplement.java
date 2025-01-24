@@ -17,7 +17,7 @@ import com.icehufs.icebreaker.dto.object.PersAttendManagListItem;
 import com.icehufs.icebreaker.dto.object.ReservedClassListItem;
 import com.icehufs.icebreaker.dto.request.codingzone.*;
 import com.icehufs.icebreaker.dto.response.ResponseDto;
-import com.icehufs.icebreaker.dto.response.article.CheckOwnOfArticleResponseDto;
+import com.icehufs.icebreaker.domain.article.dto.response.CheckOwnOfArticleResponseDto;
 import com.icehufs.icebreaker.dto.response.codingzone.*;
 import com.icehufs.icebreaker.entity.AuthorityEntity;
 import com.icehufs.icebreaker.entity.CodingZoneClass;

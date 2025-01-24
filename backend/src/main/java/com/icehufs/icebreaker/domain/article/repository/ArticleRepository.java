@@ -1,10 +1,10 @@
-package com.icehufs.icebreaker.repository;
+package com.icehufs.icebreaker.domain.article.repository;
 
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.icehufs.icebreaker.entity.Article;
+import com.icehufs.icebreaker.domain.article.domain.entity.Article;
 
 
 

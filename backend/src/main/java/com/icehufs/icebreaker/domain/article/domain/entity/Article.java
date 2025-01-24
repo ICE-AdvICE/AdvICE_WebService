@@ -1,4 +1,4 @@
-package com.icehufs.icebreaker.entity;
+package com.icehufs.icebreaker.domain.article.domain.entity;
 
 
 import java.time.ZoneId;
@@ -15,8 +15,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
-import com.icehufs.icebreaker.dto.request.article.PatchArticleRequestDto;
-import com.icehufs.icebreaker.dto.request.article.PostArticleRequestDto;
+import com.icehufs.icebreaker.domain.article.dto.request.PatchArticleRequestDto;
+import com.icehufs.icebreaker.domain.article.dto.request.PostArticleRequestDto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

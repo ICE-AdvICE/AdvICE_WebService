@@ -1,4 +1,4 @@
-package com.icehufs.icebreaker.repository;
+package com.icehufs.icebreaker.domain.article.repository;
 
 public interface GetCommentListReultSet {
 

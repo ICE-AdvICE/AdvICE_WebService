@@ -1,4 +1,4 @@
-package com.icehufs.icebreaker.entity;
+package com.icehufs.icebreaker.domain.article.domain.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
