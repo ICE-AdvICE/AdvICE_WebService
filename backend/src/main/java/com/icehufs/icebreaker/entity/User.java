@@ -5,7 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
-import com.icehufs.icebreaker.dto.request.auth.SignUpRequestDto;
+import com.icehufs.icebreaker.domain.auth.dto.request.SignUpRequestDto;
 import com.icehufs.icebreaker.dto.request.user.PatchUserPassRequestDto;
 import com.icehufs.icebreaker.dto.request.user.PatchUserRequestDto;
 
