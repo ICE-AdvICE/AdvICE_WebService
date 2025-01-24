@@ -9,9 +9,9 @@ import org.springframework.stereotype.Service;
 import com.icehufs.icebreaker.dto.request.user.*;
 import com.icehufs.icebreaker.dto.response.ResponseDto;
 import com.icehufs.icebreaker.dto.response.user.*;
-import com.icehufs.icebreaker.entity.AuthorityEntity;
+import com.icehufs.icebreaker.domain.auth.domain.entity.Authority;
 import com.icehufs.icebreaker.entity.User;
-import com.icehufs.icebreaker.repository.AuthorityRepository;
+import com.icehufs.icebreaker.domain.auth.repostiory.AuthorityRepository;
 import com.icehufs.icebreaker.repository.UserRepository;
 import com.icehufs.icebreaker.service.UserService;
 
@@ -105,26 +105,26 @@ public class UserServiceImplement implements UserService {
 
         try{
 
-            AuthorityEntity authorityEntity = authorityRepository.findByEmail(email);
-            if(authorityEntity == null) return AuthorityResponseDto.notExistUser();
+            Authority authority = authorityRepository.findByEmail(email);
+            if(authority == null) return AuthorityResponseDto.notExistUser();
  
             //System.out.println(admin1);
             if(dto.getRoleAdmin1() == 1){ //익명게시판 운영자 권한 부여
-                authorityEntity.giveAdmin1Auth();
+                authority.giveAdmin1Auth();
             }
 
             if(dto.getRoleAdminC1() == 1){ //코딩존 운영자 권한 부여
-                authorityEntity.giveAdminC1Auth();
+                authority.giveAdminC1Auth();
             }
 
             if(dto.getRoleAdminC2() == 1){ //코딩존 운영자 권한 부여
-                authorityEntity.giveAdminC2Auth();
+                authority.giveAdminC2Auth();
             }
 
             if(dto.getRoleAdmin() == 1){ //코딩존 운영자 권한 부여
-                authorityEntity.giveAdminAuth();
+                authority.giveAdminAuth();
             }
-            authorityRepository.save(authorityEntity);
+            authorityRepository.save(authority);
 
         } catch (Exception exception){
             exception.printStackTrace();
@@ -139,10 +139,10 @@ public class UserServiceImplement implements UserService {
 
         try{
 
-            AuthorityEntity authorityEntity = authorityRepository.findByEmail(email);
-            if(authorityEntity == null) return Authority1ExistResponseDto.notExistUser();
+            Authority authority = authorityRepository.findByEmail(email);
+            if(authority == null) return Authority1ExistResponseDto.notExistUser();
  
-            String admin1 = authorityEntity.getRoleAdmin1();
+            String admin1 = authority.getRoleAdmin1();
             if("NULL".equals(admin1)){
                 return Authority1ExistResponseDto.notAdmin();
             }

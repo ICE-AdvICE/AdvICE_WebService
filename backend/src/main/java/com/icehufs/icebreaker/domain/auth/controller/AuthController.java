@@ -1,13 +1,22 @@
-package com.icehufs.icebreaker.controller;
+package com.icehufs.icebreaker.domain.auth.controller;
 
 import jakarta.validation.Valid;
 
-import com.icehufs.icebreaker.dto.response.auth.*;
+import com.icehufs.icebreaker.domain.auth.dto.request.CheckCertificationRequestDto;
+import com.icehufs.icebreaker.domain.auth.dto.request.EmailCertificationRequestDto;
+import com.icehufs.icebreaker.domain.auth.dto.request.SignInRequestDto;
+import com.icehufs.icebreaker.domain.auth.dto.request.SignUpRequestDto;
+import com.icehufs.icebreaker.domain.auth.dto.response.CheckCertificationResponseDto;
+import com.icehufs.icebreaker.domain.auth.dto.response.CheckUserBanResponseDto;
+import com.icehufs.icebreaker.domain.auth.dto.response.EmailCertificationResponseDto;
+import com.icehufs.icebreaker.domain.auth.dto.response.PassChanEmailCertificationResponseDto;
+import com.icehufs.icebreaker.domain.auth.dto.response.SignInResponseDto;
+import com.icehufs.icebreaker.domain.auth.dto.response.SignUpResponseDto;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.icehufs.icebreaker.dto.request.auth.*;
-import com.icehufs.icebreaker.service.AuthService;
+import com.icehufs.icebreaker.domain.auth.service.AuthService;
 
 import lombok.RequiredArgsConstructor;
 

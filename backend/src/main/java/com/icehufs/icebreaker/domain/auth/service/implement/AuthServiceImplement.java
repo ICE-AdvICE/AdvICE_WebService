@@ -1,4 +1,4 @@
-package com.icehufs.icebreaker.service.implement;
+package com.icehufs.icebreaker.domain.auth.service.implement;
 
 import java.time.LocalDateTime;
 import java.time.Period;
@@ -10,24 +10,34 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.icehufs.icebreaker.common.CertificationNumber;
-import com.icehufs.icebreaker.dto.request.auth.*;
+import com.icehufs.icebreaker.domain.auth.dto.request.CheckCertificationRequestDto;
+import com.icehufs.icebreaker.domain.auth.dto.request.EmailCertificationRequestDto;
+import com.icehufs.icebreaker.domain.auth.dto.request.GiveUserBanRequestDto;
+import com.icehufs.icebreaker.domain.auth.dto.request.SignInRequestDto;
+import com.icehufs.icebreaker.domain.auth.dto.request.SignUpRequestDto;
+import com.icehufs.icebreaker.domain.auth.dto.response.CheckCertificationResponseDto;
+import com.icehufs.icebreaker.domain.auth.dto.response.CheckUserBanResponseDto;
+import com.icehufs.icebreaker.domain.auth.dto.response.EmailCertificationResponseDto;
+import com.icehufs.icebreaker.domain.auth.dto.response.GiveUserBanResponseDto;
+import com.icehufs.icebreaker.domain.auth.dto.response.PassChanEmailCertificationResponseDto;
+import com.icehufs.icebreaker.domain.auth.dto.response.SignInResponseDto;
+import com.icehufs.icebreaker.domain.auth.dto.response.SignUpResponseDto;
 import com.icehufs.icebreaker.dto.response.ResponseDto;
-import com.icehufs.icebreaker.dto.response.auth.*;
 import com.icehufs.icebreaker.domain.article.domain.entity.Article;
-import com.icehufs.icebreaker.entity.AuthorityEntity;
-import com.icehufs.icebreaker.entity.BanDurationEnum;
-import com.icehufs.icebreaker.entity.BanReasonEnum;
-import com.icehufs.icebreaker.entity.CertificationEntity;
+import com.icehufs.icebreaker.domain.auth.domain.entity.Authority;
+import com.icehufs.icebreaker.domain.auth.domain.type.BanDurationEnum;
+import com.icehufs.icebreaker.domain.auth.domain.type.BanReasonEnum;
+import com.icehufs.icebreaker.domain.auth.domain.entity.Certification;
 import com.icehufs.icebreaker.entity.User;
-import com.icehufs.icebreaker.entity.UserBan;
+import com.icehufs.icebreaker.domain.auth.domain.entity.UserBan;
 import com.icehufs.icebreaker.provider.EmailProvider;
 import com.icehufs.icebreaker.provider.JwtProvider;
 import com.icehufs.icebreaker.domain.article.repository.ArticleRepository;
-import com.icehufs.icebreaker.repository.AuthorityRepository;
-import com.icehufs.icebreaker.repository.CertificationRepository;
-import com.icehufs.icebreaker.repository.UserBanRepository;
+import com.icehufs.icebreaker.domain.auth.repostiory.AuthorityRepository;
+import com.icehufs.icebreaker.domain.auth.repostiory.CertificationRepository;
+import com.icehufs.icebreaker.domain.auth.repostiory.UserBanRepository;
 import com.icehufs.icebreaker.repository.UserRepository;
-import com.icehufs.icebreaker.service.AuthService;
+import com.icehufs.icebreaker.domain.auth.service.AuthService;
 import com.icehufs.icebreaker.util.EncryptionUtil;
 
 import lombok.RequiredArgsConstructor;
@@ -61,10 +71,10 @@ public class AuthServiceImplement implements AuthService {
             dto.setPassword(encodedPassword);
 
             User userEntity = new User(dto); //dto데이터를 entity에 삽입
-            AuthorityEntity authorityEntity = new AuthorityEntity(dto.getEmail());//새 사용자한테 USER 기본 권한 부여
+            Authority authority = new Authority(dto.getEmail());//새 사용자한테 USER 기본 권한 부여
 
             userRepository.save(userEntity); //entity를 repository를 통해 db에 저장
-            authorityRepository.save(authorityEntity);
+            authorityRepository.save(authority);
 
         } catch (Exception exception){
             exception.printStackTrace();
@@ -119,11 +129,11 @@ public class AuthServiceImplement implements AuthService {
             if (isExistEmail) return EmailCertificationResponseDto.duplicateId();
 
             
-            CertificationEntity certificationEntity1 = certificationRepository.findByUserEmail(email);
+            Certification certification1 = certificationRepository.findByUserEmail(email);
 
             // 전에 이 이메일로 인증번호를 받은적 있으면 그 이메일 삭제
-            if (certificationEntity1 != null){
-                certificationRepository.delete(certificationEntity1);
+            if (certification1 != null){
+                certificationRepository.delete(certification1);
             }
 
             // 인증번호 생성
@@ -134,8 +144,8 @@ public class AuthServiceImplement implements AuthService {
             if (!isSuccessed) return EmailCertificationResponseDto.mailSendFail();
 
             // 데이터베이스 저장.
-            CertificationEntity certificationEntity = new CertificationEntity(email, certificationNumber);
-            certificationRepository.save(certificationEntity);
+            Certification certification = new Certification(email, certificationNumber);
+            certificationRepository.save(certification);
 
 
         } catch (Exception exception) {
@@ -156,18 +166,18 @@ public class AuthServiceImplement implements AuthService {
             //System.out.println("Starting certification check for email: " + email);
 
 
-            CertificationEntity certificationEntity = certificationRepository.findByUserEmail(email);
+            Certification certification = certificationRepository.findByUserEmail(email);
             // 인증 메일을 보내지 않은 경우.
-            if (certificationEntity == null) {
+            if (certification == null) {
                 return CheckCertificationResponseDto.certificationFail();
             }
 
-            boolean isMatched = certificationEntity.getUserEmail().equals(email) && certificationEntity.getCertificationNumber().equals(certificationNumber);
+            boolean isMatched = certification.getUserEmail().equals(email) && certification.getCertificationNumber().equals(certificationNumber);
 
             if (!isMatched) {
                 return CheckCertificationResponseDto.certificationFail();
             } else { // 인증 완료 시에 인증 테이블에서 해당 인증번호 삭제
-                certificationRepository.delete(certificationEntity);
+                certificationRepository.delete(certification);
             }
 
 
@@ -241,9 +251,9 @@ public class AuthServiceImplement implements AuthService {
             boolean isExistEmail = userRepository.existsByEmail(email);
             if (!isExistEmail) return PassChanEmailCertificationResponseDto.notExistUser();
 
-            CertificationEntity certificationEntity1 = certificationRepository.findByUserEmail(email);
-            if (certificationEntity1 != null){
-                certificationRepository.delete(certificationEntity1);
+            Certification certification1 = certificationRepository.findByUserEmail(email);
+            if (certification1 != null){
+                certificationRepository.delete(certification1);
             }
 
             // 인증번호 생성
@@ -254,8 +264,8 @@ public class AuthServiceImplement implements AuthService {
             if (!isSuccessed) return EmailCertificationResponseDto.mailSendFail();
 
             // 데이터베이스 저장.
-            CertificationEntity certificationEntity = new CertificationEntity(email, certificationNumber);
-            certificationRepository.save(certificationEntity);
+            Certification certification = new Certification(email, certificationNumber);
+            certificationRepository.save(certification);
 
 
         } catch (Exception exception) {

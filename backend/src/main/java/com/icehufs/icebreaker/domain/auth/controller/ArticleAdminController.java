@@ -1,4 +1,4 @@
-package com.icehufs.icebreaker.controller;
+package com.icehufs.icebreaker.domain.auth.controller;
 
 import jakarta.validation.Valid;
 
@@ -22,10 +22,10 @@ import com.icehufs.icebreaker.domain.article.dto.response.PatchCommentResponseDt
 import com.icehufs.icebreaker.domain.article.dto.response.PostArticleResponseDto;
 import com.icehufs.icebreaker.domain.article.dto.response.PostCommentResponseDto;
 import com.icehufs.icebreaker.domain.article.dto.response.PutResolvedArticleResponseDto;
-import com.icehufs.icebreaker.dto.request.auth.GiveUserBanRequestDto;
-import com.icehufs.icebreaker.dto.response.auth.GiveUserBanResponseDto;
+import com.icehufs.icebreaker.domain.auth.dto.request.GiveUserBanRequestDto;
+import com.icehufs.icebreaker.domain.auth.dto.response.GiveUserBanResponseDto;
 import com.icehufs.icebreaker.domain.article.service.ArticleService;
-import com.icehufs.icebreaker.service.AuthService;
+import com.icehufs.icebreaker.domain.auth.service.AuthService;
 
 import lombok.RequiredArgsConstructor;
 
