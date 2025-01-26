@@ -9,9 +9,9 @@ import com.icehufs.icebreaker.domain.auth.domain.type.BanDurationEnum;
 import com.icehufs.icebreaker.domain.auth.domain.type.BanReasonEnum;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 
-@Data
+@Getter
 @AllArgsConstructor
 public class CheckUserBanResponseDto extends ResponseDto{
     private String email;
