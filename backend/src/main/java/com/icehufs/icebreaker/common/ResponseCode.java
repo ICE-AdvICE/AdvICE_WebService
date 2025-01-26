@@ -25,6 +25,7 @@ public interface ResponseCode {
     //HTTP Status 403
     String NO_PERMISSION = "NP";
     String BANNED_USER = "BU";
+    String ACCESS_TOKEN_EXPIRED = "ATE";
 
     //HTTP Status 404
     String SUCCESS_BUT_NOT = "SN";

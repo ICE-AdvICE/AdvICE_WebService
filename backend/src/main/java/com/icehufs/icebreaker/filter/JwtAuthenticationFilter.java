@@ -20,6 +20,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import com.icehufs.icebreaker.common.ResponseCode;
 import com.icehufs.icebreaker.domain.auth.domain.entity.Authority;
 import com.icehufs.icebreaker.provider.JwtProvider;
 import com.icehufs.icebreaker.domain.auth.repostiory.AuthorityRepository;
@@ -85,7 +86,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
                     SecurityContextHolder.setContext(securityContext);
                 } else {
                     // 다른 API 요청에서는 401 반환
-                    setJsonResponse(response, HttpServletResponse.SC_UNAUTHORIZED, "NU", "Access Token expired.");
+                    setJsonResponse(response, HttpServletResponse.SC_UNAUTHORIZED, ResponseCode.ACCESS_TOKEN_EXPIRED, "Access Token expired.");
                     return;
                 }
             }
