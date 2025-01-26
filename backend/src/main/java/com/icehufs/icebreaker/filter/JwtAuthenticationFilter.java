@@ -33,57 +33,63 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
 
     private final JwtProvider jwtProvider;
     private final AuthorityRepository authorityRepository;
-
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-            throws ServletException, IOException {
-        try{
-            String token = parseBearerToken(request); //parseBearerToken함수로부터 인증된 토근을 받기
-        if(token == null){ //parseBearerToken에서 토큰이 인증 실패되었다면 다음 필터에게 넘기기
-            filterChain.doFilter(request, response);
-            return;
-        }
-        
-        String email = jwtProvider.validate(token);
-        if (email == null) {
-            setJsonResponse(response, HttpServletResponse.SC_UNAUTHORIZED, "NU", "This user does not exist.");
-            return;
-        }
+        throws ServletException, IOException {
+        try {
+            String token = parseBearerToken(request); // parseBearerToken()을 통해 인증된 토큰을 받음.
+            String requestURI = request.getRequestURI();
+            boolean isRefreshTokenRequest = "/api/v1/auth/refresh".equals(requestURI); // Refresh Token API 여부 체크
 
+            if (token != null) {
+                String email = jwtProvider.extractEmail(token); // Access Token에서 email 추출
+                boolean isValid = jwtProvider.validate(token) != null; // Access Token이 유효한지 확인
 
-        List<GrantedAuthority> authorities = new ArrayList<>(); //권한을 저장할 리스트 선언
+                if (isValid) {
+                    // Access Token이 유효한 경우 기존 로직 유지 (권한 저장)
+                    List<GrantedAuthority> authorities = new ArrayList<>();
+                    Authority authority = authorityRepository.findByEmail(email);
 
-        Authority authority = authorityRepository.findByEmail(email);
+                    authorities.add(new SimpleGrantedAuthority("ROLE_USER")); // 기본 사용자 권한 부여
 
-        authorities.add(new SimpleGrantedAuthority("ROLE_USER")); //기본 사용자 권한 부여
+                    if (!"NULL".equals(authority.getRoleAdmin1())) {
+                        authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN1")); // 익명게시판 운영자 권한 부여
+                    }
+                    if (!"NULL".equals(authority.getRoleAdminC1())) {
+                        authorities.add(new SimpleGrantedAuthority("ROLE_ADMINC1"));// 코딩존 과목1 조교 권한 부여
+                    }
+                    if (!"NULL".equals(authority.getRoleAdminC2())) {
+                        authorities.add(new SimpleGrantedAuthority("ROLE_ADMINC2"));// 코딩존 과목2 조교 권한 부여
+                    }
+                    if (!"NULL".equals(authority.getRoleAdmin())) {
+                        authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));// 'ICEbreaker' 코딩존 수업 등록 및 권한 부여 가능한 권한(과사조교) 부여
+                    }
 
-        if(!"NULL".equals(authority.getRoleAdmin1())){
-            authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN1")); //익명게시판 운영자 권한 부여
-        }
+                    AbstractAuthenticationToken authenticationToken =
+                        new UsernamePasswordAuthenticationToken(email, null, authorities); // Context를 생성하기 위해 authenticationToken에 이메일, 비밀번호(없음), 권한을 매개변수로 전달
+                    authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request)); // authenticationToken에 request의 상세 정보 추가
 
-        if(!"NULL".equals(authority.getRoleAdminC1())){
-            authorities.add(new SimpleGrantedAuthority("ROLE_ADMINC1"));//코딩존 과목1 조교 권한 부여
-        }
+                    SecurityContext securityContext = SecurityContextHolder.createEmptyContext(); // Context 선언
+                    securityContext.setAuthentication(authenticationToken); // securityContext를 초기화
 
-        if(!"NULL".equals(authority.getRoleAdminC2())){
-            authorities.add(new SimpleGrantedAuthority("ROLE_ADMINC2"));//코딩존 과목2 조교 권한 부여
-        }
+                    SecurityContextHolder.setContext(securityContext); // Context를 외부에서 사용할 수 있도록 설정
 
-        if(!"NULL".equals(authority.getRoleAdmin())){
-            authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));//'ICEbreaker' 코딩존 수업 등록 및 권한 부여 가능한 권한(과사조교) 부여
-        }
+                } else if (isRefreshTokenRequest) {
+                    // Refresh Token API 요청이면 만료된 Access Token에서도 email 저장
+                    AbstractAuthenticationToken authenticationToken =
+                        new UsernamePasswordAuthenticationToken(email, null, List.of()); // 권한 없이 email만 SecurityContext에 저장
+                    authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
-
-        AbstractAuthenticationToken authenticationToken =
-            new UsernamePasswordAuthenticationToken(email, null, authorities); //Context를 생성하기 위해 authenticationToken에 아이디,비번,권한을 매개변수로 받음
-        authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request)); //authenticationToken에 request의 디테일한 정보 추가
-
-        SecurityContext securityContext = SecurityContextHolder.createEmptyContext(); //Context 선언
-        securityContext.setAuthentication(authenticationToken); //securityContext로 Context에 초기화
-
-        SecurityContextHolder.setContext(securityContext); //Context를 외부에 사용할수있도록 설정
-
-        } catch (Exception exception){
+                    SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
+                    securityContext.setAuthentication(authenticationToken);
+                    SecurityContextHolder.setContext(securityContext);
+                } else {
+                    // 다른 API 요청에서는 401 반환
+                    setJsonResponse(response, HttpServletResponse.SC_UNAUTHORIZED, "NU", "Access Token expired.");
+                    return;
+                }
+            }
+        } catch (Exception exception) {
             exception.printStackTrace();
         }
 
