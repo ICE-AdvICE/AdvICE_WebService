@@ -5,10 +5,14 @@ import java.security.Key;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
+import java.util.UUID;
 
 import org.springframework.stereotype.Component;
 
+import com.icehufs.icebreaker.domain.auth.domain.vo.JwtToken;
+
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -23,17 +27,20 @@ public class JwtProvider {
         this.key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
     }
 
-    public String create(String email) {  
+    public JwtToken create(String email) {
 
         Date expiredDate = Date.from(Instant.now().plus(1, ChronoUnit.HOURS));
 
-        String jwt = Jwts.builder()
+        String accessToken = Jwts.builder()
                 .signWith(key)
                 .setSubject(email)
                 .setIssuedAt(new Date())
                 .setExpiration(expiredDate)
                 .compact();
-        return jwt;
+
+        String refreshToken = UUID.randomUUID().toString();
+
+        return new JwtToken(accessToken, refreshToken);
     }
 
     public String validate(String jwt) { 
@@ -58,12 +65,15 @@ public class JwtProvider {
     
 
     public String extractEmail(String token) {
-
-        Claims claims = Jwts.parserBuilder()
+        try {
+            Claims claims = Jwts.parserBuilder()
                 .setSigningKey(key)
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
-        return claims.getSubject();
+            return claims.getSubject();
+        } catch (ExpiredJwtException e) {
+            return e.getClaims().getSubject(); // rerfresh 토큰을 위해 만료된 경우에도 email 반환
+        }
     }
 }

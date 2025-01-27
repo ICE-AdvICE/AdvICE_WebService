@@ -9,6 +9,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.icehufs.icebreaker.domain.auth.domain.vo.JwtToken;
+import com.icehufs.icebreaker.domain.auth.dto.request.RegenerateTokenRequestDto;
+import com.icehufs.icebreaker.domain.auth.dto.response.LogoutResponseDto;
+import com.icehufs.icebreaker.domain.auth.dto.response.RegenerateTokenResponseDto;
+import com.icehufs.icebreaker.domain.auth.service.RefreshTokenService;
 import com.icehufs.icebreaker.provider.CertificationNumber;
 import com.icehufs.icebreaker.domain.auth.dto.request.CheckCertificationRequestDto;
 import com.icehufs.icebreaker.domain.auth.dto.request.EmailCertificationRequestDto;
@@ -48,7 +53,7 @@ public class AuthServiceImplement implements AuthService {
 
     private final UserRepository userRepository;
     private final JwtProvider jwtProvider;
-
+    private final RefreshTokenService refreshTokenService;
     private final CertificationRepository certificationRepository;
     private final EmailProvider emailProvider;
     private final UserBanRepository userBanRepository;
@@ -87,8 +92,6 @@ public class AuthServiceImplement implements AuthService {
 
     @Override
     public ResponseEntity<? super SignInResponseDto> signIn(SignInRequestDto dto) {
-
-        String token = null; //토큰 선업/초기화
         try{
 
             String email = dto.getEmail();  //요청으로 받은 이메일 존재 확인
@@ -97,27 +100,54 @@ public class AuthServiceImplement implements AuthService {
 
             String password = dto.getPassword(); //요청 받은 비번과 해당 유저(이메일)의 비번 일치하는지 확인
             String encodedPassword = userEntity.getPassword();
-            // System.out.println("Encoded Password from DB: " + encodedPassword);
-            // System.out.println("Input Password: " + password);
 
             boolean isMatched = passwordEncoder.matches(password, encodedPassword); //입력 받은 비번과 db에 있는 암호화된 비번 확인;
             if(!isMatched) {
-                // System.out.println("비밀번호가 일치하지않습니다.");
                 return SignInResponseDto.signInFail();
             }
 
-            token = jwtProvider.create(email); //토큰 생성
-            // System.out.println(token);
+            JwtToken jwtToken = jwtProvider.create(email);
+            refreshTokenService.storeRefreshToken(email, jwtToken.refreshToken());
 
+            return SignInResponseDto.success(jwtToken);
         } catch(Exception exception){
             exception.printStackTrace();
             return ResponseDto.databaseError();
         }
-
-        return SignInResponseDto.success(token);
-        
     }
 
+    @Override
+    public ResponseEntity<? super LogoutResponseDto> logout(String email) {
+        try {
+            refreshTokenService.deleteRefreshToken(email);
+            return LogoutResponseDto.success();
+        } catch(Exception exception){
+            exception.printStackTrace();
+            return ResponseDto.databaseError();
+        }
+    }
+
+    @Override
+    public ResponseEntity<? super RegenerateTokenResponseDto> refresh(RegenerateTokenRequestDto dto, String email) {
+        try {
+            if (email == null) {
+                return RegenerateTokenResponseDto.invalidToken();
+            }
+
+            boolean isValid = refreshTokenService.vaildateRefreshToken(email, dto.refreshToken());
+            if (!isValid) {
+                return RegenerateTokenResponseDto.invalidToken();
+            }
+
+            JwtToken jwtToken = jwtProvider.create(email);
+            refreshTokenService.storeRefreshToken(email, jwtToken.refreshToken());
+
+            return RegenerateTokenResponseDto.success(jwtToken);
+        } catch(Exception exception){
+            exception.printStackTrace();
+            return ResponseDto.databaseError();
+        }
+    }
     @Override
     public ResponseEntity<? super EmailCertificationResponseDto> emailCertification(EmailCertificationRequestDto dto) {
         try {

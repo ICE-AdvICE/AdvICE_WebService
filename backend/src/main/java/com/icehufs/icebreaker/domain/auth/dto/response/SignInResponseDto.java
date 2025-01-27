@@ -6,23 +6,26 @@ import org.springframework.http.ResponseEntity;
 import com.icehufs.icebreaker.common.ResponseCode;
 import com.icehufs.icebreaker.common.ResponseMessage;
 import com.icehufs.icebreaker.common.ResponseDto;
+import com.icehufs.icebreaker.domain.auth.domain.vo.JwtToken;
 
 import lombok.Getter;
 
 @Getter
-public class SignInResponseDto extends ResponseDto { //ResponseDto의 code와 메시지에 토큰과 만료긴간을 응답으로 반환
+public class SignInResponseDto extends ResponseDto { //ResponseDto의 code와 메시지에 토큰과 만료기간을 응답으로 반환
 
-    private String token;
+    private String accessToken;
+    private String refreshToken;
     private int expirationTime;
 
-    private SignInResponseDto(String token){
+    private SignInResponseDto(String accessToken, String refreshToken){
         super(ResponseCode.SUCCESS, ResponseMessage.SUCCESS);
-        this.token = token;
+        this.accessToken = accessToken;
+        this.refreshToken = refreshToken;
         this.expirationTime = 3600; //1시간
     }
 
-    public static ResponseEntity<SignInResponseDto> success(String token){
-        SignInResponseDto result = new SignInResponseDto(token);
+    public static ResponseEntity<SignInResponseDto> success(JwtToken jwtToken){
+        SignInResponseDto result = new SignInResponseDto(jwtToken.accessToken(), jwtToken.refreshToken());
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
