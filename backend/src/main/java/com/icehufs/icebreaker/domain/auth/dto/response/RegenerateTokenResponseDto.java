@@ -29,6 +29,6 @@ public class RegenerateTokenResponseDto extends ResponseDto {
 
 	public static ResponseEntity<ResponseDto> invalidToken() {
 		ResponseDto result = new ResponseDto(ResponseCode.NO_PERMISSION, ResponseMessage.NO_PERMISSION);
-		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(result);
+		return ResponseEntity.status(HttpStatus.FORBIDDEN).body(result);
 	}
 }
