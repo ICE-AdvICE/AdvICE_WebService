@@ -803,17 +803,16 @@ return result;
 
 //2. 사용자 로그인을 위한 API
 export const signInRequest = async (requestBody) => { 
-    const result = await axios.post(SIGN_IN_URL(), requestBody) 
-        .then(response => {
-            const responseBody = response.data;
-            return responseBody;
-        })
-        .catch(error => {
-            if (!error.response || !error.response.data) return null; 
-            const responseBody = error.response.data;             
-            return responseBody;
-        });
-    return result;
+    try {
+        const response = await axios.post(SIGN_IN_URL(), requestBody);
+        return response.data;  // 정상 응답 시 그대로 반환 (accessToken, refreshToken 포함)
+    } catch (error) {
+        if (error.response && error.response.data) {
+            return error.response.data; // API 에러 응답 반환
+        }
+        console.error('로그인 요청 실패:', error);
+        return { code: 'ERROR', message: '로그인 요청 중 오류 발생' };
+    }
 };
 
 //4. 사용자 정보 수정 API
