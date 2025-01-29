@@ -16,7 +16,7 @@ const LoginForm = ({ onLogin }) => {
   const [modalOpeninfo, setModalOpeninfo] = useState(false);
   const [cookies, setCookie] = useCookies(['accessToken']);
   const [modalOpenin, setModalOpenin] = useState(true);
-  const navigator = useNavigate();
+
 
   useEffect(() => {
     const savedEmail = localStorage.getItem('userEmail');
@@ -72,33 +72,27 @@ const LoginForm = ({ onLogin }) => {
       return;
     }
 
-    const { code, token, expirationTime } = responseBody;
+    const { code, accessToken, refreshToken, expirationTime } = responseBody;
 
-    if (code === 'SU') {
-      if (token && expirationTime) {
-        const now = new Date().getTime();
-        const expires = new Date(now + expirationTime * 1000);
-        setCookie('accessToken', token, { expires, path: '/' });
-        onLogin(true);
-        setModalOpenin(false);
-        window.location.reload();
-      } else {
-        console.error('토큰 또는 만료 시간이 제공되지 않았습니다.');
-        setError(true);
-        onLogin(false);
-      }
+    if (code === 'SU' && accessToken && refreshToken && expirationTime) {
+      const expires = new Date(Date.now() + expirationTime * 1000);
+  
+      
+      setCookie('accessToken', accessToken, { expires, path: '/' });
+  
+      
+      setCookie('refreshToken', refreshToken, { path: '/' });
+  
+      onLogin(true);
+      window.location.reload();
     } else {
       setError(true);
-      if (code === 'DBE') {
-        alert('데이터베이스 오류입니다.');
-      } else if (code === 'SF') {
-        alert('로그인 실패입니다.\n이메일 또는 비밀번호를 확인해주세요.');
-      } else if (code === 'VF') {
-        alert('로그인 실패입니다.');
-      } else {
-        alert('네트워크 오류입니다.');
-        console.error(code);
-      }
+      const messages = {
+        DBE: '데이터베이스 오류입니다.',
+        SF: '로그인 실패입니다. 이메일 또는 비밀번호를 확인해주세요.',
+        VF: '로그인 실패입니다.',
+      };
+      alert(messages[code] || '네트워크 오류입니다.');
     }
   };
 
