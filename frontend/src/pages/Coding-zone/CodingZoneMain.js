@@ -3,7 +3,7 @@ import '../css/codingzone/codingzone-main.css';
 import { useCookies } from "react-cookie";
 import CzCard from '../../components/czCard';  
 import { deleteClass,checkAdminType, getAvailableClassesForNotLogin, getAttendanceCount, deleteCodingZoneClass, reserveCodingZoneClass, getcodingzoneListRequest } from '../../apis/Codingzone-api.js'; 
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 import InquiryModal from './InquiryModal';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -295,6 +295,27 @@ const sliderSettings = {
   pauseOnHover: true      
 };
 
+/*출석률 체크바 */
+const renderAttendanceProgress = (count) => {
+  const cappedCount = Math.min(count, 4);
+  const percentage = (cappedCount / 4) * 100;
+  return (
+    <div className="attendance-progress-container">
+      <span className="attendance-label">출석률({percentage}%)</span>
+      <div 
+        className="attendance-progress-bar" 
+        aria-label={`출석 ${percentage}% 완료`}
+      >
+        <div 
+          className="attendance-progress-fill" 
+          style={{ width: `${percentage}%` }}
+        ></div>
+      </div>
+    </div>
+  );
+};
+
+
   return (
     <div className="codingzone-container">
       <div className='select-container'>
@@ -358,11 +379,11 @@ const sliderSettings = {
               코딩존 2
             </button>
           </div>
-            {cookies.accessToken && (userRole === 'SU' || userRole === 'CA') && (
-              <div className='cz-count-container'>
-                출석횟수 : {attendanceCount}/4
-              </div>
-            )}
+          {cookies.accessToken && (userRole === 'SU' || userRole === 'CA') && (
+            <Link to="/coding-zone/Codingzone_Attendance" className='cz-count-container'>
+              {renderAttendanceProgress(attendanceCount)}
+            </Link>
+          )}
         </div>
         <div className="codingzone-date">
           <button 
