@@ -212,16 +212,56 @@ overflow-x:hidden;
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 20px;
-  padding: 0 10px; 
-  margin-bottom: 0px; 
+  margin-top: 20px;          
+  padding-left: 10px;        
+  padding-right: 10px;       
+  margin-bottom: 0;          
+  box-sizing: border-box;    
 }
 
 .no-classes-img {
   width: 100%;
   height: auto;
-  max-width: 900px; 
-  box-sizing: border-box;
+  max-width: 600px;          
+  box-sizing: border-box;   
+}
+
+/* cz-count-container 스타일 */
+.cz-count-container {
+  display: flex;
+  align-items: center;
+  cursor: pointer; 
+  text-decoration: none; 
+  color: inherit; 
+  margin-bottom: 30px;
+}
+
+.attendance-progress-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center; 
+  margin-top: 10px; 
+}
+
+.attendance-label {
+  font-size: 0.9rem; 
+  color: #333; 
+  margin-bottom: 5px; 
+}
+
+.attendance-progress-bar {
+  width: 90px; 
+  height: 10px; 
+  background-color: #e0e0e0; 
+  border-radius: 2px;
+  overflow: hidden;
+  position: relative;
+}
+
+.attendance-progress-fill {
+  height: 100%;
+  background-color: #002D56; 
+  transition: width 0.5s ease-in-out;
 }
 
  
@@ -290,6 +330,37 @@ overflow-x:hidden;
 
   .no-classes-img {
     max-width: 100%; 
+  }
+}
+
+/*출석 프로그래스 바*/
+
+@media (max-width: 768px) {
+  .attendance-progress-container {
+    max-width: 100px;
+  }
+
+  .attendance-progress-bar {
+    height: 10px;
+  }
+
+  .attendance-label {
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .attendance-progress-container {
+    max-width: 100%;
+  }
+
+  .attendance-progress-bar {
+    width: 70px; 
+    height: 10px;
+  }
+
+  .attendance-label {
+    font-size: 0.7rem;
   }
 }
 
