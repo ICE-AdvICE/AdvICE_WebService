@@ -81,55 +81,48 @@
     display: flex;
     justify-content: center;
     gap: 10px;
-    margin: 20px auto;
+    margin-top: 20px;    
+    margin-bottom: 20px; 
     padding: 0 10px;
 }
 
 .btn-attend {
-    width: 100px;
-    height: 50px;
-    padding: 10px 10px;
-    border: 1px solid transparent;
-    background-color: #ffffff00;
-    border-color: #838181a8;
+    padding: 0.6rem 1.2rem; 
+    border: 1px solid #838181a8;
+    background-color: rgba(255, 255, 255, 0);
     color: #838181a8;
-    font-size: 16px;
+    font-size: 1rem; 
     cursor: pointer;
     transition: background-color 0.3s, color 0.3s;
+    min-width: 80px; 
+    max-width: 100px; 
+    width: auto; 
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-
-.btn-attend.active {
-    background-color: #ffffff00;
-    color: #052940;
-    border-color: #052940;
-    box-shadow: 0px 0px 3px #0b4264;
-    font-weight: 530;
-}
-
-.btn-attend.manage {
-    background-color: #ffffff00;
-    color: #052940;
-    border-color: #052940;
-    box-shadow: 0px 0px 3px #0b4264;
-    font-weight: 530;
-}
-
-.btn-attend.manage_all {
-    background-color: #ffffff00;
-    color: #052940;
-    border-color: #052940;
-    box-shadow: 0px 0px 3px #0b4264;
-    font-weight: 530;
-}
-
+.btn-attend.active,
+.btn-attend.manage,
+.btn-attend.manage_all,
 .btn-attend.manage_class {
-    background-color: #ffffff00;
+    background-color: rgba(255, 255, 255, 0);
     color: #052940;
     border-color: #052940;
     box-shadow: 0px 0px 3px #0b4264;
     font-weight: 530;
+    padding: 0.6rem 1.2rem; 
+    font-size: 1rem; 
+    min-width: 80px; 
+    max-width: 100px; 
+    width: auto; 
+    box-sizing: border-box;
 }
+
+
+
+
 
 .line-container1 {
     width: 100%;
@@ -391,6 +384,57 @@
         width: 95%; 
         max-width: 100%; 
         height: auto; 
+    }
+}
+
+@media (max-width: 768px) {
+    .btn-attend {
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
+        min-width: 70px;
+        max-width: 90px; 
+    }
+
+    .btn-attend.active,
+    .btn-attend.manage,
+    .btn-attend.manage_all,
+    .btn-attend.manage_class {
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
+        min-width: 70px;
+        max-width: 90px; 
+    }
+
+    .button-container,
+    .cza_button_container {
+        margin-top: 15px; 
+        
+    }
+}
+
+/* 모바일 화면 */
+@media (max-width: 480px) {
+    .btn-attend {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.8rem;
+        min-width: 60px;
+        max-width: 80px; /* max-width을 80px으로 감소 */
+    }
+
+    .btn-attend.active,
+    .btn-attend.manage,
+    .btn-attend.manage_all,
+    .btn-attend.manage_class {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.8rem;
+        min-width: 60px;
+        max-width: 80px; 
+    }
+
+    .button-container,
+    .cza_button_container {
+        margin-top: 10px; 
+        
     }
 }
 
