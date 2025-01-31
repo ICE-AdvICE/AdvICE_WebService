@@ -51,11 +51,11 @@ const CodingMain = () => {
   const location = useLocation();  
   const [selectedZone, setSelectedZone] = useState(1);
   const [selectedButton, setSelectedButton] = useState('codingzone'); 
-  const [noClassesMessage, setNoClassesMessage] = useState('');
   const [userReservedClass, setUserReservedClass] = useState(null);
   const [selectedDay, setSelectedDay] = useState('');  
   const [isRendered, setIsRendered] = useState(false);
   const [userRole, setUserRole] = useState('');
+  const [showNoClassesImage, setShowNoClassesImage] = useState(false);
 
   useEffect(() => {
     if (cookies.accessToken  ) {
@@ -101,8 +101,10 @@ const CodingMain = () => {
         setClassList(prevClassList => {
             const updatedList = prevClassList.filter(item => item.classNum !== classNum);
             if (updatedList.length === 0) {
-                setNoClassesMessage('현재는 코딩존 예약 기간이 아니어서 수업이 표시되지 않습니다');
-            }
+              setShowNoClassesImage(true);
+          } else {
+              setShowNoClassesImage(false);
+          }
             return updatedList;
         });
     } else {
@@ -184,20 +186,20 @@ const CodingMain = () => {
                 }
             }
             if (classes && classes.length > 0) {
-                const sortedClasses = sortClassList(classes);
-                setOriginalClassList(sortedClasses);
-                setClassList(sortedClasses);
-                setNoClassesMessage('');  
-            } else {
-                setOriginalClassList([]);
-                setClassList([]);
-                setNoClassesMessage('현재는 코딩존 예약 기간이 아니어서 수업이 표시되지 않습니다');
-            }
+              const sortedClasses = sortClassList(classes);
+              setOriginalClassList(sortedClasses);
+              setClassList(sortedClasses);
+              setShowNoClassesImage(false);  
+          } else {
+              setOriginalClassList([]);
+              setClassList([]);
+              setShowNoClassesImage(true);
+          }
         } catch (error) {
-            setOriginalClassList([]);
-            setClassList([]);
-            setNoClassesMessage('현재는 코딩존 예약 기간이 아니어서 수업이 표시되지 않습니다');
-        }
+          setOriginalClassList([]);
+          setClassList([]);
+          setShowNoClassesImage(true);
+      }
     };
     fetchData();
 }, [cookies.accessToken, grade]);
@@ -325,7 +327,7 @@ const sliderSettings = {
       </div>
       <Slider {...sliderSettings}> 
          <div className="codingzone-top-container">
-         <img src="/codingzone_main_v5" className="codingzonetop2-image"/>
+         <img src="/codingzone_main_v5.png" className="codingzonetop2-image"/>
         </div>
         <div className="codingzone-top-container">
         <img src="/coding-zone-main2.png" className="codingzonetop2-image"/>
@@ -415,20 +417,21 @@ const sliderSettings = {
         </div>
         
         <div className="codingzone-list">
-          {noClassesMessage ? (
-             <div className="no-classes-message" style={{ textAlign: 'center', marginTop: '20px' }}>
-             {noClassesMessage}
-           </div> 
-          ) : (
-            <ClassList 
-              classList={classList} 
-              handleCardClick={handleCardClick} 
-              handleToggleReservation={handleToggleReservation} 
-              isAdmin={isAdmin}  
-              onDeleteClick={handleDelete} 
-              userReservedClass={userReservedClass} 
-            />
-          )}
+        {showNoClassesImage ? (
+          <div className="no-classes-image" style={{ textAlign: 'center', marginTop: '20px' }}>
+            <img src="/Codingzone-noregist.png" alt="수업이 없습니다" className="no-classes-img" />
+          </div>
+        ) : (
+          <ClassList 
+            classList={classList} 
+            handleCardClick={handleCardClick} 
+            handleToggleReservation={handleToggleReservation} 
+            isAdmin={isAdmin}  
+            onDeleteClick={handleDelete} 
+            userReservedClass={userReservedClass} 
+          />
+        )}
+
         </div>
        
       </div>

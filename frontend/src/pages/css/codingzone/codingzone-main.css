@@ -208,6 +208,22 @@ overflow-x:hidden;
   padding: 7px 1px;
 }
 
+.no-classes-image {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  padding: 0 10px; 
+  margin-bottom: 0px; 
+}
+
+.no-classes-img {
+  width: 100%;
+  height: auto;
+  max-width: 900px; 
+  box-sizing: border-box;
+}
+
  
 @media (max-width: 1000px) {
   .card-hidden-space {
@@ -254,3 +270,26 @@ overflow-x:hidden;
     max-width: calc(100% ); /* 컨테이너 너비에서 20px(좌우 패딩)을 빼준 값 */
   }
 }
+
+/*수업 없을때 뜨는 이미지 이미지 조정*/
+@media (max-width: 768px) {
+  .no-classes-image {
+    margin-bottom: 15px; 
+  }
+
+  .no-classes-img {
+    max-width: 80%; 
+  }
+}
+
+/* 모바일 화면 크기 */
+@media (max-width: 480px) {
+  .no-classes-image {
+    margin-bottom: 10px; 
+  }
+
+  .no-classes-img {
+    max-width: 100%; 
+  }
+}
+
