@@ -379,11 +379,9 @@ const renderAttendanceProgress = (count) => {
               코딩존 2
             </button>
           </div>
-          {cookies.accessToken && (userRole === 'SU' || userRole === 'CA') && (
-            <Link to="/coding-zone/Codingzone_Attendance" className='cz-count-container'>
-              {renderAttendanceProgress(attendanceCount)}
-            </Link>
-          )}
+          <Link to="/coding-zone/Codingzone_Attendance" className='cz-count-container'>
+            {renderAttendanceProgress(attendanceCount)}
+          </Link>
         </div>
         <div className="codingzone-date">
           <button 
