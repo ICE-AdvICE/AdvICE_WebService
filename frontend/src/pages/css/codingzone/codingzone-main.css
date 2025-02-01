@@ -62,17 +62,23 @@ overflow-x:hidden;
   padding: 0 10px 10px 10px;
   margin-bottom: 100px;
 }
-.cz-category-top{
+
+.cz-category-top {
+  position: relative; /* 자식들의 절대 위치 기준 */
   display: flex;
   align-items: center;
-  position: relative;
-  justify-content: space-between; 
   font-size: 8px;
-  margin-left: 39.5%;
 }
-.cz-category-date{
+.cz-category-date {
   display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
 }
+
+
 .cz-category-date button{
   padding: 10px 1px;
   width: 100px;
@@ -83,6 +89,7 @@ overflow-x:hidden;
   border: 1px solid #D0D5DD;
   font-size: 10px;
   background-color: white;
+  
 }
 .cz-1{
   margin-right: 10px;
@@ -234,6 +241,8 @@ overflow-x:hidden;
   text-decoration: none; 
   color: inherit; 
   margin-bottom: 30px;
+  margin-left: auto;
+  
 }
 
 .attendance-progress-container {
@@ -276,12 +285,21 @@ overflow-x:hidden;
 }
 @media (max-width: 860px) {
   .cz-category-top {
+    padding: 0 10px;
     font-size: 8px;
+  }
+
+  .attendance-progress-container{
+    margin-top: -10px; 
+    margin-bottom: -20px;
   }
   .cz-category-date button{
     height: 100%;
     border-color: #D0D5DD;
     background-color: white;
+    margin-top: -10px; 
+    margin-bottom: -15px;
+    width: 10vw;
   }
 }
 @media (max-width: 465px) {
@@ -289,25 +307,30 @@ overflow-x:hidden;
     font-size: 12px;
   }
   .card-reservation, .card-delete{
-    font-size: 10px;
+    font-size: 12px;
   }
-  .cz-category-date button{
-    font-size: 8px;
+  .cz-category-date button:first-child,
+  .cz-category-date button:last-child {
+    width: 50px;
   }
 }
 @media (max-width: 395px) {
   .czcard p, .codingzone-title p,.codingzone-date button{
-    font-size: 10px;
+    font-size: 12px;
   }
 }
 
 @media (max-width: 600px) {
   .codingzone-top-container {
-    padding: 20px 10px; /* 상하 20px, 좌우 10px의 패딩 */
+    padding: 10px 10px; /* 상하 20px, 좌우 10px의 패딩 */
   }
 
   .codingzonetop2-image {
     max-width: calc(100% ); /* 컨테이너 너비에서 20px(좌우 패딩)을 빼준 값 */
+  }
+  .cz-category-date button:first-child,
+  .cz-category-date button:last-child {
+    width: 70px;
   }
 }
 
