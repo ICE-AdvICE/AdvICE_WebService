@@ -64,7 +64,7 @@ overflow-x:hidden;
 }
 
 .cz-category-top {
-  position: relative; /* 자식들의 절대 위치 기준 */
+  position: relative; 
   display: flex;
   align-items: center;
   font-size: 8px;
@@ -76,6 +76,7 @@ overflow-x:hidden;
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
+ 
 }
 
 
@@ -241,6 +242,7 @@ overflow-x:hidden;
   text-decoration: none; 
   color: inherit; 
   margin-bottom: 30px;
+  margin-top: 10px;
   margin-left: auto;
   
 }
@@ -265,6 +267,7 @@ overflow-x:hidden;
   border-radius: 2px;
   overflow: hidden;
   position: relative;
+  margin-bottom: -20px;
 }
 
 .attendance-progress-fill {
