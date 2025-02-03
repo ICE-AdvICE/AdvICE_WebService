@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
-import ToastViewer from '../ToastViewer.js';  
-import './ShowPage.css';
-import {fetchArticle,fetchLikeStatus, handleLike ,handleResolveArticle,giveBanToUser,adminhandleDelete,checkAnonymousBoardAdmin,handleCommentEdit,handleCommentDelete,fetchComments,handleDelete,handleCommentSubmit ,checkArticleOwnership} from '../../apis/index.js';
+import ToastViewer from '../../../widgets/layout//ToastEditor/ToastViewer.js';  
+import '../../css/ArticlePage/ShowPage.css';
+import {fetchArticle,fetchLikeStatus, handleLike ,handleResolveArticle,giveBanToUser,adminhandleDelete,checkAnonymousBoardAdmin,handleCommentEdit,handleCommentDelete,fetchComments,handleDelete,handleCommentSubmit ,checkArticleOwnership} from '../../../apis/index.js';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart as solidHeart } from '@fortawesome/free-solid-svg-icons';
 import { faHeart as regularHeart } from '@fortawesome/free-regular-svg-icons';

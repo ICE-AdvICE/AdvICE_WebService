@@ -1,7 +1,6 @@
 import React, { useEffect , useState} from 'react';
-import '../css/Main.bar/MainPage.css';
+import '../css/MainPage/MainPage.css';
 import { getMypageRequest } from '../../apis/index.js';
-
 import { useNavigate } from 'react-router-dom';
 import { useCookies } from "react-cookie";
 
@@ -35,9 +34,7 @@ const MainPage = () => {
 }, [cookies.accessToken, navigate]);
 
   const handlecodingzone = () => {
- 
       navigate(`/coding-zone`);
-    
   };
 
   return (

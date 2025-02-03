@@ -1,9 +1,9 @@
 import React, { useMemo, useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCookies } from "react-cookie";
-import Card from '../../components/Card';
-import Pagination from '../../components/Pagination';
-import './ArticleMain.css';
+import Card from '../../widgets/layout/Card/Card';
+import Pagination from '../../widgets/layout/Pagination/Pagination';
+import '../css/ArticlePage/ArticleMain.css';
 import { getArticleListRequest, fetchUserArticles, checkUserBanStatus } from '../../apis/index.js';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';

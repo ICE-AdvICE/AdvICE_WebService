@@ -1,5 +1,5 @@
-import BlogForm from "../../components/BlogForm";
-import './CreatePage.css';
+import BlogForm from "../../../widgets/BlogForm";
+import '../../css/ArticlePage/CreatePage.css';
  
 const CreatePage = () => {
     return(

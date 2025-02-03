@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import '../css/codingzone/codingzone-main.css';
 import { useCookies } from "react-cookie";
-import CzCard from '../../components/czCard';  
+import CzCard from '../../widgets/layout/CzCard/czCard';  
 import { deleteClass,checkAdminType, getAvailableClassesForNotLogin, getAttendanceCount, deleteCodingZoneClass, reserveCodingZoneClass, getcodingzoneListRequest } from '../../apis/Codingzone-api.js'; 
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import InquiryModal from './InquiryModal';

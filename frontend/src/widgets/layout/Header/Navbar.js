@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
-import '../pages/css/Main.bar/NavBar.css';
-import LoginForm from '../Modals/LoginForm';
-import SignUpinfoForm from '../Modals/Signupinfo';
-import MypageForm from '../Modals/Mypage';
-import MyModal from '../MyModal';
+import './Navbar.css';
+import LoginForm from '../../../Modals/LoginForm';
+import SignUpinfoForm from '../../../Modals/Signupinfo';
+import MypageForm from '../../../Modals/Mypage';
+import MyModal from '../../../MyModal';
 import { useCookies } from 'react-cookie';
 
 const NavBar = () => {

@@ -5,15 +5,15 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Main from './pages/HomePage';
 import ArticleMain from './pages/ArticlePage/ArticleMain';
 import CodingMain from './pages/Coding-zone/CodingZoneMain';
-import EditPage from './pages/ArticlePage/EditPage';
+import EditPage from './pages/ArticlePage/Components/EditPage';
 import CodingClassRegist from './pages/Coding-zone/CodingZoneRegist';
 import CodingZoneAttendanceAssistant from './pages/Coding-zone/CodingZoneAttendanceAssistant';
 import CodingZoneMyAttendance from './pages/Coding-zone/CodingZoneMyAttendance';
 import CodingZoneAttendanceManager from './pages/Coding-zone/CodingZoneAttendanceManager';
-import NavBar from './components/NavBar';
-import Footer from './components/Footer';
-import CreatePage from './pages/ArticlePage/CreatePage';
-import ShowPage from './pages/ArticlePage/ShowPage';
+import NavBar from './widgets/layout/Header/Navbar';
+import Footer from './widgets/layout/Footer/Footer';
+import CreatePage from './pages/ArticlePage/Components/CreatePage';
+import ShowPage from './pages/ArticlePage/Components/ShowPage';
 import AuthHandle from './pages/AuthHandle';
  
 
