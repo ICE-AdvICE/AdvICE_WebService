@@ -4,8 +4,9 @@ import '../css/codingzone/CodingClassRegist.css';
 import { useCookies } from "react-cookie";
 import InquiryModal from './InquiryModal';
 import '../css/codingzone/codingzone-main.css';
-import { uploadGroupData, fetchGroupClasses, uploadClassForWeek, resetCodingZoneData, getczauthtypetRequest } from '../../apis/Codingzone-api';
-
+import { resetCodingZoneData } from '../../features/api/Admin/Codingzone/ClassApi';
+import { uploadGroupData, fetchGroupClasses,uploadClassForWeek } from '../../entities/api/CodingZone/AdminApi';
+import { getczauthtypetRequest } from '../../shared/api/AuthApi';
 
 
 const CodingZoneRegist = () => {

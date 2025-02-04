@@ -13,6 +13,9 @@ const GIVE_BAN_URL = (articleNum) => `${API_ADMIN_DOMAIN}/give-ban/${articleNum}
 const ADMIN_DELETE_ARTICLE_URL = (articleNum) => `${API_ADMIN_DOMAIN}/${articleNum}`;
 const RESOLVE_ARTICLE_URL = (articleNum) => `${API_ADMIN_DOMAIN}/${articleNum}/resolv`;
 const CHECK_ANONYMOUS_BOARD_ADMIN_URL = () => `${API_DOMAIN}/user/auth1-exist`;
+const CHECK_ADMIN_TYPE_URL = () => `${API_DOMAIN}/coding-zone/auth-type`;
+
+
 
 // 1-10 사용자 정지 부여 API
 export const giveBanToUser = async (navigate,articleNum, token, banDuration, banReason) => {
@@ -200,3 +203,34 @@ export const checkAnonymousBoardAdmin = async (token) => {
         return false;  
     }
 };
+
+// 7. 운영자 권한 종류 확인 API
+export const checkAdminType = async (token) => {
+    try {
+        const response = await axios.get(CHECK_ADMIN_TYPE_URL(), authorization(token));
+        if (response.data.code === "SU") 
+            return "SU"
+        else if (response.data.code === "EA") {
+            return "EA";  
+        } 
+        else if (response.data.code === "CA") {
+            return "CA";  
+        }
+    } catch (error) {
+        if (error.response) {
+            switch (error.response.data.code) {
+                case "NU":
+                    console.log("사용자가 존재하지 않습니다.");
+                    break;
+                case "DBE":
+                    console.log("데이터베이스에 문제가 발생했습니다.");
+                    break;
+                default:
+                    console.log("예상치 못한 문제가 발생하였습니다.");
+                    break;
+            }
+        }
+        return false;   
+    }
+};
+

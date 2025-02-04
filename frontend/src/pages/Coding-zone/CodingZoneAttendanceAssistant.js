@@ -6,9 +6,11 @@ import "react-datepicker/dist/react-datepicker.css";
 import '../css/codingzone/codingzone-main.css';
 import '../css/codingzone/codingzone_attend.css';
 import '../css/codingzone/codingzone_manager.css';
-import { getczauthtypetRequest, getczattendlistRequest, getczreservedlistRequest, putczattendc1Request, putczattendc2Request } from '../../apis/Codingzone-api.js';
+import { getczreservedlistRequest} from '../../features/api/Admin/Codingzone/ClassApi.js';
+import { getczauthtypetRequest } from '../../shared/api/AuthApi.js';
+import { putczattendc1Request,putczattendc2Request} from '../../features/api/Admin/Codingzone/AttendanceApi.js';
 import InquiryModal from './InquiryModal.js';
-
+import { getczattendlistRequest } from '../../features/api/CodingzoneApi.js';
 const CodingZoneAttendanceAssistant= () => {
     const [attendList, setAttendList] = useState([]);
     const [reservedList, setReservedList] = useState([]);

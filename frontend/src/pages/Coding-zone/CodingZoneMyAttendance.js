@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { getczauthtypetRequest, getczattendlistRequest } from '../../apis/Codingzone-api.js';
+
+import { getczauthtypetRequest } from '../../shared/api/AuthApi.js';
 import { useCookies } from 'react-cookie';
 import '../css/codingzone/codingzone-main.css';
 import '../css/codingzone/codingzone_attend.css';
 import { useNavigate, useLocation } from 'react-router-dom';
 import InquiryModal from './InquiryModal.js';
-
+import { getczattendlistRequest } from '../../features/api/CodingzoneApi.js';
 const CodingZoneMyAttendance = () => {
     const [authMessage, setAuthMessage] = useState('');
     const [attendList, setAttendList] = useState([]);

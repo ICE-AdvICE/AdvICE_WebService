@@ -2,7 +2,9 @@ import React, { useState, useEffect } from 'react';
 import './css/AuthHandle.css';
 import { useCookies } from "react-cookie";
 import {useNavigate } from 'react-router-dom';
-import {grantPermission, deprivePermission} from '../apis/Codingzone-api';
+ 
+import { deprivePermission,grantPermission } from '../features/api/Admin/Codingzone/AuthApi';
+ 
 
 
 const AuthHandle = () => {

@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { getczauthtypetRequest, getczallattendRequest } from '../../apis/Codingzone-api.js';
+ 
+import { getczallattendRequest } from '../../features/api/Admin/Codingzone/ClassApi.js';
 import { useCookies } from 'react-cookie';
 import '../css/codingzone/codingzone-main.css';
 import '../css/codingzone/codingzone_attend.css';
 import '../css/codingzone/codingzone_all_attendance.css';
 import { useNavigate } from 'react-router-dom';
 import InquiryModal from './InquiryModal.js';
-
+import { getczauthtypetRequest } from '../../shared/api/AuthApi.js';
+ 
 const CodingZoneAttendanceManager = () => {
     const [authMessage, setAuthMessage] = useState('');
     const [showAdminButton, setShowAdminButton] = useState(false);

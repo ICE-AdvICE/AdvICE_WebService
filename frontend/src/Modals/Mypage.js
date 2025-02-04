@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useCookies } from 'react-cookie';
 import { checkuserbanRequest } from '../features/api/ArticleApi.js';
- 
 import MyModal from '../MyModal';
 import FindpasswordForm from '../Modals/findpassword';
 import './modules.css';
 import { useNavigate } from 'react-router-dom';
-import { getczauthtypetRequest } from '../apis/Codingzone-api.js';
+import { getczauthtypetRequest } from '../shared/api/AuthApi.js';
 import { deleteUserRequest } from '../entities/api/UserApi.js';
 import { updateMypageUserRequest } from '../entities/api/UserApi.js';
 import { getMypageRequest } from '../shared/api/AuthApi.js';

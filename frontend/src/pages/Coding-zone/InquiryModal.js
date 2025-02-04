@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getczassitantRequest, getczauthtypetRequest} from '../../apis/Codingzone-api';
 import styles from '../css/codingzone/InquiryModal.module.css';
 import '../../Modals/modules.css';
-
+import { getczassitantRequest } from '../../features/api/Admin/Codingzone/InquiryApi';
 
 const InquiryModal = ({ isOpen, onClose }) => {
     const [assistants, setAssistants] = useState({ zone1: [], zone2: [] });

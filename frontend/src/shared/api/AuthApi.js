@@ -6,6 +6,8 @@ const API_DOMAIN = `${DOMAIN}/api/v1`;
 const GET_MYPAGE_USER_URL = () => `${API_DOMAIN}/user`; //마이페이지_개인정보 
 
 const GET_SIGN_IN_USER_URL =() =>`${API_DOMAIN}/user`;
+ 
+const GET_CZ_AUTH_TYPE = () => `${API_DOMAIN}/coding-zone/auth-type`;
 const authorization = (accessToken) => {
     return {headers: {Authorization:`Bearer ${accessToken}`}}
 };
@@ -45,5 +47,16 @@ export const getMypageRequest = async (accessToken) => {
 };
 
 
+
+// 7.운영자 권한 종류 확인 API
+export const getczauthtypetRequest = async (accessToken) => {
+    try {
+        const response = await axios.get(GET_CZ_AUTH_TYPE(), authorization(accessToken));
+        return response.data;
+    } catch (error) {
+        if (!error.response || !error.response.data) return null;
+        return error.response.data;
+    }
+};
 
 

@@ -2,13 +2,17 @@ import React, { useState, useEffect } from 'react';
 import '../css/codingzone/codingzone-main.css';
 import { useCookies } from "react-cookie";
 import CzCard from '../../widgets/layout/CzCard/czCard';  
-import { deleteClass,checkAdminType, getAvailableClassesForNotLogin, getAttendanceCount, deleteCodingZoneClass, reserveCodingZoneClass, getcodingzoneListRequest } from '../../apis/Codingzone-api.js'; 
+ 
 import { useNavigate, useLocation, Link } from 'react-router-dom';
+import { deleteClass } from '../../entities/api/CodingZone/AdminApi.js';
+import { checkAdminType } from '../../features/api/Admin/UserApi.js';
+import { getAvailableClassesForNotLogin } from '../../features/api/Admin/Codingzone/ClassApi.js';
 import InquiryModal from './InquiryModal';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from 'react-slick';
-
+import { getAttendanceCount, getcodingzoneListRequest } from '../../features/api/CodingzoneApi.js';
+import { deleteCodingZoneClass, reserveCodingZoneClass } from '../../entities/api/CodingZone/StudentApi.js';
 const ClassList = ({ userReservedClass,onDeleteClick,classList, handleCardClick, handleToggleReservation, isAdmin }) => {
   return (
     <div className='cz-card'>
