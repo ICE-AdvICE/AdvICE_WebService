@@ -2,7 +2,9 @@ import React, { useState, useEffect } from 'react';
 import './modules.css';
 import { useCookies } from 'react-cookie';
 import { useNavigate } from 'react-router-dom';
-import { signUpRequest, emailCertificationRequest, checkCertificationRequest } from '../apis/index.js';
+ 
+import { signUpRequest } from '../entities/api/UserApi.js';
+import { emailCertificationRequest, checkCertificationRequest } from '../shared/api/EmailApi.js';
 
 const SignUpinfoForm = ({ closeModal }) => {
   const [userCertificationNumber, setUsercertificationNumber] = useState('');

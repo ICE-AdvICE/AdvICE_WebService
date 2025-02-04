@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { pwRequest, checkCertificationRequest, pwUpdateRequest } from '../apis/index.js';
 import { useNavigate } from 'react-router-dom';
-
+import { checkCertificationRequest } from '../shared/api/EmailApi.js';
+import { pwRequest } from '../shared/api/EmailApi.js';
+import { pwUpdateRequest } from '../entities/api/UserApi.js';
 const FindpasswordForm = ({ onClose }) => {
     const [userEmail, setUserEmail] = useState('');
     const [certificationNumber, setCertificationNumber] = useState('');

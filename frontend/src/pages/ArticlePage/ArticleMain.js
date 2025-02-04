@@ -4,8 +4,7 @@ import { useCookies } from "react-cookie";
 import Card from '../../widgets/layout/Card/Card';
 import Pagination from '../../widgets/layout/Pagination/Pagination';
 import '../css/ArticlePage/ArticleMain.css';
- 
-import { getArticleListRequest  } from '../../apis/index.js';
+import { getArticleListRequest } from '../../entities/api/ArticleApi.js';
 import { checkUserBanStatus,fetchUserArticles  } from '../../features/api/ArticleApi.js';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';

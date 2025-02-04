@@ -9,6 +9,7 @@ const CREATE_ARTICLE_URL = () => `${API_DOMAIN}/article`;
 const EDIT_ARTICLE = (articleNum) => `${API_DOMAIN}/article/${articleNum}`;
 const DELETE_ARTICLE_URL = (articleNum) => `${API_DOMAIN}/article/${articleNum}`;
 const FETCH_ARTICLE_URL = (articleNum) => `${API_DOMAIN}/article/${articleNum}`;
+const GET_ARTICLE_LIST_URL = () => `${API_DOMAIN}/article/list`;
 
 //1. 게시물(일반,요청)을 등록하는 API
 export const createArticleRequest = async (postData, accessToken) => {
@@ -146,3 +147,26 @@ export const handleDelete = async (articleNum, token, navigate) => {
         }
     }
 };
+// 11.모든 게시글을 리스트 형태로 불러오는 API
+export const getArticleListRequest = async () => {
+    const result = await axios.get(GET_ARTICLE_LIST_URL())
+        .then(response => {
+            const responseBody = response.data;
+            return responseBody;
+        })
+        .catch(error => {
+            if (!error.response || !error.response.data) {
+                console.log("API 응답에 문제가 발생했습니다.");
+                return { message: "API 응답 오류", code: "API_ERROR" }; 
+            }
+            const responseBody = error.response.data;    
+            if (responseBody.code === "DBE") {
+                console.log("데이터베이스에 문제가 발생했습니다.");  
+            }             
+            return responseBody;
+        })
+    return result;
+};
+
+
+

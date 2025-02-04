@@ -1,8 +1,9 @@
 import React, { useEffect , useState} from 'react';
 import '../css/MainPage/MainPage.css';
-import { getMypageRequest } from '../../apis/index.js';
+ 
 import { useNavigate } from 'react-router-dom';
 import { useCookies } from "react-cookie";
+import { getMypageRequest } from '../../shared/api/AuthApi.js';
 
 const MainPage = () => {
   const [cookies] = useCookies('accessToken');
