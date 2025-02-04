@@ -3,10 +3,15 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import ToastViewer from '../../../widgets/layout//ToastEditor/ToastViewer.js';  
 import '../../css/ArticlePage/ShowPage.css';
-import {fetchArticle,fetchLikeStatus, handleLike ,handleResolveArticle,giveBanToUser,adminhandleDelete,checkAnonymousBoardAdmin,handleCommentEdit,handleCommentDelete,fetchComments,handleDelete,handleCommentSubmit ,checkArticleOwnership} from '../../../apis/index.js';
+import {handleDelete,fetchArticle} from '../../../entities/api/ArticleApi.js';
+import {checkAnonymousBoardAdmin , handleResolveArticle,giveBanToUser,adminhandleDelete } from '../../../features/api/Admin/UserApi.js';
+import { handleLike,fetchLikeStatus,checkArticleOwnership } from '../../../features/api/ArticleApi.js';
+import { handleCommentSubmit,fetchComments,handleCommentEdit  } from '../../../features/api/Admin/CommentsApi.js';
+ 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart as solidHeart } from '@fortawesome/free-solid-svg-icons';
 import { faHeart as regularHeart } from '@fortawesome/free-regular-svg-icons';
+import { handleCommentDelete } from '../../../features/api/Admin/CommentsApi.js';
 
 const ShowPage = () => {
     // 댓글 작성 중인지 여부를 관리하는 상태

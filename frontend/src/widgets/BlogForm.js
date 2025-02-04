@@ -2,14 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { useCookies } from 'react-cookie';
-import {
-  checkUserBanStatus,
-  fetchArticle,
-  handleEdit,
-  checkAnonymousBoardAdmin,
-  createArticleRequest,
-  createNotificationArticleRequest,
-} from '../apis/index';
+ 
+import { checkUserBanStatus } from '../features/api/ArticleApi';
+import {checkAnonymousBoardAdmin, createNotificationArticleRequest } from '../features/api/Admin/UserApi';
+import {createArticleRequest,handleEdit,fetchArticle} from '../entities/api/ArticleApi';
 import ReactQuill from 'react-quill';
 import '../pages/css/ArticlePage/BlogForm.css';
 import { useLocation } from 'react-router-dom';

@@ -4,10 +4,12 @@ import { useCookies } from "react-cookie";
 import Card from '../../widgets/layout/Card/Card';
 import Pagination from '../../widgets/layout/Pagination/Pagination';
 import '../css/ArticlePage/ArticleMain.css';
-import { getArticleListRequest, fetchUserArticles, checkUserBanStatus } from '../../apis/index.js';
+ 
+import { getArticleListRequest  } from '../../apis/index.js';
+import { checkUserBanStatus,fetchUserArticles  } from '../../features/api/ArticleApi.js';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
- 
+
   
 const ArticleMain = () => {
     // 상태 관리: 공지사항과 일반 게시글을 각각 관리
