@@ -6,7 +6,7 @@ import java.util.List;
 import com.icehufs.icebreaker.common.ResponseCode;
 import com.icehufs.icebreaker.common.ResponseMessage;
 
-import com.icehufs.icebreaker.domain.codingzone.domain.vo.ReservedClassListItem;
+import com.icehufs.icebreaker.domain.codingzone.dto.object.ReservedClassListItem;
 import com.icehufs.icebreaker.common.ResponseDto;
 
 import lombok.Getter;

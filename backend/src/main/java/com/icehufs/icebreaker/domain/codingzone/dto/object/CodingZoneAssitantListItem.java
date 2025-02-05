@@ -1,4 +1,4 @@
-package com.icehufs.icebreaker.domain.codingzone.domain.vo;
+package com.icehufs.icebreaker.domain.codingzone.dto.object;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

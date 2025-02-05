@@ -1,4 +1,4 @@
-package com.icehufs.icebreaker.domain.codingzone.domain.vo;
+package com.icehufs.icebreaker.domain.codingzone.dto.object;
 
 import com.icehufs.icebreaker.domain.codingzone.domain.entity.GroupInf;
 
