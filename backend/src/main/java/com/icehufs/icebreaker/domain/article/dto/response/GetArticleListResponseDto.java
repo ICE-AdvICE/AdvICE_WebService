@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 
 import com.icehufs.icebreaker.common.ResponseCode;
 import com.icehufs.icebreaker.common.ResponseMessage;
-import com.icehufs.icebreaker.domain.article.domain.vo.ArticleListItem;
+import com.icehufs.icebreaker.domain.article.dto.object.ArticleListItem;
 import com.icehufs.icebreaker.common.ResponseDto;
 import com.icehufs.icebreaker.domain.article.domain.entity.Article;
 
