@@ -4,7 +4,7 @@ import com.icehufs.icebreaker.common.ResponseDto;
 import com.icehufs.icebreaker.domain.codingzone.domain.entity.GroupInf;
 import com.icehufs.icebreaker.common.ResponseCode;
 import com.icehufs.icebreaker.common.ResponseMessage;
-import com.icehufs.icebreaker.domain.codingzone.domain.vo.GroupInfListItem;
+import com.icehufs.icebreaker.domain.codingzone.dto.object.GroupInfListItem;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;

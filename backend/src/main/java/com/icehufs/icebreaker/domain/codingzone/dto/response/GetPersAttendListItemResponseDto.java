@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 
 import com.icehufs.icebreaker.common.ResponseCode;
 import com.icehufs.icebreaker.common.ResponseMessage;
-import com.icehufs.icebreaker.domain.codingzone.domain.vo.PersAttendManagListItem;
+import com.icehufs.icebreaker.domain.codingzone.dto.object.PersAttendManagListItem;
 import com.icehufs.icebreaker.common.ResponseDto;
 
 import lombok.Getter;

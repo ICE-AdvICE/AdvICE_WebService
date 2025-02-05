@@ -5,7 +5,7 @@ import org.springframework.http.ResponseEntity;
 
 import com.icehufs.icebreaker.common.ResponseCode;
 import com.icehufs.icebreaker.common.ResponseMessage;
-import com.icehufs.icebreaker.domain.codingzone.domain.vo.CodingZoneAssitantListItem;
+import com.icehufs.icebreaker.domain.codingzone.dto.object.CodingZoneAssitantListItem;
 import com.icehufs.icebreaker.common.ResponseDto;
 import com.icehufs.icebreaker.domain.membership.domain.entity.User;
 

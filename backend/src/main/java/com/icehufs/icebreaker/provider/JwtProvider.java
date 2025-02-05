@@ -9,7 +9,7 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Component;
 
-import com.icehufs.icebreaker.domain.auth.domain.vo.JwtToken;
+import com.icehufs.icebreaker.domain.auth.dto.object.JwtToken;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;

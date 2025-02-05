@@ -6,7 +6,7 @@ import org.springframework.http.ResponseEntity;
 import com.icehufs.icebreaker.common.ResponseCode;
 import com.icehufs.icebreaker.common.ResponseDto;
 import com.icehufs.icebreaker.common.ResponseMessage;
-import com.icehufs.icebreaker.domain.auth.domain.vo.JwtToken;
+import com.icehufs.icebreaker.domain.auth.dto.object.JwtToken;
 
 import lombok.Getter;
 

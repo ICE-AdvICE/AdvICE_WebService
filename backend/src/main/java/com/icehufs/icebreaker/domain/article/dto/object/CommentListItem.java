@@ -1,4 +1,4 @@
-package com.icehufs.icebreaker.domain.article.domain.vo;
+package com.icehufs.icebreaker.domain.article.dto.object;
 
 import java.util.ArrayList;
 import java.util.List;
