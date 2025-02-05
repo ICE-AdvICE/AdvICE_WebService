@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { useCookies } from "react-cookie";
 import { getMypageRequest } from '../../shared/api/AuthApi.js';
 
-const MainPage = () => {
+const HomePage = () => {
   const [cookies] = useCookies('accessToken');
   const navigate = useNavigate();
   const [userData, setUserData] = useState(null);
@@ -69,4 +69,4 @@ const MainPage = () => {
   );
 }
 
-export default MainPage;
+export default HomePage;

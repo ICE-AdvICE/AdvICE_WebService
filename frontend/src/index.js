@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Main from './pages/HomePage';
+import Main from './pages/HomePage/HomePage';
 import ArticleMain from './pages/ArticlePage/ArticleMain';
 import CodingMain from './pages/Coding-zone/CodingZoneMain';
 import EditPage from './pages/ArticlePage/Components/EditPage';
