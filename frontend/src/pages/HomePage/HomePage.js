@@ -3,10 +3,10 @@ import '../css/MainPage/MainPage.css';
  
 import { useNavigate } from 'react-router-dom';
 import { useCookies } from "react-cookie";
-import { getMypageRequest } from '../../shared/api/AuthApi.js';
+import { getMypageRequest} from '../../shared/api/AuthApi.js';
 
 const HomePage = () => {
-  const [cookies] = useCookies('accessToken');
+  const [cookies, setCookie] = useCookies(['accessToken', 'refreshToken']);
   const navigate = useNavigate();
   const [userData, setUserData] = useState(null);
   const handleMoreClick = () => {
@@ -20,19 +20,23 @@ const HomePage = () => {
   };
   useEffect(() => {
     const fetchData = async () => {
-        const data = await getMypageRequest(cookies.accessToken);
-        if (data) {
-            setUserData(data);
-            navigate('/');
+      if (!cookies.accessToken && !cookies.refreshToken) {
+        navigate('/');
+        return;
+      }
 
-        } else {
-            
-            navigate('/');
-        }
+      const data = await getMypageRequest(cookies.accessToken, cookies.refreshToken, setCookie, navigate);
+      
+      if (data) {
+        setUserData(data);
+      } else {
+        console.error("❌ [유저 데이터 불러오기 실패]");
+        navigate('/');
+      }
     };
 
     fetchData();
-}, [cookies.accessToken, navigate]);
+  }, [cookies.accessToken, cookies.refreshToken, navigate, setCookie]);
 
   const handlecodingzone = () => {
       navigate(`/coding-zone`);
@@ -70,3 +74,15 @@ const HomePage = () => {
 }
 
 export default HomePage;
+
+
+
+
+
+
+
+
+
+
+
+
