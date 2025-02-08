@@ -2,12 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { useCookies } from 'react-cookie';
- 
-import { checkUserBanStatus } from '../features/api/ArticleApi';
-import {checkAnonymousBoardAdmin, createNotificationArticleRequest } from '../features/api/Admin/UserApi';
-import {createArticleRequest,handleEdit,fetchArticle} from '../entities/api/ArticleApi';
+import {checkAnonymousBoardAdmin, createNotificationArticleRequest } from '../api/Admin/UserApi';
+import {createArticleRequest,handleEdit,fetchArticle} from '../../entities/api/ArticleApi';
 import ReactQuill from 'react-quill';
-import '../pages/css/ArticlePage/BlogForm.css';
+import '../../pages/css/ArticlePage/BlogForm.css';
 import { useLocation } from 'react-router-dom';
 
 
@@ -21,13 +19,14 @@ const BlogForm = ({ editing }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [category, setCategory] = useState('카테고리 선택');
-  const [categoryName, setCategoryName] = useState('카테고리 선택');
+ 
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [cookies] = useCookies(['accessToken']);
   const token = cookies.accessToken;
-  const [categoryString, setCategoryString] = useState('카테고리 선택');
+ 
   const [isAdmin, setIsAdmin] = useState(false);
   const [canChangeCategory, setCanChangeCategory] = useState(true);
+
 
   const categoryMap = {
     'REQUEST': '요청',
@@ -36,37 +35,36 @@ const BlogForm = ({ editing }) => {
     '카테고리 선택': '카테고리 선택',
     'RESOLVE' : '해결'
   };
+  const categoryLabel = categoryMap[category] || '카테고리 선택';
 
   useEffect(() => {
-    const loadArticleData = async () => {
-        if (editing && articleNum) {
-            setLoading(true);
-            try {
-                const data = await fetchArticle(articleNum, navigate);
-                if (data) {
-                    const { articleTitle, articleContent, category, authCheck } = data;
-                    setArticleTitle(articleTitle);
-                    setArticleContent(articleContent);
-                    
-                    if (authCheck === 1) {
-                        setCategoryName('해결');  
-                        setCategory('RESOLVE');  
-                        setCanChangeCategory(false);   
-                    } else {
-                        setCategoryName(category);
-                        setCategory(category);
-                        setCanChangeCategory(true);  
-                    }
-                }
-            } catch (error) {
-                console.error('Error fetching article:', error);
-            } finally {
-                setLoading(false);
+    if (editing && articleNum) {
+      const loadArticleData = async () => {
+        setLoading(true);
+        try {
+          const data = await fetchArticle(articleNum, navigate);
+          if (data) {
+            setArticleTitle(data.articleTitle);
+            setArticleContent(data.articleContent);
+  
+            if (data.authCheck === 1) {
+              setCategory('RESOLVE');  
+              setCanChangeCategory(false);
+            } else {
+              setCategory(data.category);
+              setCanChangeCategory(true);
             }
+          }
+        } catch (error) {
+          console.error('Error fetching article:', error);
+        } finally {
+          setLoading(false);
         }
-    };
-    loadArticleData();
-}, [editing, articleNum]);
+      };
+      loadArticleData();
+    }
+  }, [editing, articleNum]);
+  
 
 
   useEffect(() => {
@@ -93,40 +91,51 @@ const BlogForm = ({ editing }) => {
     }
   }, [editing, location.state]);
 
-  const handleCategoryChange = (id, name) => {
+  const handleCategoryChange = (id) => {
     if (canChangeCategory) {
       setCategory(id);
-      setCategoryString(name);
       setDropdownOpen(false);
     }
   };
+  const validateForm = () => {
+    if (category === '카테고리 선택') return '카테고리를 선택해주세요.';
+    if (!articleTitle.trim()) return '제목을 입력하세요.';
+    if (!articleContent.replace(/<[^>]*>/g, '').trim()) return '내용을 입력하세요.';
+    return null; // 검증 성공 시 null 반환
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    if (category =='카테고리 선택') {
-        alert('카테고리를 선택해주세요.');
-        setLoading(false);
-        return;
-    }
-    if (!articleTitle.trim()) {
-      alert('제목을 입력하세요.');
+  
+    const postData = { articleTitle, articleContent, category };
+    let response = null;
+    
+    const errorMessage = validateForm();
+    if (errorMessage) {
+      alert(errorMessage);
       setLoading(false);
       return;
     }
-    const plainTextContent = articleContent.replace(/<[^>]*>/g, '').trim();
-    if (!plainTextContent) {
-      alert('내용을 입력하세요.');
+    try {
+      if (editing) {
+        response = await handleEdit(articleNum, token, navigate, setCanEdit, postData);
+      } else if (category === 'NOTIFICATION') {
+        response = await createNotificationArticleRequest(postData, token);
+      } else {
+        response = await createArticleRequest(postData, token);
+      }
+  
+      if (response && response.code === 'SU') {
+        navigate('/article-main');
+      }
+    } catch (error) {
+      console.error('Error submitting article:', error);
+    } finally {
       setLoading(false);
-      return;
     }
-
-    const postData = {
-      articleTitle,
-      articleContent,
-      category: category,
-    };
-
-    let response;
+    
+   
 
     // 수정 작업
     if (editing) {
@@ -154,24 +163,14 @@ const BlogForm = ({ editing }) => {
   };
 
 
-  useEffect(() => {
-    const verifyAccess = async () => {
-      const banStatus = await checkUserBanStatus(token);
-      if (banStatus.banned) {
-        alert("계정이 정지된 상태입니다. 글 작성이 불가능합니다.");
-        navigate('/');
-      }
-    };
 
-    verifyAccess();
-  }, [token, navigate]);
 
   return (
     <div className="BlogForm-container">
       <div className='blog-container'>
       <div className="banner_img_container_icebreaker_write">
-                    <img src="/icebreaker_main2.png" className="banner" />
-                </div>
+        <img src="/icebreaker_main2.png" className="banner" />
+      </div>
         {error && <div className="alert alert-danger">{error}</div>}
         <div className='createpage-container'>
         <div className="title-container">
