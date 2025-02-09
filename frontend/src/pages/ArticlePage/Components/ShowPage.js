@@ -14,6 +14,7 @@ import { faHeart as regularHeart } from '@fortawesome/free-regular-svg-icons';
 import { handleCommentDelete } from '../../../features/api/Admin/CommentsApi.js';
 
 const ShowPage = () => {
+    
     // 댓글 작성 중인지 여부를 관리하는 상태
     const [isComposing, setIsComposing] = useState(false);
     // 현재 편집 중인 댓글의 ID와 편집할 댓글의 내용을 관리하는 상태
@@ -53,7 +54,8 @@ const ShowPage = () => {
             "5": "IMPERSONATION",
             "6": "SCAM",
             "7": "VIOLATION_OF_RULES",
-            "8": "OTHER"
+            "8": "the OTHER"
+
         };
         const selectedBanReason = banReasonMap[banReason];
         if (!selectedBanReason) {
@@ -70,6 +72,7 @@ const ShowPage = () => {
             "2": "SIX_MONTHS",
             "3": "ONE_YEAR",
             "4": "PERMANENT"
+            
         };
         const selectedBanDuration = banDurationMap[banDuration];
         if (!selectedBanDuration) {
