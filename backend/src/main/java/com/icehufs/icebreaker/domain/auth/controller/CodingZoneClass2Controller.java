@@ -1,4 +1,4 @@
-package com.icehufs.icebreaker.domain.codingzone.controller;
+package com.icehufs.icebreaker.domain.auth.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
