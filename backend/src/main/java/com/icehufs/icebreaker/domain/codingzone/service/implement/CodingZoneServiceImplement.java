@@ -1,7 +1,14 @@
 package com.icehufs.icebreaker.domain.codingzone.service.implement;
 
+import com.icehufs.icebreaker.domain.codingzone.dto.response.*;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.List;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -16,24 +23,6 @@ import com.icehufs.icebreaker.domain.codingzone.dto.request.CodingZoneClassAssig
 import com.icehufs.icebreaker.domain.codingzone.dto.request.GroupInfUpdateRequestDto;
 import com.icehufs.icebreaker.domain.codingzone.dto.request.HandleAuthRequestDto;
 import com.icehufs.icebreaker.domain.codingzone.dto.request.PatchGroupInfRequestDto;
-import com.icehufs.icebreaker.domain.codingzone.dto.response.AuthorityExistResponseDto;
-import com.icehufs.icebreaker.domain.codingzone.dto.response.CodingZoneCanceResponseDto;
-import com.icehufs.icebreaker.domain.codingzone.dto.response.CodingZoneClassAssignResponseDto;
-import com.icehufs.icebreaker.domain.codingzone.dto.response.CodingZoneRegisterResponseDto;
-import com.icehufs.icebreaker.domain.codingzone.dto.response.DeleteAllInfResponseDto;
-import com.icehufs.icebreaker.domain.codingzone.dto.response.DeleteClassResponseDto;
-import com.icehufs.icebreaker.domain.codingzone.dto.response.DepriveAuthResponseDto;
-import com.icehufs.icebreaker.domain.codingzone.dto.response.GetCodingZoneAssitantListResponseDto;
-import com.icehufs.icebreaker.domain.codingzone.dto.response.GetCodingZoneStudentListResponseDto;
-import com.icehufs.icebreaker.domain.codingzone.dto.response.GetCountOfAttendResponseDto;
-import com.icehufs.icebreaker.domain.codingzone.dto.response.GetListOfCodingZoneClassForNotLogInResponseDto;
-import com.icehufs.icebreaker.domain.codingzone.dto.response.GetListOfCodingZoneClassResponseDto;
-import com.icehufs.icebreaker.domain.codingzone.dto.response.GetListOfGroupInfResponseDto;
-import com.icehufs.icebreaker.domain.codingzone.dto.response.GetPersAttendListItemResponseDto;
-import com.icehufs.icebreaker.domain.codingzone.dto.response.GetReservedClassListItemResponseDto;
-import com.icehufs.icebreaker.domain.codingzone.dto.response.GiveAuthResponseDto;
-import com.icehufs.icebreaker.domain.codingzone.dto.response.GroupInfUpdateResponseDto;
-import com.icehufs.icebreaker.domain.codingzone.dto.response.PutAttendanceResponseDto;
 import com.icehufs.icebreaker.domain.codingzone.dto.object.CodingZoneStudentListItem;
 import com.icehufs.icebreaker.domain.codingzone.dto.object.PersAttendManagListItem;
 import com.icehufs.icebreaker.domain.codingzone.dto.object.ReservedClassListItem;
@@ -689,4 +678,52 @@ public class CodingZoneServiceImplement implements CodingZoneService {
         }
         return GetCodingZoneAssitantListResponseDto.success(ListOfCodingZone1, ListOfCodingZone2);
     }
+
+    @Override
+    public ByteArrayResource generateAttendanceExcelOfGrade1() throws IOException {
+        List<CodingZoneRegister> codingZoneRegisters;
+
+        Workbook workbook = new XSSFWorkbook();
+        Sheet sheet = workbook.createSheet("코딩존1 출석부"); // 시트 이름 설정
+
+        // 헤더 생성 및 스타일 설정
+        Row headerRow = sheet.createRow(0);
+        String[] columns = {"학번", "이름", "수업 날짜", "수업 시간", "출/결석"};
+        CellStyle headerStyle = workbook.createCellStyle();
+        Font headerFont = workbook.createFont();
+        headerFont.setBold(true);
+        headerStyle.setFont(headerFont);
+
+        for (int i = 0; i < columns.length; i++) {
+            Cell cell = headerRow.createCell(i);
+            cell.setCellValue(columns[i]);
+            cell.setCellStyle(headerStyle);
+        }
+
+        // 코딩존1을 들은 모든 학생들을 학번순으로 불러오기
+        codingZoneRegisters = codingZoneRegisterRepository.findByGradeOrderByUserStudentNumAsc(1);
+
+        // 데이터 채우기
+        int rowNum = 1;
+        for (CodingZoneRegister register : codingZoneRegisters) {
+            Row row = sheet.createRow(rowNum++);
+            row.createCell(0).setCellValue(register.getUserStudentNum());
+            row.createCell(1).setCellValue(register.getUserName());
+
+            int classNum = register.getClassNum();
+            CodingZoneClass codingZoneClass = codingZoneClassRepository.findByClassNum(classNum);
+            row.createCell(2).setCellValue(codingZoneClass.getClassDate());
+            row.createCell(3).setCellValue(codingZoneClass.getClassTime());
+            row.createCell(4).setCellValue(register.getAttendance());
+        }
+
+        // 워크북을 바이트 배열로 변환
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        workbook.write(outputStream);
+        workbook.close();
+
+        return new ByteArrayResource(outputStream.toByteArray());
+
+    }
+
 }
