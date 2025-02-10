@@ -63,7 +63,7 @@ export const fetchArticle = async (articleNum,navigate) => {
 };
 
 // 4.게시글 수정 API
-export const handleEdit = async (articleNum, token, navigate, setCanEdit, article) => {
+export const handleEdit = async (articleNum, token, navigate, article) => {
     if (!article) {
         alert.log("게시글을 다시 확인해주세요.");
         return false;  
@@ -78,7 +78,7 @@ export const handleEdit = async (articleNum, token, navigate, setCanEdit, articl
             headers: { Authorization: `Bearer ${token}` }
         });
         if (response.data.code === "SU") {
-            setCanEdit(true);
+        
             return true;   
         }
         } 
