@@ -54,7 +54,7 @@ const ShowPage = () => {
             "5": "IMPERSONATION",
             "6": "SCAM",
             "7": "VIOLATION_OF_RULES",
-            "8": "the OTHER"
+            "8": "OTHER"
 
         };
         const selectedBanReason = banReasonMap[banReason];
