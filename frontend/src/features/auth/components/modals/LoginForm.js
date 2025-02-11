@@ -2,11 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { useCookies } from 'react-cookie';
 import { useNavigate } from 'react-router-dom';
  
-import FindpasswordForm from '../Modals/findpassword';
-import SignUpinfoForm from '../Modals/Signupinfo';
-import MyModal from '../shared/components/BaseModal.js';
+import FindpasswordForm from './FindPassword.js';
+import SignUpinfoForm from './Signup.js';
+import MyModal from '../../../../shared/components/BaseModal.js';
 import './modules.css';
-import { signInRequest } from '../entities/api/UserApi.js';
+import { signInRequest } from '../../../../entities/api/UserApi.js';
 
 const LoginForm = ({ onLogin }) => {
   const [userEmail, setUserEmail] = useState('');

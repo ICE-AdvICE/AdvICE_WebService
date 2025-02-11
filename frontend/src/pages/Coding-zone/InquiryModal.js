@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from '../css/codingzone/InquiryModal.module.css';
-import '../../Modals/modules.css';
+import '../../features/auth/components/Modals/modules.css';
 import { getczassitantRequest } from '../../features/api/Admin/Codingzone/InquiryApi';
 
 const InquiryModal = ({ isOpen, onClose }) => {

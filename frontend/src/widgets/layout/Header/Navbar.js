@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import './Navbar.css';
-import LoginForm from '../../../Modals/LoginForm';
-import SignUpinfoForm from '../../../Modals/Signupinfo';
-import MypageForm from '../../../Modals/Mypage';
+import LoginForm from '../../../features/auth/components/Modals/LoginForm.js';
+import SignUpinfoForm from '../../../features/auth/components/Modals/Signup.js';
+import MypageForm from '../../../features/auth/components/Modals/Mypage.js';
 import MyModal from '../../../shared/components/BaseModal.js';
 import { useCookies } from 'react-cookie';
 
