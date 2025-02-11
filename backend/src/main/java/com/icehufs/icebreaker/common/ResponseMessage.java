@@ -34,6 +34,7 @@ public interface ResponseMessage {
         String MAIL_FAIL = "Mail send Failed.";
         String DATABASE_ERROR = "Database error.";
         String DOES_NOT_MATCH_EMAIL ="Doesn't Match Email.";
+        String INTERNAL_SERVER_ERROR = "Internal Server Error.";
 
 
 }

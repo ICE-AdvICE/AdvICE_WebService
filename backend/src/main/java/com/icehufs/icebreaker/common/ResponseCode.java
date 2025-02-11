@@ -34,6 +34,7 @@ public interface ResponseCode {
     //HTTP Status 500
     String MAIL_FAIL = "MF";
     String DATABASE_ERROR = "DBE";
+    String INTERNAL_SERVER_ERROR = "ISE";
 
     String DOES_NOT_MATCH_EMAIL = "DNME";
 }
