@@ -24,6 +24,7 @@ public interface CodingZoneService {
     ResponseEntity<? super GiveAuthResponseDto> giveAuth(String email, HandleAuthRequestDto dto);
     ResponseEntity<? super DepriveAuthResponseDto> depriveAuth(String email,HandleAuthRequestDto dto);
     ByteArrayResource generateAttendanceExcelOfGrade1() throws IOException;
+    ByteArrayResource generateAttendanceExcelOfGrade2() throws IOException;
 
     //권한이 필요없는 로직
     ResponseEntity<? super AuthorityExistResponseDto> authExist(String email);

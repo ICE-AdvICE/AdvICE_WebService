@@ -726,4 +726,51 @@ public class CodingZoneServiceImplement implements CodingZoneService {
 
     }
 
+    @Override
+    public ByteArrayResource generateAttendanceExcelOfGrade2() throws IOException {
+        List<CodingZoneRegister> codingZoneRegisters;
+
+        Workbook workbook = new XSSFWorkbook();
+        Sheet sheet = workbook.createSheet("코딩존1 출석부"); // 시트 이름 설정
+
+        // 헤더 생성 및 스타일 설정
+        Row headerRow = sheet.createRow(0);
+        String[] columns = {"학번", "이름", "수업 날짜", "수업 시간", "출/결석"};
+        CellStyle headerStyle = workbook.createCellStyle();
+        Font headerFont = workbook.createFont();
+        headerFont.setBold(true);
+        headerStyle.setFont(headerFont);
+
+        for (int i = 0; i < columns.length; i++) {
+            Cell cell = headerRow.createCell(i);
+            cell.setCellValue(columns[i]);
+            cell.setCellStyle(headerStyle);
+        }
+
+        // 코딩존1을 들은 모든 학생들을 학번순으로 불러오기
+        codingZoneRegisters = codingZoneRegisterRepository.findByGradeOrderByUserStudentNumAsc(2);
+
+        // 데이터 채우기
+        int rowNum = 1;
+        for (CodingZoneRegister register : codingZoneRegisters) {
+            Row row = sheet.createRow(rowNum++);
+            row.createCell(0).setCellValue(register.getUserStudentNum());
+            row.createCell(1).setCellValue(register.getUserName());
+
+            int classNum = register.getClassNum();
+            CodingZoneClass codingZoneClass = codingZoneClassRepository.findByClassNum(classNum);
+            row.createCell(2).setCellValue(codingZoneClass.getClassDate());
+            row.createCell(3).setCellValue(codingZoneClass.getClassTime());
+            row.createCell(4).setCellValue(register.getAttendance());
+        }
+
+        // 워크북을 바이트 배열로 변환
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        workbook.write(outputStream);
+        workbook.close();
+
+        return new ByteArrayResource(outputStream.toByteArray());
+
+    }
+
 }
