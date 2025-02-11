@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
  
 import FindpasswordForm from '../Modals/findpassword';
 import SignUpinfoForm from '../Modals/Signupinfo';
-import MyModal from '../MyModal';
+import MyModal from '../shared/components/BaseModal.js';
 import './modules.css';
 import { signInRequest } from '../entities/api/UserApi.js';
 

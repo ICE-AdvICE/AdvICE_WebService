@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useCookies } from 'react-cookie';
 import { checkuserbanRequest } from '../features/api/ArticleApi.js';
-import MyModal from '../MyModal';
+import MyModal from '../shared/components/BaseModal.js';
 import FindpasswordForm from '../Modals/findpassword';
 import './modules.css';
 import { useNavigate } from 'react-router-dom';

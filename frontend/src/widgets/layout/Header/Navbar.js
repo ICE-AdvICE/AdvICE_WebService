@@ -4,7 +4,7 @@ import './Navbar.css';
 import LoginForm from '../../../Modals/LoginForm';
 import SignUpinfoForm from '../../../Modals/Signupinfo';
 import MypageForm from '../../../Modals/Mypage';
-import MyModal from '../../../MyModal';
+import MyModal from '../../../shared/components/BaseModal.js';
 import { useCookies } from 'react-cookie';
 
 const NavBar = () => {
