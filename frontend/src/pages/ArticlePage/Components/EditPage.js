@@ -1,4 +1,4 @@
-import BlogForm from "../../../widgets/BlogForm";
+import BlogForm from "../../../features/ArticlePage/BlogForm";
 const EditPage = () => {
     return(
         <div>

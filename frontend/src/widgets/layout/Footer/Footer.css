@@ -1,10 +1,8 @@
 .footer-container {
     width: 100%;
     background: #052940;
-    margin: 0 auto;
     position: relative;
     display: flex;
-    justify-content: center;
     align-items: center;
     flex-direction: column;
     padding: 0 10px;
@@ -12,7 +10,6 @@
 
 .footer-logo {
     padding-top: 20px;
-    text-align: center;
     width: 100%;
     max-width: 300px;
     margin: 0 auto;
@@ -23,7 +20,6 @@
 
 .footer-inner {
     padding: 20px 0;
-    width: 100%;
 }
 
 .footer-address {
