@@ -1,0 +1,701 @@
+.loginHeaderContainer {
+  text-align: center;
+  /* 이미지 중앙 정렬 */
+  padding: 20px;
+  border-bottom: 2.5px solid #052940;
+  /* 상단에 실선 추가 */
+  margin-bottom: 30px;
+}
+
+.loginFormContainer {
+  display: flex;
+  /* Flexbox 사용 */
+  justify-content: center;
+  /* 가로축 중앙 정렬 */
+  margin-top: 20px;
+  margin-bottom: -15px;
+  max-height: 80vh;
+  overflow-y: auto;
+  /* 스크롤바 활성화 */
+  width: 100%;
+  /* 컨테이너 너비를 명시적으로 정의 */
+}
+
+.loginFormContainer input {
+  border: 1px solid #ccc;
+  /* 경계선 추가 */
+  margin-bottom: 30px;
+  /* 입력 필드 간의 간격 */
+  width: 95%;
+  /* 입력 필드 너비 조정 */
+  height: 40px;
+  padding: 8px;
+  /* 입력 필드 내부 패딩 */
+}
+
+.login_passwordCss {
+  display: flex;
+  /* Flexbox 사용 */
+  justify-content: center;
+  /* 가로축 중앙 정렬 */
+  max-height: 80vh;
+  overflow-y: auto;
+  /* 스크롤바 활성화 */
+  width: 100%;
+}
+
+.login_passwordCss input {
+  border: 1px solid #ccc;
+  /* 경계선 추가 */
+  margin-bottom: 10px;
+  /* 입력 필드 간의 간격 */
+  width: 95%;
+  /* 입력 필드 너비 조정 */
+  height: 40px;
+  padding: 8px;
+  /* 입력 필드 내부 패딩 */
+}
+
+.loginFormContainer input::placeholder, .login_passwordCss input::placeholder {
+  font-size: 16px;
+  color: #ccc;
+}
+
+.loginButton {
+  width: 95%;
+  /* 컨테이너의 90% 너비 */
+  max-width: 460px;
+  /* 최대 너비 제한 */
+  height: 60px;
+  margin: 20px auto;
+  /* 위아래 20px 마진, 좌우 자동 */
+  display: block;
+  /* 블록 레벨 요소로 설정 */
+  border: none;
+  outline: none;
+  background-color: rgb(56, 56, 63);
+  /* 기본 배경 색상 설정 */
+  color: white;
+  font-weight: bold;
+  font-size: 20px;
+  text-align: center;
+  font-family: "Noto Sans KR", sans-serif;
+}
+
+.loginButton:hover {
+  background-color: #052940;
+  /* 호버 시 배경 색상 변경 */
+}
+
+.responsiveLogo {
+  width: 220px; /* 기본 너비 설정 */
+  height: auto; /* 높이는 자동으로 조절 */
+}
+
+.auth-sign-in-error-message {
+  text-align: center;
+  color: red;
+  /* 텍스트 색상을 빨간색으로 설정 */
+  font-size: 10px;
+  /* 텍스트 크기 조정 */
+  margin-bottom: 15px;
+}
+
+
+.signUpContainer {
+  display: flex;
+  /* Flexbox 사용하여 요소들을 한 줄에 배치 */
+  align-items: center;
+  /* 세로 중앙 정렬 */
+
+}
+
+.signupHeaderContainer {
+  text-align: center;
+  /* 이미지 중앙 정렬 */
+  padding: 20px;
+  border-bottom: 2.5px solid #052940;
+  /* 상단에 실선 추가 */
+  margin-bottom: 20px;
+}
+
+
+.signUpContainer input {
+  width: 49%;
+  /* 입력 필드 너비 조정 */
+  margin-right: 2px;
+  /* 오른쪽에 여백 추가 */
+  height: 40px;
+  /* 입력 필드 높이 조정 */
+  padding: 8px;
+  /* 입력 필드 내부 패딩 */
+}
+
+.signup_name {
+  margin-top: 30px;
+}
+
+.signup_name input {
+  margin-top: -10px;
+  margin-bottom: 5px;
+  /* 입력 필드 간의 간격 */
+  width: 95%;
+  /* 입력 필드 너비 조정 */
+  height: 40px;
+}
+
+.signup_pw {
+  margin-top: 10px;
+
+}
+
+.signup_pw input {
+  margin-top: -10px;
+  margin-bottom: 5px;
+  /* 입력 필드 간의 간격 */
+  width: 95%;
+  /* 입력 필드 너비 조정 */
+  height: 40px;
+}
+
+
+.emailpost {
+  margin-top: 20px;
+  display: flex;
+  /* Flexbox 레이아웃 사용 */
+  flex-direction: width;
+  /* 세로 방향 배치 */
+}
+
+.emailpost input {
+  margin-bottom: 5px;
+  /* 입력 필드 간의 간격 */
+  width: 70%;
+  /* 입력 필드 너비 조정 */
+  height: 40px;
+  padding: 8px;
+  /* 입력 필드 내부 패딩 */
+  display: flex;
+  /* Flexbox 레이아웃 사용 */
+  flex-direction: width;
+}
+
+.signupButton {
+  width: 95%;
+  /* 컨테이너의 90% 너비 */
+  max-width: 460px;
+  /* 최대 너비 제한 */
+  height: 50px;
+  margin-top: 30px;
+  /* 위아래 20px 마진, 좌우 자동 */
+  border: none;
+  outline: none;
+  background-color: rgb(56, 56, 63);
+  /* 기본 배경 색상 설정 */
+  color: white;
+  font-weight: bold;
+  font-size: 20px;
+  text-align: center;
+  font-family: "Noto Sans KR", sans-serif;
+}
+
+.signupButton:hover {
+  background-color: #052940;
+}
+
+.post {
+
+  margin-left: 10px;
+  width: 100px;
+  height: 40px;
+  border: none;
+  outline: 0;
+  color: rgb(56, 56, 63);
+
+  font-weight: bold;
+  color: white;
+  font-size: 20px;
+  text-align: center;
+  font-family: "Noto Sans KR", sans-serif;
+}
+
+.post:hover {
+  background-color: #052940;
+}
+
+.SignupFormpost {
+  margin-left: 7px;
+  width: 100px;
+  height: 40px;
+  border: none;
+  outline: 0;
+  background-color: rgb(56, 56, 63);
+
+  font-weight: bold;
+  color: white;
+  font-size: 18px;
+  text-align: center;
+  font-family: "Noto Sans KR", sans-serif;
+
+}
+
+.activeButton {
+  background-color: green;
+  /* 버튼 색상 변경 */
+  color: white;
+  cursor: pointer;
+}
+
+/* 비활성화 상태일 때의 버튼 스타일 */
+.inactiveButton {
+  background-color: grey;
+  color: darkgray;
+  cursor: not-allowed;
+}
+
+.SignupFormpost:hover {
+  background-color: #052940;
+}
+
+.findpasswordpost {
+  margin-left: -3px;
+  width: 100px;
+  height: 50px;
+  border: none;
+  outline: 0;
+  background-color: rgb(56, 56, 63);
+
+  font-weight: bold;
+  color: white;
+  font-size: 18px;
+  text-align: center;
+  font-family: "Noto Sans KR", sans-serif;
+}
+
+.findpasswordpost:hover {
+  background-color: #052940;
+}
+
+.findPasswordButton {
+  font-size: 15px;
+  margin-top: -10px;
+  margin-bottom: 20px;
+  background: none;
+  /* 배경 제거 */
+  border: none;
+  /* 테두리 제거 */
+  color: black;
+  /* 글자 색상 설정, 예시로 파란색 사용 */
+  cursor: pointer;
+  /* 마우스 오버 시 커서 변경 */
+  float: right;
+  /* 오른쪽 정렬 */
+  padding: 10px;
+  /* 클릭 영역 확장 */
+}
+
+.findPasswordButton:hover {
+  text-decoration: underline;
+  /* 호버 시 밑줄 표시 */
+}
+
+.rememberMeCheckbox {
+  font-size: 15px;
+  margin-top: -10px;
+  margin-bottom: 20px;
+  background: none;
+  border: none;
+  color: black;
+  cursor: pointer;
+  float: left;
+  padding: 10px;
+  display: flex;
+  align-items: center; /* Ensure vertical alignment of checkbox and label */
+  gap: 10px; /* Adds space between checkbox and label */
+}
+
+.rememberMeCheckbox input[type="checkbox"] {
+  transform: scale(1.5); /* Increase checkbox size by 150% */
+  margin-right: 2px; /* Add some right margin if needed */
+  margin-left: 5px;
+}
+
+.signupPrompt {
+  text-align: center;
+  /* 중앙 정렬 */
+
+}
+
+
+.signUpButton_Login {
+
+  background: none;
+  /* 배경 제거 */
+  border: none;
+  /* 테두리 제거 */
+  color: black;
+  /* 글자 색상 설정, 예시로 파란색 사용 */
+  cursor: pointer;
+  /* 마우스 오버 시 커서 변경 */
+  margin-top: -20px;
+  padding: 0px;
+  /* 클릭 영역 확장 */
+
+}
+
+.signUpButton_Login:hover {
+  text-decoration: underline;
+  /* 호버 시 밑줄 표시 */
+}
+
+/*MyPage CSS*/
+.mypage_icelogo {
+  display: flex;
+  /* Flexbox를 활용하여 요소를 정렬 */
+  justify-content: center;
+  /* 가로축 중앙 정렬 */
+  align-items: center;
+  /* 세로축 중앙 정렬 */
+  width: 100%;
+  /* 부모 요소의 전체 너비를 차지하게 설정 */
+  height: auto;
+  /* 높이는 자동으로 설정 (내용물에 맞춰짐) */
+}
+
+.mypage_icelogo img {
+  width: 150px;
+  height: auto;
+  /* 높이는 비율에 맞춰 자동 조정 */
+}
+
+.mypage_component p {
+  font-family: "Noto Sans KR", sans-serif;
+  font-weight: bold;
+  font-size: 16px;
+  border-bottom: 1px solid #ccc;
+  margin-top: 20px;
+  padding-bottom: 8px;
+  margin-bottom: 12px;
+}
+
+.mypage_buttons {
+  display: flex;
+  justify-content: center;
+  /* 버튼들을 가운데 정렬합니다 */
+  align-items: center;
+  /* 세로축 중앙 정렬 (필요한 경우) */
+  width: 100%;
+  gap: 10px;
+  /* 버튼 사이의 간격 */
+  margin-top: 50px;
+}
+
+.mypage_buttons button {
+  padding: 8px 16px;
+  background-color: rgb(56, 56, 63);
+  color: white;
+  border: none;
+  border-radius: 2px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-top: 10px;
+}
+
+.mypage_buttons button:hover {
+  background-color: #052940;
+}
+
+.mypage_delete_user_container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.mypage_delete_user {
+  font-size: 15px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  background: none;
+  border: none;
+  color: black;
+  cursor: pointer;
+}
+
+.mypage_delete_user:hover {
+  text-decoration: underline;
+}
+
+.mypage_update-button {
+  padding: 8px 16px;
+  background-color: rgb(56, 56, 63);
+  color: white;
+  border: none;
+  border-radius: 2px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-top: 50px;
+}
+
+.mypage_update-button:hover {
+  background-color: #052940;
+}
+
+.mypage_update_name,
+.mypage_update_studentNum {
+  width: 100%;
+  /* 전체 너비 사용 */
+  padding: 8px 12px;
+  /* 패딩 설정 */
+  margin-bottom: 10px;
+  /* 하단 여백 */
+  border: 1px solid #ccc;
+  /* 테두리 설정 */
+  border-radius: 4px;
+  /* 테두리 둥글게 */
+}
+
+/*pw css*/
+.pw_emailpost {
+
+  display: flex;
+  /* Flexbox 레이아웃 사용 */
+  align-items: center;
+  /* Align items vertically in the center */
+  margin-bottom: 30px;
+  /* Adjust according to your spacing needs */
+
+}
+
+.pw_emailpost input {
+  /* 입력 필드 간의 간격 */
+  width: 60%;
+  /* 입력 필드 너비 조정 */
+  height: 40px;
+  padding: 8px;
+  /* 입력 필드 내부 패딩 */
+  margin-right: 2px;
+
+}
+
+.pw_emailDomain {
+  margin-left: 2px;
+  margin-right: 5px;
+  /* Add some space between the input and the domain text */
+  font-size: 16px;
+  /* Adjust font size to match your design */
+  align-self: center;
+  /* This ensures vertical alignment if needed */
+}
+
+
+.pw_emailpost button {
+  margin-left: 7px;
+  width: 100px;
+  height: 40px;
+  border: none;
+  outline: 0;
+  color: rgb(56, 56, 63);
+
+  font-weight: bold;
+  color: white;
+  font-size: 20px;
+  text-align: center;
+  font-family: "Noto Sans KR", sans-serif;
+}
+
+.pw_emailcer {
+
+  display: flex;
+  /* Flexbox 레이아웃 사용 */
+
+}
+
+.pw_emailcer input {
+  margin-bottom: 30px;
+  /* 입력 필드 간의 간격 */
+  width: 90%;
+  /* 입력 필드 너비 조정 */
+  height: 40px;
+  padding: 8px;
+  /* 입력 필드 내부 패딩 */
+
+}
+
+.pw_emailcer button {
+  margin-left: 7px;
+  width: 100px;
+  height: 40px;
+  border: none;
+  outline: 0;
+  color: rgb(56, 56, 63);
+
+  font-weight: bold;
+  color: white;
+  font-size: 20px;
+  text-align: center;
+  font-family: "Noto Sans KR", sans-serif;
+}
+
+.pw_new input {
+  margin-bottom: 30px;
+  /* 입력 필드 간의 간격 */
+  width: 100%;
+  /* 입력 필드 너비 조정 */
+  height: 40px;
+  padding: 8px;
+  /* 입력 필드 내부 패딩 */
+
+}
+
+.pw_new_cer input {
+  margin-bottom: 10px;
+  /* 입력 필드 간의 간격 */
+  width: 100%;
+  /* 입력 필드 너비 조정 */
+  height: 40px;
+  padding: 8px;
+  /* 입력 필드 내부 패딩 */
+}
+
+.pw-mismatch-error {
+  text-align: center;
+  /* 텍스트 중앙 정렬 */
+  width: 100%;
+  /* 부모 컨테이너의 전체 너비 사용 */
+}
+
+
+
+.countdown-timer {
+  display: block;
+  text-align: right;
+  color: #0e5a8a;
+  font-size: 14px;
+  /* 글씨 크기를 줄입니다 */
+  margin-top: 5px;
+  /* 위쪽 여백을 추가하여 시각적으로 구분을 줍니다 */
+}
+
+.pw_countdown-timer {
+  display: block;
+  text-align: right;
+  color: #0e5a8a;
+  font-size: 14px;
+  /* 글씨 크기를 줄입니다 */
+  margin-top: -30px;
+  /* 위쪽 여백을 추가하여 시각적으로 구분을 줍니다 */
+  margin-bottom: 10px;
+
+}
+
+
+.signup_termsContainer h3 {
+  font-size: 16px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+
+.signup_checkboxLabel {
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+  cursor: pointer;
+  justify-content: flex-end;
+  
+  width: 100%;
+ 
+}
+
+.signup_styledCheckbox {
+  display: none;
+}
+
+.signup_checkboxCustom {
+  width: 20px;
+  height: 20px;
+  background-color: #fff;
+
+  border: 1px solid #000;
+  margin-right: 10px;
+ 
+  display: inline-block;
+}
+
+.signup_styledCheckbox:checked+.signup_checkboxCustom {
+  background-color: #052940;
+  border-color: #052940;
+}
+
+
+.signup_terms_checkbox_container {
+  border: 1px solid #052940;
+
+  padding: 10px;
+
+  margin-top: 10px;
+ 
+  margin-bottom: 10px;
+  
+  width: 95%;
+}
+
+@media (max-width: 768px) {
+  .responsiveLogo {
+      width: 180px; 
+  }
+}
+
+/* 화면 크기가 480px 이하일 때 */
+@media (max-width: 480px) {
+  .responsiveLogo {
+      width: 140px; /* 너비를 140px로 조절 */
+  }
+}
+
+@media (max-width: 440px) {
+  .mypage_buttons button {
+      font-size: 10px; 
+  }
+}
+
+@media (max-width: 365px) {
+  .mypage_buttons button {
+      font-size: 8px; 
+  }
+}
+
+@media (max-width: 400px) {
+  .findPasswordButton, .rememberMeCheckbox {
+    font-size: 12px;
+  }
+
+  .rememberMeCheckbox input[type="checkbox"] {
+    transform: scale(1); 
+    margin-right: -5px; 
+  }
+}
+
+@media (max-width: 345px) {
+  .findPasswordButton, .rememberMeCheckbox {
+    font-size: 10px;
+  }
+}
+
+@media (max-width: 460px) {
+  .pw_emailDomain {
+    margin-left: 1px;
+    margin-right: 1px;
+    font-size: 12px;
+    align-self: center;
+  }
+}
+
+@media (max-width: 300px) {
+  .pw_emailDomain {
+    margin-left: 1px;
+    margin-right: 1px;
+    font-size: 8px;
+    align-self: center;
+  }
+}
