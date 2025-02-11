@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCookies } from 'react-cookie'; //
-import LoginForm from "./Modals/LoginForm";
-import Newpassword from './Modals/Newpassword';
-import SignUpForm from './Modals/SignupForm';
-import SignUpinfoForm from './Modals/Signupinfo';
-import FindpasswordForm from './Modals/findpassword';
-import MypageForm from './Modals/Mypage';
+import LoginForm from "./modals/LoginForm";
+import Newpassword from './modals/Newpassword';
+import SignUpForm from './modals/SignupForm';
+import SignUpinfoForm from './modals/Signupinfo';
+import FindpasswordForm from './modals/findpassword';
+import MypageForm from './modals/Mypage';
 import MyModal from './MyModal';
 import './MyModal.module.css';
 
