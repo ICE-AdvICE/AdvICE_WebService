@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from '../css/codingzone/InquiryModal.module.css';
-import '../../features/auth/components/Modals/modules.css';
 import { getczassitantRequest } from '../../features/api/Admin/Codingzone/InquiryApi';
 
 const InquiryModal = ({ isOpen, onClose }) => {
@@ -41,7 +40,7 @@ const InquiryModal = ({ isOpen, onClose }) => {
                 <div className={styles.title}><strong>코딩존 조교</strong></div>
                 <div className={styles.modalBody}>
     <strong>코딩존 1</strong>
-    <ul style={{ listStyleType: 'none' }}> {/* 점을 제거합니다 */}
+    <ul style={{ listStyleType: 'none' }}> 
         {assistants.zone1.map((assistant, index) => (
             <li key={index}>
                 {assistant.name} ({assistant.email})
@@ -49,7 +48,7 @@ const InquiryModal = ({ isOpen, onClose }) => {
         ))}
     </ul>
     <strong>코딩존 2</strong>
-    <ul style={{ listStyleType: 'none' }}> {/* 점을 제거합니다 */}
+    <ul style={{ listStyleType: 'none' }}>
         {assistants.zone2.map((assistant, index) => (
             <li key={index}>
                 {assistant.name} ({assistant.email})
