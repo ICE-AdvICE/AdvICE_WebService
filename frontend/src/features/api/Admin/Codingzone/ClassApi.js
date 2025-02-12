@@ -79,3 +79,44 @@ export const getczreservedlistRequest =  async (accessToken, classDate) => {
         return error.response.data;
     }
 };
+
+//16. 해당 학기 모든 학생들의 출결 정보를 Excel 파일로 반환하는 API 
+export const downloadAttendanceExcel = async (accessToken, grade) => {
+    try {
+        const response = await axios.get(`${API_DOMAIN_ADMIN}/excel/attendance/grade${grade}`, {
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            },
+            responseType: 'blob',
+        });
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', `attendance_grade${grade}.xlsx`);
+        document.body.appendChild(link);
+        link.click();
+        link.parentNode.removeChild(link);
+    } catch (error) {
+        if (error.response) {
+            switch (error.response.data.code) {
+                case "ATE":
+                    alert("로그인 시간이 만료되었습니다. 다시 로그인 해주세요.");
+                    break;
+                case "AF":
+                    alert("권한이 없습니다. 학과 조교 권한이 필요합니다.");
+                    break;
+                case "ISE":
+                    alert("서버 문제로 인해 파일 생성에 실패했습니다. 다시 시도해주세요.");
+                    break;
+                case "DBE":
+                    alert("데이터베이스 오류가 발생했습니다. 관리자에게 문의하세요.");
+                    break;
+                default:
+                    alert("다운로드 실패: 네트워크 상태를 확인해주세요.");
+                    break;
+            }
+        } else {
+            alert("다운로드 실패: 네트워크 상태를 확인해주세요.");
+        }
+    }
+};

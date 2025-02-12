@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
- 
-import { getczallattendRequest } from '../../features/api/Admin/Codingzone/ClassApi.js';
+
+import { getczallattendRequest, downloadAttendanceExcel } from '../../features/api/Admin/Codingzone/ClassApi.js';
 import { useCookies } from 'react-cookie';
 import '../css/codingzone/codingzone-main.css';
 import '../css/codingzone/codingzone_attend.css';
@@ -8,7 +8,7 @@ import '../css/codingzone/codingzone_all_attendance.css';
 import { useNavigate } from 'react-router-dom';
 import InquiryModal from './InquiryModal.js';
 import { getczauthtypetRequest } from '../../shared/api/AuthApi.js';
- 
+
 const CodingZoneAttendanceManager = () => {
     const [authMessage, setAuthMessage] = useState('');
     const [showAdminButton, setShowAdminButton] = useState(false);
@@ -21,7 +21,7 @@ const CodingZoneAttendanceManager = () => {
     const token = cookies.accessToken;
     const navigate = useNavigate();
     const [showModal, setShowModal] = useState(false);
-    const [selectedButton, setSelectedButton] = useState('attendence'); 
+    const [selectedButton, setSelectedButton] = useState('attendence');
 
     const handleOpenModal = () => {
         setShowModal(true);
@@ -51,15 +51,15 @@ const CodingZoneAttendanceManager = () => {
     };
 
     const handlecodingzoneattendence = () => {
-   
+
         const token = cookies.accessToken;
         if (!token) {
-          alert("로그인 후 이용 가능합니다.");
-          return; 
+            alert("로그인 후 이용 가능합니다.");
+            return;
         }
         setSelectedButton('attendence');
         navigate(`/coding-zone/Codingzone_Attendance`);
-      };
+    };
 
     const handleInquiry = () => {
         setSelectedButton('attendence');
@@ -146,6 +146,14 @@ const CodingZoneAttendanceManager = () => {
         return Object.values(aggregatedData);
     };
 
+    const handleDownload = async () => {
+        if (!token) {
+            alert("로그인 후 이용 가능합니다.");
+            return;
+        }
+        await downloadAttendanceExcel(token, selectedGrade);
+    };
+
 
     return (
         <div>
@@ -225,21 +233,28 @@ const CodingZoneAttendanceManager = () => {
             </div>
             <div className="centered-content">
                 <div className="allattendance_buttons">
-                    <button
-                        className={selectedGrade === 1 ? 'active' : ''}
-                        onClick={() => handleGradeChange(1)}
-                    >
-                        코딩존1
-                    </button>
-                    <button
-                        className={selectedGrade === 2 ? 'active' : ''}
-                        onClick={() => handleGradeChange(2)}
-                    >
-                        코딩존2
+                    <div className="grade-buttons">
+                        <button
+                            className={selectedGrade === 1 ? 'active' : ''}
+                            onClick={() => handleGradeChange(1)}
+                        >
+                            코딩존1
+                        </button>
+                        <button
+                            className={selectedGrade === 2 ? 'active' : ''}
+                            onClick={() => handleGradeChange(2)}
+                        >
+                            코딩존2
+                        </button>
+                    </div>
+
+                    <button className="download-button" onClick={handleDownload}>
+                        <img src="/excell_img.png" alt="다운로드" className="download-icon" />
+                        다운로드
                     </button>
                 </div>
+
                 <div className="line-container1">
-                    {/* 실선 영역 */}
                 </div>
 
                 <div className="info-all_container">
@@ -253,7 +268,6 @@ const CodingZoneAttendanceManager = () => {
                     </div>
                 </div>
                 <div className="line-container2">
-                    {/* 실선 영역 */}
                 </div>
 
                 <div className="info_all_data_container">
