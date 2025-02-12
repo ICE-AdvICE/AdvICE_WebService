@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import { getczallattendRequest } from '../../features/api/Admin/Codingzone/ClassApi.js';
+import { getczallattendRequest, downloadAttendanceExcel } from '../../features/api/Admin/Codingzone/ClassApi.js';
 import { useCookies } from 'react-cookie';
 import '../css/codingzone/codingzone-main.css';
 import '../css/codingzone/codingzone_attend.css';
@@ -146,9 +146,12 @@ const CodingZoneAttendanceManager = () => {
         return Object.values(aggregatedData);
     };
 
-    const handleDownload = () => {
-        alert("다운로드 기능을 구현해야 합니다.");
-        // 실제로는 API 요청을 보내거나 엑셀 데이터를 생성해야 함
+    const handleDownload = async () => {
+        if (!token) {
+            alert("로그인 후 이용 가능합니다.");
+            return;
+        }
+        await downloadAttendanceExcel(token, selectedGrade);
     };
 
 
@@ -230,7 +233,6 @@ const CodingZoneAttendanceManager = () => {
             </div>
             <div className="centered-content">
                 <div className="allattendance_buttons">
-                    {/* 가운데 정렬할 코딩존1,2 버튼 */}
                     <div className="grade-buttons">
                         <button
                             className={selectedGrade === 1 ? 'active' : ''}
@@ -246,7 +248,6 @@ const CodingZoneAttendanceManager = () => {
                         </button>
                     </div>
 
-                    {/* 다운로드 버튼을 완전히 오른쪽 정렬 */}
                     <button className="download-button" onClick={handleDownload}>
                         <img src="/excell_img.png" alt="다운로드" className="download-icon" />
                         다운로드
