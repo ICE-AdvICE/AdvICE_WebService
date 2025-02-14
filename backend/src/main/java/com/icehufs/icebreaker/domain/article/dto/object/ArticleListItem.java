@@ -1,6 +1,7 @@
 package com.icehufs.icebreaker.domain.article.dto.object;
 
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +22,7 @@ public class ArticleListItem {
     private String articleContent;
     private int likeCount;
     private int viewCount;
-    private String articleDate;
+    private LocalDateTime articleDate;
     private int authCheck;
     private ArticleCategoryEnum category;
 

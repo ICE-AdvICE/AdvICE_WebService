@@ -1,5 +1,6 @@
 package com.icehufs.icebreaker.domain.article.service.implement;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,6 +19,7 @@ import com.icehufs.icebreaker.domain.article.dto.response.DeleteCommentResponseD
 import com.icehufs.icebreaker.domain.article.dto.response.GetArticleListResponseDto;
 import com.icehufs.icebreaker.domain.article.dto.response.GetArticleResponseDto;
 import com.icehufs.icebreaker.domain.article.dto.response.GetCommentListResponseDto;
+import com.icehufs.icebreaker.domain.article.dto.response.GetRecentArticleNumDto;
 import com.icehufs.icebreaker.domain.article.dto.response.GetUserArticleListResponseDto;
 import com.icehufs.icebreaker.domain.article.dto.response.PatchArticleResponseDto;
 import com.icehufs.icebreaker.domain.article.dto.response.PatchCommentResponseDto;
@@ -101,6 +103,13 @@ public class ArticleServiceImplement implements ArticleService {
             return ResponseDto.databaseError();
         }
         return GetArticleListResponseDto.success(articleListViewEntities);
+    }
+
+    @Override
+    public ResponseEntity<? super GetRecentArticleNumDto> getRecentArticleNum() {
+        LocalDateTime oneWeekAgo = LocalDateTime.now().minusDays(7);
+        long count = articleRepository.countByArticleDateAfter(oneWeekAgo);
+        return GetRecentArticleNumDto.success(count);
     }
 
 

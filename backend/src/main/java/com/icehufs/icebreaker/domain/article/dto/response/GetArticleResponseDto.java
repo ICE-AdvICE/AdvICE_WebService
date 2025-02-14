@@ -1,5 +1,7 @@
 package com.icehufs.icebreaker.domain.article.dto.response;
 
+import java.time.LocalDateTime;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -15,19 +17,17 @@ import lombok.Getter;
 public class GetArticleResponseDto extends ResponseDto {
 
     private int articleNum;
-    //private String userEmail; 익명보장을 위해 글 작성자 메일을 아예 노출 x
     private String articleTitle;
     private String articleContent;
     private int likeCount;
     private int viewCount;
-    private String articleDate;
+    private LocalDateTime articleDate;
     private int authCheck;
     private ArticleCategoryEnum category;
 
     private GetArticleResponseDto(Article articleEntity){
         super(ResponseCode.SUCCESS, ResponseMessage.SUCCESS);
         this.articleNum = articleEntity.getArticleNum();
-        //this.userEmail = articleEntity.getUserEmail();
         this.articleTitle = articleEntity.getArticleTitle();
         this.articleContent = articleEntity.getArticleContent();
         this.likeCount = articleEntity.getLikeCount();

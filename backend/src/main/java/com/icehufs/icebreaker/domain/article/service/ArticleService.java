@@ -14,6 +14,7 @@ import com.icehufs.icebreaker.domain.article.dto.response.DeleteCommentResponseD
 import com.icehufs.icebreaker.domain.article.dto.response.GetArticleListResponseDto;
 import com.icehufs.icebreaker.domain.article.dto.response.GetArticleResponseDto;
 import com.icehufs.icebreaker.domain.article.dto.response.GetCommentListResponseDto;
+import com.icehufs.icebreaker.domain.article.dto.response.GetRecentArticleNumDto;
 import com.icehufs.icebreaker.domain.article.dto.response.GetUserArticleListResponseDto;
 import com.icehufs.icebreaker.domain.article.dto.response.PatchArticleResponseDto;
 import com.icehufs.icebreaker.domain.article.dto.response.PatchCommentResponseDto;
@@ -28,6 +29,7 @@ public interface ArticleService {
     ResponseEntity<? super PostArticleResponseDto> postArticleNotif(PostArticleRequestDto dto, String email);
     ResponseEntity<? super GetArticleResponseDto> getArticle(Integer articleNum);
     ResponseEntity<? super GetArticleListResponseDto> getArticleList();
+    ResponseEntity<? super GetRecentArticleNumDto> getRecentArticleNum();
     ResponseEntity<? super GetUserArticleListResponseDto> getUserArticleList(String email);
     ResponseEntity<? super PatchArticleResponseDto> patchArticle(PatchArticleRequestDto dto, Integer articleNum, String email);
     ResponseEntity<? super CheckOwnOfArticleResponseDto> checkOwnArtcle(String email, Integer articleNum);
