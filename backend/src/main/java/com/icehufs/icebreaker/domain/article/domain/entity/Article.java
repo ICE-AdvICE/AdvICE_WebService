@@ -1,11 +1,7 @@
 package com.icehufs.icebreaker.domain.article.domain.entity;
 
 
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
-
-
+import java.time.LocalDateTime;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -53,8 +49,8 @@ public class Article {
     @Column(name = "view_count")
     private int viewCount;
 
-    @Column(name = "article_date")
-    private String articleDate;
+    @Column(name = "article_date", columnDefinition = "DATETIME")
+    private LocalDateTime articleDate;
 
     @Column(name = "auth_check")
     private int authCheck;
@@ -64,16 +60,12 @@ public class Article {
     private ArticleCategoryEnum category;
 
     public Article(PostArticleRequestDto dto, String email){
-        ZonedDateTime now = ZonedDateTime.now(ZoneId.of("Asia/Seoul"));
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        String writeDatetime = now.format(formatter);
-
         this.userEmail = email;
         this.articleTitle = dto.getArticleTitle();
         this.articleContent = dto.getArticleContent();
         this.likeCount = 0;
         this.viewCount = 0;
-        this.articleDate = writeDatetime;
+        this.articleDate = LocalDateTime.now();
         this.authCheck = 0;
         this.category = dto.getCategory();
     }
