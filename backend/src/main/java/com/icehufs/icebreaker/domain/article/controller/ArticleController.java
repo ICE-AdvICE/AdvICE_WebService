@@ -22,6 +22,7 @@ import com.icehufs.icebreaker.domain.article.dto.response.DeleteArticleResponseD
 import com.icehufs.icebreaker.domain.article.dto.response.GetArticleListResponseDto;
 import com.icehufs.icebreaker.domain.article.dto.response.GetArticleResponseDto;
 import com.icehufs.icebreaker.domain.article.dto.response.GetCommentListResponseDto;
+import com.icehufs.icebreaker.domain.article.dto.response.GetRecentArticleNumDto;
 import com.icehufs.icebreaker.domain.article.dto.response.GetUserArticleListResponseDto;
 import com.icehufs.icebreaker.domain.article.dto.response.PatchArticleResponseDto;
 import com.icehufs.icebreaker.domain.article.dto.response.PostArticleResponseDto;
@@ -85,6 +86,13 @@ public class ArticleController {
     @GetMapping("/list") // 모든 게시글 반환 API
     public ResponseEntity<? super GetArticleListResponseDto> getArticleList(){
         ResponseEntity<? super GetArticleListResponseDto> response = articleService.getArticleList();
+        return response;
+    }
+
+    @GetMapping("/list/recent")
+    public ResponseEntity<? super GetRecentArticleNumDto> getRecentArticleList() {
+        ResponseEntity<? super GetRecentArticleNumDto> response = articleService.getRecentArticleNum();
+        System.out.println("response = " + response);
         return response;
     }
 

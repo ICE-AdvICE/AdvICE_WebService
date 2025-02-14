@@ -1,6 +1,8 @@
 package com.icehufs.icebreaker.domain.article.repository;
 
 
+import java.time.LocalDateTime;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -13,5 +15,5 @@ public interface ArticleRepository extends JpaRepository<Article, Integer> {
     
     boolean existsByArticleNum(Integer articleNum); // 정확한 필드 이름을 사용
     Article findByArticleNum(Integer articleNum);   // 정확한 필드 이름을 사용
-
+    long countByArticleDateAfter(LocalDateTime localDateTime);
 }
