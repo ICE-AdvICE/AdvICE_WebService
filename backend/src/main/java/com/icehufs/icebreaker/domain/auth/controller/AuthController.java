@@ -1,10 +1,11 @@
 package com.icehufs.icebreaker.domain.auth.controller;
 
+import java.time.Duration;
+
 import jakarta.validation.Valid;
 
 import com.icehufs.icebreaker.domain.auth.dto.request.CheckCertificationRequestDto;
 import com.icehufs.icebreaker.domain.auth.dto.request.EmailCertificationRequestDto;
-import com.icehufs.icebreaker.domain.auth.dto.request.RegenerateTokenRequestDto;
 import com.icehufs.icebreaker.domain.auth.dto.request.SignInRequestDto;
 import com.icehufs.icebreaker.domain.auth.dto.request.SignUpRequestDto;
 import com.icehufs.icebreaker.domain.auth.dto.response.CheckCertificationResponseDto;
@@ -16,16 +17,14 @@ import com.icehufs.icebreaker.domain.auth.dto.response.RegenerateTokenResponseDt
 import com.icehufs.icebreaker.domain.auth.dto.response.SignInResponseDto;
 import com.icehufs.icebreaker.domain.auth.dto.response.SignUpResponseDto;
 
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-
 import com.icehufs.icebreaker.domain.auth.service.AuthService;
-
 import lombok.RequiredArgsConstructor;
-
-
-
 
 @RestController
 @RequestMapping("/api/v1/auth") //일반 사용자를 위한 URL 주소(회원가입/로그인/이메일 인증/정지 확인)
@@ -45,14 +44,28 @@ public class AuthController {
     //메소드의 반환 타입과 값을 response로 선언
     //ResponseEntity는 HTTP 응답의 본문(body), 상태 코드(status code), 헤더(headers) 등을 포함
     //요청에 대한 응답을 보낼때 SignInResponseDto으로 미리정한 다양한 타입의 응답을 처리가능
-    public ResponseEntity<? super SignInResponseDto> signIn(@RequestBody @Valid SignInRequestDto requestBody){
+    public ResponseEntity<? super SignInResponseDto> signIn(
+        @RequestBody @Valid SignInRequestDto requestBody,
+        HttpServletResponse response){
         //@RequestBody 어노테이션은 HTTP 요청의 본문(body)을 SignInRequestDto 객체로 매핑
         //@Valid 요청 본문이 SignInRequestDto 클래스에 정의된 제약 조건들을 만족하는지 검증
-        ResponseEntity<? super SignInResponseDto> response = authService.signIn(requestBody);
-        return response;
+        ResponseEntity<? super SignInResponseDto> responseEntity
+            = authService.signIn(requestBody);
+        SignInResponseDto dto = (SignInResponseDto) responseEntity.getBody();
+
+        ResponseCookie refreshTokenCookie = ResponseCookie.from("refresh_token", dto.getRefreshToken())
+            .httpOnly(true)   // JavaScript에서 접근 불가 (XSS 방어)
+            .secure(false)     // 배포 시 true로 변경 예정, HTTPS 환경에서만 사용 가능
+            .sameSite("Strict") // CSRF 방어
+            .path("api/v1/auth/refresh") // 특정 경로에서만 접근 가능
+            .maxAge(Duration.ofDays(7)) // 7일간 유지
+            .build();
+        response.addHeader(HttpHeaders.SET_COOKIE, refreshTokenCookie.toString());
+
+        return responseEntity;
     }
 
-    @PostMapping("/logout")
+    @DeleteMapping("/logout")
     public ResponseEntity<? super LogoutResponseDto> logout(@AuthenticationPrincipal String email) {
         ResponseEntity<? super LogoutResponseDto> response = authService.logout(email);
         return response;
@@ -60,9 +73,21 @@ public class AuthController {
 
     @PostMapping("/refresh")
     public ResponseEntity<? super RegenerateTokenResponseDto> refresh(@AuthenticationPrincipal String email,
-        @RequestBody @Valid RegenerateTokenRequestDto requestBody) {
-        ResponseEntity<? super RegenerateTokenResponseDto> response = authService.refresh(requestBody, email);
-        return response;
+        @CookieValue(value = "refresh_token") String refreshToken,
+        HttpServletResponse response) {
+        ResponseEntity<? super RegenerateTokenResponseDto> responseEntity = authService.refresh(refreshToken, email);;
+        RegenerateTokenResponseDto dto = (RegenerateTokenResponseDto) responseEntity.getBody();
+
+        ResponseCookie refreshTokenCookie = ResponseCookie.from("refresh_token", dto.getRefreshToken())
+            .httpOnly(true)   // JavaScript에서 접근 불가 (XSS 방어)
+            .secure(false)     // 배포 시 true로 변경 예정, HTTPS 환경에서만 사용 가능
+            .sameSite("Strict") // CSRF 방어
+            .path("api/v1/auth/refresh") // 특정 경로에서만 접근 가능
+            .maxAge(Duration.ofDays(7)) // 7일간 유지
+            .build();
+        response.addHeader(HttpHeaders.SET_COOKIE, refreshTokenCookie.toString());
+
+        return responseEntity;
     }
 
     @PostMapping("/email-certification") // 회원가입 시 인증 번호 전송 API
