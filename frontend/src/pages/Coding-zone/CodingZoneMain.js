@@ -61,6 +61,7 @@ const CodingMain = () => {
   const [userRole, setUserRole] = useState('');
   const [showNoClassesImage, setShowNoClassesImage] = useState(false);
 
+
   useEffect(() => {
     if (cookies.accessToken  ) {
       setIsRendered(true);  
@@ -350,6 +351,7 @@ const renderAttendanceProgress = (count) => {
         {showModal && <InquiryModal isOpen={showModal} onClose={handleCloseModal} />}
         <span> | </span>
       </div>
+      
       <Slider {...sliderSettings}> 
          <div className="codingzone-top-container">
          <img src="/codingzone_main_v5.png" className="codingzonetop2-image"/>
