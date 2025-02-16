@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useCookies } from 'react-cookie';
-import FindpasswordForm from './FindPassword.js';
+import FindpasswordForm from './PasswordFind.js';
 import SignUpinfoForm from './Signup.js';
 import MyModal from '../../../../shared/components/BaseModal.js';
 import './modules.css';

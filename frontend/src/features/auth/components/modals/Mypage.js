@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useCookies } from 'react-cookie';
 import { checkuserbanRequest } from '../../../api/ArticleApi.js';
 import MyModal from '../../../../shared/components/BaseModal.js';
-import FindpasswordForm from './FindPassword.js';
+import FindpasswordForm from './PasswordFind.js';
 import './modules.css';
 import { useNavigate } from 'react-router-dom';
 import { getczauthtypetRequest,getMypageRequest  } from '../../../../shared/api/AuthApi.js';
