@@ -212,8 +212,15 @@ const ShowPage = () => {
         handleLike(navigate,articleNum, liked, token, setLiked, setLikes);
     };
     if (!article) {
-        return <div>게시글이 존재하지 않습니다.</div>;
+        return (
+            <div>
+                <div className="banner_img_container_icebreaker_article">
+                    <img src="/icebreaker_main.png" className="banner" />
+                </div>
+            </div>
+        );
     }
+    
     return (
         <div className="blog-container">
            <div className="banner_img_container_icebreaker_article">
