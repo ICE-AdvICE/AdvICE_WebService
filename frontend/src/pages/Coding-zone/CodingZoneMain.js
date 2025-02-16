@@ -61,8 +61,6 @@ const CodingMain = () => {
   const [userRole, setUserRole] = useState('');
   const [showNoClassesImage, setShowNoClassesImage] = useState(false);
 
-  const [pngLoadTime, setPngLoadTime] = useState(null);
-  const [webpLoadTime, setWebpLoadTime] = useState(null);
 
   useEffect(() => {
     if (cookies.accessToken  ) {
@@ -322,40 +320,6 @@ const renderAttendanceProgress = (count) => {
   );
 };
 
- // 이미지 로딩 시간 측정 함수
- const measureImageLoadTime = (imageSrc, setLoadTime) => {
-  const img = new Image();
-  const startTime = performance.now();
-
-  img.src = imageSrc;
-  img.onload = () => {
-    const endTime = performance.now();
-    const loadTime = endTime - startTime;
-    setLoadTime(loadTime);
-    console.log(`✅ ${imageSrc} 로딩 시간: ${loadTime.toFixed(2)} ms`);
-  };
-
-  img.onerror = () => {
-    console.error(`❌ ${imageSrc} 로드 실패!`);
-    setLoadTime(null);
-  };
-};
-
-// 개별적인 WebP & PNG 로드 테스트 버튼
-const handleWebpTest = () => {
-  measureImageLoadTime("/codingzone_main_v5.webp", setWebpLoadTime);
-};
-
-const handlePngTest = () => {
-  measureImageLoadTime("/codingzone_main_v5.png", setPngLoadTime);
-};
-
-useEffect(() => {
-  if (pngLoadTime !== null && webpLoadTime !== null) {
-    const improvement = ((pngLoadTime - webpLoadTime) / pngLoadTime) * 100;
-    alert(`🚀 WebP는 PNG보다 ${improvement.toFixed(2)}% 더 빠르게 로드됩니다.`);
-  }
-}, [pngLoadTime, webpLoadTime]);
 
   return (
     <div className="codingzone-container">
@@ -387,15 +351,7 @@ useEffect(() => {
         {showModal && <InquiryModal isOpen={showModal} onClose={handleCloseModal} />}
         <span> | </span>
       </div>
-
-      <div className="image-performance-test">
-        <h2>이미지 성능 비교</h2>
-        <button onClick={handleWebpTest}>WebP 로딩 테스트</button>
-        {webpLoadTime !== null && <p>WebP 로딩 시간: {webpLoadTime.toFixed(2)} ms</p>}
-
-        <button onClick={handlePngTest}>PNG 로딩 테스트</button>
-        {pngLoadTime !== null && <p>PNG 로딩 시간: {pngLoadTime.toFixed(2)} ms</p>}
-      </div>
+      
       <Slider {...sliderSettings}> 
          <div className="codingzone-top-container">
          <img src="/codingzone_main_v5.png" className="codingzonetop2-image"/>
