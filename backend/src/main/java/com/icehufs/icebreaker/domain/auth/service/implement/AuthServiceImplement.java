@@ -128,13 +128,13 @@ public class AuthServiceImplement implements AuthService {
     }
 
     @Override
-    public ResponseEntity<? super RegenerateTokenResponseDto> refresh(RegenerateTokenRequestDto dto, String email) {
+    public ResponseEntity<? super RegenerateTokenResponseDto> refresh(String refreshToken, String email) {
         try {
             if (email == null) {
                 return RegenerateTokenResponseDto.invalidToken();
             }
 
-            boolean isValid = refreshTokenService.vaildateRefreshToken(email, dto.refreshToken());
+            boolean isValid = refreshTokenService.vaildateRefreshToken(email, refreshToken);
             if (!isValid) {
                 return RegenerateTokenResponseDto.invalidToken();
             }
