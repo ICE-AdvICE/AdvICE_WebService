@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { checkCertificationRequest,pwRequest } from '../../../../shared/api/EmailApi.js';
 import { pwUpdateRequest } from '../../../../entities/api/UserApi.js';
-const FindpasswordForm = ({ onClose }) => {
+const FindPasswordForm = ({ onClose }) => {
     const [userEmail, setUserEmail] = useState('');
     const [certificationNumber, setCertificationNumber] = useState('');
     const [newPassword, setNewPassword] = useState('');
@@ -184,4 +184,4 @@ const FindpasswordForm = ({ onClose }) => {
     );
 };
 
-export default FindpasswordForm;
+export default FindPasswordForm;

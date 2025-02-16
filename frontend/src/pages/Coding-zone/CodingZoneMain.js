@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import '../css/codingzone/codingzone-main.css';
 import { useCookies } from "react-cookie";
 import CzCard from '../../widgets/layout/CzCard/czCard';  
- 
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { deleteClass } from '../../entities/api/CodingZone/AdminApi.js';
 import { checkAdminType } from '../../features/api/Admin/UserApi.js';
@@ -36,9 +35,7 @@ const ClassList = ({ userReservedClass,onDeleteClick,classList, handleCardClick,
             userReservedClass && 
             (userReservedClass.classNum !== classItem.classNum && userReservedClass.grade === classItem.grade)
           }
-         
         />
-        
       ))}
     </div>
   );
@@ -60,7 +57,6 @@ const CodingMain = () => {
   const [isRendered, setIsRendered] = useState(false);
   const [userRole, setUserRole] = useState('');
   const [showNoClassesImage, setShowNoClassesImage] = useState(false);
-
 
   useEffect(() => {
     if (cookies.accessToken  ) {
@@ -132,7 +128,14 @@ const CodingMain = () => {
       return timeToNumber(a.classTime) - timeToNumber(b.classTime);
     });
   };
-
+  const days = [
+    { name: "월요일", label: "Mon" },
+    { name: "화요일", label: "Tue" },
+    { name: "수요일", label: "Wed" },
+    { name: "목요일", label: "Thu" },
+    { name: "금요일", label: "Fri" },
+  ];
+  
   // 요일 필터링 기능
   const filterByDay = (day) => {
     if (selectedDay === day) {
@@ -155,7 +158,7 @@ const CodingMain = () => {
     }
   }, [location.pathname]);
 
-  
+  const token = cookies.accessToken;
   /// 코딩존 수업 데이터를 가져오는 useEffect
   useEffect(() => {
     const fetchData = async () => {
@@ -250,24 +253,19 @@ const CodingMain = () => {
     }
 };
 
-  const handlecodingzone = () => {
-    setSelectedButton('codingzone');   
+const handleTabChange = (tab) => {
+  if (tab === 'attendence' && !cookies.accessToken) {
+    alert("로그인 후 이용 가능합니다.");
+    return;
+  }
+  setSelectedButton(tab);
+  if (tab === 'codingzone') {
     navigate('/coding-zone');
-  };
+  } else if (tab === 'attendence') {
+    navigate('/coding-zone/Codingzone_Attendance');
+  }
+};
 
-  const handlecodingzoneattendence = () => {
-    const token = cookies.accessToken;
-    if (!token) {
-      alert("로그인 후 이용 가능합니다.");
-      return; 
-    }
-    setSelectedButton('attendence');
-    navigate(`/coding-zone/Codingzone_Attendance`);
-  };
-
-  const handleInquiry = () => {
-    setSelectedButton('codingzone');   
-  };
 
   const handleCardClick = (classItem) => {
   };
@@ -326,24 +324,19 @@ const renderAttendanceProgress = (count) => {
       <div className='select-container'>
         <span> | </span>
         <button 
-          onClick={handlecodingzone} 
+          onClick={() => handleTabChange('codingzone')} 
           className={selectedButton === 'codingzone' ? 'selected' : ''}
         >
           코딩존 예약
         </button>
-        <span> | </span>
         <button 
-          onClick={handlecodingzoneattendence} 
+          onClick={() => handleTabChange('attendence')} 
           className={selectedButton === 'attendence' ? 'selected' : ''}
         >
           출결 관리
         </button>
-        <span> | </span>
         <button 
-        onClick={() => {
-          handleInquiry();
-          handleOpenModal();
-        }}
+          onClick={handleOpenModal}
           className={selectedButton === 'inquiry' ? 'selected' : ''}
         >
           문의 하기
@@ -390,42 +383,18 @@ const renderAttendanceProgress = (count) => {
           </Link>
         </div>
         <div className="codingzone-date">
-          <button 
-            onClick={() => filterByDay('월요일')}
-            className={selectedDay === '월요일' ? 'selected' : ''}
-          >
-            <p>Mon</p>
-          </button>
-          <span> | </span>
-          <button 
-            onClick={() => filterByDay('화요일')}
-            className={selectedDay === '화요일' ? 'selected' : ''}
-          >
-            <p>Tue</p>
-          </button>
-          <span> | </span>
-          <button 
-            onClick={() => filterByDay('수요일')}
-            className={selectedDay === '수요일' ? 'selected' : ''}
-          >
-            <p>Wed</p>
-          </button>
-          <span> | </span>
-          <button 
-            onClick={() => filterByDay('목요일')}
-            className={selectedDay === '목요일' ? 'selected' : ''}
-          >
-            <p>Thu</p>
-          </button>
-          <span> | </span>
-          <button 
-            onClick={() => filterByDay('금요일')}
-            className={selectedDay === '금요일' ? 'selected' : ''}
-          >
-            <p>Fri</p>
-          </button>
+          {days.map((day, index) => (
+            <React.Fragment key={day.name}>
+              <button
+                onClick={() => filterByDay(day.name)}
+                className={selectedDay === day.name ? 'selected' : ''}
+              >
+                <p>{day.label}</p>
+              </button>
+              {index < days.length - 1 && <span> | </span>}
+            </React.Fragment>
+          ))}
         </div>
-
         <div className='category-name-container'>
           <div className="codingzone-title">
             <p className='weekDay'>요일</p> 
@@ -454,6 +423,7 @@ const renderAttendanceProgress = (count) => {
             isAdmin={isAdmin}  
             onDeleteClick={handleDelete} 
             userReservedClass={userReservedClass} 
+            token={token}
           />
         )}
 

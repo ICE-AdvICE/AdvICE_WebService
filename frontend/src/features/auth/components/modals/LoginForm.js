@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useCookies } from 'react-cookie';
-import { useNavigate } from 'react-router-dom';
- 
 import FindpasswordForm from './FindPassword.js';
 import SignUpinfoForm from './Signup.js';
 import MyModal from '../../../../shared/components/BaseModal.js';
