@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.icehufs.icebreaker.domain.auth.dto.object.JwtToken;
-import com.icehufs.icebreaker.domain.auth.dto.request.RegenerateTokenRequestDto;
 import com.icehufs.icebreaker.domain.auth.dto.response.LogoutResponseDto;
 import com.icehufs.icebreaker.domain.auth.dto.response.RegenerateTokenResponseDto;
 import com.icehufs.icebreaker.domain.auth.service.RefreshTokenService;

@@ -6,7 +6,6 @@ import jakarta.validation.Valid;
 
 import com.icehufs.icebreaker.domain.auth.dto.request.CheckCertificationRequestDto;
 import com.icehufs.icebreaker.domain.auth.dto.request.EmailCertificationRequestDto;
-import com.icehufs.icebreaker.domain.auth.dto.request.RegenerateTokenRequestDto;
 import com.icehufs.icebreaker.domain.auth.dto.request.SignInRequestDto;
 import com.icehufs.icebreaker.domain.auth.dto.request.SignUpRequestDto;
 import com.icehufs.icebreaker.domain.auth.dto.response.CheckCertificationResponseDto;
