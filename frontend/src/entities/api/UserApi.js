@@ -26,14 +26,14 @@ return result;
 //2. 사용자 로그인을 위한 API
 export const signInRequest = async (requestBody) => { 
     try {
-        const response = await axios.post(SIGN_IN_URL(), requestBody);
-        return response.data;  // 정상 응답 시 그대로 반환 (accessToken, refreshToken 포함)
+        const response = await axios.post(SIGN_IN_URL(), requestBody, { withCredentials: true }); // 쿠키 포함 요청
+        return { data: response.data, headers: response.headers }; // 응답 본문과 헤더 반환
     } catch (error) {
-        if (error.response && error.response.data) {
-            return error.response.data; // API 에러 응답 반환
+        if (error.response) {
+            return { data: error.response.data, headers: error.response.headers };
         }
         console.error('로그인 요청 실패:', error);
-        return { code: 'ERROR', message: '로그인 요청 중 오류 발생' };
+        return { data: { code: 'ERROR', message: '로그인 요청 중 오류 발생' }, headers: {} };
     }
 };
 
