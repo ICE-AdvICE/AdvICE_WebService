@@ -6,6 +6,7 @@ const SIGN_IN_URL = () => `${API_DOMAIN}/auth/sign-in`; //로그인
 const SIGN_UP_URL = () => `${API_DOMAIN}/auth/sign-up`; // 회원가입 
 const PATCH_MYPAGE_USER_URL=() =>`${API_DOMAIN}/user`; //마이페이지_개인정보 수정
 const PATCH_PW_URL=() =>`${API_DOMAIN}/user/password`; 
+axios.defaults.withCredentials = true;
 //1. 사용자 회원가입을 위한 API
 export const signUpRequest = async (requestBody) => {
     
@@ -26,16 +27,26 @@ return result;
 //2. 사용자 로그인을 위한 API
 export const signInRequest = async (requestBody) => { 
     try {
-        const response = await axios.post(SIGN_IN_URL(), requestBody, { withCredentials: true }); // 쿠키 포함 요청
-        return { data: response.data, headers: response.headers }; // 응답 본문과 헤더 반환
+        console.log("📤 Axios 요청 데이터:", requestBody); // ✅ 디버깅 추가
+
+        const response = await axios.post(SIGN_IN_URL(), requestBody, {
+            withCredentials: true,  // ✅ 쿠키 포함 요청
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
+
+        console.log("🔍 Axios 응답 데이터:", response); // ✅ 응답 로그 추가
+        return { data: response.data, headers: response.headers };
     } catch (error) {
-        if (error.response) {
-            return { data: error.response.data, headers: error.response.headers };
-        }
-        console.error('로그인 요청 실패:', error);
+        console.error("🚨 Axios 요청 실패:", error);
+        alert('🚨 로그인 요청 중 오류 발생! 서버 응답: ' + JSON.stringify(error.response, null, 2));
         return { data: { code: 'ERROR', message: '로그인 요청 중 오류 발생' }, headers: {} };
     }
 };
+
+
+
 
 //4. 사용자 정보 수정 API
 export const updateMypageUserRequest = async (userData, accessToken) => { 
