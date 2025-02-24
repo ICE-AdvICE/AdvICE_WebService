@@ -1,6 +1,7 @@
 package com.icehufs.icebreaker.config;
 
 import java.io.IOException;
+import java.util.List;
 
 import jakarta.servlet.ServletException;
 
@@ -36,9 +37,7 @@ public class WebSecurityConfig {
     @Bean
     protected SecurityFilterChain configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
-            .cors(cors -> cors
-                .configurationSource(corsConfigurationSource())
-            )
+            .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             .csrf(CsrfConfigurer::disable)
             .httpBasic(HttpBasicConfigurer::disable)
             .sessionManagement(sessionManagement -> sessionManagement 
@@ -60,17 +59,14 @@ public class WebSecurityConfig {
 
         return httpSecurity.build();
     }
-    
+
     @Bean
     protected CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
-        corsConfiguration.addAllowedOrigin("http://localhost:3000");
-        corsConfiguration.addAllowedMethod("*");
-        corsConfiguration.addAllowedHeader("*");
-        corsConfiguration.setAllowCredentials(true);
-        // corsConfiguration.addAllowedOrigin("*");
-        // corsConfiguration.addAllowedMethod("*");
-        // corsConfiguration.addAllowedHeader("*");
+        corsConfiguration.setAllowedOriginPatterns(List.of("http://localhost:3000"));
+        corsConfiguration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        corsConfiguration.setAllowedHeaders(List.of("*"));
+        corsConfiguration.setAllowCredentials(true); // 🔹 withCredentials 요청을 허용
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/api/**", corsConfiguration);
