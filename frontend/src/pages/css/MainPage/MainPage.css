@@ -8,7 +8,6 @@
     margin-bottom: 20px;
 }
 
-
 .main-container {
     display: flex;
     flex-direction: column;
@@ -33,7 +32,6 @@
     width: 100%;
     flex-wrap: wrap;
     margin-top: 30px;
-
 }
 
 .service-box {
@@ -66,13 +64,13 @@
     margin: 20px;
     border: 1.5px solid #A78258;
     transition: transform 0.3s ease-in-out;
+    position: relative;  /* 배지 위치를 위해 추가 */
 }
 
 .icebreaker-box:hover {
     transform: scale(1.1);
     /* 호버시 요소 크기를 10% 증가 */
 }
-
 
 .study-box {
     margin: 20px;
@@ -103,14 +101,11 @@
     border-radius: 0px;
     color: white;
     transition: background-color 0.3s;
-
-
 }
 
 .coding {
     background-color: #052940;
     box-shadow: 0px 2px 5px #052940;
-
 }
 
 .icebreaker {
@@ -129,7 +124,6 @@
 
 .feedback-container {
     margin-top: 60px;
-
 }
 
 .feedback-btn {
@@ -141,6 +135,30 @@
     padding: 10px;
     font-size: 16px;
 }
+
+/* 추가: 최근 게시글 배지 스타일 */
+.recent-article-badge {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background-color: #F24822;  /* 카카오톡 느낌의 빨간색 */
+    color: white;
+    border-radius: 50%;
+    padding: 3px 5px;
+    font-size: 10px;
+    font-weight: bold;
+    animation: shake 2s infinite;  /* 애니메이션 지속시간 2초, 무한 반복 */
+}
+
+@keyframes shake {
+    0% { transform: translate(0, 0); }
+    10% { transform: translate(-1px, 1px); }
+    20% { transform: translate(1px, -1px); }
+    30% { transform: translate(-1px, 1px); }
+    40% { transform: translate(0, 0); }
+    100% { transform: translate(0, 0); }
+}
+
 
 @media (max-width: 400px) {
     .feedback-container {

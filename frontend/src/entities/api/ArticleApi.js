@@ -10,6 +10,7 @@ const EDIT_ARTICLE = (articleNum) => `${API_DOMAIN}/article/${articleNum}`;
 const DELETE_ARTICLE_URL = (articleNum) => `${API_DOMAIN}/article/${articleNum}`;
 const FETCH_ARTICLE_URL = (articleNum) => `${API_DOMAIN}/article/${articleNum}`;
 const GET_ARTICLE_LIST_URL = () => `${API_DOMAIN}/article/list`;
+const GET_RECENT_ARTICLE_URL = () => `${API_DOMAIN}/article/list/recent`;
 
 //1. 게시물(일반,요청)을 등록하는 API
 export const createArticleRequest = async (postData, accessToken) => {
@@ -168,5 +169,21 @@ export const getArticleListRequest = async () => {
     return result;
 };
 
-
-
+export const getRecentArticleRequest = async (accessToken) => {
+    try {
+        const response = await axios.get(GET_RECENT_ARTICLE_URL(), authorization(accessToken));
+        // 성공 응답 예시: { "code": "SU", "message": "Success.", "recentArticleNum": 14 }
+        return response.data;
+    } catch (error) {
+        if (error.response) {
+            if (error.response.data.code === "DBE") {
+                console.log("데이터베이스에 문제가 발생했습니다.");
+            } else {
+                console.log("예상치 못한 오류가 발생했습니다.");
+            }
+        } else {
+            console.log("서버에 연결할 수 없습니다.");
+        }
+        return false;
+    }
+};
