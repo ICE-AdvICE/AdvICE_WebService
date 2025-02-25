@@ -34,7 +34,7 @@ const HomePage = () => {
       if (data) {
         setUserData(data);
       } else {
-        console.error("❌ [유저 데이터 불러오기 실패]");
+        console.error("[유저 데이터 불러오기 실패]");
         navigate('/');
       }
     };
@@ -42,20 +42,18 @@ const HomePage = () => {
     fetchData();
   }, [cookies.accessToken, cookies.refreshToken, navigate, setCookie]);
 
-  // New useEffect for fetching recentArticleNum
-  useEffect(() => {
-    const fetchRecentArticleNum = async () => {
-      if (!cookies.accessToken) return;
-      const result = await getRecentArticleRequest(cookies.accessToken);
-      if (result && result.code === "SU" && result.recentArticleNum >= 1) {
-        setRecentArticleNum(result.recentArticleNum);
-      } else {
-        setRecentArticleNum(0);
-      }
-    };
+useEffect(() => {
+  const fetchRecentArticleNum = async () => {
+    const result = await getRecentArticleRequest();
+    if (result && result.code === "SU" && result.recentArticleNum >= 1) {
+      setRecentArticleNum(result.recentArticleNum);
+    } else {
+      setRecentArticleNum(0);
+    }
+  };
 
-    fetchRecentArticleNum();
-  }, [cookies.accessToken]);
+  fetchRecentArticleNum();
+}, []); 
 
   const handlecodingzone = () => {
     navigate(`/coding-zone`);

@@ -169,10 +169,9 @@ export const getArticleListRequest = async () => {
     return result;
 };
 
-export const getRecentArticleRequest = async (accessToken) => {
+export const getRecentArticleRequest = async () => {
     try {
-        const response = await axios.get(GET_RECENT_ARTICLE_URL(), authorization(accessToken));
-        // 성공 응답 예시: { "code": "SU", "message": "Success.", "recentArticleNum": 14 }
+        const response = await axios.get(GET_RECENT_ARTICLE_URL());
         return response.data;
     } catch (error) {
         if (error.response) {
