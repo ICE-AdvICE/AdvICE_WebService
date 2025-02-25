@@ -1,23 +1,27 @@
-import React, { useEffect , useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import '../css/MainPage/MainPage.css';
- 
+
 import { useNavigate } from 'react-router-dom';
 import { useCookies } from "react-cookie";
-import { getMypageRequest} from '../../shared/api/AuthApi.js';
+import { getMypageRequest } from '../../shared/api/AuthApi.js';
+import { getRecentArticleRequest } from '../../entities/api/ArticleApi.js'; // import the new API
 
 const HomePage = () => {
   const [cookies, setCookie] = useCookies(['accessToken', 'refreshToken']);
   const navigate = useNavigate();
   const [userData, setUserData] = useState(null);
+  const [recentArticleNum, setRecentArticleNum] = useState(0); // state for recent article number
+
   const handleMoreClick = () => {
-    navigate('/article-main');  
+    navigate('/article-main');
   };
   const handlereservationClick = () => {
-    window.location.href = 'https://open.kakao.com/o/giOS427b';  
+    window.location.href = 'https://open.kakao.com/o/giOS427b';
   };
   const handlefeedbackClick = () => {
-    window.location.href = 'https://open.kakao.com/o/swnIYgKg';  
+    window.location.href = 'https://open.kakao.com/o/swnIYgKg';
   };
+
   useEffect(() => {
     const fetchData = async () => {
       if (!cookies.accessToken && !cookies.refreshToken) {
@@ -26,11 +30,11 @@ const HomePage = () => {
       }
 
       const data = await getMypageRequest(cookies.accessToken, cookies.refreshToken, setCookie, navigate);
-      
+
       if (data) {
         setUserData(data);
       } else {
-        console.error("❌ [유저 데이터 불러오기 실패]");
+        console.error("[유저 데이터 불러오기 실패]");
         navigate('/');
       }
     };
@@ -38,8 +42,21 @@ const HomePage = () => {
     fetchData();
   }, [cookies.accessToken, cookies.refreshToken, navigate, setCookie]);
 
+useEffect(() => {
+  const fetchRecentArticleNum = async () => {
+    const result = await getRecentArticleRequest();
+    if (result && result.code === "SU" && result.recentArticleNum >= 1) {
+      setRecentArticleNum(result.recentArticleNum);
+    } else {
+      setRecentArticleNum(0);
+    }
+  };
+
+  fetchRecentArticleNum();
+}, []); 
+
   const handlecodingzone = () => {
-      navigate(`/coding-zone`);
+    navigate(`/coding-zone`);
   };
 
   return (
@@ -47,10 +64,10 @@ const HomePage = () => {
       <div className="header">
         <h1>AdvICE</h1>
         <p className="department-info">
-  This is an integrated service for students in the Department of Information and Communication Engineering.<br />
-  Try the coding zone reservation, anonymous bulletin board, and study room reservation service for the Department of Information and Communication Engineering.
-  <br />Try your best rather than be the best.
-</p>
+          This is an integrated service for students in the Department of Information and Communication Engineering.<br />
+          Try the coding zone reservation, anonymous bulletin board, and study room reservation service for the Department of Information and Communication Engineering.
+          <br />Try your best rather than be the best.
+        </p>
       </div>
       <div className="buttons-container">
         <div className="service-box coding-box">
@@ -58,6 +75,11 @@ const HomePage = () => {
           <button onClick={handlecodingzone} className="btn coding">Coding Zone</button>
         </div>
         <div className="service-box icebreaker-box">
+          {recentArticleNum > 0 && (
+            <div className="recent-article-badge">
+              +{recentArticleNum}
+            </div>
+          )}
           <p>ICEbreaker 익명게시판을 통해<br /> 학과 사람들과 소통해 보세요.</p>
           <button onClick={handleMoreClick} className="btn icebreaker">ICEbreaker</button>
         </div>
@@ -67,22 +89,12 @@ const HomePage = () => {
         </div>
       </div>
       <div className='feedback-container'>
-        <button onClick={handlefeedbackClick} className="feedback-btn">서비스 이용하시는데 불편한 점이나 요청사항이 있으신가요?</button>
+        <button onClick={handlefeedbackClick} className="feedback-btn">
+          서비스 이용하시는데 불편한 점이나 요청사항이 있으신가요?
+        </button>
       </div>
     </div>
   );
-}
+};
 
 export default HomePage;
-
-
-
-
-
-
-
-
-
-
-
-
