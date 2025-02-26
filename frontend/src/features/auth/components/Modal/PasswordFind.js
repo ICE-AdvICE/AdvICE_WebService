@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useCookies } from 'react-cookie';
 import { useNavigate } from 'react-router-dom';
 import { checkCertificationRequest,pwRequest } from '../../../../shared/api/EmailApi.js';
 import { pwUpdateRequest } from '../../../../entities/api/UserApi.js';
@@ -8,6 +9,7 @@ const FindPasswordForm = ({ onClose }) => {
     const [newPassword, setNewPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [isCertified, setIsCertified] = useState(false);
+    const [cookies, setCookie] = useCookies(['accessToken']);
     const [isModalOpen, setIsModalOpen] = useState(true);
     const navigate = useNavigate();
     const [buttonDisabled, setButtonDisabled] = useState(false);
@@ -97,30 +99,27 @@ const FindPasswordForm = ({ onClose }) => {
             alert('비밀번호가 일치하지 않습니다.');
             return;
         }
-
+    
         if (newPassword.length < 8 || newPassword.length > 20) {
             alert('비밀번호 길이를 8자 이상 20자 이하로 해주세요.');
             return;
         }
+    
         const requestBody = {
             email: userEmail,
             password: newPassword
         };
-
-        const response = await pwUpdateRequest(requestBody);
-        if (response.code === 'SU') {
+    
+        const response = await pwUpdateRequest(requestBody, cookies.accessToken, setCookie, navigate);
+        
+        if (response?.code === "SU") {
             alert('비밀번호 변경이 성공적으로 완료되었습니다.');
             onClose();
-        } else if (response.code === 'NU') {
-            alert('로그인 시간이 만료되었습니다. 다시 로그인 해주세요.');
-            navigate('/');
         } else {
             alert('오류가 발생했습니다. 다시 시도 해 주세요.');
-            navigate('/');
         }
     };
-
-
+    
     return (
         <form onSubmit={(e) => e.preventDefault()}>
             <div className="loginHeaderContainer">

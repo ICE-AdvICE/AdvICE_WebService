@@ -6,12 +6,11 @@ import '../../css/ArticlePage/ShowPage.css';
 import {handleDelete,fetchArticle} from '../../../entities/api/ArticleApi.js';
 import {checkAnonymousBoardAdmin , handleResolveArticle,giveBanToUser,adminhandleDelete } from '../../../features/api/Admin/UserApi.js';
 import { handleLike,fetchLikeStatus,checkArticleOwnership } from '../../../features/api/ArticleApi.js';
-import { handleCommentSubmit,fetchComments,handleCommentEdit  } from '../../../features/api/Admin/CommentsApi.js';
+import { handleCommentSubmit,fetchComments,handleCommentEdit,handleCommentDelete  } from '../../../features/api/Admin/CommentsApi.js';
  
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart as solidHeart } from '@fortawesome/free-solid-svg-icons';
 import { faHeart as regularHeart } from '@fortawesome/free-regular-svg-icons';
-import { handleCommentDelete } from '../../../features/api/Admin/CommentsApi.js';
 
 const ShowPage = () => {
     
@@ -31,7 +30,7 @@ const ShowPage = () => {
     const [comments, setComments] = useState([]);
     const [commentInput, setCommentInput] = useState("");
     // 쿠키를 이용해 사용자 정보와 토큰을 가져옴
-    const [cookies] = useCookies(['accessToken', 'userEmail']);
+    const [cookies,setCookie] = useCookies(['accessToken', 'userEmail']);
     const token = cookies.accessToken;
     const userEmail = cookies.userEmail;
     // 페이지 이동을 위한 네비게이트 훅
@@ -80,7 +79,7 @@ const ShowPage = () => {
             return;
         }
         // 사용자를 정지하는 API 호출
-        const result = await giveBanToUser(navigate,articleNum, token, selectedBanDuration, selectedBanReason);
+        const result = await giveBanToUser(navigate, articleNum, token, selectedBanDuration, selectedBanReason, setCookie);
         if (result.code === 'SU') {
             
             alert('사용자가 성공적으로 정지되었습니다.');
@@ -89,7 +88,7 @@ const ShowPage = () => {
     };
     // 게시글을 해결 상태로 변경하는 함수
     const handleResolve = async () => {
-        await handleResolveArticle(navigate,articleNum, token, navigate, setCanEdit);    
+        await handleResolveArticle(navigate, articleNum, token, setCookie, setCanEdit);    
     };
     // 한글 입력 조합 상태를 관리하기 위한 함수
     const handleComposition = (event) => {
@@ -101,24 +100,24 @@ const ShowPage = () => {
     };
     // 댓글 삭제를 처리하는 함수
     const handleDeleteComment = async (articleNum, commentNumber, token) => {
-        const success = await handleCommentDelete(navigate,articleNum,commentNumber, token);
+        const success = await handleCommentDelete(navigate, articleNum, commentNumber, token, setCookie);
         if (success) {
             fetchComments(navigate,articleNum, setComments);  
         }    
     };
     // 게시글 삭제 처리
     const onDelete = () => {
-        handleDelete(articleNum, token, navigate);
+        handleDelete(articleNum, token, navigate, setCookie);
     };
     // 관리자 권한으로 게시글 삭제 처리
     const adonDelete = () => {
-        adminhandleDelete(articleNum, token, navigate);
+        adminhandleDelete(articleNum, token, navigate, setCookie);
     };
     // 사용자가 관리자 권한을 가지고 있는지 확인하는 함수
     useEffect(() => {
         const checkAdmin = async () => {
             try {
-                const response = await checkAnonymousBoardAdmin(token);
+                const response = await checkAnonymousBoardAdmin(token, setCookie, navigate);
                 if (response) {
                     setIsAdmin(true);
                 }
@@ -132,7 +131,7 @@ const ShowPage = () => {
     useEffect(() => {
         const fetchData = async () => {
             if (articleNum && token) {
-                await fetchLikeStatus(articleNum, token, setLiked);
+                await fetchLikeStatus(articleNum, token, setLiked, setCookie, navigate);
             }
         };
         fetchData();
@@ -141,7 +140,7 @@ const ShowPage = () => {
     // 초기 데이터와 좋아요 상태를 가져오는 함수
     useEffect(() => {
         const fetchInitialData = async () => {
-            await fetchLikeStatus(articleNum, token, setLiked);
+            await fetchLikeStatus(articleNum, token, setLiked, setCookie, navigate);
         };
         fetchInitialData();
     }, [articleNum, token]);
@@ -151,7 +150,7 @@ const ShowPage = () => {
     };
     // 댓글 수정 저장 핸들러
     const handleSaveEdit = async (commentNumber) => {
-        const response = await handleCommentEdit(navigate,commentNumber, editCommentInput, token);
+        const response = await handleCommentEdit(navigate,commentNumber, editCommentInput, token,setCookie);
         if (response) {
             const updatedComments = comments.map(comment =>
                 comment.commentNumber === commentNumber ? { ...comment, content: editCommentInput } : comment
@@ -163,7 +162,7 @@ const ShowPage = () => {
     // 게시글의 소유권을 확인하는 함수
     useEffect(() => {
         if (articleNum && token) {
-            checkArticleOwnership(navigate,articleNum, token).then(data => {
+            checkArticleOwnership(navigate, articleNum, token, setCookie).then(data => {
                 if (data.code === "SU") {
                     setCanEdit(true);  
                 } else {
@@ -174,19 +173,19 @@ const ShowPage = () => {
     }, [articleNum, token]);
     // 댓글 제출 핸들러
     const handleSubmit = async () => {
-        await handleCommentSubmit(navigate,null, commentInput, setComments, setCommentInput, userEmail, articleNum, token);
+        await handleCommentSubmit(navigate,null, commentInput, setComments, setCommentInput, userEmail, articleNum, token,setCookie);
     };
     // Enter 키 입력 시 댓글 제출 핸들러
     const handleKeyDown = async (event) => {
         if (event.key === 'Enter' && !event.shiftKey && !isComposing) {
             event.preventDefault();
-            await handleCommentSubmit(navigate,event,commentInput, setComments, setCommentInput, userEmail, articleNum, token);
+            await handleCommentSubmit(navigate,event,commentInput, setComments, setCommentInput, userEmail, articleNum, token,setCookie);
         }
     };
     // 게시글 정보와 댓글 목록을 가져오는 함수
     useEffect(() => {
         if (articleNum) {
-            fetchArticle(articleNum,navigate)
+            fetchArticle(articleNum, navigate, cookies.accessToken, setCookie)
                 .then(res => {
                     const {articleTitle, articleContent, likeCount, viewCount, category, authCheck,articleDate, userEmail: authorEmail, comments: loadedComments } = res;
                     setArticle({ articleTitle, body: articleContent, views: viewCount, category, articleDate, authCheck });
@@ -209,7 +208,7 @@ const ShowPage = () => {
     };
     // 좋아요 토글 처리
     const toggleLike = () => {
-        handleLike(navigate,articleNum, liked, token, setLiked, setLikes);
+        handleLike(navigate, articleNum, liked, token, setLiked, setLikes, setCookie);
     };
     if (!article) {
         return (

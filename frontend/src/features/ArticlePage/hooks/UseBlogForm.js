@@ -7,7 +7,7 @@ import { createArticleRequest, handleEdit, fetchArticle } from '../../../entitie
 export const useBlogForm = (editing) => {
   const navigate = useNavigate();
   const { articleNum } = useParams();
-  const [cookies] = useCookies(['accessToken']);
+  const [cookies,setCookie] = useCookies(['accessToken']);
   const token = cookies.accessToken;
   const [articleTitle, setArticleTitle] = useState('');
   const [articleContent, setArticleContent] = useState('');
@@ -39,7 +39,7 @@ export const useBlogForm = (editing) => {
       const loadArticleData = async () => {
         setLoading(true);
         try {
-          const data = await fetchArticle(articleNum, navigate);
+          const data = await fetchArticle(articleNum, navigate, cookies.accessToken, setCookie);
           if (data) {
             setArticleTitle(data.articleTitle);
             setArticleContent(data.articleContent);
@@ -60,7 +60,7 @@ export const useBlogForm = (editing) => {
     if (!token) return; 
     const checkAdmin = async () => {
       try {
-        const response = await checkAnonymousBoardAdmin(token);
+        const response = await checkAnonymousBoardAdmin(token, setCookie, navigate);
         if (response) {
           setIsAdmin(true);
         }
@@ -87,14 +87,14 @@ export const useBlogForm = (editing) => {
     try {
       let response;
       if (editing) {
-        response = await handleEdit(articleNum, token, navigate, postData);
+        response = await handleEdit(articleNum, token, setCookie, navigate, postData);
         if (response) {
           navigate(`/article-main/${articleNum}`);
         }  
       } else {
         response = category === 'NOTIFICATION'
-          ? await createNotificationArticleRequest(postData, token)
-          : await createArticleRequest(postData, token);
+          ? await createNotificationArticleRequest(postData, token, setCookie, navigate)
+          : await createArticleRequest(postData, token, setCookie, navigate);
         if (response && response.code === 'SU') {
           navigate('/article-main');
         } 

@@ -11,6 +11,39 @@ const LOGOUT_URL = () => `${API_DOMAIN}/auth/logout`;
 
 axios.defaults.withCredentials = true;
 
+
+const requestWithTokenHandling = async (apiCall, accessToken, setCookie, navigate, retryData = null) => {
+    try {
+        const response = await apiCall(accessToken);
+        return response.data;
+    } catch (error) {
+        if (!error.response || !error.response.data) {
+            alert("알 수 없는 오류가 발생했습니다. 다시 시도해주세요.");
+            return null;
+        }
+
+        const { code } = error.response.data;
+
+        if (code === "ATE") {
+            console.warn("🔄 Access Token 만료됨. 토큰 재발급 시도 중...");
+            const newToken = await refreshTokenRequest(setCookie, accessToken, navigate);
+
+            if (newToken?.accessToken) {
+                console.log("✅ Access Token이 재발급됨. 다시 요청 수행...");
+                return requestWithTokenHandling(apiCall, newToken.accessToken, setCookie, navigate, retryData);
+            } else {
+                alert("토큰 재발급 실패. 다시 로그인해주세요.");
+                setCookie('accessToken', '', { path: '/', expires: new Date(0) });
+                navigate('/');
+                return null;
+            }
+        }
+
+        return error.response.data;
+    }
+};
+
+
 // 1. 사용자 회원가입 API
 export const signUpRequest = async (requestBody) => {
     try {
@@ -44,37 +77,27 @@ export const signInRequest = async (requestBody, setCookie) => {
 };
 
 // 4. 사용자 정보 수정 API
-export const updateMypageUserRequest = async (userData, accessToken) => {
-    try {
-        const response = await axios.patch(PATCH_MYPAGE_USER_URL(), userData, {
-            headers: { Authorization: `Bearer ${accessToken}` }
-        });
-        return response.data;
-    } catch (error) {
-        return error.response?.data || { code: "UN", message: "Unexpected error occurred." };
-    }
+export const updateMypageUserRequest = async (userData, accessToken, setCookie, navigate) => {
+    return requestWithTokenHandling(
+        (token) => axios.patch(PATCH_MYPAGE_USER_URL(), userData, { headers: { Authorization: `Bearer ${token}` } }),
+        accessToken, setCookie, navigate, userData
+    );
 };
 
 // 5. 사용자 비밀번호 변경 API
-export const pwUpdateRequest = async (userData) => {
-    try {
-        const response = await axios.patch(PATCH_PW_URL(), userData);
-        return response.data;
-    } catch (error) {
-        return error.response?.data || { code: "UN", message: "Unexpected error occurred." };
-    }
+export const pwUpdateRequest = async (userData, accessToken, setCookie, navigate) => {
+    return requestWithTokenHandling(
+        (token) => axios.patch(PATCH_PW_URL(), userData, { headers: { Authorization: `Bearer ${token}` } }),
+        accessToken, setCookie, navigate
+    );
 };
 
 // 6. 사용자 탈퇴 API
-export const deleteUserRequest = async (accessToken) => {
-    try {
-        const response = await axios.delete(DELETE_USER(), {
-            headers: { Authorization: `Bearer ${accessToken}` }
-        });
-        return response.data;
-    } catch (error) {
-        return error.response?.data || { code: "UN", message: "예상치 못한 오류가 발생했습니다." };
-    }
+export const deleteUserRequest = async (accessToken, setCookie, navigate) => {
+    return requestWithTokenHandling(
+        (token) => axios.delete(DELETE_USER(), { headers: { Authorization: `Bearer ${token}` } }),
+        accessToken, setCookie, navigate
+    );
 };
 
 // 7. 사용자 로그아웃 API
@@ -86,14 +109,13 @@ export const logoutRequest = async (accessToken, setCookie, navigate) => {
         });
 
      
-
         return response.data;
     } catch (error) {
         
 
         // Access Token이 만료된 경우 (ATE)
         if (error.response?.status === 401 || error.response?.data?.code === "ATE") {
-            alert("⚠️ Access Token 만료, 토큰 재발급 시도 중...");
+
 
             // 새로운 Access Token 요청 (refreshToken을 매개변수로 전달하지 않음)
             const newToken = await refreshTokenRequest(setCookie, accessToken, navigate);

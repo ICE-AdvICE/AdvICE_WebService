@@ -1,6 +1,6 @@
 
 import axios from 'axios';
- 
+import { refreshTokenRequest } from '../../shared/api/AuthApi';
  
 
 const DOMAIN = 'http://localhost:8080';
@@ -11,8 +11,73 @@ const LIKE_ARTICLE_URL = (articleNum) => `${API_DOMAIN}/article/${articleNum}/li
 const FETCH_USER_ARTICLES_URL = () => `${API_DOMAIN}/article/user-list`;
 const GET_LIKE_STATUS_URL = (articleNum) => `${API_DOMAIN}/article/${articleNum}/like`;
 const CHECK_OWNERSHIP_URL = (articleNum) => `${API_DOMAIN}/article/own/${articleNum}`;
-// 6.게시글 좋아요 누르기/취소하기  API
-export const handleLike = async (navigate,articleNum, liked, token, setLiked, setLikes) => {
+
+const handleApiError = async (error, apiCall, token, setCookie, navigate, apiName) => {
+    if (!error.response || !error.response.data) {
+        alert(`🔴 ${apiName} 요청 실패: 네트워크 상태를 확인해주세요.`);
+        return null;
+    }
+
+    const { code } = error.response.data;
+
+    if (code === "ATE") {
+        console.warn(`🔄 ${apiName}: Access Token 만료됨. 토큰 재발급 시도 중...`);
+        const newToken = await refreshTokenRequest(setCookie, token, navigate);
+
+        if (newToken?.accessToken) {
+            alert(`🔄 ${apiName}: 토큰이 재발급되었습니다. 다시 시도합니다.`);
+            return apiCall(newToken.accessToken);
+        } else {
+            alert(`🔴 ${apiName}: 토큰 재발급 실패. 다시 로그인해주세요.`);
+            setCookie('accessToken', '', { path: '/', expires: new Date(0) });
+            navigate('/');
+            return null;
+        }
+    }
+
+    return error.response.data;
+};
+
+// ✅ 1-11 사용자 정지 확인 API (공통 ATE 처리 적용)
+export const checkUserBanStatus = async (token, setCookie, navigate) => {
+    try {
+        const response = await axios.post(CHECK_USER_BAN_STATUS_URL(), {}, {
+            headers: { Authorization: `Bearer ${token}` }
+        });
+        const { data } = response;
+
+        if (data.email !== null) {
+            return {
+                banned: true,
+                details: data,
+                banReason: data.banReason,
+                banDuration: data.banDuration,
+                banEndTime: data.banEndTime
+            };
+        } else {
+            return { banned: false };
+        }
+    } catch (error) {
+        return await handleApiError(error, (newToken) => checkUserBanStatus(newToken, setCookie, navigate), token, setCookie, navigate, "사용자 정지 확인");
+    }
+};
+
+// ✅ 12. “내가 쓴” 모든 게시글 리스트 불러오기 API (공통 ATE 처리 적용)
+export const fetchUserArticles = async (navigate, token, setCookie) => {
+    try {
+        const response = await axios.get(FETCH_USER_ARTICLES_URL(), {
+            headers: { Authorization: `Bearer ${token}` }
+        });
+        if (response.data.code === "SU") {
+            return response.data.userArticleList;
+        }
+        return false;
+    } catch (error) {
+        return await handleApiError(error, (newToken) => fetchUserArticles(navigate, newToken, setCookie), token, setCookie, navigate, "내가 쓴 게시글 불러오기");
+    }
+};
+// ✅ 6. 게시글 좋아요 누르기/취소하기 API (ATE 처리 추가)
+export const handleLike = async (navigate, articleNum, liked, token, setLiked, setLikes, setCookie) => {
     try {
         const response = await axios.put(LIKE_ARTICLE_URL(articleNum), {}, {
             headers: { Authorization: `Bearer ${token}` }
@@ -22,153 +87,57 @@ export const handleLike = async (navigate,articleNum, liked, token, setLiked, se
             setLiked(!liked);
             setLikes(prev => liked ? prev - 1 : prev + 1);
         }
-    } catch (err) {
-        if (err.response) {
-            const { code } = err.response.data;
-            switch (code) {
-                case "NA":
-                    alert("존재하지 않는 게시글입니다.");
-                    navigate('/article-main');
-                    break;
-                case "DBE":
-                    console.log("데이터베이스 오류가 발생했습니다.");
-                    break;
-                case "NU":
-                    alert("로그인이 필요합니다.");
-                    navigate('/');
-                    break;
-                case "VF":
-                    console.log("유효성 검사 실패하였습니다.");
-                    break;
-                default:
-                    console.log("예상치 못한 문제가 발생하였습니다.");
-                    break;
-            }
-        } 
-    }
-};
-//1-11 사용자 정지확인 api
-export const checkUserBanStatus = async (token) => {
-    try {
-        const response = await axios.post(CHECK_USER_BAN_STATUS_URL(), {}, {
-            headers: { Authorization: `Bearer ${token}` }
-        });
-        const { data } = response; 
-        if (data.email !== null) {
-            return {
-                banned: true,
-                details: data,
-                banReason: data.banReason,
-                banDuration: data.banDuration,
-                banEndTime: data.badEndTime
-
-            };
-        } else {
-            return {
-                banned: false
-            };
-        }
-    } catch (error) {     
-        if (error.response) {
-            const errorCode = error.response.data.code;
-            switch (errorCode) {
-                case "DBE":
-                    console.log("데이터베이스 오류가 발생했습니다.");
-                    break;
-                default:
-                    console.log("알 수 없는 오류 코드:", errorCode);
-            }
-        }
-        return {
-            banned: false,
-            error: true
-        };
-    }
-};
-// 12.“내가 쓴” 모든 게시글 리스트 불러오기 API
-export const fetchUserArticles = async (navigate,token) => {
-    try {
-        const response = await axios.get(FETCH_USER_ARTICLES_URL(), {
-            headers: { Authorization: `Bearer ${token}` }
-        });
-        if (response.data.code === "SU") {
-            return response.data.userArticleList; 
-        }
     } catch (error) {
-        if (error.response) {
-            switch (error.response.data.code) {
-                case "NU":
-                    alert("로그인이 필요합니다.");
-                    navigate('/');
-                    break;
-                case "VF":
-                    console.log("유효성 검사 실패했습니다.");
-                    break;
-                case "DBE":
-                    console.log("데이터베이스에 문제가 발생했습니다");
-                    break;
-                default:
-                    console.log("예상치 못한 문제가 발생하였습니다.");
-                    break;
-            }
-        } 
-        return false;
+        return await handleApiError(
+            error, 
+            (newToken) => handleLike(navigate, articleNum, liked, newToken, setLiked, setLikes, setCookie),
+            token, 
+            setCookie, 
+            navigate, 
+            "게시글 좋아요"
+        );
     }
 };
-// 13.특정 게시글 좋아요 여부 API
-export const fetchLikeStatus = async (articleNum, token, setLiked) => {
+
+// ✅ 13. 특정 게시글 좋아요 여부 API (ATE 처리 추가)
+export const fetchLikeStatus = async (articleNum, token, setLiked, setCookie, navigate) => {
     try {
         const response = await axios.get(GET_LIKE_STATUS_URL(articleNum), {
             headers: { Authorization: `Bearer ${token}` }
         });
         const { code } = response.data;
-        setLiked(code === "SU");  
+        setLiked(code === "SU");
     } catch (error) {
-        if (error.response) {
-            switch (error.response.data.code) {
-                case "SN":
-                    console.log("이 계정은 좋아요를 누르지 않음")
-                    break;
-                case "DBE":
-                    console.log("데이터베이스에 문제가 발생했습니다.");
-                    break;
-            }
-        }
-        return false;    
+        return await handleApiError(
+            error, 
+            (newToken) => fetchLikeStatus(articleNum, newToken, setLiked, setCookie, navigate),
+            token, 
+            setCookie, 
+            navigate, 
+            "좋아요 상태 조회"
+        );
     }
 };
-// 14. 특정 게시글 소유 여부 API
-export const checkArticleOwnership = async (navigate,articleNum, token) => {
+
+// ✅ 14. 특정 게시글 소유 여부 API (ATE 처리 추가)
+export const checkArticleOwnership = async (navigate, articleNum, token, setCookie) => {
     try {
         const response = await axios.get(CHECK_OWNERSHIP_URL(articleNum), {
             headers: { Authorization: `Bearer ${token}` }
         });
-        return response.data; 
+        return response.data;
     } catch (error) {
-        if (error.response) {
-            switch (error.response.data.code) {
-                case "NA":
-                    console.log("해당 게시글이 없습니다.");
-                    navigate('/article-main');
-                    break;
-                case "NU":
-                    console.log("로그인이 필요합니다.");
-                    navigate('/');
-                    break;
-                case "NP":
-                    console.log("게시글 작성자가 아닙니다.");
-                    break;
-                    
-                case "DBE":
-                    console.log("데이터베이스에 문제가 발생했습니다.");
-                    break;
-              
-            }
-        }
-        return false;  
-        
+        return await handleApiError(
+            error, 
+            (newToken) => checkArticleOwnership(navigate, articleNum, newToken, setCookie),
+            token, 
+            setCookie, 
+            navigate, 
+            "게시글 소유 여부 확인"
+        );
     }
 };
+      
 //정지 확인 API
 const POST_CHECK_USER_BAN_URL = () => `${API_DOMAIN}/auth/check-user-ban`; 
 

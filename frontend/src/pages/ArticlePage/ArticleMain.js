@@ -23,7 +23,7 @@ const ArticleMain = () => {
     const [articlesState, setArticlesState] = useState([]); // 전체 게시글 목록을 상태로 관리
     const articlesPerPage = 6; // 한 페이지에 보여줄 게시글 수
     // 쿠키를 이용한 사용자 정보 가져오기
-    const [cookies] = useCookies(['accessToken', 'userEmail']);
+    const [cookies,setCookie] = useCookies(['accessToken', 'userEmail']);
       
     // 검색어와 검색된 게시글 목록 관리
     const [filteredArticles, setFilteredArticles] = useState([]);
@@ -88,7 +88,7 @@ const ArticleMain = () => {
             return;
         }
         try {
-            const banStatus = await checkUserBanStatus(token);
+            const banStatus = await checkUserBanStatus(token, setCookie, navigate);
             if (banStatus.banned) {
                 const reasonText = banReasonKoreanMap[banStatus.banReason] || "알 수 없음";
                 const durationText = banDurationKoreanMap[banStatus.banDuration] || "알 수 없음";
@@ -240,7 +240,7 @@ const ArticleMain = () => {
     useEffect(() => {
         if (selectedCategory === 'my') {
             const fetchArticles = async () => {
-                const articles = await fetchUserArticles(navigate,token);
+                const articles = await fetchUserArticles(navigate, token, setCookie);
                 setUserArticles(articles || []);
                 setFilteredArticles(articles || []);
             };

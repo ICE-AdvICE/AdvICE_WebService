@@ -5,113 +5,104 @@ import MyModal from '../../../../shared/components/BaseModal.js';
 import FindpasswordForm from './PasswordFind.js';
 import './modules.css';
 import { useNavigate } from 'react-router-dom';
-import { getczauthtypetRequest,getMypageRequest  } from '../../../../shared/api/AuthApi.js';
-import { deleteUserRequest, updateMypageUserRequest} from '../../../../entities/api/UserApi.js';
+import { getczauthtypetRequest, getMypageRequest } from '../../../../shared/api/AuthApi.js';
+import { deleteUserRequest, updateMypageUserRequest, logoutRequest} from '../../../../entities/api/UserApi.js';
 
-
-const MypageForm = ({ handleLogout, closeModal }) => {
+const MypageForm = ({ closeModal }) => {
     const [userDetails, setUserDetails] = useState({
         email: '',
         studentNum: '',
         name: ''
-    }); // 사용자 정보를 저장할 상태
+    });
     const [editMode, setEditMode] = useState(false);
     const [authType, setAuthType] = useState('');
     const [cookies, setCookie] = useCookies(['accessToken']);
-    const token = cookies.accessToken;
-    const [modalOpenfind, setModalOpenfind] = useState(false);
     const navigate = useNavigate();
+    const [modalOpenfind, setModalOpenfind] = useState(false);
 
-    //사용자 정보 가져오는 함수
+    const handleLogout = async () => {
+        const result = await logoutRequest(cookies.accessToken, setCookie, navigate);
+        
+        if (result?.code === "SU" || result?.code === "RF_FAIL") {
+            console.log("로그아웃 완료, 메인 페이지로 이동");
+    
+            setCookie('accessToken', '', { path: '/', expires: new Date(0) });
+            setCookie('refreshToken', '', { path: '/', expires: new Date(0) });
+    
+            navigate('/'); // ✅ 로그아웃 후 메인 페이지로 이동
+            window.location.reload(); // ✅ 새로고침하여 NavBar 상태 반영
+        } else {
+            alert("로그아웃 중 오류가 발생했습니다. 다시 시도해주세요.");
+        }
+    };
+    
+
     useEffect(() => {
         const fetchUserDetails = async () => {
-
-            const data = await getMypageRequest(token);
-
-            if (data && data.code === "SU") {
+            const data = await getMypageRequest(cookies.accessToken, setCookie, navigate);
+            if (data?.code === "SU") {
                 setUserDetails({
                     email: data.email,
                     studentNum: data.studentNum,
                     name: data.name
                 });
-            } else if (data && data.code === "NU") {
-                alert("해당 사용자가 존재하지 않습니다.");
-            } else if (data && data.code === "DBE") {
-                alert("데이터베이스 오류가 발생했습니다.");
             }
         };
 
         const fetchAuthType = async () => {
-            const data = await getczauthtypetRequest(token);
-            if (data && data.code === "EA") {
+            const data = await getczauthtypetRequest(cookies.accessToken, setCookie, navigate);
+            if (data?.code === "EA") {
                 setAuthType(data.code);
             }
         };
 
-        if (token) {
-            fetchUserDetails();
-            fetchAuthType();
-        } else {
-            console.error("No token available.");
-        }
-    }, [token]);
+        fetchUserDetails();
+        fetchAuthType();
+    }, [cookies.accessToken, setCookie, navigate]);
 
     const handleGrantPermissions = () => {
-        closeModal(); // 모달 닫기
-
+        closeModal();
         setTimeout(() => {
             navigate('/auth-handle');
         }, 100);
     };
-    //회원탈퇴 함수(정지 당했을 시 탈퇴 불가)
+
     const handleDeleteAccount = async () => {
         if (window.confirm("정말로 계정을 삭제하시겠습니까?")) {
-            // 이메일과 토큰을 사용하여 사용자의 정지 유무 확인
-            const banCheck = await checkuserbanRequest(userDetails.email, token);
+            const banCheck = await checkuserbanRequest(userDetails.email, cookies.accessToken);
             if (banCheck.banReason) {
                 alert(`계정 삭제가 불가능합니다. 정지 사유: ${banCheck.banReason}`);
             } else {
-                const result = await deleteUserRequest(token);
-                switch (result.code) {
-                    case "SU":
-                        alert("계정이 성공적으로 삭제되었습니다.");
-                        handleLogout();
-                        break;
-                    case "NU":
-                        alert("해당 사용자가 존재하지 않습니다.");
-                        break;
-                    case "VF":
-                        alert("유효성 검증에 실패했습니다.");
-                        break;
-                    case "DBE":
-                        alert("데이터베이스 오류가 발생했습니당.");
-                        break;
-                    default:
-                        alert("알 수 없는 오류가 발생했습니다.");
-                        break;
+                const result = await deleteUserRequest(cookies.accessToken, setCookie, navigate);
+                if (result?.code === "SU") {
+                    alert("계정이 성공적으로 삭제되었습니다.");
+                    handleLogout(); // ✅ 탈퇴 후 자동 로그아웃 처리
+                } else {
+                    alert(`오류 발생: ${result?.message}`);
                 }
             }
         }
     };
 
-    //사용자 개인정보 수정 함수
     const handleUpdateUserDetails = async () => {
-        const result = await updateMypageUserRequest(userDetails, token);
-        if (result.code === "SU") {
-            alert("정보가 성공적으로 업데이트 되었습니다.");
+        const updatedUserDetails = { ...userDetails }; // 현재 입력된 정보를 저장
+    
+        const result = await updateMypageUserRequest(updatedUserDetails, cookies.accessToken, setCookie, navigate);
+        if (result?.code === "SU") {
+            alert("정보가 성공적으로 업데이트되었습니다.");
             setEditMode(false);
+            setUserDetails(updatedUserDetails); // 업데이트 성공 후 상태 유지
         } else {
-            alert(`Error: ${result.message}`);
+            alert(`Error: ${result?.message}`);
         }
     };
+    
 
-    //비밀번호 수정 모달 부르는 함수 
     const handleFindpassword = (e) => {
         e.preventDefault();
         setModalOpenfind(true);
     };
 
-    //숫자만 입력할 수 있도록 설정하는 함수
     const handleNumberInput = (e) => {
         const value = e.target.value;
         setUserDetails({ ...userDetails, studentNum: value.replace(/[^0-9]/g, '') });
@@ -119,9 +110,9 @@ const MypageForm = ({ handleLogout, closeModal }) => {
 
     return (
         <form onSubmit={(e) => e.preventDefault()}>
-        <div className="loginHeaderContainer">
-        <img src="header-name.png" alt="로그인 로고" className="responsiveLogo" />
-      </div>
+            <div className="loginHeaderContainer">
+                <img src="header-name.png" alt="로그인 로고" className="responsiveLogo" />
+            </div>
             <div className="mypage_icelogo">
                 <img src="favicon.png" alt="정보통신공학과 로고" style={{ width: '150px', height: 'auto' }} />
             </div>
@@ -138,9 +129,10 @@ const MypageForm = ({ handleLogout, closeModal }) => {
                 <button type="button" onClick={() => setEditMode(true)}>정보 수정</button>
                 <button type="button" onClick={handleLogout}>로그아웃</button>
             </div>
-            <div class="mypage_delete_user_container">
-  <button class="mypage_delete_user" onClick={handleDeleteAccount}>회원 탈퇴</button>
-</div>
+            <div className="mypage_delete_user_container">
+                <button className="mypage_delete_user" onClick={handleDeleteAccount}>회원 탈퇴</button>
+            </div>
+
             {editMode && (
                 <MyModal open={editMode} onCancel={() => setEditMode(false)} footer={[]}>
                     <div className="loginHeaderContainer">
@@ -164,15 +156,14 @@ const MypageForm = ({ handleLogout, closeModal }) => {
                 </MyModal>
             )}
 
-            <MyModal //비밀번호 찾기
+            <MyModal
                 open={modalOpenfind}
-                width={500} //모달 넓이 이게 적당 한듯
+                width={500}
                 header={[]}
-                onCancel={e => setModalOpenfind(false)} //x 버튼
+                onCancel={() => setModalOpenfind(false)}
                 footer={[]}
             >
                 <FindpasswordForm onLogin={handleFindpassword} onClose={() => setModalOpenfind(false)} />
-
             </MyModal>
         </form>
     );

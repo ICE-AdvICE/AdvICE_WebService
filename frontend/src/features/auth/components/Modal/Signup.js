@@ -324,7 +324,7 @@ const SignUpinfoForm = ({ closeModal }) => {
           <h3>이용약관 (필수)</h3>
           <div className="signup_termsContent" style={{ height: '100px', overflowY: 'scroll', border: '1px solid #ccc', padding: '10px', marginBottom: '10px' }}>
             <p><strong>제1장 총칙</strong></p>
-            <p><strong>제1조 (목적)</strong> 이 약관은 ICEbreaker (이하 “관리자”)가 인터넷과 모바일 등 플랫폼을 통해 제공하는 익명 게시판 및 코딩존 예약 서비스(이하 “서비스”)의 이용과 관련하여 관리자와 이용자 간의 권리, 의무 및 책임사항, 기타 필요한 사항을 규정함을 목적으로 합니다.</p>
+            <p><strong>제1조 (목적)</strong> 이 약관은 AdvICE(이하 “관리자”)가 인터넷과 모바일 등 플랫폼을 통해 제공하는 익명 게시판 및 코딩존 예약 서비스(이하 “서비스”)의 이용과 관련하여 관리자와 이용자 간의 권리, 의무 및 책임사항, 기타 필요한 사항을 규정함을 목적으로 합니다.</p>
             <p><strong>제2조 (용어의 정의)</strong> 이 약관에서 사용하는 용어의 정의는 다음과 같습니다.</p>
             <ul>
               <li>“관리자”라 함은 온라인을 통하여 서비스를 제공하는 사업자를 의미합니다.</li>
@@ -388,7 +388,7 @@ const SignUpinfoForm = ({ closeModal }) => {
             </ul>
             <p><strong>5. 개인정보 침해 관련 상담 및 신고</strong></p>
             <ul>
-              <li>ICEbreaker: hufsicebreaker@gmail.com</li>
+              <li>AdvICE: hufsicebreaker@gmail.com</li>
             </ul>
             <p><strong>6. 개인정보의 열람 및 정정</strong></p>
             <ul>
