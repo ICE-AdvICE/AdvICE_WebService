@@ -3,11 +3,11 @@ import '../css/MainPage/MainPage.css';
 
 import { useNavigate } from 'react-router-dom';
 import { useCookies } from "react-cookie";
-import { getMypageRequest } from '../../shared/api/AuthApi.js';
+import { getMypageRequest, refreshTokenRequest } from '../../shared/api/AuthApi.js';
 import { getRecentArticleRequest } from '../../entities/api/ArticleApi.js'; // import the new API
 
 const HomePage = () => {
-  const [cookies, setCookie] = useCookies(['accessToken', 'refreshToken']);
+  const [cookies, setCookie] = useCookies(['accessToken']);
   const navigate = useNavigate();
   const [userData, setUserData] = useState(null);
   const [recentArticleNum, setRecentArticleNum] = useState(0); // state for recent article number
@@ -21,15 +21,14 @@ const HomePage = () => {
   const handlefeedbackClick = () => {
     window.location.href = 'https://open.kakao.com/o/swnIYgKg';
   };
-
   useEffect(() => {
     const fetchData = async () => {
-      if (!cookies.accessToken && !cookies.refreshToken) {
+      if (!cookies.accessToken) {
         navigate('/');
         return;
       }
 
-      const data = await getMypageRequest(cookies.accessToken, cookies.refreshToken, setCookie, navigate);
+      const data = await getMypageRequest(cookies.accessToken, setCookie, navigate);
 
       if (data) {
         setUserData(data);
@@ -40,23 +39,25 @@ const HomePage = () => {
     };
 
     fetchData();
-  }, [cookies.accessToken, cookies.refreshToken, navigate, setCookie]);
+  }, [cookies.accessToken, navigate, setCookie]);
 
-useEffect(() => {
-  const fetchRecentArticleNum = async () => {
-    const result = await getRecentArticleRequest();
-    if (result && result.code === "SU" && result.recentArticleNum >= 1) {
-      setRecentArticleNum(result.recentArticleNum);
-    } else {
-      setRecentArticleNum(0);
-    }
-  };
 
-  fetchRecentArticleNum();
-}, []); 
+
+  useEffect(() => {
+    const fetchRecentArticleNum = async () => {
+      const result = await getRecentArticleRequest();
+      if (result && result.code === "SU" && result.recentArticleNum >= 1) {
+        setRecentArticleNum(result.recentArticleNum);
+      } else {
+        setRecentArticleNum(0);
+      }
+    };
+
+    fetchRecentArticleNum();
+  }, []);
 
   const handlecodingzone = () => {
-    navigate(`/coding-zone`);
+    navigate('/coding-zone');
   };
 
   return (
