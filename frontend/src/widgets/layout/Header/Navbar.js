@@ -6,6 +6,7 @@ import SignUpinfoForm from '../../../features/auth/components/Modal/Signup.js';
 import MypageForm from '../../../features/auth/components/Modal/Mypage.js';
 import MyModal from '../../../shared/components/BaseModal.js';
 import { useCookies } from 'react-cookie';
+import { logoutRequest } from '../../../entities/api/UserApi.js';
 
 const NavBar = () => {
     const [modal, setModal] = useState({
@@ -27,13 +28,31 @@ const NavBar = () => {
     const openModal = (type) => setModal(prev => ({ ...prev, [type]: true }));
     const closeModal = (type) => setModal(prev => ({ ...prev, [type]: false }));
 
-    const handleLogout = () => {
-        setIsLoggedIn(false);
-        removeCookie('accessToken', { path: '/' }); // 경로 지정 주의
-        closeModal('mypage');
-        setTimeout(() => {
-            navigate('/');
-        }, 100); // navigate 호출 전에 시간 지연
+    const handleLogout = async () => {
+        const accessToken = cookies.accessToken;
+        if (!accessToken) {
+            alert("로그인된 상태가 아닙니다.");
+            return;
+        }
+
+        try {
+            const response = await logoutRequest(accessToken, setCookie, navigate);
+
+            if (response.code === "SU") {
+                // setCookie 사용하여 accessToken과 refreshToken 삭제
+                setCookie('accessToken', '', { path: '/', expires: new Date(0) });
+                setCookie('refreshToken', '', { path: '/', expires: new Date(0) });
+
+                setIsLoggedIn(false);
+                closeModal('mypage');
+                alert("로그아웃되었습니다.");
+                navigate('/');
+            } else {
+                alert(`로그아웃 실패: ${response.message}`);
+            }
+        } catch (error) {
+            alert("로그아웃 중 오류가 발생했습니다.");
+        }
     };
 
     return (

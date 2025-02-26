@@ -29,57 +29,50 @@ const LoginForm = ({ onLogin }) => {
     e.preventDefault();
     const requestBody = { email: userEmail, password: userPassword };
 
-    console.log("📤 전송할 로그인 데이터:", requestBody);  // ✅ 디버깅 추가
-
     try {
-        const response = await signInRequest(requestBody);
-        if (response) {
-            handleSignInResponse(response);
-        }
+      const response = await signInRequest(requestBody, setCookie);
+      if (response) {
+        handleSignInResponse(response);
+      }
 
-        if (rememberEmail) {
-            localStorage.setItem('userEmail', userEmail);
-        } else {
-            localStorage.removeItem('userEmail');
-        }
+      if (rememberEmail) {
+        localStorage.setItem('userEmail', userEmail);
+      } else {
+        localStorage.removeItem('userEmail');
+      }
     } catch (error) {
-        alert('로그인 요청 중 오류가 발생했습니다.');
-        setError(true);
-        onLogin(false);
+      alert('로그인 요청 중 오류가 발생했습니다.');
+      setError(true);
+      onLogin(false);
     }
-};
+  };
 
 
 
-const handleSignInResponse = (response) => {
-  alert("🔍 서버 응답 데이터: " + JSON.stringify(response, null, 2));
+  const handleSignInResponse = (response) => {
+    alert("서버 응답 데이터: " + JSON.stringify(response, null, 2));
 
-  if (!response || !response.data || !response.data.code || !response.data.accessToken) {
-      alert('❌ 서버에서 올바른 응답을 받지 못했습니다.\n응답 데이터를 확인하세요.');
-      console.error("서버 응답 데이터:", response);
+    if (!response || !response.data || !response.data.code || !response.data.accessToken) {
       setError(true);
       onLogin(false);
       return;
-  }
+    }
 
-  if (response.data.code === 'SU') {
+    if (response.data.code === 'SU') {
       const accessToken = response.data.accessToken;
-
-      // ✅ accessToken을 쿠키에 저장 (Secure & HttpOnly 설정은 서버에서 처리해야 함)
       setCookie('accessToken', accessToken, { path: '/', expires: new Date(Date.now() + 3600 * 1000) });
 
       onLogin(true);
-      alert('✅ 로그인 성공! 액세스 토큰이 쿠키에 저장되었습니다.');
-  } else {
+    } else {
       setError(true);
       const messages = {
-          DBE: '⚠️ 데이터베이스 오류입니다.',
-          SF: '❌ 로그인 실패! 이메일 또는 비밀번호를 확인해주세요.',
-          VF: '❌ 로그인 실패! 잘못된 요청입니다.',
+        DBE: '데이터베이스 오류입니다.',
+        SF: '로그인 실패! 이메일 또는 비밀번호를 확인해주세요.',
+        VF: '로그인 실패! 잘못된 요청입니다.',
       };
-      alert(messages[response.data.code] || '🚨 네트워크 오류입니다.');
-  }
-};
+      alert(messages[response.data.code] || '네트워크 오류입니다.');
+    }
+  };
 
 
 
