@@ -81,7 +81,7 @@ const CodingZoneMyAttendance = () => {
 
     useEffect(() => {
         const fetchAuthType = async () => {
-            const response = await getczauthtypetRequest(token);
+            const response = await getczauthtypetRequest(token,setCookie, navigate);
             if (response) {
                 switch (response.code) {
                     case "CA":
@@ -111,7 +111,7 @@ const CodingZoneMyAttendance = () => {
 
     useEffect(() => {
         const fetchAttendList = async () => {
-            const response = await getczattendlistRequest(token);
+            const response = await getczattendlistRequest(token,setCookie, navigate);
             if (response && response.code === "SU") {
                 setAttendList(response.attendList);
             } else if (response && response.code === "NU") {

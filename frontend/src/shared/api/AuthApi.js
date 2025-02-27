@@ -70,7 +70,6 @@ export const getczauthtypetRequest = async (accessToken, setCookie, navigate) =>
 export const refreshTokenRequest = async (setCookie, accessToken, navigate, apiName) => {
     try {
         if (!accessToken) {
-            alert("로그인 세션이 만료되었습니다. 다시 로그인해주세요.");
             navigate('/');
             return null;
         }
@@ -99,13 +98,11 @@ export const refreshTokenRequest = async (setCookie, accessToken, navigate, apiN
             console.log(`✅ [${apiName}] 토큰 재발급 성공:`, newAccessToken);
             return { accessToken: newAccessToken, apiName };
         } else {
-            console.error(`[${apiName}] [토큰 재발급 실패] 응답:`, response.data.message);
-            alert("토큰 재발급에 실패했습니다. 다시 로그인해주세요.");
+            alert(`[${apiName}] [토큰 재발급 실패] 응답:`, response.data.message);
             navigate('/');
             return null;
         }
     } catch (error) {
-        alert("토큰 재발급 중 오류가 발생했습니다. 다시 로그인해주세요.");
         navigate('/');
         return null;
     }

@@ -44,7 +44,7 @@ const ClassList = ({ userReservedClass,onDeleteClick,classList, handleCardClick,
 const CodingMain = () => {
   const [classList, setClassList] = useState([]);
   const [grade, setGrade] = useState(1);  
-  const [cookies] = useCookies(['accessToken']);
+  const [cookies,setCookie] = useCookies(['accessToken']);
   const [originalClassList, setOriginalClassList] = useState([]); 
   const [attendanceCount, setAttendanceCount] = useState(0); 
   const [isAdmin, setIsAdmin] = useState(false); 
@@ -96,7 +96,7 @@ const CodingMain = () => {
         alert("로그인이 필요합니다.");
         return;
     }
-    const result = await deleteClass(classNum, token);
+    const result = await deleteClass(classNum, token,setCookie, navigate);
     if (result) {
         alert("수업이 삭제되었습니다.");
         setClassList(prevClassList => {
@@ -160,56 +160,56 @@ const CodingMain = () => {
 
   const token = cookies.accessToken;
   /// 코딩존 수업 데이터를 가져오는 useEffect
-  useEffect(() => {
-    const fetchData = async () => {
-        try {
-            let classes = [];
-            if (cookies.accessToken) {
-                const response = await getcodingzoneListRequest(cookies.accessToken, grade);
-                if (response) {
-                    if (response.registedClassNum !== 0) {
-                        classes = response.classList.map(classItem => ({
-                            ...classItem,
-                            isReserved: classItem.classNum === response.registedClassNum   
-                        }));
-                        const reservedClass = classes.find(classItem => classItem.isReserved);
-                        if (reservedClass) {
-                            setUserReservedClass(reservedClass);
-                        }
-                    } else {
-                        classes = response.classList.map(classItem => ({
-                            ...classItem,
-                            isReserved: false   
-                        }));
-                    }
-                }
-            } 
-            else {
-                const response = await getAvailableClassesForNotLogin(grade);
-                if (response && response.length > 0) {
-                    classes = response.map(classItem => ({
+  const fetchData = async () => {
+    try {
+        let classes = [];
+        if (cookies.accessToken) {
+            const response = await getcodingzoneListRequest(cookies.accessToken, grade, setCookie, navigate);
+            if (response) {
+                if (response.registedClassNum !== 0) {
+                    classes = response.classList.map(classItem => ({
                         ...classItem,
-                        isReserved: undefined 
+                        isReserved: classItem.classNum === response.registedClassNum   
+                    }));
+                    const reservedClass = classes.find(classItem => classItem.isReserved);
+                    if (reservedClass) {
+                        setUserReservedClass(reservedClass);
+                    }
+                } else {
+                    classes = response.classList.map(classItem => ({
+                        ...classItem,
+                        isReserved: false   
                     }));
                 }
             }
-            if (classes && classes.length > 0) {
-              const sortedClasses = sortClassList(classes);
-              setOriginalClassList(sortedClasses);
-              setClassList(sortedClasses);
-              setShowNoClassesImage(false);  
-          } else {
-              setOriginalClassList([]);
-              setClassList([]);
-              setShowNoClassesImage(true);
-          }
-        } catch (error) {
-          setOriginalClassList([]);
-          setClassList([]);
-          setShowNoClassesImage(true);
-      }
-    };
-    fetchData();
+        } else {
+            const response = await getAvailableClassesForNotLogin(grade);
+            if (response && response.length > 0) {
+                classes = response.map(classItem => ({
+                    ...classItem,
+                    isReserved: undefined 
+                }));
+            }
+        }
+        if (classes.length > 0) {
+            const sortedClasses = sortClassList(classes);
+            setOriginalClassList(sortedClasses);
+            setClassList(sortedClasses);
+            setShowNoClassesImage(false);
+        } else {
+            setOriginalClassList([]);
+            setClassList([]);
+            setShowNoClassesImage(true);
+        }
+    } catch (error) {
+        alert("수업 데이터를 불러오는 중 오류가 발생했습니다.");
+        setOriginalClassList([]);
+        setClassList([]);
+        setShowNoClassesImage(true);
+    }
+};
+useEffect(() => {
+  fetchData();
 }, [cookies.accessToken, grade]);
 
   // 출석 횟수 가져오기
@@ -217,7 +217,7 @@ const CodingMain = () => {
     const fetchAttendance = async () => {
       const token = cookies.accessToken;
       if (token) {
-          const count = await getAttendanceCount(token, grade);  
+          const count = await getAttendanceCount(token, grade,setCookie, navigate);  
           setAttendanceCount(count);
         } 
     };
@@ -225,32 +225,30 @@ const CodingMain = () => {
   }, [cookies.accessToken, grade]);
 
 // 예약 기능 토글
-  const handleToggleReservation = async (classItem) => {
-    const token = cookies.accessToken;
-    if (!token) {
-        alert("로그인이 필요합니다.");
-        return;
-    }
-    try {
-        let result;
-        if (classItem.isReserved) {
-            result = await deleteCodingZoneClass(token, classItem.classNum);
-            if (result) {
-                alert("예약 취소가 완료되었습니다.");
-                updateClassItem(classItem.classNum, false, classItem.currentNumber - 1);
-                setUserReservedClass(null);   
-            }
-        } else {
-            result = await reserveCodingZoneClass(token, classItem.classNum);
-            if (result) {
-                alert("예약이 완료되었습니다.");
-                updateClassItem(classItem.classNum, true, classItem.currentNumber + 1); 
-                setUserReservedClass(classItem);  
-            }
-        }
-    } catch (error) {
-        alert("예약 처리 중 오류가 발생했습니다.");
-    }
+const handleToggleReservation = async (classItem) => {
+  const token = cookies.accessToken;
+  if (!token) {
+      alert("로그인이 필요합니다.");
+      return;
+  }
+  try {
+      let result;
+      if (classItem.isReserved) {
+          result = await deleteCodingZoneClass(token, classItem.classNum, setCookie, navigate);
+          if (result) {
+              alert("예약 취소가 완료되었습니다.");
+              await fetchData(); // ✅ 예약 취소 후 리스트 갱신
+          }
+      } else {
+          result = await reserveCodingZoneClass(token, classItem.classNum, setCookie, navigate);
+          if (result) {
+              alert("예약이 완료되었습니다.");
+              await fetchData(); // ✅ 예약 후 리스트 갱신
+          }
+      }
+  } catch (error) {
+      alert("예약 처리 중 오류가 발생했습니다.");
+  }
 };
 
 const handleTabChange = (tab) => {
@@ -329,12 +327,14 @@ const renderAttendanceProgress = (count) => {
         >
           코딩존 예약
         </button>
+        <span> | </span>
         <button 
           onClick={() => handleTabChange('attendence')} 
           className={selectedButton === 'attendence' ? 'selected' : ''}
         >
           출결 관리
         </button>
+        <span> | </span>
         <button 
           onClick={handleOpenModal}
           className={selectedButton === 'inquiry' ? 'selected' : ''}
