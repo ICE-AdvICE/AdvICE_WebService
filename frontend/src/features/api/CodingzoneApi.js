@@ -1,6 +1,6 @@
 
 import axios from 'axios';
-
+import { refreshTokenRequest } from '../../shared/api/AuthApi';
 const DOMAIN = 'http://localhost:8080'; 
 const API_DOMAIN = `${DOMAIN}/api/v1`;
 const API_DOMAIN_ADMIN = `${DOMAIN}/api/admin`;
@@ -69,15 +69,32 @@ export const getAttendanceCount = async (token, grade) => {
     }
 }
 // 12.특정 사용자의 출/결석된 수업 리스트로 반환 API 
-export const getczattendlistRequest = async (accessToken) => {
+export const getczattendlistRequest = async (accessToken, setCookie, navigate) => {
     try {
         const response = await axios.get(GET_CZ_ATTEND_LIST(), authorization(accessToken));
         return response.data;
     } catch (error) {
         if (!error.response || !error.response.data) return null;
+
+        const { code } = error.response.data;
+
+        if (code === "ATE") {
+            console.warn("🔄 출/결석 수업 리스트 조회: Access Token 만료됨. 토큰 재발급 시도 중...");
+            const newToken = await refreshTokenRequest(setCookie, accessToken, navigate);
+
+            if (newToken?.accessToken) {
+                alert("🔄 출/결석 수업 리스트 조회: 토큰이 재발급되었습니다. 다시 시도합니다.");
+                return getczattendlistRequest(newToken.accessToken, setCookie, navigate);
+            } else {
+                alert("❌ 출/결석 수업 리스트 조회: 토큰 재발급 실패. 다시 로그인해주세요.");
+                setCookie('accessToken', '', { path: '/', expires: new Date(0) });
+                navigate('/');
+                return { code: 'TOKEN_EXPIRED', message: '토큰이 만료되었습니다. 다시 로그인해주세요.' };
+            }
+        }
+
         return error.response.data;
     }
 };
-;
 
 

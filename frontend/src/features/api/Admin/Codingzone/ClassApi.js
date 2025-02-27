@@ -118,12 +118,30 @@ export const getAvailableClassesForNotLogin = async (grade) => {
     }
 };
 // 14.특정 날짜에 1학년/2학년 코딩존 수업 예약한 학생들 리스트로 반환 API
-export const getczreservedlistRequest =  async (accessToken, classDate) => {
+export const getczreservedlistRequest = async (accessToken, classDate, setCookie, navigate) => {
     try {
         const response = await axios.get(`${API_DOMAIN}/coding-zone/reserved-list/${classDate}`, authorization(accessToken));
         return response.data;
     } catch (error) {
         if (!error.response || !error.response.data) return null;
+
+        const { code } = error.response.data;
+
+        if (code === "ATE") {
+            console.warn("🔄 특정 날짜 예약된 학생 목록 조회: Access Token 만료됨. 토큰 재발급 시도 중...");
+            const newToken = await refreshTokenRequest(setCookie, accessToken, navigate);
+
+            if (newToken?.accessToken) {
+                alert("🔄 특정 날짜 예약된 학생 목록 조회: 토큰이 재발급되었습니다. 다시 시도합니다.");
+                return getczreservedlistRequest(newToken.accessToken, classDate, setCookie, navigate);
+            } else {
+                alert("❌ 특정 날짜 예약된 학생 목록 조회: 토큰 재발급 실패. 다시 로그인해주세요.");
+                setCookie('accessToken', '', { path: '/', expires: new Date(0) });
+                navigate('/');
+                return { code: 'TOKEN_EXPIRED', message: '토큰이 만료되었습니다. 다시 로그인해주세요.' };
+            }
+        }
+
         return error.response.data;
     }
 };

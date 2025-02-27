@@ -69,7 +69,7 @@ const CodingZoneAttendanceAssistant= () => {
     }, [token, selectedDate]);
 
     const fetchAuthType = async () => {
-        const response = await getczauthtypetRequest(token);
+        const response = await getczauthtypetRequest(token,setCookie, navigate);
         if (response) {
             switch (response.code) {
                 case "SU":
@@ -91,7 +91,7 @@ const CodingZoneAttendanceAssistant= () => {
     };
 
     const fetchAttendList = async () => {
-        const response = await getczattendlistRequest(token);
+        const response = await getczattendlistRequest(token,setCookie, navigate);
         if (response && response.code === "SU") {
             setAttendList(response.attendList);
         }
@@ -106,7 +106,7 @@ const CodingZoneAttendanceAssistant= () => {
 
     const fetchReservedList = async () => {
         const formattedDate = selectedDate.toISOString().split('T')[0];
-        const response = await getczreservedlistRequest(token, formattedDate);
+        const response = await getczreservedlistRequest(token, formattedDate,setCookie, navigate);
         if (response && response.code === "SU") {
             setReservedList(response.studentList.sort((a, b) => a.classTime.localeCompare(b.classTime)));
         } else if (response && response.code === "NU") {
@@ -121,7 +121,7 @@ const CodingZoneAttendanceAssistant= () => {
 
     const handleAttendanceUpdate = async (student, newState) => {
         const method = student.grade === 1 ? putczattendc1Request : putczattendc2Request;
-        const response = await method(student.registrationId, token);
+        const response = await method(student.registrationId, token,setCookie, navigate);
         if (response.code === "SU") {
             alert('처리가 완료되었습니다.');
             fetchReservedList(); // 새로고침 기능
