@@ -102,7 +102,7 @@ const CodingZoneAttendanceManager = () => {
 
     useEffect(() => {
         const fetchAttendanceData = async () => {
-            const response = await getczallattendRequest(token);
+            const response = await getczallattendRequest(token,setCookie, navigate);
             if (response && response.code === "SU") {
                 // Filter data based on selected grade
                 const filteredData = response.studentList.filter(student => student.grade === selectedGrade);
@@ -151,7 +151,7 @@ const CodingZoneAttendanceManager = () => {
             alert("로그인 후 이용 가능합니다.");
             return;
         }
-        await downloadAttendanceExcel(token, selectedGrade);
+        await downloadAttendanceExcel(token, selectedGrade,setCookie, navigate);
     };
 
 

@@ -329,12 +329,14 @@ const renderAttendanceProgress = (count) => {
         >
           코딩존 예약
         </button>
+        <span> | </span>
         <button 
           onClick={() => handleTabChange('attendence')} 
           className={selectedButton === 'attendence' ? 'selected' : ''}
         >
           출결 관리
         </button>
+        <span> | </span>
         <button 
           onClick={handleOpenModal}
           className={selectedButton === 'inquiry' ? 'selected' : ''}
