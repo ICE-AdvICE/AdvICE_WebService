@@ -58,7 +58,7 @@ const MypageForm = ({ closeModal }) => {
 
         fetchUserDetails();
         fetchAuthType();
-    }, [cookies.accessToken, setCookie, navigate]);
+    }, [cookies.accessToken, navigate]);
 
     const handleGrantPermissions = () => {
         closeModal();

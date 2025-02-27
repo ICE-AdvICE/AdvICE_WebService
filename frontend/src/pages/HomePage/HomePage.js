@@ -11,7 +11,7 @@ const HomePage = () => {
   const navigate = useNavigate();
   const [userData, setUserData] = useState(null);
   const [recentArticleNum, setRecentArticleNum] = useState(0); // state for recent article number
-
+  const token = cookies.accessToken;
   const handleMoreClick = () => {
     navigate('/article-main');
   };
@@ -21,25 +21,8 @@ const HomePage = () => {
   const handlefeedbackClick = () => {
     window.location.href = 'https://open.kakao.com/o/swnIYgKg';
   };
-  useEffect(() => {
-    const fetchData = async () => {
-      if (!cookies.accessToken) {
-        navigate('/');
-        return;
-      }
-
-      const data = await getMypageRequest(cookies.accessToken, setCookie, navigate);
-
-      if (data) {
-        setUserData(data);
-      } else {
-        console.error("[유저 데이터 불러오기 실패]");
-        navigate('/');
-      }
-    };
-
-    fetchData();
-  }, [cookies.accessToken, navigate, setCookie]);
+  
+  
 
 
 
