@@ -13,7 +13,7 @@ const CodingZoneRegist = () => {
     const [boxes, setBoxes] = useState([{ day: '', time: '', assistant: '', className: '', grade: '', maxPers: '' }]);
     const [boxes2, setBoxes2] = useState([]);
     const [groupId, setGroupId] = useState('A');
-    const [cookies] = useCookies(['accessToken']);
+    const [cookies, setCookie] = useCookies(['accessToken']);
     const [activeCategory, setActiveCategory] = useState('registerClass');
     const [authMessage, setAuthMessage] = useState('');
     const [showAdminButton, setShowAdminButton] = useState(false);
@@ -70,7 +70,7 @@ const CodingZoneRegist = () => {
 
     useEffect(() => {
         const fetchAuthType = async () => {
-            const response = await getczauthtypetRequest(token);
+            const response = await getczauthtypetRequest(token,setCookie, navigate);
             if (response) {
                 switch (response.code) {
                     case "CA":
@@ -154,7 +154,7 @@ const CodingZoneRegist = () => {
 
     //등록된 조 정보 반환 API 응답 함수
     const loadGroupClasses = async () => {
-        const data = await fetchGroupClasses(groupId, cookies.accessToken);
+        const data = await fetchGroupClasses(groupId, cookies.accessToken, setCookie, navigate);
         if (!data) {
             alert('오류 발생: 네트워크 상태를 확인해주세요.');
             return;
@@ -261,7 +261,7 @@ const CodingZoneRegist = () => {
             weekDay: box.day,
             grade: parseInt(box.grade)
         }));
-        const response = await uploadGroupData(formattedData, cookies.accessToken);
+        const response = await uploadGroupData(formattedData, cookies.accessToken,setCookie, navigate);
         handleGroupUploadResponse(response);
     };
 
@@ -302,7 +302,7 @@ const CodingZoneRegist = () => {
                 grade: parseInt(box.grade)
             };
         });
-        const response = await uploadClassForWeek(formattedData, cookies.accessToken);
+        const response = await uploadClassForWeek(formattedData, cookies.accessToken,setCookie, navigate);
         handleuploadClassForWeekResponse(response);
     };
 
@@ -314,7 +314,7 @@ const CodingZoneRegist = () => {
     const handleResetSemester = async () => {
         // 사용자에게 확인 받기
         if (window.confirm("정말 코딩존 관련 모든 정보를 초기화하시겠습니까?")) {
-            const response = await resetCodingZoneData(cookies.accessToken);
+            const response = await resetCodingZoneData(cookies.accessToken, setCookie, navigate);
             handleResetResponse(response);
         } else {
         }

@@ -1,5 +1,5 @@
 import axios from 'axios';
-
+import { refreshTokenRequest } from '../../../../shared/api/AuthApi';
 const DOMAIN = 'http://localhost:8080'; 
 const API_DOMAIN = `${DOMAIN}/api/v1`;
 
@@ -12,22 +12,51 @@ const authorization = (accessToken) => {
 const GET_AVAILABLE_CLASSES_FOR_NOT_LOGIN_URL = (grade) => `${API_DOMAIN}/coding-zone/class-list/for-not-login/${grade}`;
 const GET_CZ_ALL_ATTEND = () => `${DOMAIN}/api/admin/student-list`;
 //6. 학기 초기화 API
-export const resetCodingZoneData = async (token) => {
+export const resetCodingZoneData = async (token, setCookie, navigate) => {
     try {
         const response = await axios.delete(`${API_DOMAIN_ADMIN}/delete-allinf`, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
+            headers: { Authorization: `Bearer ${token}` }
         });
-        return response.data; 
+
+        if (response.data.code === "SU") {
+            return response.data;
+        }
     } catch (error) {
         if (!error.response) {
             return { code: 'NETWORK_ERROR', message: '네트워크 상태를 확인해주세요.' };
         }
-        return error.response.data;
-    }
-};
 
+        const { code } = error.response.data;
+
+        if (code === "ATE") {
+            console.warn("🔄 학기 초기화: Access Token 만료됨. 토큰 재발급 시도 중...");
+            const newToken = await refreshTokenRequest(setCookie, token, navigate);
+
+            if (newToken?.accessToken) {
+                alert("🔄 학기 초기화: 토큰이 재발급되었습니다. 다시 시도합니다.");
+                return resetCodingZoneData(newToken.accessToken, setCookie, navigate);
+            } else {
+                alert("❌ 학기 초기화: 토큰 재발급 실패. 다시 로그인해주세요.");
+                setCookie('accessToken', '', { path: '/', expires: new Date(0) });
+                navigate('/');
+                return { code: 'TOKEN_EXPIRED', message: '토큰이 만료되었습니다. 다시 로그인해주세요.' };
+            }
+        }
+
+        switch (code) {
+            case "AF":
+                alert("권한이 없습니다.");
+                break;
+            case "DBE":
+                console.log("데이터베이스 오류가 발생했습니다.");
+                break;
+            default:
+                console.log("예상치 못한 오류 발생.");
+                break;
+        }
+    }
+    return { code: 'ERROR', message: '학기 초기화 실패' };
+};
 //13. 해당 학기에 출/결한 모든 학생들 리스트로 반환 API
 export const getczallattendRequest = async (accessToken) => {
     try {

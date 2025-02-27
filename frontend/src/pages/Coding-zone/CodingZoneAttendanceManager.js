@@ -69,7 +69,7 @@ const CodingZoneAttendanceManager = () => {
 
     useEffect(() => {
         const fetchAuthType = async () => {
-            const response = await getczauthtypetRequest(token);
+            const response = await getczauthtypetRequest(token,setCookie, navigate);
             if (response) {
                 switch (response.code) {
                     case "CA":
