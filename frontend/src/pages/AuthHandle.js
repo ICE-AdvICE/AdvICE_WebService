@@ -8,7 +8,7 @@ import { deprivePermission,grantPermission } from '../features/api/Admin/Codingz
 
 
 const AuthHandle = () => {
-    const [cookies] = useCookies(['accessToken']);
+    const [cookies,setCookie] = useCookies(['accessToken']);
     const [activeCategory, setActiveCategory] = useState('giveAuth');
     const [email, setEmail] = useState('');
     const [role, setRole] = useState('');
@@ -24,7 +24,7 @@ const AuthHandle = () => {
         const confirmMessage = `정말 ${email} 사용자에게 선택하신 권한을 부여하시겠습니까?`;
         if (window.confirm(confirmMessage)) {
             try {
-                const response = await grantPermission(email, role, cookies.accessToken);
+                const response = await grantPermission(email, role, cookies.accessToken,setCookie, navigate);
                 handleResponse(response);
             } catch (error) {
                 alert('네트워크 상태를 확인해주세요.');
@@ -41,7 +41,7 @@ const AuthHandle = () => {
         const confirmMessage = `정말 ${email} 사용자에게 선택하신 권한을 박탈하시겠습니까?`;
         if (window.confirm(confirmMessage)) {
             try {
-                const response = await deprivePermission(email, role, cookies.accessToken);
+                const response = await deprivePermission(email, role, cookies.accessToken,setCookie, navigate);
                 handleResponse2(response);
             } catch (error) {
                 alert('네트워크 상태를 확인해주세요.');

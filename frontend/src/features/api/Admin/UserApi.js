@@ -266,32 +266,53 @@ export const checkAnonymousBoardAdmin = async (token, setCookie, navigate) => {
 
 
 // 7. 운영자 권한 종류 확인 API
-export const checkAdminType = async (token) => {
+// ✅ 운영자 권한 종류 확인 API (ATE 처리 추가)
+export const checkAdminType = async (token, setCookie, navigate) => {
     try {
         const response = await axios.get(CHECK_ADMIN_TYPE_URL(), authorization(token));
-        if (response.data.code === "SU") 
-            return "SU"
-        else if (response.data.code === "EA") {
+
+        if (response.data.code === "SU") {
+            return "SU";
+        } else if (response.data.code === "EA") {
             return "EA";  
-        } 
-        else if (response.data.code === "CA") {
+        } else if (response.data.code === "CA") {
             return "CA";  
         }
     } catch (error) {
-        if (error.response) {
-            switch (error.response.data.code) {
-                case "NU":
-                    console.log("사용자가 존재하지 않습니다.");
-                    break;
-                case "DBE":
-                    console.log("데이터베이스에 문제가 발생했습니다.");
-                    break;
-                default:
-                    console.log("예상치 못한 문제가 발생하였습니다.");
-                    break;
+        if (!error.response) {
+            return { code: 'NETWORK_ERROR', message: '네트워크 상태를 확인해주세요.' };
+        }
+
+        const { code } = error.response.data;
+
+        if (code === "ATE") {
+            console.warn("🔄 운영자 권한 확인: Access Token 만료됨. 토큰 재발급 시도 중...");
+            const newToken = await refreshTokenRequest(setCookie, token, navigate);
+
+            if (newToken?.accessToken) {
+                alert("🔄 운영자 권한 확인: 토큰이 재발급되었습니다. 다시 시도합니다.");
+                return checkAdminType(newToken.accessToken, setCookie, navigate);
+            } else {
+                alert("❌ 운영자 권한 확인: 토큰 재발급 실패. 다시 로그인해주세요.");
+                setCookie('accessToken', '', { path: '/', expires: new Date(0) });
+                navigate('/');
+                return { code: 'TOKEN_EXPIRED', message: '토큰이 만료되었습니다. 다시 로그인해주세요.' };
             }
         }
-        return false;   
+
+        switch (code) {
+            case "NU":
+                console.log("사용자가 존재하지 않습니다.");
+                break;
+            case "DBE":
+                console.log("데이터베이스에 문제가 발생했습니다.");
+                break;
+            default:
+                console.log("예상치 못한 문제가 발생하였습니다.");
+                break;
+        }
     }
+    return false;   
 };
+
 

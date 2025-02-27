@@ -1,5 +1,5 @@
 import axios from 'axios';
-
+import { refreshTokenRequest } from '../../../shared/api/AuthApi';
 const DOMAIN = 'http://localhost:8080'; 
 const API_DOMAIN = `${DOMAIN}/api/v1`;
 const API_DOMAIN_ADMIN = `${DOMAIN}/api/admin`;
@@ -15,66 +15,104 @@ const refreshPage = () => {
     window.location.reload();
   };
 // 11. 코딩존 수업 예약 API
-export const reserveCodingZoneClass = async (token, classNum) => {
+export const reserveCodingZoneClass = async (token, classNum, setCookie, navigate) => {
     try {
-        const response = await axios.post(RESERVE_CODING_ZONE_CLASS_URL(classNum), {}, {
-            headers: { Authorization: `Bearer ${token}` }
-        });
+        const response = await axios.post(RESERVE_CODING_ZONE_CLASS_URL(classNum), {}, authorization(token));
+
         if (response.data.code === "SU") {
             return true;
         }
-        return false;
     } catch (error) {
-        if (error.response) {
-            switch (error.response.data.code) {
-                case "FC":
-                    alert("예약가능한 인원이 꽉 찼습니다.");
-                    refreshPage(); //마감된것을 확인 후 페이지 새로고침
-                    break;
-                case "NU":
-                    console.log("사용자가 존재하지 않습니다.");
-                    break;
-                case "DBE":
-                    console.log("데이터베이스에 문제가 발생했습니다.");
-                    break;
-                case "AR":
-                    console.log("이미 예약한 학생입니다.");
-                    break; 
-                default:
-                    console.log("예상치 못한 문제가 발생하였습니다.");
-                    break;
-            }
-        } else {
-            console.log("네트워크 오류가 발생하였습니다.");
+        if (!error.response) {
+            alert("네트워크 오류가 발생하였습니다.");
+            return false;
         }
-        return false;
+
+        const { code } = error.response.data;
+
+        if (code === "ATE") {
+            console.warn("🔄 코딩존 수업 예약: Access Token 만료됨. 토큰 재발급 시도 중...");
+            alert("🔄 세션이 만료되었습니다. 새로 로그인 후 다시 시도해주세요.");
+            
+            const newToken = await refreshTokenRequest(setCookie, token, navigate);
+            if (newToken?.accessToken) {
+                alert("✅ 세션이 갱신되었습니다. 다시 시도합니다.");
+                return reserveCodingZoneClass(newToken.accessToken, classNum, setCookie, navigate);
+            } else {
+                alert("❌ 로그인 세션이 만료되었습니다. 다시 로그인해주세요.");
+                setCookie('accessToken', '', { path: '/', expires: new Date(0) });
+                navigate('/');
+                return false;
+            }
+        }
+
+        switch (code) {
+            case "FC":
+                alert("🚨 예약 가능한 인원이 꽉 찼습니다.");
+                return false;
+            case "NU":
+                alert("사용자가 존재하지 않습니다.");
+                break;
+            case "DBE":
+                alert("데이터베이스 오류가 발생했습니다.");
+                break;
+            case "AR":
+                alert("이미 예약한 학생입니다.");
+                break; 
+            default:
+                alert("❌ 예상치 못한 오류가 발생했습니다.");
+                break;
+        }
     }
-}
+    return false;
+};
+
 // 12.  코딩존 수업 예약 취소 API
-export const deleteCodingZoneClass = async (token, classNum) => {
+export const deleteCodingZoneClass = async (token, classNum, setCookie, navigate) => {
     try {
         const response = await axios.delete(DELETE_CODING_ZONE_CLASS_URL(classNum), authorization(token));
+
         if (response.data.code === "SU") {
             return true;
         }
-        return false;
     } catch (error) {
-        if (error.response) {
-            switch (error.response.data.code) {
-                case "NR":
-                    console.log("이미 취소된 수업입니다.");
-                    break;
-                case "NU":
-                    console.log("사용자가 존재하지 않습니다.");
-                    break;
-                case "DBE":
-                    console.log("데이터베이스에 문제가 발생했습니다.");
-                    break;
-                default:
-                    console.log("예상치 못한 문제가 발생하였습니다.");
-                    break;
+        if (!error.response) {
+            alert("네트워크 오류가 발생하였습니다.");
+            return false;
+        }
+
+        const { code } = error.response.data;
+
+        if (code === "ATE") {
+            console.warn("🔄 코딩존 수업 예약 취소: Access Token 만료됨. 토큰 재발급 시도 중...");
+            alert("🔄 세션이 만료되었습니다. 새로 로그인 후 다시 시도해주세요.");
+
+            const newToken = await refreshTokenRequest(setCookie, token, navigate);
+            if (newToken?.accessToken) {
+                alert("✅ 세션이 갱신되었습니다. 다시 시도합니다.");
+                return deleteCodingZoneClass(newToken.accessToken, classNum, setCookie, navigate);
+            } else {
+                alert("❌ 로그인 세션이 만료되었습니다. 다시 로그인해주세요.");
+                setCookie('accessToken', '', { path: '/', expires: new Date(0) });
+                navigate('/');
+                return false;
             }
-        } 
-        return false;
+        }
+
+        switch (code) {
+            case "NR":
+                alert("이미 취소된 수업입니다.");
+                break;
+            case "NU":
+                alert("사용자가 존재하지 않습니다.");
+                break;
+            case "DBE":
+                alert("데이터베이스 오류가 발생했습니다.");
+                break;
+            default:
+                alert("❌ 예상치 못한 문제가 발생했습니다.");
+                break;
+        }
     }
+    return false;
 };
