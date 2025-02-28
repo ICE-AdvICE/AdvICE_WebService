@@ -357,7 +357,7 @@ const CodingZoneRegist = () => {
                                 <p className="className">과목명</p>
                             </div>
                             <div className="part3-element-title">
-                                <p className="grade">학년</p>
+                                <p className="grade">코딩존</p>
                                 <p className="maxPers">인원</p>
                             </div>
                         </div>
@@ -392,7 +392,7 @@ const CodingZoneRegist = () => {
                                 <input className="Assistant-input" placeholder="Assistant" value={box.assistant} onChange={(e) => handleChange(index, 'assistant', e.target.value)} />
                                 <input className="ClassName-input" placeholder="Class Name" value={box.className} onChange={(e) => handleChange(index, 'className', e.target.value)} />
                                 <select className="Grade-input" value={box.grade} onChange={(e) => handleChange(index, 'grade', e.target.value)}>
-                                    <option value="">Grade</option>
+                                    <option value="">코딩존</option>
                                     <option value="1">1</option>
                                     <option value="2">2</option>
                                 </select>
@@ -432,7 +432,7 @@ const CodingZoneRegist = () => {
                                 <p className="className2">과목명</p>
                             </div>
                             <div className="part3-element-title2">
-                                <p className="grade2">학년</p>
+                                <p className="grade2">코딩존</p>
                                 <p className="maxPers2">인원</p>
                             </div>
                         </div>
@@ -468,7 +468,7 @@ const CodingZoneRegist = () => {
                                 <input className="Assistant-input" placeholder="Assistant" value={box.assistant} onChange={(e) => handleChange2(index, 'assistant', e.target.value)} />
                                 <input className="ClassName-input" placeholder="Class Name" value={box.className} onChange={(e) => handleChange2(index, 'className', e.target.value)} />
                                 <select className="Grade-input" value={box.grade} onChange={(e) => handleChange2(index, 'grade', e.target.value)}>
-                                    <option value="">Grade</option>
+                                    <option value="">코딩존</option>
                                     <option value="1">1</option>
                                     <option value="2">2</option>
                                 </select>
