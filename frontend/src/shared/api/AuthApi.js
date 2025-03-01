@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-const DOMAIN = 'http://localhost:8080';
+//const DOMAIN = 'http://localhost:8080';
+const DOMAIN = 'https://api.ice-advice.co.kr'; 
 const API_DOMAIN = `${DOMAIN}/api/v1`;
 const GET_MYPAGE_USER_URL = () => `${API_DOMAIN}/user`; // 마이페이지_개인정보
 const GET_SIGN_IN_USER_URL = () => `${API_DOMAIN}/user`;
