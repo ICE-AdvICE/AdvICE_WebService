@@ -4,7 +4,7 @@ import { refreshTokenRequest } from '../../shared/api/AuthApi';
  
 
 //const DOMAIN = 'http://localhost:8080';
-const DOMAIN = 'http://54.180.165.91:8080'; 
+const DOMAIN = 'https://api.ice-advice.co.kr'; 
 const API_DOMAIN = `${DOMAIN}/api/v1`;
 
 const CHECK_USER_BAN_STATUS_URL = () => `${API_DOMAIN}/auth/check-user-ban`;
