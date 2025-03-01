@@ -51,16 +51,18 @@ public class AuthController {
         //@Valid 요청 본문이 SignInRequestDto 클래스에 정의된 제약 조건들을 만족하는지 검증
         ResponseEntity<? super SignInResponseDto> responseEntity
             = authService.signIn(requestBody);
-        SignInResponseDto dto = (SignInResponseDto) responseEntity.getBody();
 
-        ResponseCookie refreshTokenCookie = ResponseCookie.from("refresh_token", dto.getRefreshToken())
-            .httpOnly(true)   // JavaScript에서 접근 불가 (XSS 방어)
-            .secure(true)     // 배포 시 true로 변경 예정, HTTPS 환경에서만 사용 가능
-            .sameSite("Strict") // CSRF 방어
-            .path("api/v1/auth") // 특정 경로에서만 접근 가능
-            .maxAge(Duration.ofDays(7)) // 7일간 유지
-            .build();
-        response.addHeader(HttpHeaders.SET_COOKIE, refreshTokenCookie.toString());
+        if (responseEntity.getBody() instanceof SignInResponseDto) {
+            SignInResponseDto dto = (SignInResponseDto) responseEntity.getBody();
+            ResponseCookie refreshTokenCookie = ResponseCookie.from("refresh_token", dto.getRefreshToken())
+                .httpOnly(true)
+                .secure(true)
+                .sameSite("Strict")
+                .path("/api/v1/auth")
+                .maxAge(Duration.ofDays(7))
+                .build();
+            response.addHeader(HttpHeaders.SET_COOKIE, refreshTokenCookie.toString());
+        }
 
         return responseEntity;
     }
@@ -78,14 +80,16 @@ public class AuthController {
         ResponseEntity<? super RegenerateTokenResponseDto> responseEntity = authService.refresh(refreshToken, email);;
         RegenerateTokenResponseDto dto = (RegenerateTokenResponseDto) responseEntity.getBody();
 
-        ResponseCookie refreshTokenCookie = ResponseCookie.from("refresh_token", dto.getRefreshToken())
-            .httpOnly(true)   // JavaScript에서 접근 불가 (XSS 방어)
-            .secure(true)     // 배포 시 true로 변경 예정, HTTPS 환경에서만 사용 가능
-            .sameSite("Strict") // CSRF 방어
-            .path("api/v1/auth") // 특정 경로에서만 접근 가능
-            .maxAge(Duration.ofDays(7)) // 7일간 유지
-            .build();
-        response.addHeader(HttpHeaders.SET_COOKIE, refreshTokenCookie.toString());
+        if (responseEntity.getBody() instanceof RegenerateTokenResponseDto dto) {
+            ResponseCookie refreshTokenCookie = ResponseCookie.from("refresh_token", dto.getRefreshToken())
+                .httpOnly(true)
+                .secure(true)
+                .sameSite("Strict")
+                .path("/api/v1/auth")
+                .maxAge(Duration.ofDays(7))
+                .build();
+            response.addHeader(HttpHeaders.SET_COOKIE, refreshTokenCookie.toString());
+        }
 
         return responseEntity;
     }
