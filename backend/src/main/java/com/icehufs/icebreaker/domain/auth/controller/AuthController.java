@@ -78,7 +78,6 @@ public class AuthController {
         @CookieValue(value = "refresh_token") String refreshToken,
         HttpServletResponse response) {
         ResponseEntity<? super RegenerateTokenResponseDto> responseEntity = authService.refresh(refreshToken, email);;
-        RegenerateTokenResponseDto dto = (RegenerateTokenResponseDto) responseEntity.getBody();
 
         if (responseEntity.getBody() instanceof RegenerateTokenResponseDto dto) {
             ResponseCookie refreshTokenCookie = ResponseCookie.from("refresh_token", dto.getRefreshToken())
