@@ -53,14 +53,12 @@ jobs:
 
       - name: Create .env file
         run: |
-          cat <<EOF > .env
-          ${{ secrets.BE_ENV_FILE }}
-          EOF
+          echo "${{ secrets.BE_ENV_FILE }}" > backend/.env
 
       - name: Debug .env file
         run: |
           echo "=== .env 파일 내용 ==="
-          cat .env
+          cat backend/.env
 
       - name: Copy .env to EC2
         uses: appleboy/scp-action@master
@@ -68,8 +66,8 @@ jobs:
           host: ${{ secrets.BE_HOST }}
           username: ubuntu
           key: "${{ secrets.BE_KEY }}"
-          source: ".env"
-          target: "/home/ubuntu/"
+          source: "backend/.env"
+          target: "/home/ubuntu/backend/"
 
       - name: Verify .env file exists on EC2
         uses: appleboy/ssh-action@master
@@ -78,7 +76,7 @@ jobs:
           username: ubuntu
           key: "${{ secrets.BE_KEY }}"
           script: |
-            if [ ! -f /home/ubuntu/.env ]; then
+            if [ ! -f /home/ubuntu/backend/.env ]; then
               echo "Error: .env file is missing!"
               exit 1
             fi
@@ -113,27 +111,12 @@ jobs:
             CONTAINER_NAME="backend"
             IMAGE_NAME="${{ secrets.BE_DOCKER_USERNAME }}/advicecodingzone:latest"
 
-            mkdir -p /home/ubuntu/backend/
-
-            if [ -f /home/ubuntu/.env ]; then
-              mv /home/ubuntu/.env /home/ubuntu/backend/.env
-            else
-              echo "Error: .env file is missing!"
-              exit 1
-            fi
-
-            if [ "$(sudo docker ps -q -f name=$CONTAINER_NAME)" ]; then
-              sudo docker stop $CONTAINER_NAME
-              sudo docker rm $CONTAINER_NAME
-            fi
-
             sudo docker pull $IMAGE_NAME
 
             sudo docker run -d --name $CONTAINER_NAME \
               -p 8080:8080 --restart always \
               --env-file /home/ubuntu/backend/.env \
               -e TZ=Asia/Seoul \
-              -v /home/ubuntu/backend/.env:/app/.env \
               $IMAGE_NAME
 
       - name: Clean Up Unused Docker Images
