@@ -63,7 +63,7 @@ public class WebSecurityConfig {
     @Bean
     protected CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
-        corsConfiguration.setAllowedOriginPatterns(List.of("https://www.ice-advice.co.kr", "https://ice-advice.co.kr"));
+        corsConfiguration.setAllowedOriginPatterns(List.of("https://api.ice-advice.co.kr", "https://www.ice-advice.co.kr", "https://ice-advice.co.kr"));
         corsConfiguration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
         corsConfiguration.setAllowedHeaders(List.of("*"));
         corsConfiguration.setAllowCredentials(true); // withCredentials 요청을 허용
