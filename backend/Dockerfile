@@ -28,8 +28,5 @@ WORKDIR /app
 # 9. 빌드된 JAR 파일을 복사
 COPY --from=builder /app/build/libs/*.jar app.jar
 
-# 10. .env 파일을 복사
-COPY .env .env
-
-# 11. 실행 명령어 (환경 변수 로드 후 실행)
+# 10. 실행 명령어 (환경 변수 로드 후 실행)
 CMD ["sh", "-c", "if [ -f .env ]; then export $(cat .env | xargs); fi && java -jar app.jar"]
