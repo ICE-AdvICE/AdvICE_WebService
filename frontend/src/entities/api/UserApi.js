@@ -25,11 +25,11 @@ const requestWithTokenHandling = async (apiCall, accessToken, setCookie, navigat
         const { code } = error.response.data;
 
         if (code === "ATE") {
-            console.warn("🔄 Access Token 만료됨. 토큰 재발급 시도 중...");
+            console.warn("Access Token 만료됨. 토큰 재발급 시도 중...");
             const newToken = await refreshTokenRequest(setCookie, accessToken, navigate);
 
             if (newToken?.accessToken) {
-                console.log("✅ Access Token이 재발급됨. 다시 요청 수행...");
+                console.log("Access Token이 재발급됨. 다시 요청 수행...");
                 return requestWithTokenHandling(apiCall, newToken.accessToken, setCookie, navigate, retryData);
             } else {
                 alert("토큰 재발급 실패. 다시 로그인해주세요.");
@@ -121,7 +121,7 @@ export const logoutRequest = async (accessToken, setCookie, navigate) => {
             const newToken = await refreshTokenRequest(setCookie, accessToken, navigate);
 
             if (newToken?.accessToken) {
-                console.log("🔄 새 Access Token을 사용하여 로그아웃 재시도...");
+                console.log("새 Access Token을 사용하여 로그아웃 재시도...");
                 return logoutRequest(newToken.accessToken, setCookie, navigate);
             } else {
                 alert("토큰 재발급 실패, 강제 로그아웃 실행");
