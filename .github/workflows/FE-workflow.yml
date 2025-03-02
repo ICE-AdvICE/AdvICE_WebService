@@ -30,6 +30,7 @@ jobs:
           npm run build
         env:
           CI: false
+          REACT_APP_API_DOMAIN: ${{ secrets.REACT_APP_API_DOMAIN }}
 
       - name: Deploy to S3
         uses: reggionick/s3-deploy@v3
