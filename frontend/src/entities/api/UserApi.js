@@ -71,7 +71,7 @@ export const signInRequest = async (requestBody, setCookie) => {
 
         return { data: response.data, headers: response.headers };
     } catch (error) {
-        alert('로그인 요청 중 오류 발생! 서버 응답: ' + JSON.stringify(error.response, null, 2));
+        //alert('로그인 요청 중 오류 발생! 서버 응답: ' + JSON.stringify(error.response, null, 2));
         return { data: { code: 'ERROR', message: '로그인 요청 중 오류 발생' }, headers: {} };
     }
 };

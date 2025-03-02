@@ -61,7 +61,6 @@ const LoginForm = ({ onLogin }) => {
     if (response.data.code === 'SU') {
       const accessToken = response.data.accessToken;
       setCookie('accessToken', accessToken, { path: '/', expires: new Date(Date.now() + 3600 * 1000) });
-
       onLogin(true);
     } else {
       setError(true);
