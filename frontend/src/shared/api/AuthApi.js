@@ -117,8 +117,8 @@ export const getczauthtypetRequest = async (accessToken, setCookie, navigate) =>
 
 
 
-let isRefreshing = false; // 토큰 갱신 여부 플래그
-let refreshSubscribers = []; // 대기 중인 API 요청 저장
+let isRefreshing = false;  
+let refreshSubscribers = [];  
 
 export const refreshTokenRequest = async (setCookie, accessToken, navigate, apiName) => {
     if (isRefreshing) {

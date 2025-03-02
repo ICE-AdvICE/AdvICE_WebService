@@ -22,7 +22,6 @@ const handleApiError = async (error, apiCall, token, setCookie, navigate, apiNam
     const { code } = error.response.data;
 
     if (code === "ATE") {
-        console.warn(`🔄 ${apiName}: Access Token 만료됨. 토큰 재발급 시도 중...`);
         const newToken = await refreshTokenRequest(setCookie, token, navigate);
 
         if (newToken?.accessToken) {

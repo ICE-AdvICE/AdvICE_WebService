@@ -81,7 +81,7 @@ export const createNotificationArticleRequest = async (postData, token, setCooki
         });
 
         if (response.data.code === "SU") {
-            return true;
+            return response.data;
         }
     } catch (error) {
         if (!error.response) return false;

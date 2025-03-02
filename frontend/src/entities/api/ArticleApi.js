@@ -19,7 +19,6 @@ export const createArticleRequest = async (postData, token, setCookie, navigate)
         const response = await axios.post(CREATE_ARTICLE_URL(), postData, {
             headers: { Authorization: `Bearer ${token}` }
         });
-
         if (response.data.code === "SU") {
             return response.data;
         }
@@ -28,20 +27,15 @@ export const createArticleRequest = async (postData, token, setCookie, navigate)
         const { code } = error.response.data;
 
         if (code === "ATE") {
-            console.warn("🔄 게시글 등록: Access Token 만료됨. 토큰 재발급 시도 중...");
             const newToken = await refreshTokenRequest(setCookie, token, navigate);
-
             if (newToken?.accessToken) {
-                alert("🔄 게시글 등록: 토큰이 재발급되었습니다. 다시 시도합니다.");
                 return createArticleRequest(postData, newToken.accessToken, setCookie, navigate);
             } else {
-                alert("❌ 게시글 등록: 토큰 재발급 실패. 다시 로그인해주세요.");
                 setCookie('accessToken', '', { path: '/', expires: new Date(0) });
                 navigate('/');
                 return false;
             }
         }
-
         switch (code) {
             case "NU":
                 alert("로그인이 필요합니다.");
@@ -101,7 +95,6 @@ export const fetchArticle = async (articleNum, navigate, accessToken, setCookie)
 // 4.게시글 수정 API
 export const handleEdit = async (articleNum, token, setCookie, navigate, article) => {
     if (!article) {
-        console.log("게시글 데이터를 확인해주세요.");
         return false;  
     }
 
@@ -124,20 +117,16 @@ export const handleEdit = async (articleNum, token, setCookie, navigate, article
         const { code } = error.response.data;
 
         if (code === "ATE") {
-            console.warn("🔄 게시글 수정: Access Token 만료됨. 토큰 재발급 시도 중...");
             const newToken = await refreshTokenRequest(setCookie, token, navigate);
 
             if (newToken?.accessToken) {
-                alert("🔄 게시글 수정: 토큰이 재발급되었습니다. 다시 시도합니다.");
                 return handleEdit(articleNum, newToken.accessToken, setCookie, navigate, article);
             } else {
-                alert("❌ 게시글 수정: 토큰 재발급 실패. 다시 로그인해주세요.");
                 setCookie('accessToken', '', { path: '/', expires: new Date(0) });
                 navigate('/');
                 return false;
             }
         }
-
         switch (code) {
             case "NA":
                 alert("존재하지 않는 게시글입니다.");
@@ -179,7 +168,6 @@ export const handleDelete = async (articleNum, token, navigate, setCookie) => {
                         navigate('/article-main');
                         break;
                     case "ATE": 
-                        console.warn("Access Token 만료됨. 토큰 재발급 시도 중...");
                         const newToken = await refreshTokenRequest(setCookie, token, navigate);
                         if (newToken?.accessToken) {
                             return handleDelete(articleNum, newToken.accessToken, navigate, setCookie);
