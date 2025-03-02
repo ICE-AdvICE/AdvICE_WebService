@@ -78,23 +78,17 @@ export const createNotificationArticleRequest = async (postData, token, setCooki
         const response = await axios.post(CREATE_NOTIFICATION_ARTICLE_URL(), postData, {
             headers: { Authorization: `Bearer ${token}` }
         });
-
         if (response.data.code === "SU") {
             return response.data;
         }
     } catch (error) {
         if (!error.response) return false;
         const { code } = error.response.data;
-
         if (code === "ATE") {
-            console.warn("🔄 공지글 등록: Access Token 만료됨. 토큰 재발급 시도 중...");
             const newToken = await refreshTokenRequest(setCookie, token, navigate);
-
             if (newToken?.accessToken) {
-                alert("🔄 공지글 등록: 토큰이 재발급되었습니다. 다시 시도합니다.");
                 return createNotificationArticleRequest(postData, newToken.accessToken, setCookie, navigate);
             } else {
-                alert("❌ 공지글 등록: 토큰 재발급 실패. 다시 로그인해주세요.");
                 setCookie('accessToken', '', { path: '/', expires: new Date(0) });
                 navigate('/');
                 return false;
@@ -138,16 +132,11 @@ export const adminhandleDelete = async (articleNum, token, navigate, setCookie) 
     } catch (error) {
         if (!error.response) return false;
         const { code } = error.response.data;
-
         if (code === "ATE") {
-            console.warn("🔄 게시글 삭제: Access Token 만료됨. 토큰 재발급 시도 중...");
             const newToken = await refreshTokenRequest(setCookie, token, navigate);
-
             if (newToken?.accessToken) {
-                alert("🔑 게시글 삭제: 토큰이 재발급되었습니다. 다시 시도합니다.");
                 return adminhandleDelete(articleNum, newToken.accessToken, navigate, setCookie);
             } else {
-                alert("❌ 게시글 삭제: 토큰 재발급 실패. 다시 로그인해주세요.");
                 setCookie('accessToken', '', { path: '/', expires: new Date(0) });
                 navigate('/');
                 return false;
@@ -187,7 +176,6 @@ export const handleResolveArticle = async (navigate, articleNum, token, setCooki
         const response = await axios.put(RESOLVE_ARTICLE_URL(articleNum), {}, authorization(token));
         const { code } = response.data;
         if (code === "SU") {
-            console.log('✅ 게시글이 정상적으로 해결되었습니다.');
             navigate('/article-main');
             return true;
         }
@@ -196,13 +184,10 @@ export const handleResolveArticle = async (navigate, articleNum, token, setCooki
             const errorCode = error.response.data.code;
             switch (errorCode) {
                 case "ATE":
-                    console.warn("🔄 Access Token 만료됨. 토큰 재발급 시도 중...");
                     const newToken = await refreshTokenRequest(setCookie, token, navigate);
                     if (newToken?.accessToken) {
-                        alert("🔑 토큰이 성공적으로 재발급되었습니다. 다시 시도합니다.(해결)");
                         return handleResolveArticle(navigate, articleNum, newToken.accessToken, setCookie);
                     } else {
-                        alert("❌ 토큰 재발급 실패. 다시 로그인해주세요.");
                         setCookie('accessToken', '', { path: '/', expires: new Date(0) });
                         navigate('/');
                         return false;
@@ -245,7 +230,6 @@ export const checkAnonymousBoardAdmin = async (token, setCookie, navigate) => {
             const errorCode = error.response.data.code;
             switch (errorCode) {
                 case "ATE":
-                    console.warn("Access Token 만료됨. 토큰 재발급 시도 중...");
                     const newToken = await refreshTokenRequest(setCookie, token, navigate);
                     if (newToken?.accessToken) {
                         return checkAnonymousBoardAdmin(newToken.accessToken, setCookie, navigate);

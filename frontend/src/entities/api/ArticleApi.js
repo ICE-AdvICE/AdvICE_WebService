@@ -68,14 +68,11 @@ export const fetchArticle = async (articleNum, navigate, accessToken, setCookie)
                 alert("존재하지 않는 게시글입니다.");
                 navigate(`/article-main`);
                 break;
-            case "ATE": // 🔄 Access Token 만료 처리
-                console.warn("🔄 Access Token 만료됨. 토큰 재발급 시도 중...");
+            case "ATE": 
                 const newToken = await refreshTokenRequest(setCookie, accessToken, navigate);
                 if (newToken?.accessToken) {
-                    alert("🔑 토큰이 성공적으로 재발급되었습니다. 다시 시도합니다.(특정글)");
                     return fetchArticle(articleNum, navigate, newToken.accessToken, setCookie);
                 } else {
-                    alert("❌ 토큰 재발급 실패. 다시 로그인해주세요.");
                     setCookie('accessToken', '', { path: '/', expires: new Date(0) });
                     navigate('/');
                     return null;
@@ -96,28 +93,23 @@ export const handleEdit = async (articleNum, token, setCookie, navigate, article
     if (!article) {
         return false;  
     }
-
     const updatedArticle = {
         articleTitle: article.articleTitle,
         articleContent: article.articleContent,
         category: article.category 
     };
-
     try {
         const response = await axios.patch(EDIT_ARTICLE(articleNum), updatedArticle, {
             headers: { Authorization: `Bearer ${token}` }
         });
-
         if (response.data.code === "SU") {
             return true;   
         }
     } catch (error) {
         if (!error.response) return false;
         const { code } = error.response.data;
-
         if (code === "ATE") {
             const newToken = await refreshTokenRequest(setCookie, token, navigate);
-
             if (newToken?.accessToken) {
                 return handleEdit(articleNum, newToken.accessToken, setCookie, navigate, article);
             } else {

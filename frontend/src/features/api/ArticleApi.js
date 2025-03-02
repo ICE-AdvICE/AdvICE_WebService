@@ -14,7 +14,6 @@ const CHECK_OWNERSHIP_URL = (articleNum) => `${API_DOMAIN}/article/own/${article
 
 const handleApiError = async (error, apiCall, token, setCookie, navigate, apiName) => {
     if (!error.response || !error.response.data) {
-        alert(`🔴 ${apiName} 요청 실패: 네트워크 상태를 확인해주세요.`);
         return null;
     }
 
@@ -24,10 +23,8 @@ const handleApiError = async (error, apiCall, token, setCookie, navigate, apiNam
         const newToken = await refreshTokenRequest(setCookie, token, navigate);
 
         if (newToken?.accessToken) {
-            alert(`🔄 ${apiName}: 토큰이 재발급되었습니다. 다시 시도합니다.`);
             return apiCall(newToken.accessToken);
         } else {
-            alert(`🔴 ${apiName}: 토큰 재발급 실패. 다시 로그인해주세요.`);
             setCookie('accessToken', '', { path: '/', expires: new Date(0) });
             navigate('/');
             return null;
@@ -37,7 +34,7 @@ const handleApiError = async (error, apiCall, token, setCookie, navigate, apiNam
     return error.response.data;
 };
 
-// ✅ 1-11 사용자 정지 확인 API (공통 ATE 처리 적용)
+// 1-11 사용자 정지 확인 API (공통 ATE 처리 적용)
 export const checkUserBanStatus = async (token, setCookie, navigate) => {
     try {
         const response = await axios.post(CHECK_USER_BAN_STATUS_URL(), {}, {
@@ -61,7 +58,7 @@ export const checkUserBanStatus = async (token, setCookie, navigate) => {
     }
 };
 
-// ✅ 12. “내가 쓴” 모든 게시글 리스트 불러오기 API (공통 ATE 처리 적용)
+//  12. “내가 쓴” 모든 게시글 리스트 불러오기 API (공통 ATE 처리 적용)
 export const fetchUserArticles = async (navigate, token, setCookie) => {
     try {
         const response = await axios.get(FETCH_USER_ARTICLES_URL(), {
@@ -75,7 +72,7 @@ export const fetchUserArticles = async (navigate, token, setCookie) => {
         return await handleApiError(error, (newToken) => fetchUserArticles(navigate, newToken, setCookie), token, setCookie, navigate, "내가 쓴 게시글 불러오기");
     }
 };
-// ✅ 6. 게시글 좋아요 누르기/취소하기 API (ATE 처리 추가)
+// 6. 게시글 좋아요 누르기/취소하기 API (ATE 처리 추가)
 export const handleLike = async (navigate, articleNum, liked, token, setLiked, setLikes, setCookie) => {
     try {
         const response = await axios.put(LIKE_ARTICLE_URL(articleNum), {}, {
@@ -98,7 +95,7 @@ export const handleLike = async (navigate, articleNum, liked, token, setLiked, s
     }
 };
 
-// ✅ 13. 특정 게시글 좋아요 여부 API (ATE 처리 추가)
+// 13. 특정 게시글 좋아요 여부 API (ATE 처리 추가)
 export const fetchLikeStatus = async (articleNum, token, setLiked, setCookie, navigate) => {
     try {
         const response = await axios.get(GET_LIKE_STATUS_URL(articleNum), {
@@ -118,7 +115,7 @@ export const fetchLikeStatus = async (articleNum, token, setLiked, setCookie, na
     }
 };
 
-// ✅ 14. 특정 게시글 소유 여부 API (ATE 처리 추가)
+// 14. 특정 게시글 소유 여부 API (ATE 처리 추가)
 export const checkArticleOwnership = async (navigate, articleNum, token, setCookie) => {
     try {
         const response = await axios.get(CHECK_OWNERSHIP_URL(articleNum), {

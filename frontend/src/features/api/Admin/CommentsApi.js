@@ -24,12 +24,10 @@ export const handleCommentSubmit = async (
         content: commentInput,
         user_email: userEmail
     };
-
     try {
         const response = await axios.post(CREATE_COMMENT_URL(articleNum), commentData, {
             headers: { Authorization: `Bearer ${token}` }
         });
-
         if (response.data.code === "SU") {
             fetchComments(navigate, articleNum, setComments, setCookie);
             setCommentInput("");
@@ -39,19 +37,15 @@ export const handleCommentSubmit = async (
         const { code } = error.response.data;
 
         if (code === "ATE") {
-            console.warn("🔄 댓글 작성: Access Token 만료됨. 토큰 재발급 시도 중...");
             const newToken = await refreshTokenRequest(setCookie, token, navigate);
             if (newToken?.accessToken) {
-                alert("🔄 댓글 작성: 토큰이 재발급되었습니다. 다시 시도합니다.");
                 return handleCommentSubmit(navigate, event, commentInput, setComments, setCommentInput, userEmail, articleNum, newToken.accessToken, setCookie);
             } else {
-                alert("❌ 댓글 작성: 토큰 재발급 실패. 다시 로그인해주세요.");
                 setCookie('accessToken', '', { path: '/', expires: new Date(0) });
                 navigate('/');
                 return null;
             }
         }
-
         switch (code) {
             case "AF":
                 alert("댓글 작성 권한이 없습니다.");
@@ -131,19 +125,15 @@ export const handleCommentEdit = async (navigate, commentNumber, newContent, tok
         const { code } = error.response.data;
 
         if (code === "ATE") {
-            console.warn("🔄 댓글 수정: Access Token 만료됨. 토큰 재발급 시도 중...");
             const newToken = await refreshTokenRequest(setCookie, token, navigate);
             if (newToken?.accessToken) {
-                alert("🔄 댓글 수정: 토큰이 재발급되었습니다. 다시 시도합니다.");
                 return handleCommentEdit(navigate, commentNumber, newContent, newToken.accessToken, setCookie);
             } else {
-                alert("❌ 댓글 수정: 토큰 재발급 실패. 다시 로그인해주세요.");
                 setCookie('accessToken', '', { path: '/', expires: new Date(0) });
                 navigate('/');
                 return null;
             }
         }
-
         switch (code) {
             case "AF":
                 alert("댓글 수정 권한이 없습니다.");
@@ -174,12 +164,10 @@ export const handleCommentDelete = async (navigate, articleNum, commentNumber, t
     if (!window.confirm("정말로 댓글을 삭제하시겠습니까?")) {
         return false;
     }
-
     try {
         const response = await axios.delete(`${API_ADMIN_DOMAIN}/comment/${commentNumber}`, {
             headers: { Authorization: `Bearer ${token}` }
         });
-
         if (response.data.code === "SU") {
             alert("댓글이 삭제되었습니다.");
             return true;
@@ -189,19 +177,15 @@ export const handleCommentDelete = async (navigate, articleNum, commentNumber, t
         const { code } = error.response.data;
 
         if (code === "ATE") {
-            console.warn("🔄 댓글 삭제: Access Token 만료됨. 토큰 재발급 시도 중...");
             const newToken = await refreshTokenRequest(setCookie, token, navigate);
             if (newToken?.accessToken) {
-                alert("🔄 댓글 삭제: 토큰이 재발급되었습니다. 다시 시도합니다.");
                 return handleCommentDelete(navigate, articleNum, commentNumber, newToken.accessToken, setCookie);
             } else {
-                alert("❌ 댓글 삭제: 토큰 재발급 실패. 다시 로그인해주세요.");
                 setCookie('accessToken', '', { path: '/', expires: new Date(0) });
                 navigate('/');
                 return null;
             }
         }
-
         switch (code) {
             case "AF":
                 alert("댓글 삭제 권한이 없습니다.");
