@@ -81,7 +81,7 @@ export const createNotificationArticleRequest = async (postData, token, setCooki
         });
 
         if (response.data.code === "SU") {
-            return true;
+            return response.data;
         }
     } catch (error) {
         if (!error.response) return false;
@@ -101,7 +101,6 @@ export const createNotificationArticleRequest = async (postData, token, setCooki
                 return false;
             }
         }
-
         switch (code) {
             case "NU":
                 alert("로그인이 필요합니다.");
@@ -126,56 +125,62 @@ export const createNotificationArticleRequest = async (postData, token, setCooki
 //15. (Admin)게시글 삭제 API
 export const adminhandleDelete = async (articleNum, token, navigate, setCookie) => {
     try {
-        const response = await axios.delete(ADMIN_DELETE_ARTICLE_URL(articleNum), authorization(token));
+        const response = await axios.delete(ADMIN_DELETE_ARTICLE_URL(articleNum), {
+            headers: { Authorization: `Bearer ${token}` }
+        });
 
-        if (response.data.code === "ATE") {
-            console.warn("🔄 Access Token 만료됨. 토큰 재발급 시도 중...");
+        if (response.data.code === "SU") {
+            if (window.confirm("정말로 게시글을 삭제하시겠습니까?")) {
+                alert("게시글이 삭제되었습니다.");
+                navigate('/article-main');
+            }
+            return true;
+        }
+    } catch (error) {
+        if (!error.response) return false;
+        const { code } = error.response.data;
+
+        if (code === "ATE") {
+            console.warn("🔄 게시글 삭제: Access Token 만료됨. 토큰 재발급 시도 중...");
             const newToken = await refreshTokenRequest(setCookie, token, navigate);
+
             if (newToken?.accessToken) {
-                alert("🔑 토큰이 성공적으로 재발급되었습니다. 다시 시도합니다.(삭제)");
+                alert("🔑 게시글 삭제: 토큰이 재발급되었습니다. 다시 시도합니다.");
                 return adminhandleDelete(articleNum, newToken.accessToken, navigate, setCookie);
             } else {
-                alert("❌ 토큰 재발급 실패. 다시 로그인해주세요.");
+                alert("❌ 게시글 삭제: 토큰 재발급 실패. 다시 로그인해주세요.");
                 setCookie('accessToken', '', { path: '/', expires: new Date(0) });
                 navigate('/');
                 return false;
             }
         }
 
-        if (window.confirm("정말로 게시글을 삭제하시겠습니까?")) {
-            if (response.data.code === "SU") {
-                alert("게시글이 삭제되었습니다.");
+        switch (code) {
+            case "NA":
+                alert("해당 게시글이 존재하지 않습니다.");
                 navigate('/article-main');
-            }
-        }
-    } catch (error) {
-        if (error.response) {
-            const errorCode = error.response.data.code;
-            switch (errorCode) {
-                case "NA":
-                    alert("해당 게시글이 존재하지 않습니다.");
-                    navigate('/article-main');
-                    break;
-                case "AF":
-                    alert("게시글 삭제 권한이 없습니다.");
-                    break;
-                case "NU":
-                    alert("로그인이 필요합니다.");
-                    navigate('/');
-                    break;
-                case "VF":
-                    console.log("유효성 검사 실패하였습니다.");
-                    break;
-                case "DBE":
-                    console.log("데이터베이스에 문제가 발생했습니다.");
-                    break;
-                default:
-                    console.log("예상치 못한 문제가 발생하였습니다.");
-                    break;
-            }
+                break;
+            case "AF":
+                alert("게시글 삭제 권한이 없습니다.");
+                break;
+            case "NU":
+                alert("로그인이 필요합니다.");
+                navigate('/');
+                break;
+            case "VF":
+                console.log("유효성 검사 실패하였습니다.");
+                break;
+            case "DBE":
+                console.log("데이터베이스에 문제가 발생했습니다.");
+                break;
+            default:
+                console.log("예상치 못한 오류가 발생했습니다.");
+                break;
         }
     }
+    return false;
 };
+
 
 //16.(Admin) 해결이 필요한 게시글을 해결된 게시글로 변경을 위한 API
 export const handleResolveArticle = async (navigate, articleNum, token, setCookie) => {
