@@ -1,8 +1,7 @@
 import axios from 'axios';
 import { refreshTokenRequest } from '../../../../shared/api/AuthApi';
 
-const DOMAIN = 'http://localhost:8080';
-//const DOMAIN = 'https://api.ice-advice.co.kr'; 
+const DOMAIN = process.env.REACT_APP_API_DOMAIN;
 
 // ✅ 1학년 출/결석 처리 API (ATE 대응)
 export const putczattendc1Request = async (registNum, accessToken, setCookie, navigate) => {

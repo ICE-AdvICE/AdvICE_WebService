@@ -1,8 +1,7 @@
 import axios from 'axios';
 import { refreshTokenRequest } from '../../../shared/api/AuthApi';
 import moment from 'moment-timezone';
-const DOMAIN = 'http://localhost:8080';
-//const DOMAIN = 'https://api.ice-advice.co.kr'; 
+const DOMAIN = process.env.REACT_APP_API_DOMAIN;
 const API_ADMIN_DOMAIN = `${DOMAIN}/api/admin1`;
 
 const API_DOMAIN = `${DOMAIN}/api/v1`;
