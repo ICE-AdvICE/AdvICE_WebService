@@ -29,7 +29,7 @@ public class JwtProvider {
 
     public JwtToken create(String email) {
 
-        Date expiredDate = Date.from(Instant.now().plus(20, ChronoUnit.SECONDS));
+        Date expiredDate = Date.from(Instant.now().plus(1, ChronoUnit.HOURS));
 
         String accessToken = Jwts.builder()
                 .signWith(key)

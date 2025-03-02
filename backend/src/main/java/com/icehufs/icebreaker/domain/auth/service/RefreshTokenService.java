@@ -10,7 +10,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 public class RefreshTokenService {
 	private final StringRedisTemplate redisTemplate;
 	private static final String REFRESH_TOKEN_PREFIX = "RT:";
-	private static final Duration REFRESH_TOKEN_VALIDITY = Duration.ofSeconds(30);
+	private static final Duration REFRESH_TOKEN_VALIDITY = Duration.ofDays(28);
 
 	public void storeRefreshToken(String email, String refreshToken) {
 		redisTemplate.opsForValue().set(REFRESH_TOKEN_PREFIX + email, refreshToken, REFRESH_TOKEN_VALIDITY);
