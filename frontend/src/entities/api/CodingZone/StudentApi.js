@@ -28,18 +28,15 @@ export const reserveCodingZoneClass = async (token, classNum, setCookie, navigat
             return false;
         }
 
-        const { code } = error.response.data;
+        const { code } = error.response.data; 
 
         if (code === "ATE") {
-            console.warn("🔄 코딩존 수업 예약: Access Token 만료됨. 토큰 재발급 시도 중...");
-            alert("🔄 세션이 만료되었습니다. 새로 로그인 후 다시 시도해주세요.");
+            console.warn("코딩존 수업 예약: Access Token 만료됨. 토큰 재발급 시도 중...");
             
             const newToken = await refreshTokenRequest(setCookie, token, navigate);
             if (newToken?.accessToken) {
-                alert("✅ 세션이 갱신되었습니다. 다시 시도합니다.");
                 return reserveCodingZoneClass(newToken.accessToken, classNum, setCookie, navigate);
             } else {
-                alert("❌ 로그인 세션이 만료되었습니다. 다시 로그인해주세요.");
                 setCookie('accessToken', '', { path: '/', expires: new Date(0) });
                 navigate('/');
                 return false;
@@ -48,7 +45,7 @@ export const reserveCodingZoneClass = async (token, classNum, setCookie, navigat
 
         switch (code) {
             case "FC":
-                alert("🚨 예약 가능한 인원이 꽉 찼습니다.");
+                alert("예약 가능한 인원이 꽉 찼습니다.");
                 return false;
             case "NU":
                 alert("사용자가 존재하지 않습니다.");
@@ -60,7 +57,7 @@ export const reserveCodingZoneClass = async (token, classNum, setCookie, navigat
                 alert("이미 예약한 학생입니다.");
                 break; 
             default:
-                alert("❌ 예상치 못한 오류가 발생했습니다.");
+                alert("예상치 못한 오류가 발생했습니다.");
                 break;
         }
     }
@@ -84,15 +81,12 @@ export const deleteCodingZoneClass = async (token, classNum, setCookie, navigate
         const { code } = error.response.data;
 
         if (code === "ATE") {
-            console.warn("🔄 코딩존 수업 예약 취소: Access Token 만료됨. 토큰 재발급 시도 중...");
-            alert("🔄 세션이 만료되었습니다. 새로 로그인 후 다시 시도해주세요.");
+            console.warn("코딩존 수업 예약 취소: Access Token 만료됨. 토큰 재발급 시도 중...");
 
             const newToken = await refreshTokenRequest(setCookie, token, navigate);
             if (newToken?.accessToken) {
-                alert("✅ 세션이 갱신되었습니다. 다시 시도합니다.");
                 return deleteCodingZoneClass(newToken.accessToken, classNum, setCookie, navigate);
             } else {
-                alert("❌ 로그인 세션이 만료되었습니다. 다시 로그인해주세요.");
                 setCookie('accessToken', '', { path: '/', expires: new Date(0) });
                 navigate('/');
                 return false;
@@ -110,7 +104,7 @@ export const deleteCodingZoneClass = async (token, classNum, setCookie, navigate
                 alert("데이터베이스 오류가 발생했습니다.");
                 break;
             default:
-                alert("❌ 예상치 못한 문제가 발생했습니다.");
+                alert("예상치 못한 문제가 발생했습니다.");
                 break;
         }
     }
