@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { refreshTokenRequest } from '../../../../shared/api/AuthApi';
-const DOMAIN = 'http://localhost:8080';
-//const DOMAIN = 'https://api.ice-advice.co.kr'; 
+const DOMAIN = process.env.REACT_APP_API_DOMAIN; 
 const API_DOMAIN = `${DOMAIN}/api/v1`;
 
 const API_DOMAIN_ADMIN = `${DOMAIN}/api/admin`;

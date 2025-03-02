@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { refreshTokenRequest } from '../../shared/api/AuthApi';
-const DOMAIN = 'http://localhost:8080';
-//const DOMAIN = 'https://api.ice-advice.co.kr'; 
+const DOMAIN = process.env.REACT_APP_API_DOMAIN;
 const API_DOMAIN = `${DOMAIN}/api/v1`;
 const DELETE_USER = () => `${API_DOMAIN}/user`; // 회원탈퇴
 const SIGN_IN_URL = () => `${API_DOMAIN}/auth/sign-in`; // 로그인
