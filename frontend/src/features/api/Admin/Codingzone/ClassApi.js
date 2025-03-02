@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { refreshTokenRequest } from '../../../../shared/api/AuthApi';
-const DOMAIN = process.env.REACT_APP_API_DOMAIN; 
+const DOMAIN = process.env.REACT_APP_API_DOMAIN;
 const API_DOMAIN = `${DOMAIN}/api/v1`;
 
 const API_DOMAIN_ADMIN = `${DOMAIN}/api/admin`;
@@ -29,14 +29,14 @@ export const resetCodingZoneData = async (token, setCookie, navigate) => {
         const { code } = error.response.data;
 
         if (code === "ATE") {
-            console.warn("🔄 학기 초기화: Access Token 만료됨. 토큰 재발급 시도 중...");
+            console.warn(" 학기 초기화: Access Token 만료됨. 토큰 재발급 시도 중...");
             const newToken = await refreshTokenRequest(setCookie, token, navigate);
 
             if (newToken?.accessToken) {
-                alert("🔄 학기 초기화: 토큰이 재발급되었습니다. 다시 시도합니다.");
+
                 return resetCodingZoneData(newToken.accessToken, setCookie, navigate);
             } else {
-                alert("❌ 학기 초기화: 토큰 재발급 실패. 다시 로그인해주세요.");
+
                 setCookie('accessToken', '', { path: '/', expires: new Date(0) });
                 navigate('/');
                 return { code: 'TOKEN_EXPIRED', message: '토큰이 만료되었습니다. 다시 로그인해주세요.' };
@@ -68,14 +68,14 @@ export const getczallattendRequest = async (accessToken, setCookie, navigate) =>
         const { code } = error.response.data;
 
         if (code === "ATE") {
-            console.warn("🔄 출결 목록 조회: Access Token 만료됨. 토큰 재발급 시도 중...");
+            console.warn("출결 목록 조회: Access Token 만료됨. 토큰 재발급 시도 중...");
             const newToken = await refreshTokenRequest(setCookie, accessToken, navigate);
 
             if (newToken?.accessToken) {
-                alert("🔄 출결 목록 조회: 토큰이 재발급되었습니다. 다시 시도합니다.");
+
                 return getczallattendRequest(newToken.accessToken, setCookie, navigate);
             } else {
-                alert("❌ 출결 목록 조회: 토큰 재발급 실패. 다시 로그인해주세요.");
+
                 setCookie('accessToken', '', { path: '/', expires: new Date(0) });
                 navigate('/');
                 return { code: 'TOKEN_EXPIRED', message: '토큰이 만료되었습니다. 다시 로그인해주세요.' };
@@ -92,7 +92,7 @@ export const getAvailableClassesForNotLogin = async (grade) => {
     try {
         const response = await axios.get(GET_AVAILABLE_CLASSES_FOR_NOT_LOGIN_URL(grade));
         if (response.data.code === "SU") {
-            return response.data.classList; 
+            return response.data.classList;
         } else {
             console.log(response.data.message);
             return [];
@@ -113,7 +113,7 @@ export const getAvailableClassesForNotLogin = async (grade) => {
                     console.log("예상치 못한 문제가 발생하였습니다.");
                     break;
             }
-        }  
+        }
         return [];
     }
 };
@@ -128,14 +128,14 @@ export const getczreservedlistRequest = async (accessToken, classDate, setCookie
         const { code } = error.response.data;
 
         if (code === "ATE") {
-            console.warn("🔄 특정 날짜 예약된 학생 목록 조회: Access Token 만료됨. 토큰 재발급 시도 중...");
+            console.warn("특정 날짜 예약된 학생 목록 조회: Access Token 만료됨. 토큰 재발급 시도 중...");
             const newToken = await refreshTokenRequest(setCookie, accessToken, navigate);
 
             if (newToken?.accessToken) {
-                alert("🔄 특정 날짜 예약된 학생 목록 조회: 토큰이 재발급되었습니다. 다시 시도합니다.");
+
                 return getczreservedlistRequest(newToken.accessToken, classDate, setCookie, navigate);
             } else {
-                alert("❌ 특정 날짜 예약된 학생 목록 조회: 토큰 재발급 실패. 다시 로그인해주세요.");
+
                 setCookie('accessToken', '', { path: '/', expires: new Date(0) });
                 navigate('/');
                 return { code: 'TOKEN_EXPIRED', message: '토큰이 만료되었습니다. 다시 로그인해주세요.' };
@@ -170,14 +170,14 @@ export const downloadAttendanceExcel = async (accessToken, grade, setCookie, nav
         const { code } = error.response.data;
 
         if (code === "ATE") {
-            console.warn("🔄 출결 Excel 다운로드: Access Token 만료됨. 토큰 재발급 시도 중...");
+            console.warn(" 출결 Excel 다운로드: Access Token 만료됨. 토큰 재발급 시도 중...");
             const newToken = await refreshTokenRequest(setCookie, accessToken, navigate);
 
             if (newToken?.accessToken) {
-                alert("🔄 출결 Excel 다운로드: 토큰이 재발급되었습니다. 다시 시도합니다.");
+
                 return downloadAttendanceExcel(newToken.accessToken, grade, setCookie, navigate);
             } else {
-                alert("❌ 출결 Excel 다운로드: 토큰 재발급 실패. 다시 로그인해주세요.");
+
                 setCookie('accessToken', '', { path: '/', expires: new Date(0) });
                 navigate('/');
                 return;

@@ -11,7 +11,7 @@ const authorization = (accessToken) => ({
     headers: { Authorization: `Bearer ${accessToken}` }
 });
 
-export const getSignInUserRequest  = async (accessToken, setCookie, navigate) => {
+export const getSignInUserRequest = async (accessToken, setCookie, navigate) => {
     try {
         const response = await axios.get(GET_SIGN_IN_USER_URL(), authorization(accessToken));
         return response.data;
@@ -24,14 +24,12 @@ export const getSignInUserRequest  = async (accessToken, setCookie, navigate) =>
             case "NA":
 
                 break;
-            case "ATE": // 🔄 Access Token 만료 처리
-                console.warn("🔄 Access Token 만료됨. 토큰 재발급 시도 중...");
+            case "ATE": // Access Token 만료 처리
+                console.warn("Access Token 만료됨. 토큰 재발급 시도 중...");
                 const newToken = await refreshTokenRequest(setCookie, accessToken, navigate);
                 if (newToken?.accessToken) {
-                    alert("🔑 토큰이 성공적으로 재발급되었습니다. 다시 시도합니다.(특정글)");
-                    return getSignInUserRequest( newToken.accessToken, setCookie,navigate);
+                    return getSignInUserRequest(newToken.accessToken, setCookie, navigate);
                 } else {
-                    alert("❌ 토큰 재발급 실패. 다시 로그인해주세요.");
                     setCookie('accessToken', '', { path: '/', expires: new Date(0) });
                     navigate('/');
                     return null;
@@ -58,13 +56,13 @@ export const getMypageRequest = async (accessToken, setCookie, navigate) => {
         switch (code) {
             case "NA":
                 break;
-            case "ATE": // 🔄 Access Token 만료 처리
-                console.warn("🔄 Access Token 만료됨. 토큰 재발급 시도 중...");
+            case "ATE": // Access Token 만료 처리
+                console.warn(" Access Token 만료됨. 토큰 재발급 시도 중...");
                 const newToken = await refreshTokenRequest(setCookie, accessToken, navigate);
                 if (newToken?.accessToken) {
-                    return getMypageRequest (newToken.accessToken, setCookie,navigate);
+                    return getMypageRequest(newToken.accessToken, setCookie, navigate);
                 } else {
-                    alert("❌ 토큰 재발급 실패. 다시 로그인해주세요.(마이페이지)");
+
                     setCookie('accessToken', '', { path: '/', expires: new Date(0) });
                     navigate('/');
                     return null;
@@ -92,13 +90,13 @@ export const getczauthtypetRequest = async (accessToken, setCookie, navigate) =>
                 alert("존재하지 않는 게시글입니다.");
                 navigate(`/article-main`);
                 break;
-            case "ATE": // 🔄 Access Token 만료 처리
-                console.warn("🔄 Access Token 만료됨. 토큰 재발급 시도 중...");
+            case "ATE": // Access Token 만료 처리
+                console.warn(" Access Token 만료됨. 토큰 재발급 시도 중...");
                 const newToken = await refreshTokenRequest(setCookie, accessToken, navigate);
                 if (newToken?.accessToken) {
                     return getczauthtypetRequest(newToken.accessToken, setCookie, navigate);
                 } else {
-                    alert("❌ 토큰 재발급 실패. 다시 로그인해주세요.(코딩존 권한)");
+                    alert("토큰 재발급 실패. 다시 로그인해주세요.(코딩존 권한)");
                     setCookie('accessToken', '', { path: '/', expires: new Date(0) });
                     navigate('/');
                     return null;
@@ -116,8 +114,8 @@ export const getczauthtypetRequest = async (accessToken, setCookie, navigate) =>
 
 
 
-let isRefreshing = false;  
-let refreshSubscribers = [];  
+let isRefreshing = false;
+let refreshSubscribers = [];
 
 export const refreshTokenRequest = async (setCookie, accessToken, navigate, apiName) => {
     if (isRefreshing) {
@@ -154,7 +152,7 @@ export const refreshTokenRequest = async (setCookie, accessToken, navigate, apiN
                 setCookie('refreshToken', newRefreshToken, { path: '/', httpOnly: true, secure: true });
             }
 
-            console.log(`✅ [${apiName}] 토큰 재발급 성공:`, newAccessToken);
+            console.log(`[${apiName}] 토큰 재발급 성공:`, newAccessToken);
 
             // 대기 중이던 API 요청들에게 새로운 토큰 제공
             refreshSubscribers.forEach((callback) => callback(newAccessToken));
@@ -162,7 +160,7 @@ export const refreshTokenRequest = async (setCookie, accessToken, navigate, apiN
 
             return { accessToken: newAccessToken, apiName };
         } else {
-            alert(`[${apiName}] [토큰 재발급 실패] 응답:`, response.data.message);
+            alert("로그인 기간이 만료되었습니다.");
             navigate('/');
             return null;
         }
