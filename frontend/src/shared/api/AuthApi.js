@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-//const DOMAIN = 'http://localhost:8080';
-const DOMAIN = 'https://api.ice-advice.co.kr'; 
+const DOMAIN = 'http://localhost:8080';
+//const DOMAIN = 'https://api.ice-advice.co.kr'; 
 const API_DOMAIN = `${DOMAIN}/api/v1`;
 const GET_MYPAGE_USER_URL = () => `${API_DOMAIN}/user`; // 마이페이지_개인정보
 const GET_SIGN_IN_USER_URL = () => `${API_DOMAIN}/user`;
@@ -117,8 +117,17 @@ export const getczauthtypetRequest = async (accessToken, setCookie, navigate) =>
 
 
 
+let isRefreshing = false; // 토큰 갱신 여부 플래그
+let refreshSubscribers = []; // 대기 중인 API 요청 저장
 
 export const refreshTokenRequest = async (setCookie, accessToken, navigate, apiName) => {
+    if (isRefreshing) {
+        return new Promise((resolve) => {
+            refreshSubscribers.push((newToken) => resolve({ accessToken: newToken, apiName }));
+        });
+    }
+
+    isRefreshing = true; // 토큰 갱신 시작
     try {
         if (!accessToken) {
             navigate('/');
@@ -147,6 +156,11 @@ export const refreshTokenRequest = async (setCookie, accessToken, navigate, apiN
             }
 
             console.log(`✅ [${apiName}] 토큰 재발급 성공:`, newAccessToken);
+
+            // 대기 중이던 API 요청들에게 새로운 토큰 제공
+            refreshSubscribers.forEach((callback) => callback(newAccessToken));
+            refreshSubscribers = [];
+
             return { accessToken: newAccessToken, apiName };
         } else {
             alert(`[${apiName}] [토큰 재발급 실패] 응답:`, response.data.message);
@@ -156,6 +170,7 @@ export const refreshTokenRequest = async (setCookie, accessToken, navigate, apiN
     } catch (error) {
         navigate('/');
         return null;
+    } finally {
+        isRefreshing = false; // 갱신 종료
     }
 };
-

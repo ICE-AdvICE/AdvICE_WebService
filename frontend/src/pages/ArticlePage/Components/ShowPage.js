@@ -163,7 +163,7 @@ const ShowPage = () => {
     useEffect(() => {
         if (articleNum && token) {
             checkArticleOwnership(navigate, articleNum, token, setCookie).then(data => {
-                if (data.code === "SU") {
+                if (data?.code === "SU") {
                     setCanEdit(true);  
                 } else {
                     setCanEdit(false);  

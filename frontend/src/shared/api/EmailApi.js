@@ -1,6 +1,6 @@
 import axios from 'axios';
-//const DOMAIN = 'http://localhost:8080';
-const DOMAIN = 'https://api.ice-advice.co.kr'; 
+const DOMAIN = 'http://localhost:8080';
+//const DOMAIN = 'https://api.ice-advice.co.kr'; 
 const API_DOMAIN = `${DOMAIN}/api/v1`;
 
 const Email_Certification_URL = () => `${API_DOMAIN}/auth/email-certification`; //인증번호 전송
