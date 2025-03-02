@@ -237,7 +237,8 @@ const handleToggleReservation = async (classItem) => {
           result = await deleteCodingZoneClass(token, classItem.classNum, setCookie, navigate);
           if (result) {
               alert("예약 취소가 완료되었습니다.");
-              await fetchData(); // ✅ 예약 취소 후 리스트 갱신
+              setUserReservedClass(null);
+              await fetchData(); //  
           }
       } else {
           result = await reserveCodingZoneClass(token, classItem.classNum, setCookie, navigate);
