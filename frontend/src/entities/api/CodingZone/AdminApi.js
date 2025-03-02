@@ -28,10 +28,8 @@ export const uploadGroupData = async (groupData, token, setCookie, navigate) => 
             const newToken = await refreshTokenRequest(setCookie, token, navigate);
 
             if (newToken?.accessToken) {
-                alert("🔄 (A/B)조 정보 등록: 토큰이 재발급되었습니다. 다시 시도합니다.");
                 return uploadGroupData(groupData, newToken.accessToken, setCookie, navigate);
             } else {
-                alert("❌ (A/B)조 정보 등록: 토큰 재발급 실패. 다시 로그인해주세요.");
                 setCookie('accessToken', '', { path: '/', expires: new Date(0) });
                 navigate('/');
                 return { code: 'TOKEN_EXPIRED', message: '토큰이 만료되었습니다. 다시 로그인해주세요.' };
@@ -62,10 +60,8 @@ export const fetchGroupClasses = async (groupId, token, setCookie, navigate) => 
             const newToken = await refreshTokenRequest(setCookie, token, navigate);
 
             if (newToken?.accessToken) {
-                alert("🔄 (A/B)조 정보 반환: 토큰이 재발급되었습니다. 다시 시도합니다.");
                 return fetchGroupClasses(groupId, newToken.accessToken, setCookie, navigate);
             } else {
-                alert("❌ (A/B)조 정보 반환: 토큰 재발급 실패. 다시 로그인해주세요.");
                 setCookie('accessToken', '', { path: '/', expires: new Date(0) });
                 navigate('/');
                 return { code: 'TOKEN_EXPIRED', message: '토큰이 만료되었습니다. 다시 로그인해주세요.' };
@@ -97,10 +93,8 @@ export const uploadClassForWeek = async (groupData, token, setCookie, navigate) 
             const newToken = await refreshTokenRequest(setCookie, token, navigate);
 
             if (newToken?.accessToken) {
-                alert("🔄 코딩존 수업 등록: 토큰이 재발급되었습니다. 다시 시도합니다.");
                 return uploadClassForWeek(groupData, newToken.accessToken, setCookie, navigate);
             } else {
-                alert("❌ 코딩존 수업 등록: 토큰 재발급 실패. 다시 로그인해주세요.");
                 setCookie('accessToken', '', { path: '/', expires: new Date(0) });
                 navigate('/');
                 return { code: 'TOKEN_EXPIRED', message: '토큰이 만료되었습니다. 다시 로그인해주세요.' };
@@ -133,10 +127,8 @@ export const deleteClass = async (classNum, token, setCookie, navigate) => {
             const newToken = await refreshTokenRequest(setCookie, token, navigate);
 
             if (newToken?.accessToken) {
-                alert("🔄 수업 삭제: 토큰이 재발급되었습니다. 다시 시도합니다.");
                 return deleteClass(classNum, newToken.accessToken, setCookie, navigate);
             } else {
-                alert("❌ 수업 삭제: 토큰 재발급 실패. 다시 로그인해주세요.");
                 setCookie('accessToken', '', { path: '/', expires: new Date(0) });
                 navigate('/');
                 return { code: 'TOKEN_EXPIRED', message: '토큰이 만료되었습니다. 다시 로그인해주세요.' };
