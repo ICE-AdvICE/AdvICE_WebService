@@ -30,6 +30,7 @@ export const getSignInUserRequest = async (accessToken, setCookie, navigate) => 
                 if (newToken?.accessToken) {
                     return getSignInUserRequest(newToken.accessToken, setCookie, navigate);
                 } else {
+
                     setCookie('accessToken', '', { path: '/', expires: new Date(0) });
                     navigate('/');
                     return null;
@@ -116,7 +117,6 @@ export const getczauthtypetRequest = async (accessToken, setCookie, navigate, cl
 
 let isRefreshing = false;
 let refreshSubscribers = [];
-
 export const refreshTokenRequest = async (setCookie, accessToken, navigate, apiName) => {
     if (isRefreshing) {
         return new Promise((resolve) => {
@@ -124,9 +124,10 @@ export const refreshTokenRequest = async (setCookie, accessToken, navigate, apiN
         });
     }
 
-    isRefreshing = true; // 토큰 갱신 시작
+    isRefreshing = true;
     try {
         if (!accessToken) {
+            alert("액세스 토큰이 없습니다. 로그인 페이지로 이동합니다.");
             navigate('/');
             return null;
         }
@@ -143,7 +144,9 @@ export const refreshTokenRequest = async (setCookie, accessToken, navigate, apiN
             }
         );
 
-        if (response.data.code === "SU") {
+        //alert(`서버 응답: ${JSON.stringify(response?.data)}`);
+
+        if (response?.data?.code === "SU") {
             const newAccessToken = response.data.accessToken;
             const newRefreshToken = response.headers['refresh-token'];
 
@@ -152,25 +155,40 @@ export const refreshTokenRequest = async (setCookie, accessToken, navigate, apiN
                 setCookie('refreshToken', newRefreshToken, { path: '/', httpOnly: true, secure: true });
             }
 
-            console.log(`[${apiName}] 토큰 재발급 성공:`, newAccessToken);
+           // alert(`[${apiName}] 토큰 재발급 성공: ${newAccessToken}`);
 
-            // 대기 중이던 API 요청들에게 새로운 토큰 제공
             refreshSubscribers.forEach((callback) => callback(newAccessToken));
             refreshSubscribers = [];
 
             return { accessToken: newAccessToken, apiName };
-        } else if (response.data.code === "NP") {
-            alert("로그인 기간이 만료되었습니다.");
-            navigate('/');
-            return null;
-        } else if (response.data.code === "DBE") {
-            console.error("데이터베이스 오류 발생: ", response.data.message);
-            return null;
+        } else {
+            //alert(`[${apiName}] 토큰 재발급 실패 - 코드: ${response?.data?.code}`);
+
+            if (response?.data?.code === "NP") {
+                alert("😵로그인 기간이 만료되었습니다. 재로그인 해주세요.😵");
+                navigate('/');
+                return null;
+            } else if (response?.data?.code === "DBE") {
+                alert("데이터베이스 오류 발생: " + response.data.message);
+                return null;
+            }
         }
     } catch (error) {
-        console.error("토큰 갱신 중 오류 발생: ", error);
+        //alert("토큰 갱신 중 오류 발생: " + error);
+
+        if (error.response) {
+            //alert(`에러 응답 데이터: ${JSON.stringify(error.response.data)}`);
+            if (error.response.data?.code === "NP") {
+                alert("😵로그인 기간이 만료되었습니다. 재로그인 해주세요.😵");
+                navigate('/');
+                return null;
+            }
+        }
+
+        alert("다시 로그인해 주세요.");
+        navigate('/');
         return null;
     } finally {
-        isRefreshing = false; // 갱신 종료
+        isRefreshing = false;
     }
 };
