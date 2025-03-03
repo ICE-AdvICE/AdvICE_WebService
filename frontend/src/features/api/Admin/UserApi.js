@@ -117,20 +117,23 @@ export const createNotificationArticleRequest = async (postData, token, setCooki
 //15. (Admin)게시글 삭제 API
 export const adminhandleDelete = async (articleNum, token, navigate, setCookie) => {
     try {
+        
+        const isConfirmed = window.confirm("정말로 게시글을 삭제하시겠습니까?");
+        if (!isConfirmed) return false; 
+
         const response = await axios.delete(ADMIN_DELETE_ARTICLE_URL(articleNum), {
             headers: { Authorization: `Bearer ${token}` }
         });
 
         if (response.data.code === "SU") {
-            if (window.confirm("정말로 게시글을 삭제하시겠습니까?")) {
-                alert("게시글이 삭제되었습니다.");
-                navigate('/article-main');
-            }
+            alert("게시글이 삭제되었습니다.");
+            navigate('/article-main');
             return true;
         }
     } catch (error) {
         if (!error.response) return false;
         const { code } = error.response.data;
+
         if (code === "ATE") {
             const newToken = await refreshTokenRequest(setCookie, token, navigate);
             if (newToken?.accessToken) {

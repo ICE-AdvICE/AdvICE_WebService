@@ -157,7 +157,7 @@ export const downloadAttendanceExcel = async (accessToken, grade, setCookie, nav
         const url = window.URL.createObjectURL(new Blob([response.data]));
         const link = document.createElement('a');
         link.href = url;
-        link.setAttribute('download', `attendance_grade${grade}.xlsx`);
+        link.setAttribute('download', `코딩존${grade}.xlsx`);
         document.body.appendChild(link);
         link.click();
         link.parentNode.removeChild(link);

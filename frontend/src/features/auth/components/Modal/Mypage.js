@@ -39,7 +39,7 @@ const MypageForm = ({ closeModal, modal }) => {
 
     useEffect(() => {
         const fetchUserData = async () => {
-            if (modal.mypage) { // ✅ modal이 props로 전달되었으므로 사용 가능
+            if (modal.mypage) { //modal이 props로 전달되었으므로 사용 가능
                 const userDetailsData = await getMypageRequest(cookies.accessToken, setCookie, navigate, closeModal);
                 if (userDetailsData?.code === "SU") {
                     setUserDetails({
@@ -57,7 +57,7 @@ const MypageForm = ({ closeModal, modal }) => {
         };
     
         fetchUserData();
-    }, [modal.mypage, cookies.accessToken, navigate, closeModal]); // ✅ closeModal 추가
+    }, [modal.mypage, cookies.accessToken, navigate, closeModal]); 
     
     
 
