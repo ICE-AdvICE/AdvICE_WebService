@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import '../css/codingzone/codingzone-main.css';
 import { useCookies } from "react-cookie";
-import CzCard from '../../widgets/layout/CzCard/czCard';  
+import CzCard from '../../widgets/layout/CzCard/czCard';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { deleteClass } from '../../entities/api/CodingZone/AdminApi.js';
 import { checkAdminType } from '../../features/api/Admin/UserApi.js';
@@ -12,7 +12,7 @@ import "slick-carousel/slick/slick-theme.css";
 import Slider from 'react-slick';
 import { getAttendanceCount, getcodingzoneListRequest } from '../../features/api/CodingzoneApi.js';
 import { deleteCodingZoneClass, reserveCodingZoneClass } from '../../entities/api/CodingZone/StudentApi.js';
-const ClassList = ({ userReservedClass,onDeleteClick,classList, handleCardClick, handleToggleReservation, isAdmin }) => {
+const ClassList = ({ userReservedClass, onDeleteClick, classList, handleCardClick, handleToggleReservation, isAdmin }) => {
   return (
     <div className='cz-card'>
       {classList.map((classItem) => (
@@ -27,12 +27,12 @@ const ClassList = ({ userReservedClass,onDeleteClick,classList, handleCardClick,
           classDate={classItem.classDate}
           currentNumber={classItem.currentNumber}
           maximumNumber={classItem.maximumNumber}
-          category={`[${classItem.grade}학년]`}  
+          category={`[${classItem.grade}학년]`}
           onClick={() => handleCardClick(classItem)}
           onReserveClick={() => handleToggleReservation(classItem)}
           isReserved={classItem.isReserved}
           disableReserveButton={
-            userReservedClass && 
+            userReservedClass &&
             (userReservedClass.classNum !== classItem.classNum && userReservedClass.grade === classItem.grade)
           }
         />
@@ -43,30 +43,30 @@ const ClassList = ({ userReservedClass,onDeleteClick,classList, handleCardClick,
 
 const CodingMain = () => {
   const [classList, setClassList] = useState([]);
-  const [grade, setGrade] = useState(1);  
-  const [cookies,setCookie] = useCookies(['accessToken']);
-  const [originalClassList, setOriginalClassList] = useState([]); 
-  const [attendanceCount, setAttendanceCount] = useState(0); 
-  const [isAdmin, setIsAdmin] = useState(false); 
+  const [grade, setGrade] = useState(1);
+  const [cookies, setCookie] = useCookies(['accessToken']);
+  const [originalClassList, setOriginalClassList] = useState([]);
+  const [attendanceCount, setAttendanceCount] = useState(0);
+  const [isAdmin, setIsAdmin] = useState(false);
   const navigate = useNavigate();
-  const location = useLocation();  
+  const location = useLocation();
   const [selectedZone, setSelectedZone] = useState(1);
-  const [selectedButton, setSelectedButton] = useState('codingzone'); 
+  const [selectedButton, setSelectedButton] = useState('codingzone');
   const [userReservedClass, setUserReservedClass] = useState(null);
-  const [selectedDay, setSelectedDay] = useState('');  
+  const [selectedDay, setSelectedDay] = useState('');
   const [isRendered, setIsRendered] = useState(false);
   const [userRole, setUserRole] = useState('');
   const [showNoClassesImage, setShowNoClassesImage] = useState(false);
 
   useEffect(() => {
-    if (cookies.accessToken  ) {
-      setIsRendered(true);  
+    if (cookies.accessToken) {
+      setIsRendered(true);
     } else {
-      setIsRendered(false);  
+      setIsRendered(false);
     }
   }, [cookies.accessToken]);
 
-// 로그인 여부와 관리자 유형을 확인하는 부분을 하나의 useEffect로 정리
+  // 로그인 여부와 관리자 유형을 확인하는 부분을 하나의 useEffect로 정리
   useEffect(() => {
     const fetchUserRole = async () => {
       const token = cookies.accessToken;
@@ -74,7 +74,7 @@ const CodingMain = () => {
         const response = await checkAdminType(token, setCookie, navigate);
         if (response === "EA") {
           setIsAdmin(true);
-        } 
+        }
         else if (response === "SU") {
           setUserRole('SU');
         }
@@ -93,30 +93,30 @@ const CodingMain = () => {
   const handleDelete = async (classNum) => {
     const token = cookies.accessToken;
     if (!token) {
-        alert("로그인이 필요합니다.");
-        return;
+      alert("로그인이 필요합니다.");
+      return;
     }
-    const result = await deleteClass(classNum, token,setCookie, navigate);
+    const result = await deleteClass(classNum, token, setCookie, navigate);
     if (result) {
-        alert("수업이 삭제되었습니다.");
-        setClassList(prevClassList => {
-            const updatedList = prevClassList.filter(item => item.classNum !== classNum);
-            if (updatedList.length === 0) {
-              setShowNoClassesImage(true);
-          } else {
-              setShowNoClassesImage(false);
-          }
-            return updatedList;
-        });
+      alert("수업이 삭제되었습니다.");
+      setClassList(prevClassList => {
+        const updatedList = prevClassList.filter(item => item.classNum !== classNum);
+        if (updatedList.length === 0) {
+          setShowNoClassesImage(true);
+        } else {
+          setShowNoClassesImage(false);
+        }
+        return updatedList;
+      });
     } else {
-        alert("수업 삭제에 실패했습니다.");
+      alert("수업 삭제에 실패했습니다.");
     }
-};
+  };
 
   // 시간 문자열을 분 단위 숫자로 변환하여 정렬
   const timeToNumber = (timeStr) => {
     const [hours, minutes] = timeStr.split(':').map(Number);
-    return hours * 60 + minutes;   
+    return hours * 60 + minutes;
   };
   // 수업 목록을 요일과 시간 순으로 정렬
   const sortClassList = (classList) => {
@@ -135,7 +135,7 @@ const CodingMain = () => {
     { name: "목요일", label: "Thu" },
     { name: "금요일", label: "Fri" },
   ];
-  
+
   // 요일 필터링 기능
   const filterByDay = (day) => {
     if (selectedDay === day) {
@@ -146,11 +146,11 @@ const CodingMain = () => {
         return classItem.weekDay.toLowerCase() === day.toLowerCase();
       });
       setClassList(filteredData);
-      setSelectedDay(day);  
+      setSelectedDay(day);
     }
   };
 
-    useEffect(() => {
+  useEffect(() => {
     if (location.pathname === '/coding-zone') {
       setSelectedButton('codingzone');
     } else if (location.pathname.includes('/coding-zone/Codingzone_Attendance')) {
@@ -162,108 +162,118 @@ const CodingMain = () => {
   /// 코딩존 수업 데이터를 가져오는 useEffect
   const fetchData = async () => {
     try {
-        let classes = [];
-        if (cookies.accessToken) {
-            const response = await getcodingzoneListRequest(cookies.accessToken, grade, setCookie, navigate);
-            if (response) {
-                if (response.registedClassNum !== 0) {
-                    classes = response.classList.map(classItem => ({
-                        ...classItem,
-                        isReserved: classItem.classNum === response.registedClassNum   
-                    }));
-                    const reservedClass = classes.find(classItem => classItem.isReserved);
-                    if (reservedClass) {
-                        setUserReservedClass(reservedClass);
-                    }
-                } else {
-                    classes = response.classList.map(classItem => ({
-                        ...classItem,
-                        isReserved: false   
-                    }));
-                }
+      let classes = [];
+      if (cookies.accessToken) {
+        const response = await getcodingzoneListRequest(cookies.accessToken, grade, setCookie, navigate);
+        if (response) {
+          if (response.registedClassNum !== 0) {
+            classes = response.classList.map(classItem => ({
+              ...classItem,
+              isReserved: classItem.classNum === response.registedClassNum
+            }));
+            const reservedClass = classes.find(classItem => classItem.isReserved);
+            if (reservedClass) {
+              setUserReservedClass(reservedClass);
             }
-        } else {
-            const response = await getAvailableClassesForNotLogin(grade);
-            if (response && response.length > 0) {
-                classes = response.map(classItem => ({
-                    ...classItem,
-                    isReserved: undefined 
-                }));
-            }
+          } else {
+            classes = response.classList.map(classItem => ({
+              ...classItem,
+              isReserved: false
+            }));
+          }
         }
-        if (classes.length > 0) {
-            const sortedClasses = sortClassList(classes);
-            setOriginalClassList(sortedClasses);
-            setClassList(sortedClasses);
-            setShowNoClassesImage(false);
-        } else {
-            setOriginalClassList([]);
-            setClassList([]);
-            setShowNoClassesImage(true);
+      } else {
+        const response = await getAvailableClassesForNotLogin(grade);
+        if (response && response.length > 0) {
+          classes = response.map(classItem => ({
+            ...classItem,
+            isReserved: undefined
+          }));
         }
-    } catch (error) {
-        alert("수업 데이터를 불러오는 중 오류가 발생했습니다.");
+      }
+      if (classes.length > 0) {
+        const sortedClasses = sortClassList(classes);
+        setOriginalClassList(sortedClasses);
+        setClassList(sortedClasses);
+        setShowNoClassesImage(false);
+      } else {
         setOriginalClassList([]);
         setClassList([]);
         setShowNoClassesImage(true);
+      }
+    } catch (error) {
+      alert("수업 데이터를 불러오는 중 오류가 발생했습니다.");
+      setOriginalClassList([]);
+      setClassList([]);
+      setShowNoClassesImage(true);
     }
-};
-useEffect(() => {
-  fetchData();
-}, [cookies.accessToken, grade]);
+  };
+  useEffect(() => {
+    fetchData();
+  }, [cookies.accessToken, grade]);
 
   // 출석 횟수 
   useEffect(() => {
     const fetchAttendance = async () => {
       const token = cookies.accessToken;
       if (token) {
-          const count = await getAttendanceCount(token, grade,setCookie, navigate);  
-          setAttendanceCount(count);
-        } 
+        const count = await getAttendanceCount(token, grade, setCookie, navigate);
+        setAttendanceCount(count);
+      }
     };
     fetchAttendance();
   }, [cookies.accessToken, grade]);
 
-// 예약 기능 토글
-const handleToggleReservation = async (classItem) => {
-  const token = cookies.accessToken;
-  if (!token) {
-      alert("로그인이 필요합니다.");
-      return;
-  }
-  try {
-      let result;
-      if (classItem.isReserved) {
-          result = await deleteCodingZoneClass(token, classItem.classNum, setCookie, navigate);
-          if (result) {
-              alert("예약 취소가 완료되었습니다.");
-              setUserReservedClass(null);
-              await fetchData(); //  
-          }
-      } else {
-          result = await reserveCodingZoneClass(token, classItem.classNum, setCookie, navigate);
-          if (result) {
-              alert("예약이 완료되었습니다.");
-              await fetchData(); // ✅ 예약 후 리스트 갱신
-          }
-      }
-  } catch (error) {
-      alert("예약 처리 중 오류가 발생했습니다.");
-  }
+  // 예약 기능 토글
+  const handleToggleReservation = async (classItem) => {
+    const token = cookies.accessToken;
+    if (!token) {
+        alert("로그인이 필요합니다.");
+        return;
+    }
+    try {
+        let result;
+        if (classItem.isReserved) {
+            result = await deleteCodingZoneClass(token, classItem.classNum, setCookie, navigate);
+            if (result) {
+                alert("예약 취소가 완료되었습니다.");
+                setUserReservedClass(null);
+                await fetchData(); // ✅ 예약 취소 후 리스트 갱신
+            }
+        } else {
+            result = await reserveCodingZoneClass(token, classItem.classNum, setCookie, navigate);
+            if (result) {
+                alert("예약이 완료되었습니다.");
+                await fetchData(); // ✅ 예약 후 리스트 갱신
+            } else {
+                // ✅ 예약 실패 시 응답 코드 확인 후 처리
+                if (result === "FC") {
+                    alert("예약 가능한 인원이 꽉 찼습니다.");
+                    await fetchData(); // 
+                } else {
+                    alert("예약에 실패했습니다.");
+                }
+            }
+        }
+    } catch (error) {
+        alert("예약 처리 중 오류가 발생했습니다.");
+        await fetchData(); 
+    }
 };
 
-const handleTabChange = (tab) => {
-  if (tab === 'attendence' && !cookies.accessToken) {
-    alert("로그인 후 이용 가능합니다.");
-    return;
-  }
-  setSelectedButton(tab);
-  if (tab === 'codingzone') {
-    navigate('/coding-zone');
-  } else if (tab === 'attendence') {
-    navigate('/coding-zone/Codingzone_Attendance');
-  }
-};
+
+  const handleTabChange = (tab) => {
+    if (tab === 'attendence' && !cookies.accessToken) {
+      alert("로그인 후 이용 가능합니다.");
+      return;
+    }
+    setSelectedButton(tab);
+    if (tab === 'codingzone') {
+      navigate('/coding-zone');
+    } else if (tab === 'attendence') {
+      navigate('/coding-zone/Codingzone_Attendance');
+    }
+  };
 
 
   const handleCardClick = (classItem) => {
@@ -274,69 +284,69 @@ const handleTabChange = (tab) => {
       item.classNum === classNum ? { ...item, isReserved, currentNumber: newCurrentNumber } : item
     );
     setClassList(updatedList);
-};
+  };
 
-const [showModal, setShowModal] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
-const handleOpenModal = () => {
+  const handleOpenModal = () => {
     setShowModal(true);
-};
+  };
 
-const handleCloseModal = () => {
+  const handleCloseModal = () => {
     setShowModal(false);
-};
+  };
 
-const sliderSettings = {
-  dots: false,
-  infinite: true,
-  speed: 500,
-  slidesToShow: 1,
-  slidesToScroll: 1,
-  autoplay: true,         
-  autoplaySpeed: 4000,   
-  pauseOnHover: true      
-};
+  const sliderSettings = {
+    dots: false,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 4000,
+    pauseOnHover: true
+  };
 
-/*출석률 체크바 */
-const renderAttendanceProgress = (count) => {
-  const cappedCount = Math.min(count, 4);
-  const percentage = (cappedCount / 4) * 100;
-  return (
-    <div className="attendance-progress-container">
-      <span className="attendance-label">출석률({percentage}%)</span>
-      <div 
-        className="attendance-progress-bar" 
-        aria-label={`출석 ${percentage}% 완료`}
-      >
-        <div 
-          className="attendance-progress-fill" 
-          style={{ width: `${percentage}%` }}
-        ></div>
+  /*출석률 체크바 */
+  const renderAttendanceProgress = (count) => {
+    const cappedCount = Math.min(count, 4);
+    const percentage = (cappedCount / 4) * 100;
+    return (
+      <div className="attendance-progress-container">
+        <span className="attendance-label">출석률({percentage}%)</span>
+        <div
+          className="attendance-progress-bar"
+          aria-label={`출석 ${percentage}% 완료`}
+        >
+          <div
+            className="attendance-progress-fill"
+            style={{ width: `${percentage}%` }}
+          ></div>
+        </div>
       </div>
-    </div>
-  );
-};
+    );
+  };
 
 
   return (
     <div className="codingzone-container">
       <div className='select-container'>
         <span> | </span>
-        <button 
-          onClick={() => handleTabChange('codingzone')} 
+        <button
+          onClick={() => handleTabChange('codingzone')}
           className={selectedButton === 'codingzone' ? 'selected' : ''}
         >
           코딩존 예약
         </button>
         <span> | </span>
-        <button 
-          onClick={() => handleTabChange('attendence')} 
+        <button
+          onClick={() => handleTabChange('attendence')}
           className={selectedButton === 'attendence' ? 'selected' : ''}
         >
           출결 관리
         </button>
         <span> | </span>
-        <button 
+        <button
           onClick={handleOpenModal}
           className={selectedButton === 'inquiry' ? 'selected' : ''}
         >
@@ -345,42 +355,42 @@ const renderAttendanceProgress = (count) => {
         {showModal && <InquiryModal isOpen={showModal} onClose={handleCloseModal} />}
         <span> | </span>
       </div>
-      
-      <Slider {...sliderSettings}> 
-         <div className="codingzone-top-container">
-         <img src="/codingzone_main_v5.png" className="codingzonetop2-image"/>
+
+      <Slider {...sliderSettings}>
+        <div className="codingzone-top-container">
+          <img src="/codingzone_main_v5.png" className="codingzonetop2-image" />
         </div>
         <div className="codingzone-top-container">
-        <img src="/coding-zone-main2.png" className="codingzonetop2-image"/>
+          <img src="/coding-zone-main2.png" className="codingzonetop2-image" />
         </div>
         <div className="codingzone-top-container">
-        <img src="/coding-zone-main3.png" className="codingzonetop2-image"/>
+          <img src="/coding-zone-main3.png" className="codingzonetop2-image" />
         </div>
       </Slider>
       <div className='codingzone-body-container'>
         <div className="cz-category-top">
           <div className="cz-category-date">
-            <button 
-              className={`cz-1 ${selectedZone === 1 ? 'selected' : ''}`} 
+            <button
+              className={`cz-1 ${selectedZone === 1 ? 'selected' : ''}`}
               onClick={() => {
                 setGrade(1);
                 setSelectedZone(1);
-                setSelectedDay('');  
-                setClassList(originalClassList);   
+                setSelectedDay('');
+                setClassList(originalClassList);
               }}>
               코딩존 1
             </button>
-            <button 
-              className={`cz-2 ${selectedZone === 2 ? 'selected' : ''}`} 
+            <button
+              className={`cz-2 ${selectedZone === 2 ? 'selected' : ''}`}
               onClick={() => {
                 setGrade(2); setSelectedZone(2);
-                setSelectedDay(''); setClassList(originalClassList);   
+                setSelectedDay(''); setClassList(originalClassList);
               }}>
               코딩존 2
             </button>
           </div>
           <Link to="/coding-zone/Codingzone_Attendance" className='cz-count-container'>
-          {token && renderAttendanceProgress(attendanceCount)}
+            {token && renderAttendanceProgress(attendanceCount)}
           </Link>
         </div>
         <div className="codingzone-date">
@@ -398,7 +408,7 @@ const renderAttendanceProgress = (count) => {
         </div>
         <div className='category-name-container'>
           <div className="codingzone-title">
-            <p className='weekDay'>요일</p> 
+            <p className='weekDay'>요일</p>
             <p className='weekDate'>날짜</p>
             <p className='weekTime'>시간</p>
             <p className='card-hidden-space'></p>
@@ -406,30 +416,30 @@ const renderAttendanceProgress = (count) => {
             <p className='weekperson'>조교</p>
             <p className='weekcount'>인원</p>
             {(cookies.accessToken || isAdmin) && isRendered && (
-            <p className='registerbutton'></p>
-          )}
+              <p className='registerbutton'></p>
+            )}
           </div>
         </div>
-        
+
         <div className="codingzone-list">
-        {showNoClassesImage ? (
-          <div className="no-classes-image" style={{ textAlign: 'center', marginTop: '20px' }}>
-            <img src="/Codingzone-noregist.png" alt="수업이 없습니다" className="no-classes-img" />
-          </div>
-        ) : (
-          <ClassList 
-            classList={classList} 
-            handleCardClick={handleCardClick} 
-            handleToggleReservation={handleToggleReservation} 
-            isAdmin={isAdmin}  
-            onDeleteClick={handleDelete} 
-            userReservedClass={userReservedClass} 
-            token={token}
-          />
-        )}
+          {showNoClassesImage ? (
+            <div className="no-classes-image" style={{ textAlign: 'center', marginTop: '20px' }}>
+              <img src="/Codingzone-noregist.png" alt="수업이 없습니다" className="no-classes-img" />
+            </div>
+          ) : (
+            <ClassList
+              classList={classList}
+              handleCardClick={handleCardClick}
+              handleToggleReservation={handleToggleReservation}
+              isAdmin={isAdmin}
+              onDeleteClick={handleDelete}
+              userReservedClass={userReservedClass}
+              token={token}
+            />
+          )}
 
         </div>
-       
+
       </div>
     </div>
   );
