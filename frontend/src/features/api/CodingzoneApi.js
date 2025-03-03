@@ -96,10 +96,10 @@ export const getAttendanceCount = async (token, grade, setCookie, navigate) => {
             const newToken = await refreshTokenRequest(setCookie, token, navigate);
 
             if (newToken?.accessToken) {
-                alert("출석 횟수 조회: 토큰이 재발급되었습니다. 다시 시도합니다.");
+                //alert("출석 횟수 조회: 토큰이 재발급되었습니다. 다시 시도합니다.");
                 return getAttendanceCount(newToken.accessToken, grade, setCookie, navigate);
             } else {
-                alert("출석 횟수 조회: 토큰 재발급 실패. 다시 로그인해주세요.");
+                //alert("출석 횟수 조회: 토큰 재발급 실패. 다시 로그인해주세요.");
                 setCookie('accessToken', '', { path: '/', expires: new Date(0) });
                 navigate('/');
                 return { code: 'TOKEN_EXPIRED', message: '토큰이 만료되었습니다. 다시 로그인해주세요.' };
