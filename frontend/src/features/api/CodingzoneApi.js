@@ -23,7 +23,6 @@ export const getcodingzoneListRequest = async (token, grade, setCookie, navigate
 
         if (response.data.code === "SU") {
             if (!response.data.classList || response.data.classList.length === 0) {
-                alert("📢 등록된 수업이 없습니다.");
                 return { classList: [], registedClassNum: null };
             }
 
@@ -138,10 +137,10 @@ export const getczattendlistRequest = async (accessToken, setCookie, navigate) =
             const newToken = await refreshTokenRequest(setCookie, accessToken, navigate);
 
             if (newToken?.accessToken) {
-                alert("출/결석 수업 리스트 조회: 토큰이 재발급되었습니다. 다시 시도합니다.");
+
                 return getczattendlistRequest(newToken.accessToken, setCookie, navigate);
             } else {
-                alert(" 출/결석 수업 리스트 조회: 토큰 재발급 실패. 다시 로그인해주세요.");
+
                 setCookie('accessToken', '', { path: '/', expires: new Date(0) });
                 navigate('/');
                 return { code: 'TOKEN_EXPIRED', message: '토큰이 만료되었습니다. 다시 로그인해주세요.' };

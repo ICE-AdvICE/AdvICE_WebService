@@ -32,7 +32,7 @@ const requestWithTokenHandling = async (apiCall, accessToken, setCookie, navigat
                 console.log("Access Token이 재발급됨. 다시 요청 수행...");
                 return requestWithTokenHandling(apiCall, newToken.accessToken, setCookie, navigate, retryData);
             } else {
-                alert("토큰 재발급 실패. 다시 로그인해주세요.");
+
                 setCookie('accessToken', '', { path: '/', expires: new Date(0) });
                 navigate('/');
                 return null;
@@ -108,10 +108,10 @@ export const logoutRequest = async (accessToken, setCookie, navigate) => {
             withCredentials: true
         });
 
-     
+
         return response.data;
     } catch (error) {
-        
+
 
         // Access Token이 만료된 경우 (ATE)
         if (error.response?.status === 401 || error.response?.data?.code === "ATE") {
@@ -124,7 +124,7 @@ export const logoutRequest = async (accessToken, setCookie, navigate) => {
                 console.log("새 Access Token을 사용하여 로그아웃 재시도...");
                 return logoutRequest(newToken.accessToken, setCookie, navigate);
             } else {
-                alert("토큰 재발급 실패, 강제 로그아웃 실행");
+                // alert("토큰 재발급 실패, 강제 로그아웃 실행");
 
                 // 쿠키 삭제 개선 (expires 설정)
                 setCookie('accessToken', '', { path: '/', expires: new Date(0) });
