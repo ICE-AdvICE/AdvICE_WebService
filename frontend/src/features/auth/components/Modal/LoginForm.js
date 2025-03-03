@@ -50,7 +50,7 @@ const LoginForm = ({ onLogin }) => {
 
 
   const handleSignInResponse = (response) => {
-    alert("서버 응답 데이터: " + JSON.stringify(response, null, 2));
+  
 
     if (!response || !response.data || !response.data.code || !response.data.accessToken) {
       setError(true);
