@@ -37,7 +37,6 @@ export const giveBanToUser = async (navigate, articleNum, token, banDuration, ba
                       
                         return giveBanToUser(navigate, articleNum, newToken.accessToken, banDuration, banReason, setCookie);
                     } else {
-                        alert("❌ 토큰 재발급 실패. 다시 로그인해주세요.");
                         setCookie('accessToken', '', { path: '/', expires: new Date(0) });
                         navigate('/');
                         return false;
@@ -279,10 +278,8 @@ export const checkAdminType = async (token, setCookie, navigate) => {
             const newToken = await refreshTokenRequest(setCookie, token, navigate);
 
             if (newToken?.accessToken) {
-                alert("🔄 운영자 권한 확인: 토큰이 재발급되었습니다. 다시 시도합니다.");
                 return checkAdminType(newToken.accessToken, setCookie, navigate);
             } else {
-                alert("❌ 운영자 권한 확인: 토큰 재발급 실패. 다시 로그인해주세요.");
                 setCookie('accessToken', '', { path: '/', expires: new Date(0) });
                 navigate('/');
                 return { code: 'TOKEN_EXPIRED', message: '토큰이 만료되었습니다. 다시 로그인해주세요.' };

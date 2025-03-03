@@ -44,7 +44,7 @@ export const getSignInUserRequest = async (accessToken, setCookie, navigate) => 
     }
 };
 
-export const getMypageRequest = async (accessToken, setCookie, navigate) => {
+export const getMypageRequest = async (accessToken, setCookie, navigate, closeModal) => {
     try {
         const response = await axios.get(GET_MYPAGE_USER_URL(), authorization(accessToken));
         return response.data;
@@ -57,14 +57,14 @@ export const getMypageRequest = async (accessToken, setCookie, navigate) => {
             case "NA":
                 break;
             case "ATE": // Access Token 만료 처리
-                console.warn(" Access Token 만료됨. 토큰 재발급 시도 중...");
+                console.warn("Access Token 만료됨. 토큰 재발급 시도 중...");
                 const newToken = await refreshTokenRequest(setCookie, accessToken, navigate);
                 if (newToken?.accessToken) {
-                    return getMypageRequest(newToken.accessToken, setCookie, navigate);
+                    return getMypageRequest(newToken.accessToken, setCookie, navigate, closeModal);
                 } else {
-
                     setCookie('accessToken', '', { path: '/', expires: new Date(0) });
                     navigate('/');
+                    closeModal(); // ✅ 모달 닫기 추가
                     return null;
                 }
             case "DBE":
@@ -76,7 +76,8 @@ export const getMypageRequest = async (accessToken, setCookie, navigate) => {
         }
     }
 };
-export const getczauthtypetRequest = async (accessToken, setCookie, navigate) => {
+
+export const getczauthtypetRequest = async (accessToken, setCookie, navigate, closeModal) => {
     try {
         const response = await axios.get(GET_CZ_AUTH_TYPE(), authorization(accessToken));
         return response.data;
@@ -91,14 +92,14 @@ export const getczauthtypetRequest = async (accessToken, setCookie, navigate) =>
                 navigate(`/article-main`);
                 break;
             case "ATE": // Access Token 만료 처리
-                console.warn(" Access Token 만료됨. 토큰 재발급 시도 중...");
+                console.warn("Access Token 만료됨. 토큰 재발급 시도 중...");
                 const newToken = await refreshTokenRequest(setCookie, accessToken, navigate);
                 if (newToken?.accessToken) {
-                    return getczauthtypetRequest(newToken.accessToken, setCookie, navigate);
+                    return getczauthtypetRequest(newToken.accessToken, setCookie, navigate, closeModal);
                 } else {
-                    alert("토큰 재발급 실패. 다시 로그인해주세요.(코딩존 권한)");
                     setCookie('accessToken', '', { path: '/', expires: new Date(0) });
                     navigate('/');
+                    closeModal(); // ✅ 모달 닫기 추가
                     return null;
                 }
             case "DBE":
@@ -110,7 +111,6 @@ export const getczauthtypetRequest = async (accessToken, setCookie, navigate) =>
         }
     }
 };
-
 
 
 

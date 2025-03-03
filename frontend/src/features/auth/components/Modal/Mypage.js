@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { getczauthtypetRequest, getMypageRequest } from '../../../../shared/api/AuthApi.js';
 import { deleteUserRequest, updateMypageUserRequest, logoutRequest} from '../../../../entities/api/UserApi.js';
 
-const MypageForm = ({ closeModal }) => {
+const MypageForm = ({ closeModal, modal }) => {
     const [userDetails, setUserDetails] = useState({
         email: '',
         studentNum: '',
@@ -29,8 +29,8 @@ const MypageForm = ({ closeModal }) => {
             setCookie('accessToken', '', { path: '/', expires: new Date(0) });
             setCookie('refreshToken', '', { path: '/', expires: new Date(0) });
     
-            navigate('/'); // ✅ 로그아웃 후 메인 페이지로 이동
-            window.location.reload(); // ✅ 새로고침하여 NavBar 상태 반영
+            navigate('/'); // 로그아웃 후 메인 페이지로 이동
+            window.location.reload(); // 새로고침하여 NavBar 상태 반영
         } else {
             alert("로그아웃 중 오류가 발생했습니다. 다시 시도해주세요.");
         }
@@ -38,27 +38,28 @@ const MypageForm = ({ closeModal }) => {
     
 
     useEffect(() => {
-        const fetchUserDetails = async () => {
-            const data = await getMypageRequest(cookies.accessToken, setCookie, navigate);
-            if (data?.code === "SU") {
-                setUserDetails({
-                    email: data.email,
-                    studentNum: data.studentNum,
-                    name: data.name
-                });
+        const fetchUserData = async () => {
+            if (modal.mypage) { // ✅ modal이 props로 전달되었으므로 사용 가능
+                const userDetailsData = await getMypageRequest(cookies.accessToken, setCookie, navigate, closeModal);
+                if (userDetailsData?.code === "SU") {
+                    setUserDetails({
+                        email: userDetailsData.email,
+                        studentNum: userDetailsData.studentNum,
+                        name: userDetailsData.name
+                    });
+                }
+    
+                const authTypeData = await getczauthtypetRequest(cookies.accessToken, setCookie, navigate, closeModal);
+                if (authTypeData?.code === "EA") {
+                    setAuthType(authTypeData.code);
+                }
             }
         };
-
-        const fetchAuthType = async () => {
-            const data = await getczauthtypetRequest(cookies.accessToken, setCookie, navigate);
-            if (data?.code === "EA") {
-                setAuthType(data.code);
-            }
-        };
-
-        fetchUserDetails();
-        fetchAuthType();
-    }, [cookies.accessToken, navigate]);
+    
+        fetchUserData();
+    }, [modal.mypage, cookies.accessToken, navigate, closeModal]); // ✅ closeModal 추가
+    
+    
 
     const handleGrantPermissions = () => {
         closeModal();

@@ -126,16 +126,16 @@ const NavBar = () => {
             </MyModal>
 
             <MyModal
-    open={modal.mypage}
-    onCancel={() => closeModal('mypage')}
-    footer={[]}
->
-    <MypageForm 
-        handleLogout={handleLogout} 
-        closeModal={() => closeModal('mypage')} 
-        setIsLoggedIn={setIsLoggedIn} // ✅ 로그인 상태 변경을 반영
-    />
-</MyModal>
+                open={modal.mypage}
+                onCancel={() => closeModal('mypage')}
+                footer={[]}
+            >
+                <MypageForm
+                    modal={modal} // ✅ 추가: modal 상태 전달
+                    closeModal={() => closeModal('mypage')}
+                />
+            </MyModal>
+
 
         </nav>
     );

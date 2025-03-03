@@ -71,7 +71,7 @@ const CodingMain = () => {
     const fetchUserRole = async () => {
       const token = cookies.accessToken;
       if (token) {
-        const response = await checkAdminType(token);
+        const response = await checkAdminType(token, setCookie, navigate);
         if (response === "EA") {
           setIsAdmin(true);
         } 
@@ -212,7 +212,7 @@ useEffect(() => {
   fetchData();
 }, [cookies.accessToken, grade]);
 
-  // 출석 횟수 가져오기
+  // 출석 횟수 
   useEffect(() => {
     const fetchAttendance = async () => {
       const token = cookies.accessToken;
@@ -380,7 +380,7 @@ const renderAttendanceProgress = (count) => {
             </button>
           </div>
           <Link to="/coding-zone/Codingzone_Attendance" className='cz-count-container'>
-            {renderAttendanceProgress(attendanceCount)}
+          {token && renderAttendanceProgress(attendanceCount)}
           </Link>
         </div>
         <div className="codingzone-date">
