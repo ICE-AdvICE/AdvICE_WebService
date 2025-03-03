@@ -216,7 +216,14 @@ const ShowPage = () => {
                 <div className="banner_img_container_icebreaker_article">
                     <img src="/icebreaker_main.png" className="banner" />
                 </div>
+            <div className='ArticleContentbox-container'>
+                <img src="/main2-image.png"  className="header10-image"/>
+                <div className = "body-container">
+                    <img src="/main2-icon.png"  className="icon-image"/>
+                </div>
             </div>
+        </div>
+
         );
     }
     
