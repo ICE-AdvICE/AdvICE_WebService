@@ -49,19 +49,19 @@ const LoginForm = ({ onLogin }) => {
 
 
 
-  const handleSignInResponse = (response) => {
   
-
+  const handleSignInResponse = (response) => {
     if (!response || !response.data || !response.data.code || !response.data.accessToken) {
       setError(true);
       onLogin(false);
       return;
     }
-
+  
     if (response.data.code === 'SU') {
       const accessToken = response.data.accessToken;
       setCookie('accessToken', accessToken, { path: '/', expires: new Date(Date.now() + 3600 * 1000) });
       onLogin(true);
+      setModalOpenin(false); // 로그인 성공 시 모달 닫기
     } else {
       setError(true);
       const messages = {
@@ -72,6 +72,7 @@ const LoginForm = ({ onLogin }) => {
       alert(messages[response.data.code] || '네트워크 오류입니다.');
     }
   };
+  
 
 
 
