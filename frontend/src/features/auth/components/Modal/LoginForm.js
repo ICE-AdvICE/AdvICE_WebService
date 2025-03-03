@@ -28,13 +28,13 @@ const LoginForm = ({ onLogin }) => {
   const onSignInButtonClickHandler = async (e) => {
     e.preventDefault();
     const requestBody = { email: userEmail, password: userPassword };
-
+  
     try {
       const response = await signInRequest(requestBody, setCookie);
       if (response) {
         handleSignInResponse(response);
       }
-
+  
       if (rememberEmail) {
         localStorage.setItem('userEmail', userEmail);
       } else {
@@ -43,17 +43,14 @@ const LoginForm = ({ onLogin }) => {
     } catch (error) {
       alert('로그인 요청 중 오류가 발생했습니다.');
       setError(true);
-      onLogin(false);
+      // 로그인 실패 시 모달 창이 유지되도록 함
     }
   };
-
-
-
   
   const handleSignInResponse = (response) => {
     if (!response || !response.data || !response.data.code || !response.data.accessToken) {
       setError(true);
-      onLogin(false);
+      alert("로그인 실패! 이메일 또는 비밀번호를 확인해주세요.");
       return;
     }
   
@@ -69,13 +66,12 @@ const LoginForm = ({ onLogin }) => {
         SF: '로그인 실패! 이메일 또는 비밀번호를 확인해주세요.',
         VF: '로그인 실패! 잘못된 요청입니다.',
       };
+  
       alert(messages[response.data.code] || '네트워크 오류입니다.');
+      // 로그인 실패 시 모달 창 유지 (setModalOpenin(false)를 호출하지 않음)
     }
   };
   
-
-
-
 
   const handleKeyPress = (e) => {
     if (e.key === 'Enter' && e.target.type !== 'button') {
