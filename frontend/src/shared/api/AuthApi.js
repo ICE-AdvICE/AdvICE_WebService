@@ -159,13 +159,16 @@ export const refreshTokenRequest = async (setCookie, accessToken, navigate, apiN
             refreshSubscribers = [];
 
             return { accessToken: newAccessToken, apiName };
-        } else {
+        } else if (response.data.code === "NP") {
             alert("로그인 기간이 만료되었습니다.");
             navigate('/');
             return null;
+        } else if (response.data.code === "DBE") {
+            console.error("데이터베이스 오류 발생: ", response.data.message);
+            return null;
         }
     } catch (error) {
-        navigate('/');
+        console.error("토큰 갱신 중 오류 발생: ", error);
         return null;
     } finally {
         isRefreshing = false; // 갱신 종료
