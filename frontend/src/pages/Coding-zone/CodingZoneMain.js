@@ -235,24 +235,23 @@ const CodingMain = () => {
         let result;
         if (classItem.isReserved) {
             result = await deleteCodingZoneClass(token, classItem.classNum, setCookie, navigate);
-            if (result) {
+            if (result === true) {
                 alert("예약 취소가 완료되었습니다.");
                 setUserReservedClass(null);
-                await fetchData(); // ✅ 예약 취소 후 리스트 갱신
+                await fetchData(); 
             }
         } else {
             result = await reserveCodingZoneClass(token, classItem.classNum, setCookie, navigate);
-            if (result) {
+            
+            
+            if (result === "FC") {
+                alert("예약 가능한 인원이 꽉 찼습니다.");
+                await fetchData();
+            } else if (result === true) {
                 alert("예약이 완료되었습니다.");
-                await fetchData(); // ✅ 예약 후 리스트 갱신
+                await fetchData(); 
             } else {
-                // ✅ 예약 실패 시 응답 코드 확인 후 처리
-                if (result === "FC") {
-                    alert("예약 가능한 인원이 꽉 찼습니다.");
-                    await fetchData(); // 
-                } else {
-                    alert("예약에 실패했습니다.");
-                }
+                alert("예약에 실패했습니다."); 
             }
         }
     } catch (error) {
@@ -260,6 +259,7 @@ const CodingMain = () => {
         await fetchData(); 
     }
 };
+
 
 
   const handleTabChange = (tab) => {
