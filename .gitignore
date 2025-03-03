@@ -9,3 +9,4 @@ backend/build/
 .vscode
 .idea
 backend/.env
+frontend/.env
