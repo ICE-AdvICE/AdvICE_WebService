@@ -11,7 +11,7 @@ public class IcebreakerApplication {
     public static void main( String[] args) {
         // .env 파일 로드
         Dotenv dotenv = Dotenv.configure()
-            .directory("/app") // 컨테이너 내부 작업 디렉토리
+            .directory("/app") // 로칼에서 실행할때 "backend/"로 수정 -> 작업후 다시 "/app"로 돌려놓기
             .ignoreIfMissing() // 파일이 없으면 무시
             .load();
 
@@ -25,4 +25,3 @@ public class IcebreakerApplication {
         SpringApplication.run(IcebreakerApplication.class, args);
     }	
 }
-

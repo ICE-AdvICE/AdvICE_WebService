@@ -54,12 +54,16 @@ public class AuthController {
 
         if (responseEntity.getBody() instanceof SignInResponseDto) {
             SignInResponseDto dto = (SignInResponseDto) responseEntity.getBody();
+
+            // 환경 변수에서 SECURE_COOKIE 값을 가져옴 (기본값: true)
+            boolean isSecure = Boolean.parseBoolean(System.getProperty("SECURE_COOKIE", "true"));
+
             ResponseCookie refreshTokenCookie = ResponseCookie.from("refresh_token", dto.getRefreshToken())
                 .httpOnly(true)
-                .secure(true)
+                .secure(isSecure)
                 .sameSite("Strict")
                 .path("/api/v1/auth")
-                .maxAge(Duration.ofDays(7))
+                .maxAge(Duration.ofDays(30))
                 .build();
             response.addHeader(HttpHeaders.SET_COOKIE, refreshTokenCookie.toString());
         }
@@ -80,12 +84,16 @@ public class AuthController {
         ResponseEntity<? super RegenerateTokenResponseDto> responseEntity = authService.refresh(refreshToken, email);;
 
         if (responseEntity.getBody() instanceof RegenerateTokenResponseDto dto) {
+
+            // 환경 변수에서 SECURE_COOKIE 값을 가져옴 (기본값: true)
+            boolean isSecure = Boolean.parseBoolean(System.getProperty("SECURE_COOKIE", "true"));
+
             ResponseCookie refreshTokenCookie = ResponseCookie.from("refresh_token", dto.getRefreshToken())
                 .httpOnly(true)
-                .secure(true)
+                .secure(isSecure)
                 .sameSite("Strict")
                 .path("/api/v1/auth")
-                .maxAge(Duration.ofDays(7))
+                .maxAge(Duration.ofDays(30))
                 .build();
             response.addHeader(HttpHeaders.SET_COOKIE, refreshTokenCookie.toString());
         }
